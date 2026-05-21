@@ -1,0 +1,6 @@
+*.zip
+.DS_STORE
+*.sqlite
+*.db
+*.db-shm
+*.db-wal
