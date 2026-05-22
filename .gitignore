@@ -4,3 +4,19 @@
 *.db
 *.db-shm
 *.db-wal
+
+# Python & uv
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+dist/
+build/
+*.egg-info/
+
+# uv
+.python-version
+.uv/

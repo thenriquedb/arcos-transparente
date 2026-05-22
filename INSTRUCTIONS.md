@@ -20,23 +20,28 @@ Os dados XML atualmente cobertos incluem:
 
 ## Requisitos
 
-- Python 3.9+
-- `pip3`
+- Python 3.13+
+- `uv` (gerenciador de pacotes Python)
 
-Dependências principais:
-
-- SQLAlchemy
-- Alembic
-- Typer
-- Rich
-- Loguru
-- python-dotenv
-
-Instalação rápida:
+Para instalar `uv`:
 
 ```bash
-pip3 install sqlalchemy alembic typer rich loguru python-dotenv
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
+Ou via Homebrew:
+
+```bash
+brew install uv
+```
+
+Instalação rápida de dependências:
+
+```bash
+uv sync
+```
+
+Este comando irá instalar todas as dependências especificadas em `pyproject.toml` em um ambiente virtual isolado.
 
 ---
 
@@ -83,13 +88,13 @@ DATABASE_URL=sqlite:///database/transparencia.db
 Aplicar migrations:
 
 ```bash
-python3 -m alembic upgrade head
+uv run alembic upgrade head
 ```
 
 Verificar revisão aplicada:
 
 ```bash
-python3 cli.py db status
+uv run python cli.py db status
 ```
 
 ---
@@ -99,40 +104,40 @@ python3 cli.py db status
 ### Inicializar banco
 
 ```bash
-python3 cli.py db init
+uv run python cli.py db init
 ```
 
 ### Status do banco
 
 ```bash
-python3 cli.py db status
+uv run python cli.py db status
 ```
 
 ### Importar tudo
 
 ```bash
-python3 cli.py importar
+uv run python cli.py importar
 ```
 
 ### Importar por tipo
 
 ```bash
-python3 cli.py importar --tipo licitacoes
-python3 cli.py importar --tipo frotas
-python3 cli.py importar --tipo receitas
-python3 cli.py importar --tipo folha_pagamento
+uv run python cli.py importar --tipo licitacoes
+uv run python cli.py importar --tipo frotas
+uv run python cli.py importar --tipo receitas
+uv run python cli.py importar --tipo folha_pagamento
 ```
 
 ### Importar por ano
 
 ```bash
-python3 cli.py importar --tipo receitas --ano 2025
+uv run python cli.py importar --tipo receitas --ano 2025
 ```
 
 ### Reimportar limpando dados
 
 ```bash
-python3 cli.py importar --tipo licitacoes --force
+uv run python cli.py importar --tipo licitacoes --force
 ```
 
 ---
@@ -203,13 +208,14 @@ python3 cli.py importar --tipo licitacoes --force
 ### `ModuleNotFoundError`
 
 Verifique se o arquivo parser existe no caminho esperado em `ingestion/parsers/xml/`.
+Se você acabou de clonar o repositório, certifique-se de rodar `uv sync` primeiro.
 
 ### Migration não aplicada
 
 Execute:
 
 ```bash
-python3 -m alembic upgrade head
+uv run alembic upgrade head
 ```
 
 ### Erro de tipo em valor monetário/data
