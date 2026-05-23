@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Any
 
 from pydantic import ValidationError
@@ -8,6 +9,11 @@ from agents.tools.sql_tools.servidores_schemas import (
     BuscarServidorPorNomeParams,
     BuscarServidorPorPeriodoParams,
     BuscarServidorPorSecretariaParams,
+    QuantidadeServidoresPorSecretariaResponse,
+    RankingSecretariasParams,
+    SecretariaComMaisServidoresResponse,
+    SecretariaRankingItem,
+    SecretariasRankingToolResponse,
     ServidoresToolResponse,
     ServidorToolItem,
 )
@@ -52,11 +58,109 @@ def _executar_busca_textual(
         )
 
 
+def _obter_competencia_referencia_mais_recente(session) -> date | None:
+    return session.execute(
+        select(func.max(Servidor.competencia_referencia))
+    ).scalar_one_or_none()
+
+
+def _construir_subquery_secretaria(
+    *,
+    termo_normalizado: str,
+    competencia_referencia: date,
+):
+    return (
+        select(func.max(Servidor.id).label("id"))
+        .where(Servidor.competencia_referencia == competencia_referencia)
+        .where(func.lower(Servidor.secretaria).like(f"%{termo_normalizado}%"))
+        .group_by(func.lower(Servidor.nome), func.lower(Servidor.secretaria))
+        .subquery()
+    )
+
+
+def _listar_secretarias_correspondentes(
+    session,
+    *,
+    termo_normalizado: str,
+    competencia_referencia: date,
+) -> list[str]:
+    return (
+        session.execute(
+            select(Servidor.secretaria)
+            .where(Servidor.competencia_referencia == competencia_referencia)
+            .where(func.lower(Servidor.secretaria).like(f"%{termo_normalizado}%"))
+            .group_by(Servidor.secretaria)
+            .order_by(Servidor.secretaria.asc())
+        )
+        .scalars()
+        .all()
+    )
+
+
+def _contar_servidores_por_secretaria_na_competencia(
+    session,
+    *,
+    termo_normalizado: str,
+    competencia_referencia: date,
+) -> int:
+    subquery = _construir_subquery_secretaria(
+        termo_normalizado=termo_normalizado,
+        competencia_referencia=competencia_referencia,
+    )
+    return session.execute(select(func.count()).select_from(subquery)).scalar_one()
+
+
+def _listar_servidores_por_secretaria_na_competencia(
+    session,
+    *,
+    termo_normalizado: str,
+    competencia_referencia: date,
+    limite: int,
+) -> list[Servidor]:
+    subquery = _construir_subquery_secretaria(
+        termo_normalizado=termo_normalizado,
+        competencia_referencia=competencia_referencia,
+    )
+    return (
+        session.execute(
+            select(Servidor)
+            .join(subquery, Servidor.id == subquery.c.id)
+            .order_by(Servidor.secretaria.asc(), Servidor.nome.asc())
+            .limit(limite)
+        )
+        .scalars()
+        .all()
+    )
+
+
+def _buscar_ranking_secretarias_na_competencia(
+    session,
+    *,
+    competencia_referencia: date,
+    limite: int,
+) -> list[tuple[str, int]]:
+    total_servidores = func.count(func.distinct(func.lower(Servidor.nome))).label(
+        "total_servidores"
+    )
+    return (
+        session.execute(
+            select(Servidor.secretaria, total_servidores)
+            .where(Servidor.competencia_referencia == competencia_referencia)
+            .group_by(Servidor.secretaria)
+            .order_by(total_servidores.desc(), Servidor.secretaria.asc())
+            .limit(limite)
+        )
+        .all()
+    )
+
+
 def _resposta_sem_resultados(
     *,
     query: str | None = None,
     data_inicio: Any | None = None,
     data_fim: Any | None = None,
+    competencia_referencia: Any | None = None,
+    secretarias_correspondentes: list[str] | None = None,
     mensagem: str | None = None,
     sugestao: str | None = None,
 ) -> dict[str, Any]:
@@ -64,8 +168,10 @@ def _resposta_sem_resultados(
         query=query,
         data_inicio=data_inicio,
         data_fim=data_fim,
+        competencia_referencia=competencia_referencia,
         total=0,
         resultados=[],
+        secretarias_correspondentes=secretarias_correspondentes or [],
         mensagem=mensagem,
         sugestao=sugestao,
     ).model_dump(mode="json")
@@ -158,21 +264,148 @@ def buscar_servidores_por_secretaria(
             mensagem="Informe uma secretaria para realizar a busca.",
         )
 
-    servidores = _executar_busca_textual(
-        Servidor.secretaria, params.secretaria, params.limite
-    )
-    if not servidores:
-        return _resposta_sem_resultados(
-            query=params.secretaria,
-            sugestao=(
-                f"Nenhum servidor encontrado para a secretaria '{params.secretaria}'."
-            ),
+    termo_normalizado = params.secretaria.lower()
+
+    with get_session() as session:
+        competencia_referencia = _obter_competencia_referencia_mais_recente(session)
+        if competencia_referencia is None:
+            return _resposta_sem_resultados(
+                query=params.secretaria,
+                mensagem="Nao ha registros de servidores disponiveis para consulta.",
+            )
+
+        secretarias_correspondentes = _listar_secretarias_correspondentes(
+            session,
+            termo_normalizado=termo_normalizado,
+            competencia_referencia=competencia_referencia,
+        )
+        if not secretarias_correspondentes:
+            return _resposta_sem_resultados(
+                query=params.secretaria,
+                competencia_referencia=competencia_referencia,
+                sugestao=(
+                    f"Nenhum servidor encontrado para a secretaria '{params.secretaria}'."
+                ),
+            )
+
+        total_servidores = _contar_servidores_por_secretaria_na_competencia(
+            session,
+            termo_normalizado=termo_normalizado,
+            competencia_referencia=competencia_referencia,
+        )
+        servidores = _listar_servidores_por_secretaria_na_competencia(
+            session,
+            termo_normalizado=termo_normalizado,
+            competencia_referencia=competencia_referencia,
+            limite=params.limite,
+        )
+
+    mensagem = None
+    if total_servidores > len(servidores):
+        mensagem = (
+            f"Mostrando {len(servidores)} de {total_servidores} servidores "
+            "na competencia mais recente."
         )
 
     return ServidoresToolResponse(
         query=params.secretaria,
-        total=len(servidores),
+        competencia_referencia=competencia_referencia,
+        total=total_servidores,
         resultados=[_serializar_servidor(servidor) for servidor in servidores],
+        secretarias_correspondentes=secretarias_correspondentes,
+        mensagem=mensagem,
+    ).model_dump(mode="json")
+
+
+def listar_servidores_da_secretaria(
+    secretaria: str,
+    limite: int = 50,
+) -> dict[str, Any]:
+    """
+    Lista servidores da secretaria na competencia mais recente disponivel.
+
+    Examples:
+      'liste todos os funcionarios da educacao',
+      'me mostre quem trabalha na saude'.
+
+    Args:
+        secretaria (str): Nome ou parte do nome da secretaria.
+        limite (int): Numero maximo de resultados retornados.
+    Returns:
+        dict com total de servidores e a lista limitada de resultados.
+    """
+
+    return buscar_servidores_por_secretaria(secretaria=secretaria, limite=limite)
+
+
+def contar_servidores_por_secretaria(secretaria: str) -> dict[str, Any]:
+    """
+    Conta quantos servidores existem em uma secretaria na competencia mais recente.
+
+    Examples:
+      'quantas pessoas trabalham na saude?',
+      'quantos servidores tem na educacao?'.
+
+    Args:
+        secretaria (str): Nome ou parte do nome da secretaria.
+    Returns:
+        dict com a competencia usada, secretarias correspondentes e total.
+    """
+
+    try:
+        params = BuscarServidorPorSecretariaParams.model_validate(
+            {"secretaria": secretaria, "limite": 1}
+        )
+    except ValidationError as exc:
+        return QuantidadeServidoresPorSecretariaResponse(
+            total_servidores=0,
+            mensagem=f"Parametros invalidos: {exc}",
+        ).model_dump(mode="json")
+
+    if not params.secretaria:
+        return QuantidadeServidoresPorSecretariaResponse(
+            query=secretaria,
+            total_servidores=0,
+            mensagem="Informe uma secretaria para realizar a contagem.",
+        ).model_dump(mode="json")
+
+    termo_normalizado = params.secretaria.lower()
+
+    with get_session() as session:
+        competencia_referencia = _obter_competencia_referencia_mais_recente(session)
+        if competencia_referencia is None:
+            return QuantidadeServidoresPorSecretariaResponse(
+                query=params.secretaria,
+                total_servidores=0,
+                mensagem="Nao ha registros de servidores disponiveis para consulta.",
+            ).model_dump(mode="json")
+
+        secretarias_correspondentes = _listar_secretarias_correspondentes(
+            session,
+            termo_normalizado=termo_normalizado,
+            competencia_referencia=competencia_referencia,
+        )
+        if not secretarias_correspondentes:
+            return QuantidadeServidoresPorSecretariaResponse(
+                query=params.secretaria,
+                competencia_referencia=competencia_referencia,
+                total_servidores=0,
+                sugestao=(
+                    f"Nenhum servidor encontrado para a secretaria '{params.secretaria}'."
+                ),
+            ).model_dump(mode="json")
+
+        total_servidores = _contar_servidores_por_secretaria_na_competencia(
+            session,
+            termo_normalizado=termo_normalizado,
+            competencia_referencia=competencia_referencia,
+        )
+
+    return QuantidadeServidoresPorSecretariaResponse(
+        query=params.secretaria,
+        competencia_referencia=competencia_referencia,
+        total_servidores=total_servidores,
+        secretarias_correspondentes=secretarias_correspondentes,
     ).model_dump(mode="json")
 
 
@@ -290,3 +523,87 @@ def buscar_servidores_admitidos_no_periodo(
         data_fim=data_fim,
         limite=limite,
     )
+
+
+def listar_secretarias_por_quantidade_de_servidores(
+    limite: int = 10,
+) -> dict[str, Any]:
+    """
+    Lista as secretarias com mais servidores na competencia mais recente.
+
+    Examples:
+      'quais secretarias tem mais funcionarios?',
+      'top 5 secretarias por quantidade de servidores'.
+
+    Args:
+        limite (int): Numero maximo de secretarias no ranking.
+    Returns:
+        dict com a competencia usada e o ranking de secretarias.
+    """
+
+    try:
+        params = RankingSecretariasParams.model_validate({"limite": limite})
+    except ValidationError as exc:
+        return SecretariasRankingToolResponse(
+            total=0,
+            mensagem=f"Parametros invalidos: {exc}",
+        ).model_dump(mode="json")
+
+    with get_session() as session:
+        competencia_referencia = _obter_competencia_referencia_mais_recente(session)
+        if competencia_referencia is None:
+            return SecretariasRankingToolResponse(
+                total=0,
+                mensagem="Nao ha registros de servidores disponiveis para consulta.",
+            ).model_dump(mode="json")
+
+        ranking = _buscar_ranking_secretarias_na_competencia(
+            session,
+            competencia_referencia=competencia_referencia,
+            limite=params.limite,
+        )
+
+    if not ranking:
+        return SecretariasRankingToolResponse(
+            competencia_referencia=competencia_referencia,
+            total=0,
+            sugestao="Nenhuma secretaria encontrada na competencia mais recente.",
+        ).model_dump(mode="json")
+
+    return SecretariasRankingToolResponse(
+        competencia_referencia=competencia_referencia,
+        total=len(ranking),
+        resultados=[
+            SecretariaRankingItem(
+                secretaria=secretaria,
+                total_servidores=total_servidores,
+            )
+            for secretaria, total_servidores in ranking
+        ],
+    ).model_dump(mode="json")
+
+
+def buscar_secretaria_com_mais_servidores() -> dict[str, Any]:
+    """
+    Retorna a secretaria com mais servidores na competencia mais recente.
+
+    Example:
+      'qual secretaria tem mais funcionarios?'.
+
+    Returns:
+        dict com a secretaria lider no ranking e seu total de servidores.
+    """
+
+    ranking = listar_secretarias_por_quantidade_de_servidores(limite=1)
+    if ranking["total"] == 0:
+        return SecretariaComMaisServidoresResponse(
+            mensagem=ranking.get("mensagem"),
+            sugestao=ranking.get("sugestao"),
+        ).model_dump(mode="json")
+
+    lider = ranking["resultados"][0]
+    return SecretariaComMaisServidoresResponse(
+        competencia_referencia=ranking.get("competencia_referencia"),
+        secretaria=lider["secretaria"],
+        total_servidores=lider["total_servidores"],
+    ).model_dump(mode="json")

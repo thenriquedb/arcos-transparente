@@ -48,7 +48,7 @@ class BuscarServidorPorSecretariaParams(_ServidoresToolBaseSchema):
     @field_validator("limite", mode="before")
     @classmethod
     def _normalize_limite(cls, value: Any) -> int:
-        return normalize_limit(value)
+        return normalize_limit(value, maximum=200)
 
 
 class BuscarServidorPorCargoParams(_ServidoresToolBaseSchema):
@@ -87,6 +87,15 @@ class BuscarServidorPorPeriodoParams(_ServidoresToolBaseSchema):
         return self
 
 
+class RankingSecretariasParams(_ServidoresToolBaseSchema):
+    limite: int = 10
+
+    @field_validator("limite", mode="before")
+    @classmethod
+    def _normalize_limite(cls, value: Any) -> int:
+        return normalize_limit(value)
+
+
 class ServidorToolItem(_ServidoresToolBaseSchema):
     id: int
     nome: str
@@ -100,7 +109,39 @@ class ServidoresToolResponse(_ServidoresToolBaseSchema):
     query: str | None = None
     data_inicio: date | None = None
     data_fim: date | None = None
+    competencia_referencia: date | None = None
     total: int
     resultados: list[ServidorToolItem] = Field(default_factory=list)
+    secretarias_correspondentes: list[str] = Field(default_factory=list)
+    mensagem: str | None = None
+    sugestao: str | None = None
+
+
+class QuantidadeServidoresPorSecretariaResponse(_ServidoresToolBaseSchema):
+    query: str | None = None
+    competencia_referencia: date | None = None
+    total_servidores: int
+    secretarias_correspondentes: list[str] = Field(default_factory=list)
+    mensagem: str | None = None
+    sugestao: str | None = None
+
+
+class SecretariaRankingItem(_ServidoresToolBaseSchema):
+    secretaria: str
+    total_servidores: int
+
+
+class SecretariasRankingToolResponse(_ServidoresToolBaseSchema):
+    competencia_referencia: date | None = None
+    total: int
+    resultados: list[SecretariaRankingItem] = Field(default_factory=list)
+    mensagem: str | None = None
+    sugestao: str | None = None
+
+
+class SecretariaComMaisServidoresResponse(_ServidoresToolBaseSchema):
+    competencia_referencia: date | None = None
+    secretaria: str | None = None
+    total_servidores: int = 0
     mensagem: str | None = None
     sugestao: str | None = None

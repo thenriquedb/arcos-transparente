@@ -111,3 +111,229 @@ def test_busca_servidores_por_nome_retorna_mensagem_para_termo_vazio() -> None:
 
     assert resultado["total"] == 0
     assert resultado["mensagem"] == "Informe um nome de servidor para realizar a busca."
+
+
+def test_lista_servidores_da_secretaria_considera_competencia_mais_recente(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            Servidor(
+                nome="Ana Clara",
+                cargo="Enfermeira",
+                secretaria="Secretaria de Saude",
+                salario_base=2400,
+                competencia_referencia=date(2025, 1, 1),
+            ),
+            Servidor(
+                nome="Ana Clara",
+                cargo="Enfermeira",
+                secretaria="Secretaria de Saude",
+                salario_base=2500,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Bruno Costa",
+                cargo="Medico",
+                secretaria="Secretaria de Saude",
+                salario_base=5200,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Carla Sousa",
+                cargo="Professora",
+                secretaria="Secretaria de Educacao",
+                salario_base=3200,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+        ]
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+
+    resultado = servidores_tools.listar_servidores_da_secretaria(" saude ", limite=1)
+
+    assert resultado["query"] == "saude"
+    assert resultado["competencia_referencia"] == "2025-02-01"
+    assert resultado["total"] == 2
+    assert resultado["secretarias_correspondentes"] == ["Secretaria de Saude"]
+    assert resultado["mensagem"] == (
+        "Mostrando 1 de 2 servidores na competencia mais recente."
+    )
+    assert [item["nome"] for item in resultado["resultados"]] == ["Ana Clara"]
+    assert resultado["resultados"][0]["salario_base"] == 2500.0
+
+    session.close()
+
+
+def test_conta_servidores_por_secretaria_ignora_competencias_antigas(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            Servidor(
+                nome="Ana Clara",
+                cargo="Enfermeira",
+                secretaria="Secretaria de Saude",
+                salario_base=2400,
+                competencia_referencia=date(2025, 1, 1),
+            ),
+            Servidor(
+                nome="Ana Clara",
+                cargo="Enfermeira",
+                secretaria="Secretaria de Saude",
+                salario_base=2500,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Bruno Costa",
+                cargo="Medico",
+                secretaria="Secretaria de Saude",
+                salario_base=5200,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Carla Sousa",
+                cargo="Professora",
+                secretaria="Secretaria de Educacao",
+                salario_base=3200,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+        ]
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+
+    resultado = servidores_tools.contar_servidores_por_secretaria("Saude")
+
+    assert resultado["query"] == "Saude"
+    assert resultado["competencia_referencia"] == "2025-02-01"
+    assert resultado["total_servidores"] == 2
+    assert resultado["secretarias_correspondentes"] == ["Secretaria de Saude"]
+
+    session.close()
+
+
+def test_lista_secretarias_por_quantidade_de_servidores_retorna_ranking(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            Servidor(
+                nome="Ana Clara",
+                cargo="Enfermeira",
+                secretaria="Secretaria de Saude",
+                salario_base=2500,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Bruno Costa",
+                cargo="Medico",
+                secretaria="Secretaria de Saude",
+                salario_base=5200,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Carla Sousa",
+                cargo="Professora",
+                secretaria="Secretaria de Educacao",
+                salario_base=3200,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Daniel Lima",
+                cargo="Professor",
+                secretaria="Secretaria de Educacao",
+                salario_base=3300,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Elaine Rocha",
+                cargo="Coordenadora",
+                secretaria="Secretaria de Educacao",
+                salario_base=4100,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+        ]
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+
+    resultado = servidores_tools.listar_secretarias_por_quantidade_de_servidores(
+        limite=2
+    )
+
+    assert resultado["competencia_referencia"] == "2025-02-01"
+    assert resultado["total"] == 2
+    assert resultado["resultados"] == [
+        {"secretaria": "Secretaria de Educacao", "total_servidores": 3},
+        {"secretaria": "Secretaria de Saude", "total_servidores": 2},
+    ]
+
+    session.close()
+
+
+def test_busca_secretaria_com_mais_servidores_retorna_lider(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            Servidor(
+                nome="Ana Clara",
+                cargo="Enfermeira",
+                secretaria="Secretaria de Saude",
+                salario_base=2500,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Carla Sousa",
+                cargo="Professora",
+                secretaria="Secretaria de Educacao",
+                salario_base=3200,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Daniel Lima",
+                cargo="Professor",
+                secretaria="Secretaria de Educacao",
+                salario_base=3300,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+        ]
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+
+    resultado = servidores_tools.buscar_secretaria_com_mais_servidores()
+
+    assert resultado == {
+        "competencia_referencia": "2025-02-01",
+        "secretaria": "Secretaria de Educacao",
+        "total_servidores": 2,
+        "mensagem": None,
+        "sugestao": None,
+    }
+
+    session.close()
