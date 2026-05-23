@@ -11,10 +11,12 @@ Este projeto importa dados públicos do portal da transparência para um banco S
 
 Os dados XML atualmente cobertos incluem:
 
+- contratos
 - licitações
 - frotas
 - receitas (arrecadação e lançamento)
 - folha de pagamento
+- servidores
 
 ---
 
@@ -62,7 +64,7 @@ DATABASE_URL=sqlite:///database/transparencia.db
 ├── cli.py
 ├── alembic.ini
 ├── database/
-│   ├── models.py
+│   ├── models/
 │   └── migrations/
 │       └── versions/
 ├── ingestion/
@@ -84,6 +86,12 @@ DATABASE_URL=sqlite:///database/transparencia.db
 ---
 
 ## Banco e migrations
+
+Documentação do schema:
+
+```bash
+docs/database.md
+```
 
 Aplicar migrations:
 
@@ -140,6 +148,11 @@ uv run python cli.py importar --tipo receitas --ano 2025
 uv run python cli.py importar --tipo licitacoes --force
 ```
 
+Observação:
+
+Na POC atual, o comando `importar` recria toda a base SQLite antes de executar a carga.
+O `--force` foi mantido apenas por compatibilidade.
+
 ---
 
 ## Tipos disponíveis no pipeline
@@ -168,6 +181,11 @@ uv run python cli.py importar --tipo licitacoes --force
 - `frota_veiculos`
 - `frota_despesas`
 
+### Contratos
+
+- `contratos`
+- `fornecedores`
+
 ### Receitas
 
 - `receita_naturezas`
@@ -176,10 +194,13 @@ uv run python cli.py importar --tipo licitacoes --force
 
 ### Folha
 
+- `servidores`
 - `folha_servidores`
 - `folha_lotacoes`
 - `folha_cargos`
 - `folha_pagamentos`
+
+Para a visão completa de tabelas, relacionamentos e objetivos de cada domínio, consulte `docs/database.md`.
 
 ---
 
@@ -196,7 +217,7 @@ uv run python cli.py importar --tipo licitacoes --force
 ## Boas práticas operacionais
 
 1. Sempre rode `alembic upgrade head` antes de importar.
-2. Use `--force` apenas quando quiser recarga total do domínio.
+2. Na POC atual, considere que toda importação já faz recarga total da base.
 3. Após cada importação, valide via `python3 cli.py db status`.
 4. Mantenha logs habilitados para auditoria de erros.
 5. Não edite tabelas manualmente fora do fluxo de migration/import.
