@@ -56,12 +56,15 @@ def test_busca_servidores_por_nome_serializa_resultados(monkeypatch) -> None:
     assert resultado["total"] == 1
     assert resultado["resultados"][0]["nome"] == "Maria da Silva"
     assert resultado["resultados"][0]["salario_base"] == 2500.0
-    assert resultado["resultados"][0]["competencia_referencia"] == "2025-01-01"
+    assert resultado["resultados"][0]["mes_de_referencia"] == "2025-01-01"
+    assert "competencia_referencia" not in resultado["resultados"][0]
 
     session.close()
 
 
-def test_busca_servidores_por_periodo_aceita_formatos_de_data(monkeypatch) -> None:
+def test_busca_servidores_por_mes_de_referencia_no_periodo_aceita_formatos_de_data(
+    monkeypatch,
+) -> None:
     session = _build_session()
     session.add_all(
         [
@@ -89,7 +92,7 @@ def test_busca_servidores_por_periodo_aceita_formatos_de_data(monkeypatch) -> No
 
     monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
 
-    resultado = servidores_tools.buscar_servidores_por_competencia_no_periodo(
+    resultado = servidores_tools.buscar_servidores_por_mes_de_referencia_no_periodo(
         "01/02/2025",
         "2025-03-01",
         limite=10,
@@ -160,14 +163,17 @@ def test_lista_servidores_da_secretaria_considera_competencia_mais_recente(
     resultado = servidores_tools.listar_servidores_da_secretaria(" saude ", limite=1)
 
     assert resultado["query"] == "saude"
-    assert resultado["competencia_referencia"] == "2025-02-01"
+    assert resultado["mes_de_referencia"] == "2025-02-01"
     assert resultado["total"] == 2
     assert resultado["secretarias_correspondentes"] == ["Secretaria de Saude"]
     assert resultado["mensagem"] == (
-        "Mostrando 1 de 2 servidores na competencia mais recente."
+        "Mostrando 1 de 2 servidores no mes mais recente com dados."
     )
     assert [item["nome"] for item in resultado["resultados"]] == ["Ana Clara"]
     assert resultado["resultados"][0]["salario_base"] == 2500.0
+    assert resultado["resultados"][0]["mes_de_referencia"] == "2025-02-01"
+    assert "competencia_referencia" not in resultado
+    assert "competencia_referencia" not in resultado["resultados"][0]
 
     session.close()
 
@@ -219,9 +225,10 @@ def test_conta_servidores_por_secretaria_ignora_competencias_antigas(
     resultado = servidores_tools.contar_servidores_por_secretaria("Saude")
 
     assert resultado["query"] == "Saude"
-    assert resultado["competencia_referencia"] == "2025-02-01"
+    assert resultado["mes_de_referencia"] == "2025-02-01"
     assert resultado["total_servidores"] == 2
     assert resultado["secretarias_correspondentes"] == ["Secretaria de Saude"]
+    assert "competencia_referencia" not in resultado
 
     session.close()
 
@@ -281,12 +288,13 @@ def test_lista_secretarias_por_quantidade_de_servidores_retorna_ranking(
         limite=2
     )
 
-    assert resultado["competencia_referencia"] == "2025-02-01"
+    assert resultado["mes_de_referencia"] == "2025-02-01"
     assert resultado["total"] == 2
     assert resultado["resultados"] == [
         {"secretaria": "Secretaria de Educacao", "total_servidores": 3},
         {"secretaria": "Secretaria de Saude", "total_servidores": 2},
     ]
+    assert "competencia_referencia" not in resultado
 
     session.close()
 
@@ -329,7 +337,7 @@ def test_busca_secretaria_com_mais_servidores_retorna_lider(monkeypatch) -> None
     resultado = servidores_tools.buscar_secretaria_com_mais_servidores()
 
     assert resultado == {
-        "competencia_referencia": "2025-02-01",
+        "mes_de_referencia": "2025-02-01",
         "secretaria": "Secretaria de Educacao",
         "total_servidores": 2,
         "mensagem": None,

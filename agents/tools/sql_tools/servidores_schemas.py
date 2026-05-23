@@ -66,7 +66,7 @@ class BuscarServidorPorCargoParams(_ServidoresToolBaseSchema):
         return normalize_limit(value)
 
 
-class BuscarServidorPorPeriodoParams(_ServidoresToolBaseSchema):
+class BuscarServidorPorMesDeReferenciaParams(_ServidoresToolBaseSchema):
     data_inicio: date
     data_fim: date
     limite: int = 10
@@ -82,7 +82,7 @@ class BuscarServidorPorPeriodoParams(_ServidoresToolBaseSchema):
         return normalize_limit(value)
 
     @model_validator(mode="after")
-    def _validate_period(self) -> BuscarServidorPorPeriodoParams:
+    def _validate_period(self) -> BuscarServidorPorMesDeReferenciaParams:
         validate_date_period(self.data_inicio, self.data_fim)
         return self
 
@@ -102,14 +102,14 @@ class ServidorToolItem(_ServidoresToolBaseSchema):
     cargo: str
     secretaria: str
     salario_base: float | None = None
-    competencia_referencia: date
+    mes_de_referencia: date
 
 
 class ServidoresToolResponse(_ServidoresToolBaseSchema):
     query: str | None = None
     data_inicio: date | None = None
     data_fim: date | None = None
-    competencia_referencia: date | None = None
+    mes_de_referencia: date | None = None
     total: int
     resultados: list[ServidorToolItem] = Field(default_factory=list)
     secretarias_correspondentes: list[str] = Field(default_factory=list)
@@ -119,7 +119,7 @@ class ServidoresToolResponse(_ServidoresToolBaseSchema):
 
 class QuantidadeServidoresPorSecretariaResponse(_ServidoresToolBaseSchema):
     query: str | None = None
-    competencia_referencia: date | None = None
+    mes_de_referencia: date | None = None
     total_servidores: int
     secretarias_correspondentes: list[str] = Field(default_factory=list)
     mensagem: str | None = None
@@ -132,7 +132,7 @@ class SecretariaRankingItem(_ServidoresToolBaseSchema):
 
 
 class SecretariasRankingToolResponse(_ServidoresToolBaseSchema):
-    competencia_referencia: date | None = None
+    mes_de_referencia: date | None = None
     total: int
     resultados: list[SecretariaRankingItem] = Field(default_factory=list)
     mensagem: str | None = None
@@ -140,7 +140,7 @@ class SecretariasRankingToolResponse(_ServidoresToolBaseSchema):
 
 
 class SecretariaComMaisServidoresResponse(_ServidoresToolBaseSchema):
-    competencia_referencia: date | None = None
+    mes_de_referencia: date | None = None
     secretaria: str | None = None
     total_servidores: int = 0
     mensagem: str | None = None
