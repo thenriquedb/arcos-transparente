@@ -142,16 +142,13 @@ def _buscar_ranking_secretarias_na_competencia(
     total_servidores = func.count(func.distinct(func.lower(Servidor.nome))).label(
         "total_servidores"
     )
-    return (
-        session.execute(
-            select(Servidor.secretaria, total_servidores)
-            .where(Servidor.competencia_referencia == competencia_referencia)
-            .group_by(Servidor.secretaria)
-            .order_by(total_servidores.desc(), Servidor.secretaria.asc())
-            .limit(limite)
-        )
-        .all()
-    )
+    return session.execute(
+        select(Servidor.secretaria, total_servidores)
+        .where(Servidor.competencia_referencia == competencia_referencia)
+        .group_by(Servidor.secretaria)
+        .order_by(total_servidores.desc(), Servidor.secretaria.asc())
+        .limit(limite)
+    ).all()
 
 
 def _resposta_sem_resultados(

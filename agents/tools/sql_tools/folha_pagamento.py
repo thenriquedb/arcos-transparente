@@ -173,9 +173,7 @@ def _serializar_servidor(
                     salario_base=decimal_to_float(registro.salario_base),
                     ganhos=decimal_to_float(registro.proventos),
                     adicionais=decimal_to_float(registro.vantagens),
-                    total_bruto=decimal_to_float(
-                        registro.vencimentos_totais
-                    ),
+                    total_bruto=decimal_to_float(registro.vencimentos_totais),
                     descontos=decimal_to_float(registro.descontos),
                     valor_recebido=decimal_to_float(registro.liquido),
                 )

@@ -168,9 +168,7 @@ def test_busca_historico_de_pagamentos_retorna_sugestao_sem_resultados(
 
     monkeypatch.setattr(folha_pagamento_tools, "get_session", fake_get_session)
 
-    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
-        "Jose"
-    )
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("Jose")
 
     assert resultado["query"] == "Jose"
     assert resultado["total"] == 0
