@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import subprocess
+import sys
 from pathlib import Path
 from typing import Optional
 
 import typer
+from loguru import logger
 from rich.console import Console
 from rich.progress import Progress
 from rich.table import Table as RichTable
@@ -37,6 +39,13 @@ app = typer.Typer()
 db_app = typer.Typer()
 app.add_typer(db_app, name="db")
 console = Console()
+
+
+def _configure_import_logging(verbose: bool) -> None:
+    """Configura verbosidade do loguru para o fluxo de importacao."""
+
+    logger.remove()
+    logger.add(sys.stderr, level="INFO" if verbose else "ERROR")
 
 
 def _recriar_base_importacao() -> None:
@@ -124,10 +133,15 @@ def importar(
         default=None, help="Filtra por ano no nome do arquivo"
     ),
     force: bool = typer.Option(default=False, help="Apaga dados antes de reimportar"),
+    verbose: bool = typer.Option(
+        default=False,
+        help="Exibe logs detalhados da importacao",
+    ),
 ) -> None:
     """Recria a base e importa XMLs para o banco com relatório consolidado."""
     tipos = [tipo] if tipo else None
     pipeline = IngestionPipeline(data_dir="data/xml")
+    _configure_import_logging(verbose=verbose)
 
     if force:
         console.print(
