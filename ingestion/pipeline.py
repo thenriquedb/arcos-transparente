@@ -95,9 +95,13 @@ class IngestionPipeline:
                 for arquivo in arquivos:
                     registros: list[dict[str, Any]] = parser.parse(str(arquivo))
                     if tipo == "licitacoes":
-                        resultado = self._load_licitacoes(session=session, registros=registros)
+                        resultado = self._load_licitacoes(
+                            session=session, registros=registros
+                        )
                     elif tipo == "frotas":
-                        resultado = self._load_frotas(session=session, registros=registros)
+                        resultado = self._load_frotas(
+                            session=session, registros=registros
+                        )
                     elif tipo == "receitas":
                         resultado = self._load_receitas(session=session, ano=ano)
                     else:
@@ -132,7 +136,8 @@ class IngestionPipeline:
                         select(Licitacao).where(
                             and_(
                                 Licitacao.numero == registro_base["numero"],
-                                Licitacao.data_abertura == registro_base["data_abertura"],
+                                Licitacao.data_abertura
+                                == registro_base["data_abertura"],
                             )
                         )
                     ).scalar_one_or_none()
@@ -153,13 +158,19 @@ class IngestionPipeline:
                         else:
                             resultado.ignorados += 1
 
-                        session.query(VencedorLicitacao).filter(VencedorLicitacao.licitacao_id == licitacao.id).delete()
+                        session.query(VencedorLicitacao).filter(
+                            VencedorLicitacao.licitacao_id == licitacao.id
+                        ).delete()
                         session.query(MateriaInstrumento).filter(
                             MateriaInstrumento.instrumento_id.in_(
-                                select(InstrumentoContratual.id).where(InstrumentoContratual.licitacao_id == licitacao.id)
+                                select(InstrumentoContratual.id).where(
+                                    InstrumentoContratual.licitacao_id == licitacao.id
+                                )
                             )
                         ).delete(synchronize_session=False)
-                        session.query(InstrumentoContratual).filter(InstrumentoContratual.licitacao_id == licitacao.id).delete()
+                        session.query(InstrumentoContratual).filter(
+                            InstrumentoContratual.licitacao_id == licitacao.id
+                        ).delete()
 
                     for vencedor in registro.get("vencedores", []):
                         fornecedor = self._get_or_create_fornecedor(
@@ -179,7 +190,9 @@ class IngestionPipeline:
 
                     for instrumento in registro.get("instrumentos_contratuais", []):
                         fornecedor = None
-                        if instrumento.get("cnpj_fornecedor") and instrumento.get("nome_fornecedor"):
+                        if instrumento.get("cnpj_fornecedor") and instrumento.get(
+                            "nome_fornecedor"
+                        ):
                             fornecedor = self._get_or_create_fornecedor(
                                 session=session,
                                 cnpj_cpf=instrumento["cnpj_fornecedor"],
@@ -191,14 +204,20 @@ class IngestionPipeline:
                             fornecedor_id=fornecedor.id if fornecedor else None,
                             numero_licitatorio=instrumento.get("numero_licitatorio"),
                             unidade_gestora=instrumento.get("unidade_gestora"),
-                            tipo_instrumento_contratual=instrumento.get("tipo_instrumento_contratual"),
+                            tipo_instrumento_contratual=instrumento.get(
+                                "tipo_instrumento_contratual"
+                            ),
                             numero_instrumento=instrumento.get("numero_instrumento"),
                             tipo_contrato=instrumento.get("tipo_contrato"),
                             objeto=instrumento.get("objeto"),
                             data_emissao=self._to_date(instrumento.get("data_emissao")),
-                            data_expiracao=self._to_date(instrumento.get("data_expiracao")),
+                            data_expiracao=self._to_date(
+                                instrumento.get("data_expiracao")
+                            ),
                             possui_aditivo=instrumento.get("possui_aditivo"),
-                            valor_instrumento_contratual=instrumento.get("valor_instrumento_contratual"),
+                            valor_instrumento_contratual=instrumento.get(
+                                "valor_instrumento_contratual"
+                            ),
                         )
                         session.add(instrumento_model)
                         session.flush()
@@ -237,14 +256,20 @@ class IngestionPipeline:
             for reg in parser.parse_arrecadacoes(str(arq)):
                 try:
                     with session.begin():
-                        natureza = self._get_or_create_natureza(session, reg.get("natureza") or {})
+                        natureza = self._get_or_create_natureza(
+                            session, reg.get("natureza") or {}
+                        )
                         existente = session.execute(
                             select(ReceitaArrecadacao).where(
                                 and_(
-                                    ReceitaArrecadacao.data_arrecadacao == self._to_date(reg["data_arrecadacao"]),
-                                    ReceitaArrecadacao.unidade_gestora == reg["unidade_gestora"],
-                                    ReceitaArrecadacao.natureza_id == (natureza.id if natureza else None),
-                                    ReceitaArrecadacao.fonte_recurso == reg.get("fonte_recurso"),
+                                    ReceitaArrecadacao.data_arrecadacao
+                                    == self._to_date(reg["data_arrecadacao"]),
+                                    ReceitaArrecadacao.unidade_gestora
+                                    == reg["unidade_gestora"],
+                                    ReceitaArrecadacao.natureza_id
+                                    == (natureza.id if natureza else None),
+                                    ReceitaArrecadacao.fonte_recurso
+                                    == reg.get("fonte_recurso"),
                                 )
                             )
                         ).scalar_one_or_none()
@@ -257,10 +282,16 @@ class IngestionPipeline:
                             "fonte_recurso": reg.get("fonte_recurso"),
                             "valor_previsto_bruto": reg.get("valor_previsto_bruto"),
                             "valor_arrecadado_bruto": reg.get("valor_arrecadado_bruto"),
-                            "valor_previsto_deducoes": reg.get("valor_previsto_deducoes"),
-                            "valor_realizado_deducoes": reg.get("valor_realizado_deducoes"),
+                            "valor_previsto_deducoes": reg.get(
+                                "valor_previsto_deducoes"
+                            ),
+                            "valor_realizado_deducoes": reg.get(
+                                "valor_realizado_deducoes"
+                            ),
                             "valor_previsto_liquido": reg.get("valor_previsto_liquido"),
-                            "valor_arrecadado_liquido": reg.get("valor_arrecadado_liquido"),
+                            "valor_arrecadado_liquido": reg.get(
+                                "valor_arrecadado_liquido"
+                            ),
                         }
                         if existente is None:
                             session.add(ReceitaArrecadacao(**payload))
@@ -300,14 +331,17 @@ class IngestionPipeline:
                     veiculo = session.execute(
                         select(FrotaVeiculo).where(
                             and_(
-                                FrotaVeiculo.codigo_veiculo == registro["codigo_veiculo"],
+                                FrotaVeiculo.codigo_veiculo
+                                == registro["codigo_veiculo"],
                                 FrotaVeiculo.placa_veiculo == placa_veiculo,
                             )
                         )
                     ).scalar_one_or_none()
 
                     payload = dict(registro)
-                    payload["data_aquisicao"] = self._to_datetime(payload.get("data_aquisicao"))
+                    payload["data_aquisicao"] = self._to_datetime(
+                        payload.get("data_aquisicao")
+                    )
                     despesas = payload.pop("despesas", [])
 
                     if veiculo is None:
@@ -325,14 +359,18 @@ class IngestionPipeline:
                             resultado.atualizados += 1
                         else:
                             resultado.ignorados += 1
-                        session.query(FrotaDespesa).filter(FrotaDespesa.veiculo_id == veiculo.id).delete()
+                        session.query(FrotaDespesa).filter(
+                            FrotaDespesa.veiculo_id == veiculo.id
+                        ).delete()
 
                     for despesa in despesas:
                         session.add(
                             FrotaDespesa(
                                 veiculo_id=veiculo.id,
                                 descricao_evento=despesa.get("descricao_evento"),
-                                quantidade_lancamento=despesa.get("quantidade_lancamento"),
+                                quantidade_lancamento=despesa.get(
+                                    "quantidade_lancamento"
+                                ),
                                 valor_lancamento=despesa.get("valor_lancamento"),
                                 data_evento=self._to_date(despesa.get("data_evento")),
                                 tp_despesa=despesa.get("tp_despesa"),
@@ -359,17 +397,27 @@ class IngestionPipeline:
             for reg in registros:
                 try:
                     with session.begin():
-                        servidor = self._get_or_create_folha_dim(session, FolhaServidor, reg["nome_servidor"])
-                        lotacao = self._get_or_create_folha_dim(session, FolhaLotacao, reg.get("lotacao"))
-                        cargo = self._get_or_create_folha_dim(session, FolhaCargo, reg.get("cargo"))
+                        servidor = self._get_or_create_folha_dim(
+                            session, FolhaServidor, reg["nome_servidor"]
+                        )
+                        lotacao = self._get_or_create_folha_dim(
+                            session, FolhaLotacao, reg.get("lotacao")
+                        )
+                        cargo = self._get_or_create_folha_dim(
+                            session, FolhaCargo, reg.get("cargo")
+                        )
                         existente = session.execute(
                             select(FolhaPagamentoRegistro).where(
                                 and_(
-                                    FolhaPagamentoRegistro.competencia_ano == reg["competencia_ano"],
-                                    FolhaPagamentoRegistro.competencia_mes_nome == reg["competencia_mes_nome"],
+                                    FolhaPagamentoRegistro.competencia_ano
+                                    == reg["competencia_ano"],
+                                    FolhaPagamentoRegistro.competencia_mes_nome
+                                    == reg["competencia_mes_nome"],
                                     FolhaPagamentoRegistro.servidor_id == servidor.id,
-                                    FolhaPagamentoRegistro.cargo_id == (cargo.id if cargo else None),
-                                    FolhaPagamentoRegistro.lotacao_id == (lotacao.id if lotacao else None),
+                                    FolhaPagamentoRegistro.cargo_id
+                                    == (cargo.id if cargo else None),
+                                    FolhaPagamentoRegistro.lotacao_id
+                                    == (lotacao.id if lotacao else None),
                                 )
                             )
                         ).scalar_one_or_none()
@@ -409,7 +457,9 @@ class IngestionPipeline:
     def _get_or_create_fornecedor(session, cnpj_cpf: str, nome: str) -> Fornecedor:
         """Busca fornecedor existente ou cria novo registro."""
         fornecedor = session.execute(
-            select(Fornecedor).where(and_(Fornecedor.cnpj_cpf == cnpj_cpf, Fornecedor.nome == nome))
+            select(Fornecedor).where(
+                and_(Fornecedor.cnpj_cpf == cnpj_cpf, Fornecedor.nome == nome)
+            )
         ).scalar_one_or_none()
         if fornecedor is not None:
             return fornecedor
@@ -433,12 +483,16 @@ class IngestionPipeline:
         return value
 
     @staticmethod
-    def _get_or_create_natureza(session, natureza: dict[str, Any]) -> Optional[ReceitaNatureza]:
+    def _get_or_create_natureza(
+        session, natureza: dict[str, Any]
+    ) -> Optional[ReceitaNatureza]:
         """Busca ou cria natureza de receita por identificação."""
         ident = natureza.get("identificacao")
         if not ident:
             return None
-        existente = session.execute(select(ReceitaNatureza).where(ReceitaNatureza.identificacao == ident)).scalar_one_or_none()
+        existente = session.execute(
+            select(ReceitaNatureza).where(ReceitaNatureza.identificacao == ident)
+        ).scalar_one_or_none()
         if existente is not None:
             return existente
         obj = ReceitaNatureza(
@@ -456,7 +510,9 @@ class IngestionPipeline:
         """Busca ou cria dimensão textual da folha."""
         if not nome:
             return None
-        existente = session.execute(select(model).where(model.nome == nome)).scalar_one_or_none()
+        existente = session.execute(
+            select(model).where(model.nome == nome)
+        ).scalar_one_or_none()
         if existente is not None:
             return existente
         obj = model(nome=nome)
@@ -467,7 +523,9 @@ class IngestionPipeline:
     def _arquivos_por_tipo(self, tipo: str, ano: Optional[int]) -> list[Path]:
         """Descobre arquivos de entrada por tipo e ano."""
         if tipo == "receitas":
-            arquivos = sorted(self.data_dir.rglob("*arrecadacao*.xml")) + sorted(self.data_dir.rglob("*lancamento*.xml"))
+            arquivos = sorted(self.data_dir.rglob("*arrecadacao*.xml")) + sorted(
+                self.data_dir.rglob("*lancamento*.xml")
+            )
         elif tipo == "folha_pagamento":
             arquivos = sorted(self.data_dir.rglob("*folha-pagamento*.xml"))
         elif tipo == "servidores":

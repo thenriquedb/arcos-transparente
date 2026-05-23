@@ -1,7 +1,7 @@
 """initial schema
 
 Revision ID: 20260521_000001
-Revises: 
+Revises:
 Create Date: 2026-05-21 00:00:01
 """
 
@@ -19,8 +19,18 @@ def upgrade() -> None:
     op.create_table(
         "contratos",
         sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
-        sa.Column("criado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
-        sa.Column("atualizado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column(
+            "criado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
+        sa.Column(
+            "atualizado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
         sa.Column("numero", sa.String(length=50), nullable=False),
         sa.Column("fornecedor", sa.String(length=255), nullable=False),
         sa.Column("cnpj", sa.String(length=18), nullable=False),
@@ -30,7 +40,9 @@ def upgrade() -> None:
         sa.Column("categoria", sa.String(length=100), nullable=False),
         sa.Column("secretaria", sa.String(length=120), nullable=False),
         sa.Column("descricao", sa.Text(), nullable=True),
-        sa.UniqueConstraint("numero", "data_inicio", name="uq_contrato_numero_data_inicio"),
+        sa.UniqueConstraint(
+            "numero", "data_inicio", name="uq_contrato_numero_data_inicio"
+        ),
     )
     op.create_index("ix_contratos_cnpj", "contratos", ["cnpj"])
     op.create_index("ix_contratos_categoria", "contratos", ["categoria"])
@@ -41,8 +53,18 @@ def upgrade() -> None:
     op.create_table(
         "licitacoes",
         sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
-        sa.Column("criado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
-        sa.Column("atualizado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column(
+            "criado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
+        sa.Column(
+            "atualizado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
         sa.Column("numero", sa.String(length=50), nullable=False),
         sa.Column("modalidade", sa.String(length=100), nullable=False),
         sa.Column("objeto", sa.Text(), nullable=False),
@@ -50,7 +72,9 @@ def upgrade() -> None:
         sa.Column("data_abertura", sa.Date(), nullable=False),
         sa.Column("situacao", sa.String(length=80), nullable=False),
         sa.Column("secretaria", sa.String(length=120), nullable=False),
-        sa.UniqueConstraint("numero", "data_abertura", name="uq_licitacao_numero_data_abertura"),
+        sa.UniqueConstraint(
+            "numero", "data_abertura", name="uq_licitacao_numero_data_abertura"
+        ),
     )
     op.create_index("ix_licitacoes_modalidade", "licitacoes", ["modalidade"])
     op.create_index("ix_licitacoes_situacao", "licitacoes", ["situacao"])
@@ -60,14 +84,29 @@ def upgrade() -> None:
     op.create_table(
         "servidores",
         sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
-        sa.Column("criado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
-        sa.Column("atualizado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column(
+            "criado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
+        sa.Column(
+            "atualizado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
         sa.Column("nome", sa.String(length=255), nullable=False),
         sa.Column("cargo", sa.String(length=150), nullable=False),
         sa.Column("secretaria", sa.String(length=120), nullable=False),
         sa.Column("salario_base", sa.Numeric(15, 2), nullable=False),
         sa.Column("data_admissao", sa.Date(), nullable=False),
-        sa.UniqueConstraint("nome", "cargo", "data_admissao", name="uq_servidor_nome_cargo_data_admissao"),
+        sa.UniqueConstraint(
+            "nome",
+            "cargo",
+            "data_admissao",
+            name="uq_servidor_nome_cargo_data_admissao",
+        ),
     )
     op.create_index("ix_servidores_secretaria", "servidores", ["secretaria"])
     op.create_index("ix_servidores_cargo", "servidores", ["cargo"])

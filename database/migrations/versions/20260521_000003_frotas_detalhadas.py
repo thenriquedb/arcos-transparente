@@ -19,8 +19,18 @@ def upgrade() -> None:
     op.create_table(
         "frota_veiculos",
         sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
-        sa.Column("criado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
-        sa.Column("atualizado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column(
+            "criado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
+        sa.Column(
+            "atualizado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
         sa.Column("codigo_veiculo", sa.String(length=40), nullable=False),
         sa.Column("placa_patrimonio", sa.String(length=20), nullable=True),
         sa.Column("placa_veiculo", sa.String(length=20), nullable=True),
@@ -45,15 +55,31 @@ def upgrade() -> None:
         sa.Column("fornecedor", sa.String(length=255), nullable=True),
         sa.Column("cor_predominante", sa.String(length=40), nullable=True),
         sa.Column("valor_atual", sa.Numeric(15, 2), nullable=True),
-        sa.UniqueConstraint("codigo_veiculo", "placa_veiculo", name="uq_frota_codigo_placa"),
+        sa.UniqueConstraint(
+            "codigo_veiculo", "placa_veiculo", name="uq_frota_codigo_placa"
+        ),
     )
-    op.create_index("ix_frota_veiculos_codigo_veiculo", "frota_veiculos", ["codigo_veiculo"])
-    op.create_index("ix_frota_veiculos_placa_patrimonio", "frota_veiculos", ["placa_patrimonio"])
-    op.create_index("ix_frota_veiculos_placa_veiculo", "frota_veiculos", ["placa_veiculo"])
-    op.create_index("ix_frota_veiculos_unidade_gestora", "frota_veiculos", ["unidade_gestora"])
-    op.create_index("ix_frota_veiculos_tipo_veiculo", "frota_veiculos", ["tipo_veiculo"])
-    op.create_index("ix_frota_veiculos_data_aquisicao", "frota_veiculos", ["data_aquisicao"])
-    op.create_index("ix_frota_veiculos_situacao_veiculo", "frota_veiculos", ["situacao_veiculo"])
+    op.create_index(
+        "ix_frota_veiculos_codigo_veiculo", "frota_veiculos", ["codigo_veiculo"]
+    )
+    op.create_index(
+        "ix_frota_veiculos_placa_patrimonio", "frota_veiculos", ["placa_patrimonio"]
+    )
+    op.create_index(
+        "ix_frota_veiculos_placa_veiculo", "frota_veiculos", ["placa_veiculo"]
+    )
+    op.create_index(
+        "ix_frota_veiculos_unidade_gestora", "frota_veiculos", ["unidade_gestora"]
+    )
+    op.create_index(
+        "ix_frota_veiculos_tipo_veiculo", "frota_veiculos", ["tipo_veiculo"]
+    )
+    op.create_index(
+        "ix_frota_veiculos_data_aquisicao", "frota_veiculos", ["data_aquisicao"]
+    )
+    op.create_index(
+        "ix_frota_veiculos_situacao_veiculo", "frota_veiculos", ["situacao_veiculo"]
+    )
     op.create_index("ix_frota_veiculos_renavam", "frota_veiculos", ["renavam"])
     op.create_index("ix_frota_veiculos_chassi", "frota_veiculos", ["chassi"])
     op.create_index("ix_frota_veiculos_fornecedor", "frota_veiculos", ["fornecedor"])
@@ -61,9 +87,24 @@ def upgrade() -> None:
     op.create_table(
         "frota_despesas",
         sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
-        sa.Column("criado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
-        sa.Column("atualizado_em", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
-        sa.Column("veiculo_id", sa.Integer(), sa.ForeignKey("frota_veiculos.id", ondelete="CASCADE"), nullable=False),
+        sa.Column(
+            "criado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
+        sa.Column(
+            "atualizado_em",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
+        sa.Column(
+            "veiculo_id",
+            sa.Integer(),
+            sa.ForeignKey("frota_veiculos.id", ondelete="CASCADE"),
+            nullable=False,
+        ),
         sa.Column("descricao_evento", sa.Text(), nullable=True),
         sa.Column("quantidade_lancamento", sa.Numeric(15, 4), nullable=True),
         sa.Column("valor_lancamento", sa.Numeric(15, 4), nullable=True),
@@ -71,11 +112,19 @@ def upgrade() -> None:
         sa.Column("tp_despesa", sa.String(length=20), nullable=True),
         sa.Column("tipo_despesa", sa.String(length=80), nullable=True),
         sa.Column("total_despesa", sa.Numeric(15, 4), nullable=True),
-        sa.UniqueConstraint("veiculo_id", "descricao_evento", "data_evento", "valor_lancamento", name="uq_frota_despesa_evento"),
+        sa.UniqueConstraint(
+            "veiculo_id",
+            "descricao_evento",
+            "data_evento",
+            "valor_lancamento",
+            name="uq_frota_despesa_evento",
+        ),
     )
     op.create_index("ix_frota_despesas_veiculo_id", "frota_despesas", ["veiculo_id"])
     op.create_index("ix_frota_despesas_data_evento", "frota_despesas", ["data_evento"])
-    op.create_index("ix_frota_despesas_tipo_despesa", "frota_despesas", ["tipo_despesa"])
+    op.create_index(
+        "ix_frota_despesas_tipo_despesa", "frota_despesas", ["tipo_despesa"]
+    )
 
 
 def downgrade() -> None:

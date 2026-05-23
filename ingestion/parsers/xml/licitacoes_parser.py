@@ -21,11 +21,19 @@ class LicitacoesParser:
             modalidade = self._txt(node, "Modalidade")
             objeto = self._txt(node, "Objeto")
             valor_estimado = self._money(node, "ValorProcesso")
-            data_abertura = self._date(node, "DataJulgamento") or self._date(node, "DataHomologacao")
+            data_abertura = self._date(node, "DataJulgamento") or self._date(
+                node, "DataHomologacao"
+            )
             situacao = self._txt(node, "SituacaoProcesso") or "nao_informado"
             secretaria = self._txt(node, "UnidadeGestora") or "nao_informado"
 
-            if not numero or not modalidade or not objeto or valor_estimado is None or not data_abertura:
+            if (
+                not numero
+                or not modalidade
+                or not objeto
+                or valor_estimado is None
+                or not data_abertura
+            ):
                 continue
 
             registros.append(
@@ -68,8 +76,12 @@ class LicitacoesParser:
                 {
                     "numero_licitatorio": self._txt(item, "NumeroLicitatorio"),
                     "unidade_gestora": self._txt(item, "UnidadeGestora"),
-                    "tipo_instrumento_contratual": self._txt(item, "TipoInstrumentoContratual"),
-                    "numero_instrumento": self._txt(item, "NumeroInstrumentoContratual"),
+                    "tipo_instrumento_contratual": self._txt(
+                        item, "TipoInstrumentoContratual"
+                    ),
+                    "numero_instrumento": self._txt(
+                        item, "NumeroInstrumentoContratual"
+                    ),
                     "tipo_contrato": self._txt(item, "TipoContrato"),
                     "objeto": self._txt(item, "Objeto"),
                     "data_emissao": self._date(item, "DataEmissao"),
@@ -77,7 +89,9 @@ class LicitacoesParser:
                     "cnpj_fornecedor": self._txt(item, "CNPJFornecedor"),
                     "nome_fornecedor": self._txt(item, "NomeFornecedor"),
                     "possui_aditivo": self._txt(item, "PossuiAditivo"),
-                    "valor_instrumento_contratual": self._money(item, "ValorInstrumentoContratual"),
+                    "valor_instrumento_contratual": self._money(
+                        item, "ValorInstrumentoContratual"
+                    ),
                     "materias": self._parse_materias(item),
                 }
             )

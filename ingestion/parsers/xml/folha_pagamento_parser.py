@@ -75,4 +75,8 @@ class FolhaPagamentoParser:
             11: "NOVEMBRO",
             12: "DEZEMBRO",
         }
-        return {"ano": int(yyyy), "mes_num": mes_num, "mes_nome": mapa.get(mes_num, "DESCONHECIDO")}
+        return {
+            "ano": int(yyyy),
+            "mes_num": mes_num,
+            "mes_nome": mapa.get(mes_num, "DESCONHECIDO"),
+        }

@@ -43,7 +43,9 @@ console = Console()
 def db_init() -> None:
     """Executa migrations do Alembic."""
     subprocess.run(["alembic", "upgrade", "head"], check=True)
-    console.print("[green]Banco inicializado e migrations aplicadas com sucesso.[/green]")
+    console.print(
+        "[green]Banco inicializado e migrations aplicadas com sucesso.[/green]"
+    )
 
 
 @db_app.command("status")
@@ -56,22 +58,37 @@ def db_status() -> None:
     with get_session() as session:
         tabela.add_row("contratos", str(session.query(Contrato).count()))
         tabela.add_row("licitacoes", str(session.query(Licitacao).count()))
-        tabela.add_row("vencedores_licitacao", str(session.query(VencedorLicitacao).count()))
-        tabela.add_row("instrumentos_contratuais", str(session.query(InstrumentoContratual).count()))
-        tabela.add_row("materias_instrumento", str(session.query(MateriaInstrumento).count()))
+        tabela.add_row(
+            "vencedores_licitacao", str(session.query(VencedorLicitacao).count())
+        )
+        tabela.add_row(
+            "instrumentos_contratuais",
+            str(session.query(InstrumentoContratual).count()),
+        )
+        tabela.add_row(
+            "materias_instrumento", str(session.query(MateriaInstrumento).count())
+        )
         tabela.add_row("fornecedores", str(session.query(Fornecedor).count()))
         tabela.add_row("frota_veiculos", str(session.query(FrotaVeiculo).count()))
         tabela.add_row("frota_despesas", str(session.query(FrotaDespesa).count()))
         tabela.add_row("receita_naturezas", str(session.query(ReceitaNatureza).count()))
-        tabela.add_row("receita_arrecadacoes", str(session.query(ReceitaArrecadacao).count()))
-        tabela.add_row("receita_lancamentos", str(session.query(ReceitaLancamento).count()))
+        tabela.add_row(
+            "receita_arrecadacoes", str(session.query(ReceitaArrecadacao).count())
+        )
+        tabela.add_row(
+            "receita_lancamentos", str(session.query(ReceitaLancamento).count())
+        )
         tabela.add_row("folha_servidores", str(session.query(FolhaServidor).count()))
         tabela.add_row("folha_lotacoes", str(session.query(FolhaLotacao).count()))
         tabela.add_row("folha_cargos", str(session.query(FolhaCargo).count()))
-        tabela.add_row("folha_pagamentos", str(session.query(FolhaPagamentoRegistro).count()))
+        tabela.add_row(
+            "folha_pagamentos", str(session.query(FolhaPagamentoRegistro).count())
+        )
         tabela.add_row("servidores", str(session.query(Servidor).count()))
         metadata = MetaData()
-        alembic_version = SQLATable("alembic_version", metadata, autoload_with=session.bind)
+        alembic_version = SQLATable(
+            "alembic_version", metadata, autoload_with=session.bind
+        )
         revisao = session.execute(alembic_version.select()).scalar_one_or_none()
 
     console.print(tabela)
@@ -80,8 +97,13 @@ def db_status() -> None:
 
 @app.command("importar")
 def importar(
-    tipo: Optional[str] = typer.Option(default=None, help="Tipo: contratos|licitacoes|frotas|receitas|folha_pagamento|servidores"),
-    ano: Optional[int] = typer.Option(default=None, help="Filtra por ano no nome do arquivo"),
+    tipo: Optional[str] = typer.Option(
+        default=None,
+        help="Tipo: contratos|licitacoes|frotas|receitas|folha_pagamento|servidores",
+    ),
+    ano: Optional[int] = typer.Option(
+        default=None, help="Filtra por ano no nome do arquivo"
+    ),
     force: bool = typer.Option(default=False, help="Apaga dados antes de reimportar"),
 ) -> None:
     """Importa XMLs para o banco com relatório consolidado."""
@@ -89,7 +111,9 @@ def importar(
     pipeline = IngestionPipeline(data_dir="data/xml")
 
     if force:
-        confirmar = Confirm.ask("Isso apagará dados existentes. Deseja continuar?", default=False)
+        confirmar = Confirm.ask(
+            "Isso apagará dados existentes. Deseja continuar?", default=False
+        )
         if not confirmar:
             console.print("[yellow]Operação cancelada.[/yellow]")
             raise typer.Exit(code=1)
@@ -122,8 +146,17 @@ def importar(
                 session.rollback()
                 raise
 
-    tipos_resolvidos = tipos or ["contratos", "licitacoes", "frotas", "receitas", "folha_pagamento", "servidores"]
-    total_arquivos = sum(len(pipeline._arquivos_por_tipo(t, ano)) for t in tipos_resolvidos)
+    tipos_resolvidos = tipos or [
+        "contratos",
+        "licitacoes",
+        "frotas",
+        "receitas",
+        "folha_pagamento",
+        "servidores",
+    ]
+    total_arquivos = sum(
+        len(pipeline._arquivos_por_tipo(t, ano)) for t in tipos_resolvidos
+    )
 
     with Progress() as progress:
         task = progress.add_task("Importando arquivos...", total=max(total_arquivos, 1))
@@ -142,7 +175,13 @@ def importar(
 
     total_i = total_a = total_ig = total_e = 0
     for chave, resultado in relatorio.items():
-        tabela.add_row(chave, str(resultado.inseridos), str(resultado.atualizados), str(resultado.ignorados), str(resultado.erros))
+        tabela.add_row(
+            chave,
+            str(resultado.inseridos),
+            str(resultado.atualizados),
+            str(resultado.ignorados),
+            str(resultado.erros),
+        )
         total_i += resultado.inseridos
         total_a += resultado.atualizados
         total_ig += resultado.ignorados

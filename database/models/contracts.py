@@ -12,11 +12,22 @@ from .base import Base
 
 class Contrato(Base):
     __tablename__ = "contratos"
-    __table_args__ = (UniqueConstraint("numero", "data_inicio", name="uq_contrato_numero_data_inicio"),)
+    __table_args__ = (
+        UniqueConstraint(
+            "numero", "data_inicio", name="uq_contrato_numero_data_inicio"
+        ),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    atualizado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    criado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    atualizado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
 
     numero: Mapped[str] = mapped_column(String(50), nullable=False)
     fornecedor: Mapped[str] = mapped_column(String(255), nullable=False)

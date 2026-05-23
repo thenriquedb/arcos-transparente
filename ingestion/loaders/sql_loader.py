@@ -46,29 +46,41 @@ class SQLLoader:
                         try:
                             payload = self._normalize_and_validate(registro, modelo)
                             unique_filter = self._build_unique_filter(payload, modelo)
-                            existente = self.session.execute(select(modelo).where(and_(*unique_filter))).scalar_one_or_none()
+                            existente = self.session.execute(
+                                select(modelo).where(and_(*unique_filter))
+                            ).scalar_one_or_none()
 
                             if existente is None:
                                 self.session.add(modelo(**payload))
                                 resultado.inseridos += 1
-                                logger.info(f"Inserido em {modelo.__tablename__}: {payload}")
+                                logger.info(
+                                    f"Inserido em {modelo.__tablename__}: {payload}"
+                                )
                                 continue
 
                             alterou = self._apply_updates(existente, payload)
                             if alterou:
                                 resultado.atualizados += 1
-                                logger.info(f"Atualizado em {modelo.__tablename__}: {payload}")
+                                logger.info(
+                                    f"Atualizado em {modelo.__tablename__}: {payload}"
+                                )
                             else:
                                 resultado.ignorados += 1
-                                logger.warning(f"Ignorado (sem alteracao) em {modelo.__tablename__}: {payload}")
+                                logger.warning(
+                                    f"Ignorado (sem alteracao) em {modelo.__tablename__}: {payload}"
+                                )
 
                         except Exception as exc:  # noqa: BLE001
                             resultado.erros += 1
-                            logger.error(f"Falha ao processar registro em {modelo.__tablename__}: {registro}. Erro: {exc}")
+                            logger.error(
+                                f"Falha ao processar registro em {modelo.__tablename__}: {registro}. Erro: {exc}"
+                            )
             except SQLAlchemyError as exc:
                 self.session.rollback()
                 resultado.erros += len(batch)
-                logger.error(f"Rollback de batch em {modelo.__tablename__}. Erro: {exc}")
+                logger.error(
+                    f"Rollback de batch em {modelo.__tablename__}. Erro: {exc}"
+                )
 
         return resultado
 
@@ -81,7 +93,9 @@ class SQLLoader:
                 break
 
         if unique_constraint is None:
-            raise ValueError(f"Modelo {modelo.__name__} sem UniqueConstraint para upsert")
+            raise ValueError(
+                f"Modelo {modelo.__name__} sem UniqueConstraint para upsert"
+            )
 
         filters: list[Any] = []
         for col in unique_constraint.columns:
@@ -90,7 +104,9 @@ class SQLLoader:
             filters.append(getattr(modelo, col.name) == payload[col.name])
         return filters
 
-    def _normalize_and_validate(self, registro: dict[str, Any], modelo: type) -> dict[str, Any]:
+    def _normalize_and_validate(
+        self, registro: dict[str, Any], modelo: type
+    ) -> dict[str, Any]:
         """Normaliza e valida tipos de acordo com colunas do modelo."""
         payload: dict[str, Any] = {}
         for coluna in modelo.__table__.columns:
@@ -111,7 +127,9 @@ class SQLLoader:
 
             if isinstance(coluna.type, Numeric):
                 if isinstance(valor, str):
-                    raise TypeError(f"Campo monetario deve ser Decimal/int, nao string: {coluna.name}")
+                    raise TypeError(
+                        f"Campo monetario deve ser Decimal/int, nao string: {coluna.name}"
+                    )
                 if not isinstance(valor, (Decimal, int)):
                     raise TypeError(f"Campo monetario invalido: {coluna.name}")
                 payload[coluna.name] = Decimal(valor)

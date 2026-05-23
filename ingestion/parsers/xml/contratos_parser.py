@@ -17,7 +17,9 @@ class ContratosParser:
         registros: list[dict[str, Any]] = []
 
         for node in root.findall(".//InstrumentoContratual"):
-            numero = self._txt(node, "NumeroInstrumentoContratual") or self._txt(node, "NumeroLicitatorio")
+            numero = self._txt(node, "NumeroInstrumentoContratual") or self._txt(
+                node, "NumeroLicitatorio"
+            )
             fornecedor = self._txt(node, "NomeFornecedor")
             cnpj = self._txt(node, "CNPJFornecedor")
             valor = self._money(node, "ValorInstrumentoContratual")
@@ -27,7 +29,13 @@ class ContratosParser:
             secretaria = self._txt(node, "UnidadeGestora") or "nao_informado"
             descricao = self._txt(node, "Objeto")
 
-            if not numero or not fornecedor or not cnpj or valor is None or not data_inicio:
+            if (
+                not numero
+                or not fornecedor
+                or not cnpj
+                or valor is None
+                or not data_inicio
+            ):
                 continue
 
             registros.append(
