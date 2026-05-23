@@ -8,6 +8,7 @@ from sqlalchemy import (
     Date,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     Numeric,
     String,
@@ -57,6 +58,13 @@ class ReceitaArrecadacao(Base):
             "natureza_id",
             "fonte_recurso",
             name="uq_receita_arrec_base",
+        ),
+        Index(
+            "ix_receita_arrecadacoes_exercicio_mes_natureza_unidade",
+            "exercicio",
+            "mes",
+            "natureza_id",
+            "unidade_gestora",
         ),
     )
 
@@ -115,6 +123,13 @@ class ReceitaLancamento(Base):
             "tributo",
             "valor_lancado_exercicio",
             name="uq_receita_lanc_base",
+        ),
+        Index(
+            "ix_receita_lancamentos_exercicio_mes_tipo_tributo",
+            "exercicio",
+            "mes",
+            "tipo_receita",
+            "tributo",
         ),
     )
 

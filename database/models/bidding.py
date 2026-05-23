@@ -8,6 +8,7 @@ from sqlalchemy import (
     Date,
     DateTime,
     ForeignKey,
+    Index,
     Numeric,
     String,
     Text,
@@ -24,6 +25,12 @@ class Licitacao(Base):
     __table_args__ = (
         UniqueConstraint(
             "numero", "data_abertura", name="uq_licitacao_numero_data_abertura"
+        ),
+        Index(
+            "ix_licitacoes_secretaria_situacao_data_abertura",
+            "secretaria",
+            "situacao",
+            "data_abertura",
         ),
     )
 
@@ -77,6 +84,7 @@ class Fornecedor(Base):
     instrumentos_contratuais: Mapped[list["InstrumentoContratual"]] = relationship(
         back_populates="fornecedor"
     )
+    contratos: Mapped[list["Contrato"]] = relationship(back_populates="fornecedor_rel")
 
 
 class VencedorLicitacao(Base):
@@ -101,7 +109,8 @@ class VencedorLicitacao(Base):
         ForeignKey("licitacoes.id", ondelete="CASCADE"), nullable=False, index=True
     )
     fornecedor_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("fornecedores.id", ondelete="SET NULL"), nullable=True
+        ForeignKey("fornecedores.id", ondelete="SET NULL"),
+        nullable=True,
     )
     cnpj_cpf: Mapped[str] = mapped_column(String(18), nullable=False, index=True)
     nome: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -119,6 +128,11 @@ class InstrumentoContratual(Base):
         UniqueConstraint(
             "licitacao_id", "numero_instrumento", name="uq_instrumento_licitacao_numero"
         ),
+        Index(
+            "ix_instrumentos_contratuais_fornecedor_emissao",
+            "fornecedor_id",
+            "data_emissao",
+        ),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -135,7 +149,9 @@ class InstrumentoContratual(Base):
         ForeignKey("licitacoes.id", ondelete="CASCADE"), nullable=False, index=True
     )
     fornecedor_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("fornecedores.id", ondelete="SET NULL"), nullable=True
+        ForeignKey("fornecedores.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
     )
     numero_licitatorio: Mapped[Optional[str]] = mapped_column(
         String(50), nullable=True, index=True

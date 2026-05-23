@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 import subprocess
+from pathlib import Path
 from typing import Optional
 
 import typer
 from rich.console import Console
 from rich.progress import Progress
-from rich.prompt import Confirm
 from rich.table import Table as RichTable
-from sqlalchemy import MetaData, Table as SQLATable, inspect
+from sqlalchemy import MetaData, Table as SQLATable
 
 from database.models import (
     Contrato,
@@ -37,6 +37,25 @@ app = typer.Typer()
 db_app = typer.Typer()
 app.add_typer(db_app, name="db")
 console = Console()
+
+
+def _recriar_base_importacao() -> None:
+    """Recria o banco SQLite e reaplica as migrations antes da importação."""
+    db_path = engine.url.database
+    engine.dispose()
+
+    if engine.url.get_backend_name() == "sqlite" and db_path:
+        arquivo_banco = Path(db_path)
+        arquivos_relacionados = [
+            arquivo_banco,
+            Path(f"{arquivo_banco}-shm"),
+            Path(f"{arquivo_banco}-wal"),
+        ]
+        for arquivo in arquivos_relacionados:
+            if arquivo.exists():
+                arquivo.unlink()
+
+    subprocess.run(["alembic", "upgrade", "head"], check=True)
 
 
 @db_app.command("init")
@@ -106,45 +125,17 @@ def importar(
     ),
     force: bool = typer.Option(default=False, help="Apaga dados antes de reimportar"),
 ) -> None:
-    """Importa XMLs para o banco com relatório consolidado."""
+    """Recria a base e importa XMLs para o banco com relatório consolidado."""
     tipos = [tipo] if tipo else None
     pipeline = IngestionPipeline(data_dir="data/xml")
 
     if force:
-        confirmar = Confirm.ask(
-            "Isso apagará dados existentes. Deseja continuar?", default=False
+        console.print(
+            "[yellow]A opcao --force agora e redundante: a base inteira eh recriada antes de cada importacao.[/yellow]"
         )
-        if not confirmar:
-            console.print("[yellow]Operação cancelada.[/yellow]")
-            raise typer.Exit(code=1)
-        with get_session() as session:
-            try:
-                with session.begin():
-                    existing_tables = set(inspect(session.bind).get_table_names())
-                    ordered_models = [
-                        Contrato,
-                        MateriaInstrumento,
-                        InstrumentoContratual,
-                        VencedorLicitacao,
-                        Fornecedor,
-                        FrotaDespesa,
-                        FrotaVeiculo,
-                        ReceitaArrecadacao,
-                        ReceitaLancamento,
-                        ReceitaNatureza,
-                        FolhaPagamentoRegistro,
-                        FolhaCargo,
-                        FolhaLotacao,
-                        FolhaServidor,
-                        Licitacao,
-                        Servidor,
-                    ]
-                    for model in ordered_models:
-                        if model.__tablename__ in existing_tables:
-                            session.query(model).delete()
-            except Exception:
-                session.rollback()
-                raise
+
+    _recriar_base_importacao()
+    console.print("[green]Base recriada com sucesso. Iniciando importacao...[/green]")
 
     tipos_resolvidos = tipos or [
         "contratos",

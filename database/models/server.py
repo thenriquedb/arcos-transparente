@@ -4,8 +4,17 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional
 
-from sqlalchemy import Date, DateTime, Integer, Numeric, String, UniqueConstraint, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import (
+    Date,
+    DateTime,
+    Index,
+    Integer,
+    Numeric,
+    String,
+    UniqueConstraint,
+    func,
+)
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.models.base import Base
 
@@ -21,6 +30,12 @@ class Servidor(Base):
             "secretaria",
             "data_admissao",
             name="uq_servidor_nome_cargo_sec_data_admissao",
+        ),
+        Index(
+            "ix_servidores_secretaria_cargo_data_admissao",
+            "secretaria",
+            "cargo",
+            "data_admissao",
         ),
     )
 
@@ -42,3 +57,7 @@ class Servidor(Base):
         Numeric(15, 2), nullable=True
     )
     data_admissao: Mapped[date] = mapped_column(Date, nullable=False, index=True)
+
+    registros_folha: Mapped[list["FolhaServidor"]] = relationship(
+        back_populates="servidor_canonico"
+    )

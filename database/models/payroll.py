@@ -7,6 +7,7 @@ from typing import Optional
 from sqlalchemy import (
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     Numeric,
     String,
@@ -33,9 +34,15 @@ class FolhaServidor(Base):
         nullable=False,
     )
     nome: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    servidor_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("servidores.id", ondelete="SET NULL"), nullable=True, index=True
+    )
 
     pagamentos: Mapped[list["FolhaPagamentoRegistro"]] = relationship(
         back_populates="servidor"
+    )
+    servidor_canonico: Mapped[Optional["Servidor"]] = relationship(
+        back_populates="registros_folha"
     )
 
 
@@ -91,6 +98,18 @@ class FolhaPagamentoRegistro(Base):
             "cargo_id",
             "lotacao_id",
             name="uq_folha_comp_servidor_cargo_lotacao",
+        ),
+        Index(
+            "ix_folha_pagamentos_ano_mes_lotacao",
+            "competencia_ano",
+            "competencia_mes_num",
+            "lotacao_id",
+        ),
+        Index(
+            "ix_folha_pagamentos_ano_mes_servidor",
+            "competencia_ano",
+            "competencia_mes_num",
+            "servidor_id",
         ),
     )
 

@@ -80,6 +80,21 @@ class IngestionPipeline:
                             on_file_processed(tipo, arquivo)
                     relatorio[tipo] = agregado
                     continue
+                if tipo == "contratos":
+                    for arquivo in arquivos:
+                        registros = parser.parse(str(arquivo))
+                        resultado_arquivo = self._load_contratos(
+                            session=session,
+                            registros=registros,
+                        )
+                        agregado.inseridos += resultado_arquivo.inseridos
+                        agregado.atualizados += resultado_arquivo.atualizados
+                        agregado.ignorados += resultado_arquivo.ignorados
+                        agregado.erros += resultado_arquivo.erros
+                        if on_file_processed is not None:
+                            on_file_processed(tipo, arquivo)
+                    relatorio[tipo] = agregado
+                    continue
                 if tipo == "folha_pagamento":
                     resultado = self._load_folha_pagamento(session=session, ano=ano)
                     agregado.inseridos += resultado.inseridos
@@ -116,6 +131,55 @@ class IngestionPipeline:
                 relatorio[tipo] = agregado
 
         return relatorio
+
+    def _load_contratos(self, session, registros: list[dict[str, Any]]) -> LoadResult:
+        """Carrega contratos e vincula fornecedor canonico quando possivel."""
+        resultado = LoadResult()
+        for registro in registros:
+            try:
+                with session.begin():
+                    fornecedor = self._get_or_create_fornecedor(
+                        session=session,
+                        cnpj_cpf=registro["cnpj"],
+                        nome=registro["fornecedor"],
+                    )
+                    payload = {
+                        "numero": registro["numero"],
+                        "fornecedor": registro["fornecedor"],
+                        "cnpj": registro["cnpj"],
+                        "fornecedor_id": fornecedor.id,
+                        "valor": registro["valor"],
+                        "data_inicio": self._to_date(registro["data_inicio"]),
+                        "data_fim": self._to_date(registro.get("data_fim")),
+                        "categoria": registro["categoria"],
+                        "secretaria": registro["secretaria"],
+                        "descricao": registro.get("descricao"),
+                    }
+                    existente = session.execute(
+                        select(Contrato).where(
+                            and_(
+                                Contrato.numero == payload["numero"],
+                                Contrato.data_inicio == payload["data_inicio"],
+                            )
+                        )
+                    ).scalar_one_or_none()
+                    if existente is None:
+                        session.add(Contrato(**payload))
+                        resultado.inseridos += 1
+                    else:
+                        alterou = False
+                        for campo, valor in payload.items():
+                            if getattr(existente, campo) != valor:
+                                setattr(existente, campo, valor)
+                                alterou = True
+                        if alterou:
+                            resultado.atualizados += 1
+                        else:
+                            resultado.ignorados += 1
+            except Exception:
+                session.rollback()
+                resultado.erros += 1
+        return resultado
 
     def _load_licitacoes(self, session, registros: list[dict[str, Any]]) -> LoadResult:
         """Carrega licitações e entidades filhas relacionadas."""
@@ -397,8 +461,11 @@ class IngestionPipeline:
             for reg in registros:
                 try:
                     with session.begin():
-                        servidor = self._get_or_create_folha_dim(
-                            session, FolhaServidor, reg["nome_servidor"]
+                        servidor = self._get_or_create_folha_servidor(
+                            session=session,
+                            nome=reg["nome_servidor"],
+                            cargo=reg.get("cargo"),
+                            lotacao=reg.get("lotacao"),
                         )
                         lotacao = self._get_or_create_folha_dim(
                             session, FolhaLotacao, reg.get("lotacao")
@@ -519,6 +586,68 @@ class IngestionPipeline:
         session.add(obj)
         session.flush()
         return obj
+
+    @staticmethod
+    def _get_or_create_folha_servidor(
+        session,
+        nome: str,
+        cargo: Optional[str],
+        lotacao: Optional[str],
+    ) -> FolhaServidor:
+        """Busca/cria dimensão de folha e tenta vincular ao servidor canônico."""
+        existente = session.execute(
+            select(FolhaServidor).where(FolhaServidor.nome == nome)
+        ).scalar_one_or_none()
+        servidor_canonico = IngestionPipeline._find_servidor_canonico(
+            session=session,
+            nome=nome,
+            cargo=cargo,
+            secretaria=lotacao,
+        )
+
+        if existente is not None:
+            if existente.servidor_id is None and servidor_canonico is not None:
+                existente.servidor_id = servidor_canonico.id
+            return existente
+
+        obj = FolhaServidor(
+            nome=nome,
+            servidor_id=servidor_canonico.id if servidor_canonico is not None else None,
+        )
+        session.add(obj)
+        session.flush()
+        return obj
+
+    @staticmethod
+    def _find_servidor_canonico(
+        session,
+        nome: str,
+        cargo: Optional[str],
+        secretaria: Optional[str],
+    ) -> Optional[Servidor]:
+        """Resolve o melhor servidor canônico para um nome da folha."""
+        filtros = [Servidor.nome == nome]
+        if cargo:
+            filtros.append(Servidor.cargo == cargo)
+        if secretaria:
+            filtros.append(Servidor.secretaria == secretaria)
+
+        candidatos = (
+            session.execute(select(Servidor).where(and_(*filtros))).scalars().all()
+        )
+        if len(candidatos) == 1:
+            return candidatos[0]
+
+        if cargo or secretaria:
+            fallback = (
+                session.execute(select(Servidor).where(Servidor.nome == nome))
+                .scalars()
+                .all()
+            )
+            if len(fallback) == 1:
+                return fallback[0]
+
+        return None
 
     def _arquivos_por_tipo(self, tipo: str, ano: Optional[int]) -> list[Path]:
         """Descobre arquivos de entrada por tipo e ano."""
