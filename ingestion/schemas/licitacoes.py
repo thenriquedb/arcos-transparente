@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime
-from decimal import Decimal, InvalidOperation
+from datetime import date
+from decimal import Decimal
 from typing import Any
 
 from pydantic import (
@@ -15,73 +15,13 @@ from pydantic import (
     model_validator,
 )
 
+from shared.utils.validation import clean_text, parse_date, parse_decimal
+
 
 class _LicitacoesBaseSchema(BaseModel):
     """Base compartilhada de saneamento para schemas de licitacoes."""
 
     model_config = ConfigDict(extra="ignore")
-
-    @staticmethod
-    def _clean_text(value: Any) -> str | None:
-        if value is None:
-            return None
-        if isinstance(value, str):
-            value = value.strip()
-            return value or None
-        if isinstance(value, (int, float, Decimal)):
-            value = str(value).strip()
-            return value or None
-        raise ValueError("valor textual invalido")
-
-    @classmethod
-    def _parse_decimal(cls, value: Any) -> Decimal | None:
-        if value is None:
-            return None
-        if isinstance(value, Decimal):
-            return value
-        if isinstance(value, int):
-            return Decimal(value)
-        if isinstance(value, float):
-            return Decimal(str(value))
-
-        text = cls._clean_text(value)
-        if text is None:
-            return None
-
-        normalized = text.replace("R$", "").replace(" ", "")
-        normalized = normalized.replace(".", "").replace(",", ".")
-        try:
-            return Decimal(normalized)
-        except (InvalidOperation, ValueError) as exc:
-            raise ValueError("valor decimal invalido") from exc
-
-    @classmethod
-    def _parse_date(cls, value: Any) -> date | None:
-        if value is None:
-            return None
-        if isinstance(value, datetime):
-            return value.date()
-        if isinstance(value, date):
-            return value
-
-        text = cls._clean_text(value)
-        if text is None:
-            return None
-
-        if "/" in text:
-            try:
-                dd, mm, yyyy = text.split("/")
-                return date(int(yyyy), int(mm), int(dd))
-            except ValueError as exc:
-                raise ValueError("data invalida no formato dd/mm/yyyy") from exc
-
-        try:
-            return date.fromisoformat(text)
-        except ValueError:
-            try:
-                return datetime.fromisoformat(text.replace("Z", "+00:00")).date()
-            except ValueError as exc:
-                raise ValueError("data invalida") from exc
 
 
 class MateriaInstrumentoInSchema(_LicitacoesBaseSchema):
@@ -104,12 +44,12 @@ class MateriaInstrumentoInSchema(_LicitacoesBaseSchema):
     )
     @classmethod
     def _normalize_text_fields(cls, value: Any) -> str | None:
-        return cls._clean_text(value)
+        return clean_text(value)
 
     @field_validator("quantidade", "valor_unitario", "valor_total", mode="before")
     @classmethod
     def _normalize_decimal_fields(cls, value: Any) -> Decimal | None:
-        return cls._parse_decimal(value)
+        return parse_decimal(value)
 
 
 class VencedorInSchema(_LicitacoesBaseSchema):
@@ -122,7 +62,7 @@ class VencedorInSchema(_LicitacoesBaseSchema):
     @field_validator("cnpj_cpf", "nome", "validade_proposta", mode="before")
     @classmethod
     def _normalize_text_fields(cls, value: Any) -> str | None:
-        return cls._clean_text(value)
+        return clean_text(value)
 
 
 class InstrumentoContratualInSchema(_LicitacoesBaseSchema):
@@ -156,17 +96,17 @@ class InstrumentoContratualInSchema(_LicitacoesBaseSchema):
     )
     @classmethod
     def _normalize_text_fields(cls, value: Any) -> str | None:
-        return cls._clean_text(value)
+        return clean_text(value)
 
     @field_validator("data_emissao", "data_expiracao", mode="before")
     @classmethod
     def _normalize_date_fields(cls, value: Any) -> date | None:
-        return cls._parse_date(value)
+        return parse_date(value)
 
     @field_validator("valor_instrumento_contratual", mode="before")
     @classmethod
     def _normalize_decimal_fields(cls, value: Any) -> Decimal | None:
-        return cls._parse_decimal(value)
+        return parse_decimal(value)
 
     @field_validator("materias", mode="before")
     @classmethod
@@ -205,17 +145,17 @@ class LicitacaoInSchema(_LicitacoesBaseSchema):
     @field_validator("numero", "modalidade", "objeto", "situacao", "secretaria", mode="before")
     @classmethod
     def _normalize_text_fields(cls, value: Any) -> str | None:
-        return cls._clean_text(value)
+        return clean_text(value)
 
     @field_validator("valor_estimado", mode="before")
     @classmethod
     def _normalize_valor_estimado(cls, value: Any) -> Decimal | None:
-        return cls._parse_decimal(value)
+        return parse_decimal(value)
 
     @field_validator("data_abertura", mode="before")
     @classmethod
     def _normalize_data_abertura(cls, value: Any) -> date | None:
-        return cls._parse_date(value)
+        return parse_date(value)
 
     @field_validator("vencedores", mode="before")
     @classmethod
