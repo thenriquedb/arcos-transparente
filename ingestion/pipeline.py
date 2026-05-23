@@ -633,14 +633,30 @@ class IngestionPipeline:
             filtros.append(Servidor.secretaria == secretaria)
 
         candidatos = (
-            session.execute(select(Servidor).where(and_(*filtros))).scalars().all()
+            session.execute(
+                select(Servidor)
+                .where(and_(*filtros))
+                .order_by(
+                    Servidor.competencia_referencia.desc(),
+                    Servidor.id.desc(),
+                )
+            )
+            .scalars()
+            .all()
         )
-        if len(candidatos) == 1:
+        if candidatos:
             return candidatos[0]
 
         if cargo or secretaria:
             fallback = (
-                session.execute(select(Servidor).where(Servidor.nome == nome))
+                session.execute(
+                    select(Servidor)
+                    .where(Servidor.nome == nome)
+                    .order_by(
+                        Servidor.competencia_referencia.desc(),
+                        Servidor.id.desc(),
+                    )
+                )
                 .scalars()
                 .all()
             )

@@ -4,7 +4,7 @@ from pprint import pprint
 
 
 def main():
-    termo = "João Silva"
+    termo = "Lincoln"
     # servidores = buscar_servidores_por_nome(termo)
     # pprint(servidores)
 

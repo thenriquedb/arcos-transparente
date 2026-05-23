@@ -93,7 +93,7 @@ class ServidorToolItem(_ServidoresToolBaseSchema):
     cargo: str
     secretaria: str
     salario_base: float | None = None
-    data_admissao: date
+    competencia_referencia: date
 
 
 class ServidoresToolResponse(_ServidoresToolBaseSchema):

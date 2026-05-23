@@ -27,7 +27,7 @@ class ServidoresParser:
                 "cargo": self._txt(node, "Cargo"),
                 "secretaria": self._txt(node, "Lotacao"),
                 "salario_base": self._txt(node, "SalarioBase"),
-                "data_admissao": self._txt(node, "Competencia"),
+                "competencia_referencia": self._txt(node, "Competencia"),
             }
 
             try:

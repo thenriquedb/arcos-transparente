@@ -110,9 +110,7 @@ class InstrumentoContratualInSchema(_LicitacoesBaseSchema):
 
     @field_validator("materias", mode="before")
     @classmethod
-    def _normalize_materias(
-        cls, value: Any
-    ) -> list[MateriaInstrumentoInSchema]:
+    def _normalize_materias(cls, value: Any) -> list[MateriaInstrumentoInSchema]:
         if value is None:
             return []
         if not isinstance(value, list):
@@ -142,7 +140,9 @@ class LicitacaoInSchema(_LicitacoesBaseSchema):
         default_factory=list
     )
 
-    @field_validator("numero", "modalidade", "objeto", "situacao", "secretaria", mode="before")
+    @field_validator(
+        "numero", "modalidade", "objeto", "situacao", "secretaria", mode="before"
+    )
     @classmethod
     def _normalize_text_fields(cls, value: Any) -> str | None:
         return clean_text(value)
@@ -175,9 +175,7 @@ class LicitacaoInSchema(_LicitacoesBaseSchema):
 
     @field_validator("instrumentos_contratuais", mode="before")
     @classmethod
-    def _normalize_instrumentos(
-        cls, value: Any
-    ) -> list[InstrumentoContratualInSchema]:
+    def _normalize_instrumentos(cls, value: Any) -> list[InstrumentoContratualInSchema]:
         if value is None:
             return []
         if not isinstance(value, list):

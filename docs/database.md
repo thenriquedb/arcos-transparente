@@ -215,7 +215,7 @@ Regras importantes:
 
 ### `servidores`
 
-Cadastro canônico de servidores públicos.
+Snapshots mensais de servidores derivados da folha de pagamento.
 
 Campos principais:
 
@@ -223,7 +223,7 @@ Campos principais:
 - `cargo`
 - `secretaria`
 - `salario_base`
-- `data_admissao`
+- `competencia_referencia`
 
 Relacionamentos:
 
@@ -231,12 +231,14 @@ Relacionamentos:
 
 Regras importantes:
 
-- unicidade por `nome + cargo + secretaria + data_admissao`
-- índice composto por `secretaria + cargo + data_admissao`
+- unicidade por `nome + cargo + secretaria + competencia_referencia`
+- índice composto por `secretaria + cargo + competencia_referencia`
 
 Observação:
 
-Esta tabela representa a identidade administrativa do servidor. A folha mensal fica em tabelas separadas.
+Esta tabela não contém data de admissão. O portal de origem só expõe a competência
+mensal do pagamento, então o recorte temporal armazenado aqui é a competência
+de referência do registro.
 
 ### `folha_servidores`
 
@@ -489,7 +491,7 @@ Para perguntas de folha e histórico funcional:
 
 - use `folha_pagamentos` para valores mensais
 - use `folha_servidores` para localizar o nome na folha
-- use `servidores` quando precisar de visão canônica de cargo, secretaria e admissão
+- use `servidores` quando precisar de cargo, secretaria e salário-base por competência
 
 ### Consultas por receita
 

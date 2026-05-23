@@ -28,14 +28,14 @@ def test_sql_loader_lida_com_duplicados_no_mesmo_batch_sem_rollback() -> None:
             "cargo": "Enfermeira",
             "secretaria": "Secretaria de Saude",
             "salario_base": Decimal("2500.00"),
-            "data_admissao": date(2025, 1, 1),
+            "competencia_referencia": date(2025, 1, 1),
         },
         {
             "nome": "Maria da Silva",
             "cargo": "Enfermeira",
             "secretaria": "Secretaria de Saude",
             "salario_base": Decimal("2500.00"),
-            "data_admissao": date(2025, 1, 1),
+            "competencia_referencia": date(2025, 1, 1),
         },
     ]
 

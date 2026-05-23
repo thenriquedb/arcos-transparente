@@ -22,3 +22,5 @@ build/
 .uv/
 
 .ruff_cache/
+.pytest_cache/
+.uv-cache

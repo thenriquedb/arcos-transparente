@@ -26,7 +26,7 @@ def _serializar_servidor(servidor: Servidor) -> dict[str, Any]:
             "cargo": servidor.cargo,
             "secretaria": servidor.secretaria,
             "salario_base": decimal_to_float(servidor.salario_base),
-            "data_admissao": servidor.data_admissao,
+            "competencia_referencia": servidor.competencia_referencia,
         }
     )
     return payload.model_dump(mode="json")
@@ -217,19 +217,19 @@ def buscar_servidores_por_cargo(cargo: str, limite: int = 10) -> dict[str, Any]:
     ).model_dump(mode="json")
 
 
-def buscar_servidores_admitidos_no_periodo(
+def buscar_servidores_por_competencia_no_periodo(
     data_inicio: str, data_fim: str, limite: int = 10
 ) -> dict[str, Any]:
     """
-    Busca servidores admitidos em um período específico.
+    Busca servidores com registros em um período de competência específico.
 
     Examples:
-        'quais servidores foram admitidos entre 01/01/2020 e 31/12/2020',
-        'me mostre os servidores admitidos no ano de 2021'.
+        'quais servidores aparecem entre 01/01/2025 e 31/03/2025',
+        'me mostre os servidores com competência em 2025-02-01'.
 
     Args:
-        data_inicio (str): A data de início do período no formato 'DD/MM/YYYY'.
-        data_fim (str): A data de fim do período no formato 'DD/MM/YYYY'.
+        data_inicio (str): Data inicial da competência no formato `DD/MM/YYYY` ou ISO.
+        data_fim (str): Data final da competência no formato `DD/MM/YYYY` ou ISO.
         limite (int): O número máximo de resultados a serem retornados.
     Returns:
         dict com o periodo consultado, total e resultados padronizados.
@@ -250,12 +250,15 @@ def buscar_servidores_admitidos_no_periodo(
             session.execute(
                 select(Servidor)
                 .where(
-                    Servidor.data_admissao.between(
+                    Servidor.competencia_referencia.between(
                         params.data_inicio,
                         params.data_fim,
                     )
                 )
-                .order_by(Servidor.data_admissao.asc(), Servidor.nome.asc())
+                .order_by(
+                    Servidor.competencia_referencia.asc(),
+                    Servidor.nome.asc(),
+                )
                 .limit(params.limite)
             )
             .scalars()
@@ -275,3 +278,15 @@ def buscar_servidores_admitidos_no_periodo(
         total=len(servidores),
         resultados=[_serializar_servidor(servidor) for servidor in servidores],
     ).model_dump(mode="json")
+
+
+def buscar_servidores_admitidos_no_periodo(
+    data_inicio: str, data_fim: str, limite: int = 10
+) -> dict[str, Any]:
+    """Alias de compatibilidade para busca por competencia no periodo."""
+
+    return buscar_servidores_por_competencia_no_periodo(
+        data_inicio=data_inicio,
+        data_fim=data_fim,
+        limite=limite,
+    )

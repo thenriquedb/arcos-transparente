@@ -22,8 +22,8 @@ def test_parser_servidores_filtra_invalidos_sem_quebrar_lote() -> None:
     assert primeiro["cargo"] == "Enfermeira"
     assert primeiro["secretaria"] == "nao_informado"
     assert primeiro["salario_base"] == Decimal("2345.67")
-    assert primeiro["data_admissao"] == date(2025, 1, 1)
+    assert primeiro["competencia_referencia"] == date(2025, 1, 1)
 
     segundo = registros[1]
     assert segundo["nome"] == "Carlos Pereira"
-    assert segundo["data_admissao"] == date(2025, 4, 1)
+    assert segundo["competencia_referencia"] == date(2025, 4, 1)

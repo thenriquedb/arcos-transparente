@@ -15,7 +15,7 @@ def _payload_base() -> dict[str, str]:
         "cargo": "Enfermeira",
         "secretaria": "Secretaria de Saude",
         "salario_base": "R$ 2.345,67",
-        "data_admissao": "01/2025",
+        "competencia_referencia": "01/2025",
     }
 
 
@@ -30,7 +30,7 @@ def test_schema_servidor_converte_dados_e_aplica_defaults() -> None:
     assert data["cargo"] == "nao_informado"
     assert data["secretaria"] == "nao_informado"
     assert data["salario_base"] == Decimal("2345.67")
-    assert data["data_admissao"] == date(2025, 1, 1)
+    assert data["competencia_referencia"] == date(2025, 1, 1)
 
 
 def test_schema_servidor_rejeita_obrigatorios_ausentes() -> None:
@@ -43,7 +43,7 @@ def test_schema_servidor_rejeita_obrigatorios_ausentes() -> None:
 
 def test_schema_servidor_rejeita_competencia_invalida() -> None:
     payload = _payload_base()
-    payload["data_admissao"] = "13/2025"
+    payload["competencia_referencia"] = "13/2025"
 
     with pytest.raises(ValidationError):
         ServidorInSchema.model_validate(payload)

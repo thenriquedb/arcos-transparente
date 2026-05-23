@@ -39,7 +39,7 @@ def busca_folha_pagamento_do_servidor(
 
     Returns:
         dict com 'total' e lista de 'resultados' contendo id, nome,
-        cargo, secretaria, salario_base e data_admissao de cada servidor.
+        cargo, secretaria, salario_base e referencia cadastral mais recente.
     """
     limite = max(1, min(limite, 50))
     max_pagamentos = max(1, min(max_pagamentos, 48))
@@ -127,9 +127,10 @@ def _serializar_servidor(
             if pagamento_recente and pagamento_recente.lotacao
             else None
         ),
-        "data_admissao": (
-            servidor.servidor_canonico.data_admissao.isoformat()
-            if servidor.servidor_canonico and servidor.servidor_canonico.data_admissao
+        "competencia_referencia_servidor": (
+            servidor.servidor_canonico.competencia_referencia.isoformat()
+            if servidor.servidor_canonico
+            and servidor.servidor_canonico.competencia_referencia
             else None
         ),
         "total_pagamentos_considerados": len(pagamentos_limitados),

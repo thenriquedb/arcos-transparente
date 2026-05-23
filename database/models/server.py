@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from sqlalchemy import (
     Date,
@@ -18,9 +18,12 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.models.base import Base
 
+if TYPE_CHECKING:
+    from database.models.payroll import FolhaServidor
+
 
 class Servidor(Base):
-    """Representa registros de servidores publicos."""
+    """Representa snapshots mensais de servidores a partir da folha."""
 
     __tablename__ = "servidores"
     __table_args__ = (
@@ -28,14 +31,14 @@ class Servidor(Base):
             "nome",
             "cargo",
             "secretaria",
-            "data_admissao",
-            name="uq_servidor_nome_cargo_sec_data_admissao",
+            "competencia_referencia",
+            name="uq_servidor_nome_cargo_sec_comp_ref",
         ),
         Index(
-            "ix_servidores_secretaria_cargo_data_admissao",
+            "ix_servidores_secretaria_cargo_comp_ref",
             "secretaria",
             "cargo",
-            "data_admissao",
+            "competencia_referencia",
         ),
     )
 
@@ -56,7 +59,9 @@ class Servidor(Base):
     salario_base: Mapped[Optional[Decimal]] = mapped_column(
         Numeric(15, 2), nullable=True
     )
-    data_admissao: Mapped[date] = mapped_column(Date, nullable=False, index=True)
+    competencia_referencia: Mapped[date] = mapped_column(
+        Date, nullable=False, index=True
+    )
 
     registros_folha: Mapped[list["FolhaServidor"]] = relationship(
         back_populates="servidor_canonico"

@@ -31,14 +31,14 @@ def test_busca_servidores_por_nome_serializa_resultados(monkeypatch) -> None:
                 cargo="Enfermeira",
                 secretaria="Secretaria de Saude",
                 salario_base=2500,
-                data_admissao=date(2025, 1, 1),
+                competencia_referencia=date(2025, 1, 1),
             ),
             Servidor(
                 nome="Mariana Souza",
                 cargo="Medica",
                 secretaria="Secretaria de Saude",
                 salario_base=4200,
-                data_admissao=date(2025, 2, 1),
+                competencia_referencia=date(2025, 2, 1),
             ),
         ]
     )
@@ -56,7 +56,7 @@ def test_busca_servidores_por_nome_serializa_resultados(monkeypatch) -> None:
     assert resultado["total"] == 1
     assert resultado["resultados"][0]["nome"] == "Maria da Silva"
     assert resultado["resultados"][0]["salario_base"] == 2500.0
-    assert resultado["resultados"][0]["data_admissao"] == "2025-01-01"
+    assert resultado["resultados"][0]["competencia_referencia"] == "2025-01-01"
 
     session.close()
 
@@ -70,14 +70,14 @@ def test_busca_servidores_por_periodo_aceita_formatos_de_data(monkeypatch) -> No
                 cargo="Professor",
                 secretaria="Secretaria de Educacao",
                 salario_base=3100,
-                data_admissao=date(2025, 2, 1),
+                competencia_referencia=date(2025, 2, 1),
             ),
             Servidor(
                 nome="Joana Lima",
                 cargo="Assistente",
                 secretaria="Secretaria de Obras",
                 salario_base=1800,
-                data_admissao=date(2025, 3, 1),
+                competencia_referencia=date(2025, 3, 1),
             ),
         ]
     )
@@ -89,7 +89,7 @@ def test_busca_servidores_por_periodo_aceita_formatos_de_data(monkeypatch) -> No
 
     monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
 
-    resultado = servidores_tools.buscar_servidores_admitidos_no_periodo(
+    resultado = servidores_tools.buscar_servidores_por_competencia_no_periodo(
         "01/02/2025",
         "2025-03-01",
         limite=10,

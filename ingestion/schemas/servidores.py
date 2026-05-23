@@ -24,7 +24,7 @@ class ServidorInSchema(_ServidoresBaseSchema):
     cargo: str | None = "nao_informado"
     secretaria: str | None = "nao_informado"
     salario_base: Decimal
-    data_admissao: date
+    competencia_referencia: date
 
     @field_validator("nome", "cargo", "secretaria", mode="before")
     @classmethod
@@ -36,9 +36,9 @@ class ServidorInSchema(_ServidoresBaseSchema):
     def _normalize_salario_base(cls, value: Any) -> Decimal | None:
         return parse_decimal(value)
 
-    @field_validator("data_admissao", mode="before")
+    @field_validator("competencia_referencia", mode="before")
     @classmethod
-    def _normalize_data_admissao(cls, value: Any) -> date | None:
+    def _normalize_competencia_referencia(cls, value: Any) -> date | None:
         return parse_competencia_as_date(value)
 
     @model_validator(mode="after")
