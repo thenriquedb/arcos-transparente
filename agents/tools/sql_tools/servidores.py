@@ -1,6 +1,7 @@
 from datetime import date
 from typing import Any
 
+from agents.tools.registry import register
 from pydantic import ValidationError
 from sqlalchemy import func, select
 
@@ -173,7 +174,7 @@ def _resposta_sem_resultados(
         sugestao=sugestao,
     ).model_dump(mode="json")
 
-
+@register(name="buscar_servidores_por_nome")
 def buscar_servidores_por_nome(nome: str, limite: int = 10) -> dict[str, Any]:
     """
     Busca um servidor pelo nome ou parte do nome.
@@ -232,6 +233,7 @@ def buscar_servidores_por_nome(nome: str, limite: int = 10) -> dict[str, Any]:
     ).model_dump(mode="json")
 
 
+@register(name="buscar_servidores_por_secretaria")
 def buscar_servidores_por_secretaria(
     secretaria: str, limite: int = 10
 ) -> dict[str, Any]:
@@ -314,6 +316,7 @@ def buscar_servidores_por_secretaria(
     ).model_dump(mode="json")
 
 
+@register(name="listar_servidores_da_secretaria")
 def listar_servidores_da_secretaria(
     secretaria: str,
     limite: int = 50,
@@ -335,6 +338,7 @@ def listar_servidores_da_secretaria(
     return buscar_servidores_por_secretaria(secretaria=secretaria, limite=limite)
 
 
+@register(name="contar_servidores_por_secretaria")
 def contar_servidores_por_secretaria(secretaria: str) -> dict[str, Any]:
     """
     Conta quantos servidores existem em uma secretaria no mes mais recente com dados.
@@ -405,7 +409,7 @@ def contar_servidores_por_secretaria(secretaria: str) -> dict[str, Any]:
         secretarias_correspondentes=secretarias_correspondentes,
     ).model_dump(mode="json")
 
-
+@register(name="buscar_servidores_por_cargo")
 def buscar_servidores_por_cargo(cargo: str, limite: int = 10) -> dict[str, Any]:
     """
     Busca servidores por cargo.
@@ -447,6 +451,7 @@ def buscar_servidores_por_cargo(cargo: str, limite: int = 10) -> dict[str, Any]:
     ).model_dump(mode="json")
 
 
+@register(name="buscar_servidores_por_mes_de_referencia_no_periodo")
 def buscar_servidores_por_mes_de_referencia_no_periodo(
     data_inicio: str, data_fim: str, limite: int = 10
 ) -> dict[str, Any]:
@@ -510,6 +515,7 @@ def buscar_servidores_por_mes_de_referencia_no_periodo(
     ).model_dump(mode="json")
 
 
+@register(name="listar_secretarias_por_quantidade_de_servidores")
 def listar_secretarias_por_quantidade_de_servidores(
     limite: int = 10,
 ) -> dict[str, Any]:
@@ -567,7 +573,7 @@ def listar_secretarias_por_quantidade_de_servidores(
         ],
     ).model_dump(mode="json")
 
-
+@register(name="buscar_secretaria_com_mais_servidores")
 def buscar_secretaria_com_mais_servidores() -> dict[str, Any]:
     """
     Retorna a secretaria com mais servidores no mes mais recente com dados.
