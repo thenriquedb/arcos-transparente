@@ -6,10 +6,12 @@ from .licitacoes import (
     MateriaInstrumentoInSchema,
     VencedorInSchema,
 )
+from .servidores import ServidorInSchema
 
 __all__ = [
     "LicitacaoInSchema",
     "VencedorInSchema",
     "InstrumentoContratualInSchema",
     "MateriaInstrumentoInSchema",
+    "ServidorInSchema",
 ]

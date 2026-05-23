@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FolhasPagamento>
+    <FolhaPagamento>
+        <Competencia>01/2025</Competencia>
+        <Lotacao>   </Lotacao>
+        <Cargo> Enfermeira </Cargo>
+        <NomServidor> Maria da Silva </NomServidor>
+        <SalarioBase>R$ 2.345,67</SalarioBase>
+    </FolhaPagamento>
+    <FolhaPagamento>
+        <Competencia>02/2025</Competencia>
+        <Lotacao>Secretaria de Obras</Lotacao>
+        <Cargo>Pedreiro</Cargo>
+        <NomServidor> </NomServidor>
+        <SalarioBase>R$ 1.500,00</SalarioBase>
+    </FolhaPagamento>
+    <FolhaPagamento>
+        <Competencia>13/2025</Competencia>
+        <Lotacao>Secretaria de Saúde</Lotacao>
+        <Cargo>Técnico</Cargo>
+        <NomServidor>João de Souza</NomServidor>
+        <SalarioBase>R$ 1.200,00</SalarioBase>
+    </FolhaPagamento>
+    <FolhaPagamento>
+        <Competencia>03/2025</Competencia>
+        <Lotacao>Secretaria de Educação</Lotacao>
+        <Cargo>Professor</Cargo>
+        <NomServidor>Carlos Pereira</NomServidor>
+        <SalarioBase>abc</SalarioBase>
+    </FolhaPagamento>
+    <FolhaPagamento>
+        <Competencia>2025-04-01</Competencia>
+        <Lotacao>Secretaria de Educação</Lotacao>
+        <Cargo>Professor</Cargo>
+        <NomServidor>Carlos Pereira</NomServidor>
+        <SalarioBase>R$ 3.100,00</SalarioBase>
+    </FolhaPagamento>
+</FolhasPagamento>

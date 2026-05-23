@@ -3,37 +3,44 @@
 from __future__ import annotations
 
 import xml.etree.ElementTree as ET
-from decimal import Decimal
 from typing import Any
+
+from loguru import logger
+from pydantic import ValidationError
+
+from ingestion.schemas.servidores import ServidorInSchema
 
 
 class ServidoresParser:
-    """Converte XML de servidores em lista de dicionários."""
+    """Converte XML de servidores em lista de dicionários validados."""
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
-        """Lê arquivo XML e retorna registros normalizados."""
+        """Lê arquivo XML e retorna registros normalizados com Pydantic."""
         tree = ET.parse(filepath)
         root = tree.getroot()
         registros: list[dict[str, Any]] = []
+        invalidos = 0
 
         for node in root.findall(".//FolhaPagamento"):
-            nome = self._txt(node, "NomServidor")
-            cargo = self._txt(node, "Cargo") or "nao_informado"
-            secretaria = self._txt(node, "Lotacao") or "nao_informado"
-            salario_base = self._money(node, "SalarioBase")
-            data_admissao = self._competencia_as_date(node)
+            payload_raw = {
+                "nome": self._txt(node, "NomServidor"),
+                "cargo": self._txt(node, "Cargo"),
+                "secretaria": self._txt(node, "Lotacao"),
+                "salario_base": self._txt(node, "SalarioBase"),
+                "data_admissao": self._txt(node, "Competencia"),
+            }
 
-            if not nome or salario_base is None or not data_admissao:
+            try:
+                payload = ServidorInSchema.model_validate(payload_raw)
+            except ValidationError:
+                invalidos += 1
                 continue
 
-            registros.append(
-                {
-                    "nome": nome,
-                    "cargo": cargo,
-                    "secretaria": secretaria,
-                    "salario_base": salario_base,
-                    "data_admissao": data_admissao,
-                }
+            registros.append(payload.model_dump(mode="python"))
+
+        if invalidos:
+            logger.info(
+                f"Descartados {invalidos} registros invalidos de servidores em {filepath}"
             )
 
         return registros
@@ -45,20 +52,3 @@ class ServidoresParser:
             return None
         value = child.text.strip()
         return value or None
-
-    def _money(self, node: ET.Element, tag: str) -> Decimal | None:
-        value = self._txt(node, tag)
-        if not value:
-            return None
-        normalized = value.replace("R$", "").replace(".", "").replace(",", ".").strip()
-        try:
-            return Decimal(normalized)
-        except Exception:
-            return None
-
-    def _competencia_as_date(self, node: ET.Element) -> str | None:
-        competencia = self._txt(node, "Competencia")
-        if not competencia or "/" not in competencia:
-            return None
-        mm, yyyy = competencia.split("/")
-        return f"{yyyy}-{mm}-01"

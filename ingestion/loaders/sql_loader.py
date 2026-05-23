@@ -52,6 +52,10 @@ class SQLLoader:
 
                             if existente is None:
                                 self.session.add(modelo(**payload))
+                                # Flush garante que registros novos fiquem visiveis
+                                # para o restante do batch e evita violacao de unique
+                                # constraint quando o mesmo item aparece repetido.
+                                self.session.flush()
                                 resultado.inseridos += 1
                                 logger.info(
                                     f"Inserido em {modelo.__tablename__}: {payload}"
