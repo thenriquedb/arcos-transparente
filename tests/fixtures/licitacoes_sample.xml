@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessosLicitatorios>
+    <ProcessoLicitatorio>
+        <UnidadeGestora>   </UnidadeGestora>
+        <NumeroProcesso>100/2025</NumeroProcesso>
+        <Modalidade> Pregão Eletrônico </Modalidade>
+        <Objeto> Aquisição de computadores </Objeto>
+        <DataJulgamento>07/02/2025</DataJulgamento>
+        <ValorProcesso>R$ 1.234,56</ValorProcesso>
+        <Vencedores>
+            <Vencedor>
+                <CNPJCPF>12345678000199</CNPJCPF>
+                <NomeFantasia>Empresa Boa LTDA</NomeFantasia>
+                <ValidadeDaProposta>60 Dias</ValidadeDaProposta>
+            </Vencedor>
+        </Vencedores>
+        <InstrumentosContratuais>
+            <InstrumentoContratual>
+                <NumeroLicitatorio>100/2025</NumeroLicitatorio>
+                <NumeroInstrumentoContratual>01/2025</NumeroInstrumentoContratual>
+                <DataEmissao>2025-02-20</DataEmissao>
+                <DataExpiracao>20/02/2026</DataExpiracao>
+                <ValorInstrumentoContratual>R$ 200,00</ValorInstrumentoContratual>
+                <ItensAdquiridos>
+                    <Item>
+                        <Identificacao>Notebook</Identificacao>
+                        <Quantidade>2,00</Quantidade>
+                        <ValorUnitario>R$ 100,00</ValorUnitario>
+                        <ValorTotal>R$ 200,00</ValorTotal>
+                    </Item>
+                </ItensAdquiridos>
+            </InstrumentoContratual>
+        </InstrumentosContratuais>
+    </ProcessoLicitatorio>
+
+    <ProcessoLicitatorio>
+        <UnidadeGestora>Secretaria de Obras</UnidadeGestora>
+        <Modalidade>Concorrência</Modalidade>
+        <Objeto>Reforma de prédio</Objeto>
+        <DataJulgamento>10/03/2025</DataJulgamento>
+        <ValorProcesso>R$ 10.000,00</ValorProcesso>
+    </ProcessoLicitatorio>
+
+    <ProcessoLicitatorio>
+        <UnidadeGestora>Secretaria de Saúde</UnidadeGestora>
+        <NumeroProcesso>300/2025</NumeroProcesso>
+        <Modalidade>Tomada de Preços</Modalidade>
+        <Objeto>Reforma da UBS</Objeto>
+        <DataHomologacao>15/03/2025</DataHomologacao>
+        <ValorProcesso>R$ 5.000,00</ValorProcesso>
+        <Vencedores>
+            <Vencedor>
+                <CNPJCPF>11111111000111</CNPJCPF>
+                <NomeFantasia>Construtora Alfa</NomeFantasia>
+            </Vencedor>
+            <Vencedor>
+                <CNPJCPF>22222222000122</CNPJCPF>
+                <NomeFantasia>   </NomeFantasia>
+            </Vencedor>
+        </Vencedores>
+        <InstrumentosContratuais>
+            <InstrumentoContratual>
+                <NumeroLicitatorio>300/2025</NumeroLicitatorio>
+                <NumeroInstrumentoContratual>A-1</NumeroInstrumentoContratual>
+                <DataEmissao>99/99/2025</DataEmissao>
+                <ValorInstrumentoContratual>R$ 500,00</ValorInstrumentoContratual>
+            </InstrumentoContratual>
+            <InstrumentoContratual>
+                <NumeroLicitatorio>300/2025</NumeroLicitatorio>
+                <NumeroInstrumentoContratual>A-2</NumeroInstrumentoContratual>
+                <DataEmissao>2025-03-16</DataEmissao>
+                <ValorInstrumentoContratual>R$ 700,00</ValorInstrumentoContratual>
+                <ItensAdquiridos>
+                    <Item>
+                        <Identificacao>Material válido</Identificacao>
+                        <Quantidade>1,00</Quantidade>
+                        <ValorUnitario>R$ 700,00</ValorUnitario>
+                        <ValorTotal>R$ 700,00</ValorTotal>
+                    </Item>
+                    <Item>
+                        <Identificacao>Material inválido</Identificacao>
+                        <Quantidade>abc</Quantidade>
+                        <ValorUnitario>R$ 10,00</ValorUnitario>
+                        <ValorTotal>R$ 10,00</ValorTotal>
+                    </Item>
+                </ItensAdquiridos>
+            </InstrumentoContratual>
+        </InstrumentosContratuais>
+    </ProcessoLicitatorio>
+</ProcessosLicitatorios>
