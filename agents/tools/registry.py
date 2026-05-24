@@ -39,8 +39,11 @@ def _discover_tool_modules() -> None:
         return
 
     package = importlib.import_module(TOOLS_PACKAGE)
-    for module_info in pkgutil.iter_modules(package.__path__):
-        importlib.import_module(f"{TOOLS_PACKAGE}.{module_info.name}")
+    for module_info in pkgutil.walk_packages(
+        package.__path__,
+        prefix=f"{TOOLS_PACKAGE}.",
+    ):
+        importlib.import_module(module_info.name)
 
     _DISCOVERED = True
 

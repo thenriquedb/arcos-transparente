@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.folha_pagamento as folha_pagamento_tools
+from database import session as session_manager
 from database.models import (
     Base,
     FolhaCargo,
@@ -87,7 +88,7 @@ def test_busca_historico_de_pagamentos_serializa_contrato_leigo(monkeypatch) -> 
     def fake_get_session():
         yield session
 
-    monkeypatch.setattr(folha_pagamento_tools, "get_session", fake_get_session)
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
         " Maria ",
@@ -166,7 +167,7 @@ def test_busca_historico_de_pagamentos_retorna_sugestao_sem_resultados(
     def fake_get_session():
         yield session
 
-    monkeypatch.setattr(folha_pagamento_tools, "get_session", fake_get_session)
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("Jose")
 

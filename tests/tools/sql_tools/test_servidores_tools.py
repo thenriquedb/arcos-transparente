@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.servidores as servidores_tools
+from database import session as session_manager
 from database.models import Base, Servidor
 
 
@@ -48,7 +49,7 @@ def test_busca_servidores_por_nome_serializa_resultados(monkeypatch) -> None:
     def fake_get_session():
         yield session
 
-    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = servidores_tools.buscar_servidores_por_nome(" Maria ", limite=1)
 
@@ -90,7 +91,7 @@ def test_busca_servidores_por_mes_de_referencia_no_periodo_aceita_formatos_de_da
     def fake_get_session():
         yield session
 
-    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = servidores_tools.buscar_servidores_por_mes_de_referencia_no_periodo(
         "01/02/2025",
@@ -156,7 +157,7 @@ def test_lista_maiores_salarios_ordena_do_maior_para_o_menor(monkeypatch) -> Non
     def fake_get_session():
         yield session
 
-    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = servidores_tools.listar_maiores_salarios(limite=2)
 
@@ -230,7 +231,7 @@ def test_lista_servidores_da_secretaria_considera_competencia_mais_recente(
     def fake_get_session():
         yield session
 
-    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = servidores_tools.listar_servidores_da_secretaria(" saude ", limite=1)
 
@@ -292,7 +293,7 @@ def test_conta_servidores_por_secretaria_ignora_competencias_antigas(
     def fake_get_session():
         yield session
 
-    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = servidores_tools.contar_servidores_por_secretaria("Saude")
 
@@ -354,7 +355,7 @@ def test_lista_secretarias_por_quantidade_de_servidores_retorna_ranking(
     def fake_get_session():
         yield session
 
-    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = servidores_tools.listar_secretarias_por_quantidade_de_servidores(
         limite=2
@@ -404,7 +405,7 @@ def test_busca_secretaria_com_mais_servidores_retorna_lider(monkeypatch) -> None
     def fake_get_session():
         yield session
 
-    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = servidores_tools.buscar_secretaria_com_mais_servidores()
 
