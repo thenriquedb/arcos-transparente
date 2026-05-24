@@ -11,6 +11,7 @@ from agents.tools.sql_tools.servidores_schemas import (
     BuscarServidorPorNomeParams,
     BuscarServidorPorSecretariaParams,
     QuantidadeServidoresPorSecretariaResponse,
+    RankingSalariosParams,
     RankingSecretariasParams,
     SecretariaComMaisServidoresResponse,
     SecretariaRankingItem,
@@ -150,6 +151,38 @@ def _buscar_ranking_secretarias_na_competencia(
         .order_by(total_servidores.desc(), Servidor.secretaria.asc())
         .limit(limite)
     ).all()
+
+
+def _contar_servidores_com_salario_na_competencia(
+    session,
+    *,
+    competencia_referencia: date,
+) -> int:
+    return session.execute(
+        select(func.count())
+        .select_from(Servidor)
+        .where(Servidor.competencia_referencia == competencia_referencia)
+        .where(Servidor.salario_base.is_not(None))
+    ).scalar_one()
+
+
+def _listar_maiores_salarios_na_competencia(
+    session,
+    *,
+    competencia_referencia: date,
+    limite: int,
+) -> list[Servidor]:
+    return (
+        session.execute(
+            select(Servidor)
+            .where(Servidor.competencia_referencia == competencia_referencia)
+            .where(Servidor.salario_base.is_not(None))
+            .order_by(Servidor.salario_base.desc(), Servidor.nome.asc())
+            .limit(limite)
+        )
+        .scalars()
+        .all()
+    )
 
 
 def _resposta_sem_resultados(
@@ -448,6 +481,67 @@ def buscar_servidores_por_cargo(cargo: str, limite: int = 10) -> dict[str, Any]:
         query=params.cargo,
         total=len(servidores),
         resultados=[_serializar_servidor(servidor) for servidor in servidores],
+    ).model_dump(mode="json")
+
+
+@register(name="listar_maiores_salarios")
+def listar_maiores_salarios(limite: int = 10) -> dict[str, Any]:
+    """
+    Lista os servidores com os maiores salarios base no mes mais recente com dados.
+
+    Examples:
+      'quais os 10 maiores salarios da prefeitura?',
+      'me mostre os maiores salarios dos servidores'.
+
+    Args:
+        limite (int): Numero maximo de resultados retornados.
+    Returns:
+        dict com o mes usado, total encontrado e resultados ordenados do maior
+        salario para o menor.
+    """
+
+    try:
+        params = RankingSalariosParams.model_validate({"limite": limite})
+    except ValidationError as exc:
+        return _resposta_sem_resultados(mensagem=f"Parametros invalidos: {exc}")
+
+    with get_session() as session:
+        mes_de_referencia = _obter_competencia_referencia_mais_recente(session)
+        if mes_de_referencia is None:
+            return _resposta_sem_resultados(
+                mensagem="Nao ha registros de servidores disponiveis para consulta."
+            )
+
+        total_servidores = _contar_servidores_com_salario_na_competencia(
+            session,
+            competencia_referencia=mes_de_referencia,
+        )
+        if total_servidores == 0:
+            return _resposta_sem_resultados(
+                query="maiores salarios",
+                mes_de_referencia=mes_de_referencia,
+                sugestao="Nenhum salario cadastrado no mes mais recente com dados.",
+            )
+
+        servidores = _listar_maiores_salarios_na_competencia(
+            session,
+            competencia_referencia=mes_de_referencia,
+            limite=params.limite,
+        )
+
+    mensagem = None
+    if total_servidores > len(servidores):
+        mensagem = (
+            f"Mostrando {len(servidores)} de {total_servidores} servidores "
+            "com salario no mes mais recente com dados."
+        )
+
+    return ServidoresToolResponse(
+        query="maiores salarios",
+        mes_de_referencia=mes_de_referencia,
+        total=total_servidores,
+        resultados=[_serializar_servidor(servidor) for servidor in servidores],
+        mensagem=mensagem,
     ).model_dump(mode="json")
 
 

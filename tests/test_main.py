@@ -25,5 +25,7 @@ def test_criar_agente_passa_tools_registradas_para_o_langchain(monkeypatch) -> N
     assert resultado == "agente-fake"
     assert capturado["model"] == "gpt-4o-mini"
     assert "use as tools disponíveis antes de responder" in capturado["system_prompt"]
+    assert "rankings de salários" in capturado["system_prompt"]
     assert "buscar_servidores_por_nome" in nomes
     assert "buscar_servidores_por_secretaria" in nomes
+    assert "listar_maiores_salarios" in nomes

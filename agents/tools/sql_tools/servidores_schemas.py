@@ -96,6 +96,15 @@ class RankingSecretariasParams(_ServidoresToolBaseSchema):
         return normalize_limit(value)
 
 
+class RankingSalariosParams(_ServidoresToolBaseSchema):
+    limite: int = 10
+
+    @field_validator("limite", mode="before")
+    @classmethod
+    def _normalize_limite(cls, value: Any) -> int:
+        return normalize_limit(value)
+
+
 class ServidorToolItem(_ServidoresToolBaseSchema):
     id: int
     nome: str

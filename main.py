@@ -1,6 +1,5 @@
 from langchain.agents import create_agent
 from dotenv import load_dotenv
-from pprint import pprint
 from agents.tools.registry import get_all_tools
 
 load_dotenv()
@@ -13,8 +12,8 @@ def criar_agente():
         "Você é um assistente que ajuda a buscar informações sobre servidores "
         "públicos. Sempre que a pergunta depender de dados do sistema, use as "
         "tools disponíveis antes de responder. Para consultas por nome, "
-        "secretaria, cargo ou mês de referência, prefira as tools de servidores "
-        "em vez de responder de memória."
+        "secretaria, cargo, mês de referência ou rankings de salários, prefira "
+        "as tools de servidores em vez de responder de memória."
     )
 
     return create_agent(

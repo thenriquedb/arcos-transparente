@@ -116,6 +116,78 @@ def test_busca_servidores_por_nome_retorna_mensagem_para_termo_vazio() -> None:
     assert resultado["mensagem"] == "Informe um nome de servidor para realizar a busca."
 
 
+def test_lista_maiores_salarios_ordena_do_maior_para_o_menor(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            Servidor(
+                nome="Alice Souza",
+                cargo="Medica",
+                secretaria="Secretaria de Saude",
+                salario_base=8200,
+                competencia_referencia=date(2025, 1, 1),
+            ),
+            Servidor(
+                nome="Bruno Costa",
+                cargo="Medico",
+                secretaria="Secretaria de Saude",
+                salario_base=9100,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Carla Sousa",
+                cargo="Procuradora",
+                secretaria="Procuradoria",
+                salario_base=10400,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Daniel Lima",
+                cargo="Engenheiro",
+                secretaria="Secretaria de Obras",
+                salario_base=7600,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+        ]
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(servidores_tools, "get_session", fake_get_session)
+
+    resultado = servidores_tools.listar_maiores_salarios(limite=2)
+
+    assert resultado["query"] == "maiores salarios"
+    assert resultado["mes_de_referencia"] == "2025-02-01"
+    assert resultado["total"] == 3
+    assert resultado["mensagem"] == (
+        "Mostrando 2 de 3 servidores com salario no mes mais recente com dados."
+    )
+    assert resultado["resultados"] == [
+        {
+            "id": 3,
+            "nome": "Carla Sousa",
+            "cargo": "Procuradora",
+            "secretaria": "Procuradoria",
+            "salario_base": 10400.0,
+            "mes_de_referencia": "2025-02-01",
+        },
+        {
+            "id": 2,
+            "nome": "Bruno Costa",
+            "cargo": "Medico",
+            "secretaria": "Secretaria de Saude",
+            "salario_base": 9100.0,
+            "mes_de_referencia": "2025-02-01",
+        },
+    ]
+
+    session.close()
+
+
 def test_lista_servidores_da_secretaria_considera_competencia_mais_recente(
     monkeypatch,
 ) -> None:

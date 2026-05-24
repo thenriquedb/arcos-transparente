@@ -13,6 +13,7 @@ def test_get_all_tools_descobre_tools_de_servidores() -> None:
 
     assert "buscar_servidores_por_nome" in tool_names
     assert "buscar_servidores_por_secretaria" in tool_names
+    assert "listar_maiores_salarios" in tool_names
 
 
 def test_get_all_tools_nao_duplica_tools_em_chamadas_repetidas() -> None:
