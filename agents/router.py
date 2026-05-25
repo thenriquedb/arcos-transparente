@@ -46,7 +46,20 @@ PROMPT_INJECTION_PATTERNS = (
     r"\b(?:ignore|disregard|override|bypass)\b.{0,80}\b(?:instruction|instructions|prompt|system|developer|rules?)\b",
     r"\b(?:desconsidere|ignore|ignore todas|ignore todos|ignore as|ignore os|burle|contorne)\b.{0,80}\b(?:instrucoes|instrução|instrucao|regras?|prompt|sistema|desenvolvedor|developer)\b",
     r"\b(?:revele|mostre|exiba|imprima|print|display)\b.{0,80}\b(?:prompt|system prompt|mensagem de sistema|developer message|mensagem do desenvolvedor)\b",
-    r"\b(?:nao use tools|não use tools|do not use tools)\b",
+    r"\b(?:nao use|nao utilize|do not use|never use)\b.{0,30}\b(?:todas as tools|todas as ferramentas|any tools|nenhuma tool)\b",
+)
+
+SECRETARIAS_CONHECIDAS = (
+    "saude",
+    "educacao",
+    "obras",
+    "financas",
+    "administracao",
+    "procuradoria",
+    "assistencia social",
+    "meio ambiente",
+    "planejamento",
+    "transporte",
 )
 
 SUPPORTED_SCOPE_STRONG_KEYWORDS = (
@@ -88,7 +101,10 @@ def _normalize(text: str) -> str:
 
 
 def _extract_limit(normalized_text: str, default: int = 10) -> int:
-    match = re.search(r"\b(\d{1,3})\b", normalized_text)
+    match = re.search(
+        r"\b(?:top|maiores|menores|primeiro|primeiros|listar?|mostrar?|exibir?)\s+(\d{1,3})\b",
+        normalized_text,
+    )
     if match is None:
         return default
     return int(match.group(1))
@@ -96,17 +112,18 @@ def _extract_limit(normalized_text: str, default: int = 10) -> int:
 
 def _extract_secretaria(normalized_text: str) -> str | None:
     patterns = [
-        r"\b(?:na|no|da|do)\b\s+(?:secretaria\s+de\s+)?([a-z0-9\s]+?)(?:\?|$)",
-        r"\bfuncionarios\b\s+\bda\b\s+([a-z0-9\s]+?)(?:\?|$)",
-        r"\btrabalham\b\s+\bna\b\s+([a-z0-9\s]+?)(?:\?|$)",
+        r"\b(?:na|no|da|do)\b\s+(?:secretaria\s+de\s+)?((?:[a-z]+\s?){1,4})(?:\?|\s|$)",
+        r"\bfuncionarios\b\s+\bda\b\s+((?:[a-z]+\s?){1,4})(?:\?|\s|$)",
+        r"\btrabalham\b\s+\bna\b\s+((?:[a-z]+\s?){1,4})(?:\?|\s|$)",
     ]
     for pattern in patterns:
         match = re.search(pattern, normalized_text)
         if match is None:
             continue
-        secretaria = match.group(1).strip()
-        if secretaria:
-            return secretaria
+        candidato = " ".join(match.group(1).split())
+        for secretaria in SECRETARIAS_CONHECIDAS:
+            if secretaria in candidato:
+                return secretaria
     return None
 
 
@@ -137,9 +154,20 @@ def _count_keyword_hits(normalized_text: str, keywords: tuple[str, ...]) -> int:
     return sum(1 for keyword in keywords if keyword in normalized_text)
 
 
-def route_user_query(query: str) -> RouteDecision:
-    normalized_text = _normalize(query)
+def _try_route_historico(normalized_text: str) -> RouteDecision | None:
+    """
+    Roteia para histórico detalhado de pagamentos de um servidor específico.
 
+    Casos que devem retornar RouteDecision:
+        "quanto joao silva recebeu"
+        "salario do pedro oliveira"
+        "pagamentos do servidor maria souza"
+
+    Casos que devem retornar None:
+        "maiores salarios"          -> vai para _try_route_agregacao
+        "funcionarios da saude"     -> vai para _try_route_lista
+        "quantos servidores tem"    -> vai para _try_route_agregacao
+    """
     nome_para_historico = _extract_nome_para_historico(normalized_text)
     if nome_para_historico and all(
         keyword not in normalized_text for keyword in ("maiores", "ranking", "top")
@@ -152,7 +180,23 @@ def route_user_query(query: str) -> RouteDecision:
             tags=["scope:public", "domain:folha", "shape:history"],
             confident=True,
         )
+    return None
 
+
+def _try_route_agregacao(normalized_text: str) -> RouteDecision | None:
+    """
+    Roteia para agregações e rankings do domínio municipal.
+
+    Casos que devem retornar RouteDecision:
+        "qual secretaria com mais funcionarios"
+        "quantas pessoas trabalham na saude"
+        "quais os 10 maiores salarios da prefeitura"
+
+    Casos que devem retornar None:
+        "salario do pedro oliveira" -> vai para _try_route_historico
+        "funcionarios da saude"     -> vai para _try_route_lista
+        "como programar em python"  -> fallback do router
+    """
     if "qual secretaria" in normalized_text and "mais funcionario" in normalized_text:
         return RouteDecision(
             domain="servidores",
@@ -208,7 +252,23 @@ def route_user_query(query: str) -> RouteDecision:
             tags=["scope:public", "domain:servidores", "shape:lookup"],
             confident=True,
         )
+    return None
 
+
+def _try_route_lista(normalized_text: str) -> RouteDecision | None:
+    """
+    Roteia para listagens filtradas de servidores.
+
+    Casos que devem retornar RouteDecision:
+        "lista de todos os funcionarios da educacao"
+        "quais servidores trabalham na saude"
+        "liste os funcionarios da procuradoria"
+
+    Casos que devem retornar None:
+        "salario do pedro oliveira" -> vai para _try_route_historico
+        "quantos trabalham na saude" -> vai para _try_route_agregacao
+        "maiores salarios"          -> vai para _try_route_agregacao
+    """
     secretaria = _extract_secretaria(normalized_text)
     if secretaria and any(
         keyword in normalized_text
@@ -226,7 +286,25 @@ def route_user_query(query: str) -> RouteDecision:
             tags=["scope:public", "domain:servidores", "shape:lookup"],
             confident=True,
         )
+    return None
 
+
+def route_user_query(query: str) -> RouteDecision:
+    normalized_text = _normalize(query)
+
+    # Prioridade 1 — histórico individual de servidor
+    if route := _try_route_historico(normalized_text):
+        return route
+
+    # Prioridade 2 — rankings e agregações
+    if route := _try_route_agregacao(normalized_text):
+        return route
+
+    # Prioridade 3 — listagens com filtro de secretaria
+    if route := _try_route_lista(normalized_text):
+        return route
+
+    # Fallback — deixa o LLM decidir com todas as tools
     return RouteDecision(
         domain="desconhecido",
         operation_type="desconhecido",
