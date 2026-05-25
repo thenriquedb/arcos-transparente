@@ -1,0 +1,233 @@
+from __future__ import annotations
+
+from contextlib import contextmanager
+from decimal import Decimal
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+import agents.tools.sql_tools.planejamento as planejamento_tools
+from database import session as session_manager
+from database.models import Base, PlanejamentoDespesa
+
+
+def _build_session():
+    engine = create_engine("sqlite:///:memory:", future=True)
+    Base.metadata.create_all(bind=engine)
+    session_local = sessionmaker(
+        bind=engine,
+        autoflush=False,
+        autocommit=False,
+        future=True,
+    )
+    return session_local()
+
+
+def _patch_session(monkeypatch, session) -> None:
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+
+def _planejamento(
+    *,
+    mes: str,
+    mes_num: int,
+    subfuncao: str,
+    acao: str,
+    grupo: str,
+    orcamento_atualizado: Decimal,
+    valor_pago: Decimal,
+    unidade_gestora: str = "FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS",
+    orgao: str = "FUNDAÇÃO M. SAÚDE",
+    unidade: str = "FUNDAÇÃO M. SAÚDE",
+    programa: str = "Promoção das Ações de Saúde - FUMUSA",
+) -> PlanejamentoDespesa:
+    return PlanejamentoDespesa(
+        origem="saude",
+        exercicio=2025,
+        mes=mes,
+        mes_num=mes_num,
+        unidade_gestora=unidade_gestora,
+        orgao=orgao,
+        unidade=unidade,
+        funcao="Saúde",
+        subfuncao=subfuncao,
+        programa=programa,
+        tipo_acao="Atividade",
+        descricao_acao=acao,
+        fonte_recurso_identificacao="1500",
+        fonte_recurso_descricao="Recursos não Vinculados de Impostos",
+        esfera_administrativa="Seguridade Social",
+        categoria_economica_identificacao="3.1.90.11",
+        categoria_economica_descricao="Vencimentos e Vantagens Fixas - Pessoal Civil",
+        grupo_despesa_identificacao="3.1.00.00.00.00.00",
+        grupo_despesa_descricao=grupo,
+        elemento_despesa_identificacao="3.1.90.00.00.00.00",
+        elemento_despesa_descricao="Aplicações Diretas",
+        modalidade_aplicacao_descricao="Não se aplica",
+        dotacao_inicial=orcamento_atualizado,
+        dotacao_atualizada=orcamento_atualizado,
+        valor_empenhado=valor_pago,
+        valor_liquidado=valor_pago,
+        valor_pago=valor_pago,
+    )
+
+
+def test_consultar_planejamento_filtra_saude_por_acao_sem_acento(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _planejamento(
+                mes="JANEIRO",
+                mes_num=1,
+                subfuncao="Atenção Básica",
+                acao="Manutenção da Atenção Primária à Saúde",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("150000.00"),
+                valor_pago=Decimal("9277.07"),
+            ),
+            _planejamento(
+                mes="FEVEREIRO",
+                mes_num=2,
+                subfuncao="Vigilância Sanitária",
+                acao="Manutenção da Vigilância Sanitária",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("60000.00"),
+                valor_pago=Decimal("6580.68"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"acao": "atencao primaria", "ano": 2025},
+        campos=["mes", "area", "subarea", "acao", "orcamento_atualizado"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "mes": "JANEIRO",
+            "area": "Saúde",
+            "subarea": "Atenção Básica",
+            "acao": "Manutenção da Atenção Primária à Saúde",
+            "orcamento_atualizado": 150000.0,
+        }
+    ]
+
+    session.close()
+
+
+def test_consultar_planejamento_filtra_por_entidade_fumusa(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _planejamento(
+                mes="JANEIRO",
+                mes_num=1,
+                subfuncao="Atenção Básica",
+                acao="Manutenção da Atenção Primária à Saúde",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("150000.00"),
+                valor_pago=Decimal("9277.07"),
+                programa="Gestão da Saúde",
+            ),
+            _planejamento(
+                mes="FEVEREIRO",
+                mes_num=2,
+                subfuncao="Administração Geral",
+                acao="Gestão Administrativa da Fundação",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("60000.00"),
+                valor_pago=Decimal("6580.68"),
+                unidade_gestora="Prefeitura Municipal de Arcos",
+                orgao="Secretaria de Obras",
+                unidade="Secretaria de Obras",
+                programa="Infraestrutura Urbana",
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"entidade": "fumusa", "ano": 2025},
+        campos=["unidade_gestora", "programa", "acao"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "unidade_gestora": "FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS",
+            "programa": "Gestão da Saúde",
+            "acao": "Manutenção da Atenção Primária à Saúde",
+        }
+    ]
+
+    session.close()
+
+
+def test_agregar_planejamento_soma_valor_pago_por_subarea(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _planejamento(
+                mes="JANEIRO",
+                mes_num=1,
+                subfuncao="Atenção Básica",
+                acao="Manutenção da Atenção Primária à Saúde",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("150000.00"),
+                valor_pago=Decimal("9000.00"),
+            ),
+            _planejamento(
+                mes="FEVEREIRO",
+                mes_num=2,
+                subfuncao="Atenção Básica",
+                acao="Manutenção da Atenção Primária à Saúde",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("150000.00"),
+                valor_pago=Decimal("11000.00"),
+            ),
+            _planejamento(
+                mes="JANEIRO",
+                mes_num=1,
+                subfuncao="Vigilância Sanitária",
+                acao="Manutenção da Vigilância Sanitária",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("60000.00"),
+                valor_pago=Decimal("5000.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.agregar_planejamento(
+        filtros={"ano": 2025, "area": "saude"},
+        agrupar_por="subarea",
+        metrica="soma_valor_pago",
+        ordenar_por="metrica",
+        ordem="desc",
+    )
+
+    assert resultado["total_grupos"] == 2
+    assert resultado["resultados"] == [
+        {"subarea": "Atenção Básica", "soma_valor_pago": 20000.0},
+        {"subarea": "Vigilância Sanitária", "soma_valor_pago": 5000.0},
+    ]
+
+    session.close()
+
+
+def test_agregar_planejamento_valida_periodo_de_mes_invalido() -> None:
+    resultado = planejamento_tools.agregar_planejamento(
+        filtros={"mes_inicio": 4, "mes_fim": 1},
+    )
+
+    assert resultado["total_grupos"] == 0
+    assert "Parametros invalidos" in resultado["mensagem"]

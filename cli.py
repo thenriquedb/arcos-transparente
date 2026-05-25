@@ -26,6 +26,7 @@ from database.models import (
     InstrumentoContratual,
     Licitacao,
     MateriaInstrumento,
+    PlanejamentoDespesa,
     ReceitaArrecadacao,
     ReceitaLancamento,
     ReceitaNatureza,
@@ -113,6 +114,10 @@ def db_status() -> None:
             "folha_pagamentos", str(session.query(FolhaPagamentoRegistro).count())
         )
         tabela.add_row("servidores", str(session.query(Servidor).count()))
+        tabela.add_row(
+            "planejamento_despesas",
+            str(session.query(PlanejamentoDespesa).count()),
+        )
         metadata = MetaData()
         alembic_version = SQLATable(
             "alembic_version", metadata, autoload_with=session.bind
@@ -127,7 +132,10 @@ def db_status() -> None:
 def importar(
     tipo: Optional[str] = typer.Option(
         default=None,
-        help="Tipo: contratos|licitacoes|frotas|receitas|folha_pagamento|servidores",
+        help=(
+            "Tipo: contratos|licitacoes|frotas|receitas|folha_pagamento|"
+            "servidores|planejamentos"
+        ),
     ),
     ano: Optional[int] = typer.Option(
         default=None, help="Filtra por ano no nome do arquivo"
@@ -158,6 +166,7 @@ def importar(
         "receitas",
         "folha_pagamento",
         "servidores",
+        "planejamentos",
     ]
     total_arquivos = sum(
         len(pipeline._arquivos_por_tipo(t, ano)) for t in tipos_resolvidos

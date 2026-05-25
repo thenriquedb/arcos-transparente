@@ -79,6 +79,30 @@ Comportamento esperado:
 
 ---
 
+## Planejamento da Saúde
+
+Perguntas para validar consultas e agregações sobre o planejamento orçamentário da saúde.
+
+- Quanto foi planejado para a saúde em 2025?
+- Quanto foi pago na saúde em 2025?
+- Quanto foi pago na saúde no primeiro trimestre de 2025?
+- Quais ações de saúde tiveram maior orçamento em 2025?
+- Quais programas da saúde receberam mais orçamento?
+- Liste o planejamento da saúde em 2025.
+- Mostre as ações planejadas da saúde.
+- Qual grupo de gasto teve maior valor pago na saúde?
+- Quanto foi comprometido na saúde em 2025?
+- Quanto foi confirmado/liquidado na saúde em 2025?
+
+Comportamento esperado:
+
+- usar `agregar_planejamento` para totais, rankings e perguntas com "quanto"
+- usar `consultar_planejamento` para listas de ações, programas e linhas mensais
+- explicar que `valor_comprometido` vem de empenhado, `valor_confirmado` vem de liquidado e `valor_pago` vem do campo pago
+- lembrar que, nesta fase, o domínio de planejamento começa pelo arquivo de saúde
+
+---
+
 ## Casos Sem Resultado
 
 Perguntas que provavelmente não encontrarão registros e servem para validar mensagens de ausência de dados.
@@ -88,6 +112,7 @@ Perguntas que provavelmente não encontrarão registros e servem para validar me
 - Qual o salário de Pessoa Inexistente Silva?
 - Detalhe a licitação número 999999/2099.
 - Quais contratos do evento que nunca existiu em 2025?
+- Qual foi o planejamento da saúde em 2030?
 
 Comportamento esperado:
 
@@ -155,4 +180,3 @@ Comportamento esperado:
 - diferenciar valor estimado, valor contratado e valor efetivamente pago
 - não afirmar fraude, crime ou superfaturamento sem evidência específica na base
 - responder de forma factual e cautelosa
-

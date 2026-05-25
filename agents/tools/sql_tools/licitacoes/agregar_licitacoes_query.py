@@ -10,6 +10,7 @@ from sqlalchemy import func, select
 from agents.tools.registry import PUBLIC_SCOPE, register
 from database import session as session_manager
 from database.models import Licitacao
+from shared.utils.text import matches_text_query
 
 from .agregar_licitacoes_schema import (
     AgregacaoLicitacoesItem,
@@ -20,7 +21,6 @@ from .agregar_licitacoes_schema import (
 from .shared.querying import (
     apply_licitacoes_filters,
     decimal_or_int_to_json,
-    matches_text_query,
 )
 
 

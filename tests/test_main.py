@@ -29,11 +29,14 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
     assert "use as tools disponíveis antes de responder" in capturado["system_prompt"]
     assert "consultar_servidores" in capturado["system_prompt"]
     assert "valor_total_estimado" in capturado["system_prompt"]
+    assert "consultar_planejamento" in capturado["system_prompt"]
     assert nomes == {
         "consultar_servidores",
         "agregar_servidores",
         "consultar_licitacoes",
         "agregar_licitacoes",
+        "consultar_planejamento",
+        "agregar_planejamento",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 
@@ -57,6 +60,27 @@ def test_criar_agente_com_pergunta_de_top_salarios_restringe_toolset(
 
     assert resultado == "agente-fake"
     assert nomes == ["consultar_servidores"]
+
+
+def test_criar_agente_com_pergunta_de_planejamento_restringe_toolset(
+    monkeypatch,
+) -> None:
+    capturado: dict[str, object] = {}
+
+    def fake_create_agent(*, tools, model, system_prompt):
+        capturado["tools"] = tools
+        capturado["model"] = model
+        capturado["system_prompt"] = system_prompt
+        return "agente-fake"
+
+    monkeypatch.setattr(main, "create_agent", fake_create_agent)
+
+    resultado = main.criar_agente("Quanto foi pago na saúde em 2025?")
+
+    nomes = [_tool_name(tool_obj) for tool_obj in capturado["tools"]]
+
+    assert resultado == "agente-fake"
+    assert nomes == ["agregar_planejamento"]
 
 
 def test_criar_agente_rejeita_pergunta_fora_do_escopo(monkeypatch) -> None:

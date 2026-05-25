@@ -18,6 +18,7 @@ O schema está dividido em domínios:
 - frotas
 - receitas
 - servidores e folha de pagamento
+- planejamento de despesas
 
 ---
 
@@ -63,6 +64,8 @@ receita_naturezas
 
 frota_veiculos
 └── frota_despesas
+
+planejamento_despesas
 ```
 
 ---
@@ -454,6 +457,35 @@ Relacionamentos:
 Regras importantes:
 
 - unicidade por `veiculo_id + descricao_evento + data_evento + valor_lancamento`
+
+### `planejamento_despesas`
+
+Linhas mensais do planejamento e execução orçamentária da despesa.
+
+Campos principais:
+
+- `origem`: recorte do arquivo importado; inicialmente `saude`
+- `exercicio`
+- `mes` e `mes_num`
+- `unidade_gestora`, `orgao`, `unidade`
+- `funcao`, exposta nas tools como `area`
+- `subfuncao`, exposta nas tools como `subarea`
+- `programa`
+- `descricao_acao`, exposta nas tools como `acao`
+- `fonte_recurso_identificacao` e `fonte_recurso_descricao`
+- `categoria_economica_*`, `grupo_despesa_*`, `elemento_despesa_*`
+- `dotacao_inicial`, exposta como `orcamento_inicial`
+- `dotacao_atualizada`, exposta como `orcamento_atualizado`
+- `valor_empenhado`, exposto como `valor_comprometido`
+- `valor_liquidado`, exposto como `valor_confirmado`
+- `valor_pago`
+- `valor_anulado`, exposto como `valor_cancelado`
+
+Regras importantes:
+
+- unicidade por origem, ano, mês e principais dimensões orçamentárias
+- filtros textuais nas tools ignoram diferenças de acento
+- o rollout inicial importa apenas `planejamento-saude-*.xml`
 
 ---
 

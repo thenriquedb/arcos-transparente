@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from decimal import Decimal
 from typing import Any
-import unicodedata
 
 from sqlalchemy import exists, func, select
 
@@ -13,25 +12,6 @@ from shared.utils.decimal_to_float import decimal_to_float
 
 from .filters import LicitacoesFiltroSchema
 from .runtime import serializar_licitacao
-
-
-def normalize_search_text(value: str | None) -> str:
-    if value is None:
-        return ""
-    normalized = unicodedata.normalize("NFD", value)
-    without_accents = "".join(
-        char for char in normalized if unicodedata.category(char) != "Mn"
-    )
-    return without_accents.lower()
-
-
-def matches_text_query(value: str | None, query: str | None) -> bool:
-    query_terms = normalize_search_text(query).split()
-    if not query_terms:
-        return True
-
-    searchable_text = normalize_search_text(value)
-    return all(term in searchable_text for term in query_terms)
 
 
 def apply_licitacoes_filters(stmt, filtros: LicitacoesFiltroSchema):

@@ -14,6 +14,7 @@ from database.models.payroll import (
     FolhaPagamentoRegistro,
     FolhaServidor,
 )
+from database.models.planning import PlanejamentoDespesa
 from database.models.revenue import (
     ReceitaArrecadacao,
     ReceitaLancamento,
@@ -39,4 +40,5 @@ __all__ = [
     "FolhaLotacao",
     "FolhaCargo",
     "FolhaPagamentoRegistro",
+    "PlanejamentoDespesa",
 ]

@@ -15,6 +15,8 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
         "agregar_servidores",
         "consultar_licitacoes",
         "agregar_licitacoes",
+        "consultar_planejamento",
+        "agregar_planejamento",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 
@@ -27,6 +29,8 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
         "agregar_servidores",
         "consultar_licitacoes",
         "agregar_licitacoes",
+        "consultar_planejamento",
+        "agregar_planejamento",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 

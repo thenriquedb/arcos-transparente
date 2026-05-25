@@ -38,18 +38,22 @@ Exemplos:
 - "Qual o salário do Jose Silva?" -> `buscar_historico_de_pagamentos_do_servidor`
 - "Quais as maiores licitações?" -> `consultar_licitacoes`
 - "Quantas licitações existem na saúde?" -> `agregar_licitacoes`
+- "Quanto foi pago na saúde em 2025?" -> `agregar_planejamento`
+- "Liste o planejamento da saúde em 2025" -> `consultar_planejamento`
 
 ---
 
 ## Superfície Pública Atual
 
-Atualmente o agente principal enxerga apenas 5 tools:
+Atualmente o agente principal enxerga apenas 7 tools:
 
 1. `consultar_servidores`
 2. `agregar_servidores`
 3. `consultar_licitacoes`
 4. `agregar_licitacoes`
-5. `buscar_historico_de_pagamentos_do_servidor`
+5. `consultar_planejamento`
+6. `agregar_planejamento`
+7. `buscar_historico_de_pagamentos_do_servidor`
 
 Isso vale tanto para:
 
@@ -79,6 +83,7 @@ Conceitos importantes:
 - `scope:internal`
 - `domain:servidores`
 - `domain:licitacoes`
+- `domain:planejamento`
 - `domain:folha`
 - `shape:lookup`
 - `shape:aggregate`
@@ -193,6 +198,27 @@ Serve para:
 - agrupamento por situação ou ano de abertura
 - soma e média de valor estimado
 
+#### `consultar_planejamento`
+
+Arquivo: `agents/tools/sql_tools/planejamento/consultar_planejamento_query.py`
+
+Serve para:
+
+- listar linhas do planejamento da saúde
+- filtrar por ano, mês, área, subárea, programa, ação e grupo de gasto
+- ordenar por mês, orçamento atualizado, valor comprometido ou valor pago
+- selecionar campos públicos em linguagem simples
+
+#### `agregar_planejamento`
+
+Arquivo: `agents/tools/sql_tools/planejamento/agregar_planejamento_query.py`
+
+Serve para:
+
+- totais do planejamento da saúde
+- ranking de ações, programas, subáreas e grupos de gasto
+- soma de orçamento inicial, orçamento atualizado, valor comprometido, valor confirmado e valor pago
+
 #### `buscar_historico_de_pagamentos_do_servidor`
 
 Arquivo: `agents/tools/sql_tools/folha_pagamento/buscar_historico_de_pagamentos_do_servidor_query.py`
@@ -233,6 +259,22 @@ agents/tools/sql_tools/licitacoes/
 ├── consultar_licitacoes_schema.py
 ├── agregar_licitacoes_query.py
 ├── agregar_licitacoes_schema.py
+└── shared/
+    ├── base.py
+    ├── filters.py
+    ├── querying.py
+    └── runtime.py
+```
+
+### Planejamento
+
+```text
+agents/tools/sql_tools/planejamento/
+├── __init__.py
+├── consultar_planejamento_query.py
+├── consultar_planejamento_schema.py
+├── agregar_planejamento_query.py
+├── agregar_planejamento_schema.py
 └── shared/
     ├── base.py
     ├── filters.py
@@ -341,6 +383,30 @@ Além disso:
 
 ---
 
+## Regras de Filtros em `planejamento`
+
+O domínio de `planejamento` começa pelo arquivo de planejamento da saúde.
+
+Por isso:
+
+- as tools usam `origem="saude"` por padrão
+- `area` é o nome público de `funcao`
+- `subarea` é o nome público de `subfuncao`
+- `acao` é o nome público de `descricao_acao`
+- `orcamento_atualizado` representa a dotação atualizada
+- `valor_comprometido` representa o valor empenhado
+- `valor_confirmado` representa o valor liquidado
+- `valor_pago` representa o que consta como pago no planejamento
+
+Além disso:
+
+- filtros textuais ignoram diferenças de acento
+- `mes` exato não pode coexistir com intervalo `mes_inicio/mes_fim`
+- `agregar_planejamento` deve ser usado para totais e rankings
+- `consultar_planejamento` deve ser usado para listas de ações, programas e linhas mensais
+
+---
+
 ## Quando Criar uma Tool Nova
 
 Criar uma tool nova deve ser exceção.
@@ -430,6 +496,8 @@ A arquitetura depende muito de contrato e roteamento, então os testes mais impo
   valida comportamento funcional das tools amplas
 - `tests/tools/sql_tools/test_licitacoes_public_tools.py`
   valida comportamento funcional das tools amplas de licitações
+- `tests/tools/sql_tools/test_planejamento_public_tools.py`
+  valida comportamento funcional das tools amplas de planejamento
 
 Para testes manuais de ponta a ponta, use também:
 

@@ -12,6 +12,7 @@ from agents.tools.registry import PUBLIC_SCOPE, register
 from database import session as session_manager
 from database.models import InstrumentoContratual, Licitacao
 from shared.utils.decimal_to_float import decimal_to_float
+from shared.utils.text import matches_text_query
 
 from .consultar_licitacoes_schema import (
     ConsultarLicitacoesMetadata,
@@ -21,7 +22,6 @@ from .consultar_licitacoes_schema import (
 from .shared.filters import ALLOWED_BIDDING_FIELDS
 from .shared.querying import (
     apply_licitacoes_filters,
-    matches_text_query,
     project_licitacao_fields,
 )
 

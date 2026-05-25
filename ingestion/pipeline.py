@@ -20,6 +20,7 @@ from database.models import (
     InstrumentoContratual,
     Licitacao,
     MateriaInstrumento,
+    PlanejamentoDespesa,
     ReceitaArrecadacao,
     ReceitaLancamento,
     ReceitaNatureza,
@@ -34,6 +35,7 @@ from ingestion.parsers.xml.frotas_parser import FrotasParser
 from ingestion.parsers.xml.servidores_parser import ServidoresParser
 from ingestion.parsers.xml.receitas_parser import ReceitasParser
 from ingestion.parsers.xml.folha_pagamento_parser import FolhaPagamentoParser
+from ingestion.parsers.xml.planejamentos_parser import PlanejamentosParser
 
 
 class IngestionPipeline:
@@ -50,6 +52,7 @@ class IngestionPipeline:
             "servidores": (ServidoresParser(), Servidor),
             "receitas": (ReceitasParser(), ReceitaArrecadacao),
             "folha_pagamento": (FolhaPagamentoParser(), FolhaPagamentoRegistro),
+            "planejamentos": (PlanejamentosParser(), PlanejamentoDespesa),
         }
 
     def run(
@@ -673,6 +676,8 @@ class IngestionPipeline:
             )
         elif tipo == "folha_pagamento":
             arquivos = sorted(self.data_dir.rglob("*folha-pagamento*.xml"))
+        elif tipo == "planejamentos":
+            arquivos = sorted(self.data_dir.rglob("*planejamento-saude*.xml"))
         elif tipo == "servidores":
             arquivos = sorted(self.data_dir.rglob("*servidores*.xml"))
             if not arquivos:

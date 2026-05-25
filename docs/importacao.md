@@ -45,7 +45,7 @@ python cli.py db status
 ```
 
 Mostra:
-- Total de registros em `contratos`, `licitacoes`, `servidores`
+- Total de registros em `contratos`, `licitacoes`, `servidores`, `planejamento_despesas` e demais tabelas principais
 - Última migration aplicada
 
 ### Importar tudo
@@ -60,6 +60,7 @@ python cli.py importar
 python cli.py importar --tipo contratos
 python cli.py importar --tipo licitacoes
 python cli.py importar --tipo servidores
+python cli.py importar --tipo planejamentos
 ```
 
 ### Importar por ano

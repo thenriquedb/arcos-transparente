@@ -8,9 +8,18 @@ from dataclasses import dataclass, field
 from typing import Any, Literal
 
 from agents.tools.registry import get_public_tools
+from agents.tools.sql_tools.planejamento.shared.entities import (
+    extract_planejamento_entidade_alias,
+)
 
 
-Domain = Literal["servidores", "folha_pagamento", "licitacoes", "desconhecido"]
+Domain = Literal[
+    "servidores",
+    "folha_pagamento",
+    "licitacoes",
+    "planejamento",
+    "desconhecido",
+]
 OperationType = Literal[
     "consulta_lista",
     "agregacao_ranking",
@@ -79,6 +88,14 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "contratos",
     "instrumento",
     "instrumentos",
+    "planejamento",
+    "planejamentos",
+    "orcamento",
+    "orcamentario",
+    "orcamentaria",
+    "dotacao",
+    "empenhado",
+    "liquidado",
     "servidor",
     "servidores",
     "funcionario",
@@ -90,6 +107,7 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "folha",
     "pagamento",
     "pagamentos",
+    "fumusa",
 )
 
 SUPPORTED_SCOPE_WEAK_KEYWORDS = (
@@ -97,6 +115,10 @@ SUPPORTED_SCOPE_WEAK_KEYWORDS = (
     "salarios",
     "recebeu",
     "recebe",
+    "gasto",
+    "gastos",
+    "pago",
+    "pagos",
     "trabalha",
     "trabalham",
     "saude",
@@ -157,6 +179,10 @@ def _extract_nome_para_historico(normalized_text: str) -> str | None:
     return None
 
 
+def _extract_planejamento_entidade(normalized_text: str) -> str | None:
+    return extract_planejamento_entidade_alias(normalized_text)
+
+
 def _is_licitacoes_query(normalized_text: str) -> bool:
     return any(
         keyword in normalized_text
@@ -190,6 +216,84 @@ def _extract_year(normalized_text: str) -> int | None:
     if match is None:
         return None
     return int(match.group(1))
+
+
+def _is_planejamento_query(normalized_text: str) -> bool:
+    if any(
+        keyword in normalized_text
+        for keyword in (
+            "planejamento",
+            "planejamentos",
+            "orcamento",
+            "orcamentario",
+            "orcamentaria",
+            "dotacao",
+            "empenhado",
+            "liquidado",
+        )
+    ):
+        return True
+
+    if _extract_planejamento_entidade(normalized_text) and any(
+        keyword in normalized_text
+        for keyword in (
+            "planejado",
+            "planejada",
+            "recurso",
+            "recursos",
+            "verba",
+            "verbas",
+            "programa",
+            "acao",
+            "acoes",
+            "gasto",
+            "gastos",
+            "pago",
+            "pagos",
+        )
+    ):
+        return True
+
+    return "saude" in normalized_text and any(
+        keyword in normalized_text
+        for keyword in ("gasto", "gastos", "pago", "pagos", "planejado")
+    )
+
+
+def _extract_planejamento_filters_from_query(normalized_text: str) -> dict[str, Any]:
+    filtros: dict[str, Any] = {"origem": "saude"}
+    entidade = _extract_planejamento_entidade(normalized_text)
+    if year := _extract_year(normalized_text):
+        filtros["ano"] = year
+    if "primeiro trimestre" in normalized_text or "1 trimestre" in normalized_text:
+        filtros["mes_inicio"] = 1
+        filtros["mes_fim"] = 3
+    elif "segundo trimestre" in normalized_text or "2 trimestre" in normalized_text:
+        filtros["mes_inicio"] = 4
+        filtros["mes_fim"] = 6
+    elif "terceiro trimestre" in normalized_text or "3 trimestre" in normalized_text:
+        filtros["mes_inicio"] = 7
+        filtros["mes_fim"] = 9
+    elif "quarto trimestre" in normalized_text or "4 trimestre" in normalized_text:
+        filtros["mes_inicio"] = 10
+        filtros["mes_fim"] = 12
+    if entidade is not None:
+        filtros["entidade"] = entidade
+    if "saude" in normalized_text and entidade is None:
+        filtros["area"] = "saude"
+    return filtros
+
+
+def _extract_planejamento_metric(normalized_text: str) -> str:
+    if "inicial" in normalized_text:
+        return "soma_orcamento_inicial"
+    if "empenhado" in normalized_text or "comprometido" in normalized_text:
+        return "soma_valor_comprometido"
+    if "liquidado" in normalized_text or "confirmado" in normalized_text:
+        return "soma_valor_confirmado"
+    if any(keyword in normalized_text for keyword in ("pago", "pagos", "gasto")):
+        return "soma_valor_pago"
+    return "soma_orcamento_atualizado"
 
 
 def _extract_licitacoes_objeto(normalized_text: str) -> str | None:
@@ -427,6 +531,67 @@ def _try_route_licitacoes_agregacao(normalized_text: str) -> RouteDecision | Non
     return None
 
 
+def _try_route_planejamento_agregacao(
+    normalized_text: str,
+) -> RouteDecision | None:
+    """
+    Roteia para totais e rankings do planejamento da saude.
+
+    Casos que devem retornar RouteDecision:
+        "quanto foi planejado para saude em 2025"
+        "quanto foi pago em saude no primeiro trimestre de 2025"
+        "quais acoes de saude tiveram maior orcamento"
+
+    Casos que devem retornar None:
+        "licitacoes da saude"       -> vai para _try_route_licitacoes_lista
+        "funcionarios da saude"     -> vai para _try_route_lista
+        "salario do pedro"          -> vai para _try_route_historico
+    """
+    if not _is_planejamento_query(normalized_text):
+        return None
+
+    if any(
+        keyword in normalized_text
+        for keyword in ("lista", "liste", "mostre", "quais", "detalhe")
+    ) and not any(
+        keyword in normalized_text
+        for keyword in ("maior", "maiores", "mais", "quanto", "total", "por mes")
+    ):
+        return None
+
+    filtros = _extract_planejamento_filters_from_query(normalized_text)
+    metrica = _extract_planejamento_metric(normalized_text)
+
+    if any(keyword in normalized_text for keyword in ("por mes", "mes a mes")):
+        agrupar_por = "mes"
+    elif "programa" in normalized_text:
+        agrupar_por = "programa"
+    elif "subarea" in normalized_text or "subfuncao" in normalized_text:
+        agrupar_por = "subarea"
+    elif "acao" in normalized_text or "acoes" in normalized_text:
+        agrupar_por = "acao"
+    elif "grupo" in normalized_text or "tipo de gasto" in normalized_text:
+        agrupar_por = "grupo_de_gasto"
+    else:
+        agrupar_por = None
+
+    return RouteDecision(
+        domain="planejamento",
+        operation_type="agregacao_ranking",
+        tool_name="agregar_planejamento",
+        tool_kwargs={
+            "filtros": filtros,
+            "agrupar_por": agrupar_por,
+            "metrica": metrica,
+            "ordenar_por": "metrica",
+            "ordem": "desc",
+            "limite": _extract_limit(normalized_text, default=10),
+        },
+        tags=["scope:public", "domain:planejamento", "shape:aggregate"],
+        confident=True,
+    )
+
+
 def _try_route_lista(normalized_text: str) -> RouteDecision | None:
     """
     Roteia para listagens filtradas de servidores.
@@ -459,6 +624,46 @@ def _try_route_lista(normalized_text: str) -> RouteDecision | None:
             confident=True,
         )
     return None
+
+
+def _try_route_planejamento_lista(normalized_text: str) -> RouteDecision | None:
+    """
+    Roteia para listagens do planejamento da saude.
+
+    Casos que devem retornar RouteDecision:
+        "liste o planejamento da saude em 2025"
+        "mostre as acoes planejadas da saude"
+        "quais linhas do orcamento da saude"
+
+    Casos que devem retornar None:
+        "quanto foi pago na saude"  -> vai para _try_route_planejamento_agregacao
+        "licitacao numero 12/2025"  -> vai para _try_route_licitacoes_lista
+        "funcionarios da saude"     -> vai para _try_route_lista
+    """
+    if not _is_planejamento_query(normalized_text):
+        return None
+    if not any(
+        keyword in normalized_text
+        for keyword in ("lista", "liste", "mostre", "quais", "detalhe")
+    ):
+        return None
+
+    filtros = _extract_planejamento_filters_from_query(normalized_text)
+    return RouteDecision(
+        domain="planejamento",
+        operation_type="consulta_lista",
+        tool_name="consultar_planejamento",
+        tool_kwargs={
+            "filtros": filtros,
+            "ordenar_por": "mes_num",
+            "ordem": "asc",
+            "limite": 100
+            if any(keyword in normalized_text for keyword in ("todas", "todos"))
+            else 10,
+        },
+        tags=["scope:public", "domain:planejamento", "shape:lookup"],
+        confident=True,
+    )
 
 
 def _try_route_licitacoes_lista(normalized_text: str) -> RouteDecision | None:
@@ -533,15 +738,23 @@ def route_user_query(query: str) -> RouteDecision:
     if route := _try_route_licitacoes_agregacao(normalized_text):
         return route
 
-    # Prioridade 3 — rankings e agregações de servidores
+    # Prioridade 3 — rankings e agregações de planejamento
+    if route := _try_route_planejamento_agregacao(normalized_text):
+        return route
+
+    # Prioridade 4 — rankings e agregações de servidores
     if route := _try_route_agregacao(normalized_text):
         return route
 
-    # Prioridade 4 — listagens e detalhes de licitações
+    # Prioridade 5 — listagens e detalhes de licitações
     if route := _try_route_licitacoes_lista(normalized_text):
         return route
 
-    # Prioridade 5 — listagens com filtro de secretaria
+    # Prioridade 6 — listagens de planejamento
+    if route := _try_route_planejamento_lista(normalized_text):
+        return route
+
+    # Prioridade 7 — listagens com filtro de secretaria
     if route := _try_route_lista(normalized_text):
         return route
 
@@ -567,7 +780,7 @@ def evaluate_query_guardrails(
             message=(
                 "Envie uma pergunta sobre os dados públicos municipais disponíveis "
                 "no sistema, como servidores, secretarias, salários-base ou "
-                "licitações."
+                "licitações ou planejamento."
             ),
         )
 
@@ -598,7 +811,8 @@ def evaluate_query_guardrails(
         message=(
             "Posso ajudar apenas com consultas aos dados públicos municipais "
             "disponíveis neste sistema, especialmente sobre servidores, "
-            "secretarias, salários-base, histórico de pagamentos e licitações."
+            "secretarias, salários-base, histórico de pagamentos, licitações "
+            "e planejamento."
         ),
     )
 

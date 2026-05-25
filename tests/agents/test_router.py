@@ -4,11 +4,13 @@ import pytest
 
 from agents.router import (
     _extract_limit,
+    _extract_planejamento_entidade,
     _extract_secretaria,
     _normalize,
     _try_route_agregacao,
     _try_route_historico,
     _try_route_lista,
+    _try_route_planejamento_agregacao,
     evaluate_query_guardrails,
     route_user_query,
     select_public_tools_for_query,
@@ -141,6 +143,60 @@ from agents.router import (
                 "incluir_detalhes": True,
             },
         ),
+        (
+            "Quanto foi pago na saude em 2025?",
+            "planejamento",
+            "agregacao_ranking",
+            "agregar_planejamento",
+            {
+                "filtros": {"origem": "saude", "ano": 2025, "area": "saude"},
+                "agrupar_por": None,
+                "metrica": "soma_valor_pago",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Foi planejado algum recurso para a fumusa?",
+            "planejamento",
+            "agregacao_ranking",
+            "agregar_planejamento",
+            {
+                "filtros": {"origem": "saude", "entidade": "fumusa"},
+                "agrupar_por": None,
+                "metrica": "soma_orcamento_atualizado",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Quais acoes de saude tiveram maior orcamento em 2025?",
+            "planejamento",
+            "agregacao_ranking",
+            "agregar_planejamento",
+            {
+                "filtros": {"origem": "saude", "ano": 2025, "area": "saude"},
+                "agrupar_por": "acao",
+                "metrica": "soma_orcamento_atualizado",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Liste o planejamento da saude em 2025",
+            "planejamento",
+            "consulta_lista",
+            "consultar_planejamento",
+            {
+                "filtros": {"origem": "saude", "ano": 2025, "area": "saude"},
+                "ordenar_por": "mes_num",
+                "ordem": "asc",
+                "limite": 10,
+            },
+        ),
     ],
 )
 def test_route_user_query_mapeia_exemplos_publicos(
@@ -178,6 +234,19 @@ def test_extract_secretaria_normaliza_para_secretaria_canonica() -> None:
     )
 
 
+def test_extract_planejamento_entidade_reconhece_fumusa() -> None:
+    assert (
+        _extract_planejamento_entidade("foi planejado algum recurso para a fumusa")
+        == "fumusa"
+    )
+    assert (
+        _extract_planejamento_entidade(
+            "mostre o planejamento da fundacao municipal de saude"
+        )
+        == "fumusa"
+    )
+
+
 def test_try_route_historico_isolado() -> None:
     decision = _try_route_historico(_normalize("salario do pedro oliveira"))
 
@@ -204,6 +273,23 @@ def test_try_route_agregacao_isolado_para_ranking() -> None:
     assert decision.tool_kwargs["ordem"] == "desc"
 
 
+def test_try_route_planejamento_agregacao_isolado_para_fumusa() -> None:
+    decision = _try_route_planejamento_agregacao(
+        _normalize("Foi planejado algum recurso para a fumusa?")
+    )
+
+    assert decision is not None
+    assert decision.tool_name == "agregar_planejamento"
+    assert decision.tool_kwargs == {
+        "filtros": {"origem": "saude", "entidade": "fumusa"},
+        "agrupar_por": None,
+        "metrica": "soma_orcamento_atualizado",
+        "ordenar_por": "metrica",
+        "ordem": "desc",
+        "limite": 10,
+    }
+
+
 def test_try_route_lista_isolado() -> None:
     decision = _try_route_lista(
         _normalize("lista de todos os funcionarios da educacao")
@@ -218,11 +304,29 @@ def test_try_route_lista_isolado() -> None:
     }
 
 
+def test_guardrail_permita_pergunta_sobre_fumusa() -> None:
+    decision = route_user_query("Foi planejado algum recurso para a fumusa?")
+    guardrail = evaluate_query_guardrails(
+        "Foi planejado algum recurso para a fumusa?",
+        route=decision,
+    )
+
+    assert decision.confident is True
+    assert guardrail.allowed is True
+
+
 def test_route_user_query_restringe_licitacoes_por_tags() -> None:
     tools = select_public_tools_for_query("Quais as 10 maiores licitacoes?")
     tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
 
     assert tool_names == ["consultar_licitacoes"]
+
+
+def test_route_user_query_restringe_planejamento_por_tags() -> None:
+    tools = select_public_tools_for_query("Quanto foi pago na saude em 2025?")
+    tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
+
+    assert tool_names == ["agregar_planejamento"]
 
 
 def test_evaluate_query_guardrails_permitem_consulta_no_escopo() -> None:
