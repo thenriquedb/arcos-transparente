@@ -2,6 +2,7 @@ from langchain.agents import create_agent
 from dotenv import load_dotenv
 from agents.router import route_user_query, select_public_tools_for_query
 from agents.tools.registry import get_public_tools
+from pprint import pprint
 
 load_dotenv()
 
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     rota = route_user_query(pergunta)
     resultado = responder_pergunta(pergunta)
 
-    print(
+    pprint(
         {
             "rota": {
                 "dominio": rota.domain,
