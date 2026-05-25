@@ -28,9 +28,12 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
     assert capturado["model"] == "gpt-4o-mini"
     assert "use as tools disponíveis antes de responder" in capturado["system_prompt"]
     assert "consultar_servidores" in capturado["system_prompt"]
+    assert "valor_total_estimado" in capturado["system_prompt"]
     assert nomes == {
         "consultar_servidores",
         "agregar_servidores",
+        "consultar_licitacoes",
+        "agregar_licitacoes",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 

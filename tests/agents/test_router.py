@@ -67,6 +67,80 @@ from agents.router import (
                 ],
             },
         ),
+        (
+            "Quantas licitacoes existem na saude?",
+            "licitacoes",
+            "agregacao_ranking",
+            "agregar_licitacoes",
+            {"filtros": {"secretaria": "saude"}, "metrica": "contagem"},
+        ),
+        (
+            "Quais as 10 maiores licitacoes?",
+            "licitacoes",
+            "consulta_lista",
+            "consultar_licitacoes",
+            {
+                "ordenar_por": "valor_estimado",
+                "ordem": "desc",
+                "limite": 10,
+                "campos": [
+                    "numero",
+                    "objeto",
+                    "valor_estimado",
+                    "secretaria",
+                    "data_abertura",
+                    "situacao",
+                ],
+            },
+        ),
+        (
+            "Detalhe a licitacao numero 004/2025",
+            "licitacoes",
+            "consulta_lista",
+            "consultar_licitacoes",
+            {
+                "filtros": {"numero": "004/2025"},
+                "ordenar_por": "data_abertura",
+                "ordem": "desc",
+                "limite": 10,
+                "incluir_detalhes": True,
+            },
+        ),
+        (
+            "Quais foram todas as licitacoes para o festival gastronomico em 2025? "
+            "E qual foi o total gasto?",
+            "licitacoes",
+            "consulta_lista",
+            "consultar_licitacoes",
+            {
+                "filtros": {
+                    "objeto": "festival gastronomico",
+                    "data_abertura_inicio": "2025-01-01",
+                    "data_abertura_fim": "2025-12-31",
+                },
+                "ordenar_por": "data_abertura",
+                "ordem": "desc",
+                "limite": 100,
+                "incluir_detalhes": False,
+            },
+        ),
+        (
+            "Quais contratos do festival gastronomico em 2025?",
+            "licitacoes",
+            "consulta_lista",
+            "consultar_licitacoes",
+            {
+                "filtros": {
+                    "objeto": "festival gastronomico",
+                    "data_abertura_inicio": "2025-01-01",
+                    "data_abertura_fim": "2025-12-31",
+                },
+                "ordenar_por": "data_abertura",
+                "ordem": "desc",
+                "limite": 10,
+                "incluir_detalhes": True,
+            },
+        ),
     ],
 )
 def test_route_user_query_mapeia_exemplos_publicos(
@@ -93,7 +167,9 @@ def test_extract_limit_so_captura_numeros_em_contexto_de_quantidade() -> None:
 
 def test_extract_secretaria_normaliza_para_secretaria_canonica() -> None:
     assert (
-        _extract_secretaria("quantas pessoas trabalham na saude publica municipal de arcos?")
+        _extract_secretaria(
+            "quantas pessoas trabalham na saude publica municipal de arcos?"
+        )
         == "saude"
     )
     assert (
@@ -111,7 +187,9 @@ def test_try_route_historico_isolado() -> None:
 
 
 def test_try_route_historico_retorna_none_quando_caso_e_de_agregacao() -> None:
-    decision = _try_route_historico(_normalize("quais os 10 maiores salarios da prefeitura?"))
+    decision = _try_route_historico(
+        _normalize("quais os 10 maiores salarios da prefeitura?")
+    )
 
     assert decision is None
 
@@ -127,7 +205,9 @@ def test_try_route_agregacao_isolado_para_ranking() -> None:
 
 
 def test_try_route_lista_isolado() -> None:
-    decision = _try_route_lista(_normalize("lista de todos os funcionarios da educacao"))
+    decision = _try_route_lista(
+        _normalize("lista de todos os funcionarios da educacao")
+    )
 
     assert decision is not None
     assert decision.tool_name == "consultar_servidores"
@@ -138,6 +218,13 @@ def test_try_route_lista_isolado() -> None:
     }
 
 
+def test_route_user_query_restringe_licitacoes_por_tags() -> None:
+    tools = select_public_tools_for_query("Quais as 10 maiores licitacoes?")
+    tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
+
+    assert tool_names == ["consultar_licitacoes"]
+
+
 def test_evaluate_query_guardrails_permitem_consulta_no_escopo() -> None:
     decision = evaluate_query_guardrails("Quais os 10 maiores salários da prefeitura?")
 
@@ -146,7 +233,9 @@ def test_evaluate_query_guardrails_permitem_consulta_no_escopo() -> None:
 
 
 def test_evaluate_query_guardrails_bloqueia_pergunta_fora_do_escopo() -> None:
-    decision = evaluate_query_guardrails("Como implementar uma lista encadeada em Python?")
+    decision = evaluate_query_guardrails(
+        "Como implementar uma lista encadeada em Python?"
+    )
 
     assert decision.allowed is False
     assert decision.category == "out_of_scope"

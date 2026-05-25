@@ -35,17 +35,21 @@ Exemplos:
 - "Quais os 10 maiores salários?" -> `consultar_servidores`
 - "Quantas pessoas trabalham na saúde?" -> `agregar_servidores`
 - "Qual secretaria com mais funcionários?" -> `agregar_servidores`
-- "Qual o salário do Ronaldo Gaspar?" -> `buscar_historico_de_pagamentos_do_servidor`
+- "Qual o salário do Jose Silva?" -> `buscar_historico_de_pagamentos_do_servidor`
+- "Quais as maiores licitações?" -> `consultar_licitacoes`
+- "Quantas licitações existem na saúde?" -> `agregar_licitacoes`
 
 ---
 
 ## Superfície Pública Atual
 
-Atualmente o agente principal enxerga apenas 3 tools:
+Atualmente o agente principal enxerga apenas 5 tools:
 
 1. `consultar_servidores`
 2. `agregar_servidores`
-3. `buscar_historico_de_pagamentos_do_servidor`
+3. `consultar_licitacoes`
+4. `agregar_licitacoes`
+5. `buscar_historico_de_pagamentos_do_servidor`
 
 Isso vale tanto para:
 
@@ -74,6 +78,7 @@ Conceitos importantes:
 - `scope:public`
 - `scope:internal`
 - `domain:servidores`
+- `domain:licitacoes`
 - `domain:folha`
 - `shape:lookup`
 - `shape:aggregate`
@@ -161,6 +166,33 @@ Serve para:
 - agrupamento por mês de referência
 - soma de `salario_base`
 
+#### `consultar_licitacoes`
+
+Arquivo: `agents/tools/sql_tools/licitacoes/consultar_licitacoes_query.py`
+
+Serve para:
+
+- busca por número
+- lista filtrada por secretaria
+- lista filtrada por modalidade
+- busca por objeto
+- busca por fornecedor vencedor
+- ranking simples por valor estimado
+- soma de `valor_total_estimado` para todos os registros filtrados
+- detalhes com vencedores, instrumentos e itens quando solicitado
+
+#### `agregar_licitacoes`
+
+Arquivo: `agents/tools/sql_tools/licitacoes/agregar_licitacoes_query.py`
+
+Serve para:
+
+- contagens filtradas
+- ranking por secretaria
+- ranking por modalidade
+- agrupamento por situação ou ano de abertura
+- soma e média de valor estimado
+
 #### `buscar_historico_de_pagamentos_do_servidor`
 
 Arquivo: `agents/tools/sql_tools/folha_pagamento/buscar_historico_de_pagamentos_do_servidor_query.py`
@@ -189,6 +221,22 @@ agents/tools/sql_tools/servidores/
     ├── filters.py
     ├── querying.py
     ├── responses.py
+    └── runtime.py
+```
+
+### Licitações
+
+```text
+agents/tools/sql_tools/licitacoes/
+├── __init__.py
+├── consultar_licitacoes_query.py
+├── consultar_licitacoes_schema.py
+├── agregar_licitacoes_query.py
+├── agregar_licitacoes_schema.py
+└── shared/
+    ├── base.py
+    ├── filters.py
+    ├── querying.py
     └── runtime.py
 ```
 
@@ -271,6 +319,28 @@ Além disso:
 
 ---
 
+## Regras de Filtros em `licitacoes`
+
+O domínio de `licitacoes` usa a tabela principal para listagens e só expande relações quando necessário.
+
+Por isso:
+
+- `consultar_licitacoes` retorna dados principais por padrão
+- `incluir_detalhes=True` adiciona vencedores, instrumentos contratuais e itens
+- `valor_total_estimado` soma todos os registros encontrados pelo filtro, mesmo quando a lista está paginada
+- `valor_total_estimado` deve ser apresentado como valor estimado quando não houver dado de execução financeira
+- `data_abertura` exata não pode coexistir com intervalo
+- `data_abertura_inicio` e `data_abertura_fim` devem vir juntas
+- filtro por fornecedor usa vencedores da licitação
+
+Além disso:
+
+- busca por objeto aceita múltiplos termos e ignora diferenças de acento
+- filtros de secretaria, modalidade e situação usam busca textual parcial
+- ranking de maiores licitações usa `ordenar_por="valor_estimado"` e `ordem="desc"`
+
+---
+
 ## Quando Criar uma Tool Nova
 
 Criar uma tool nova deve ser exceção.
@@ -294,7 +364,7 @@ Nesses casos, prefira estender a capability ampla já existente.
 
 ## Como Adicionar um Novo Domínio
 
-Exemplo de expansão futura para `licitacoes` ou `folha_pagamento`.
+Exemplo de expansão futura para `folha_pagamento`, receitas ou frotas.
 
 ### Passo 1. Definir as capabilities públicas
 
@@ -358,6 +428,13 @@ A arquitetura depende muito de contrato e roteamento, então os testes mais impo
   valida quais tools o agente recebe
 - `tests/tools/sql_tools/test_servidores_public_tools.py`
   valida comportamento funcional das tools amplas
+- `tests/tools/sql_tools/test_licitacoes_public_tools.py`
+  valida comportamento funcional das tools amplas de licitações
+
+Para testes manuais de ponta a ponta, use também:
+
+- `docs/perguntas-teste-agente.md`
+  reúne perguntas esperadas, ambíguas, sem resultado e casos que devem ser bloqueados
 
 Isso é importante porque uma arquitetura com poucas tools só funciona bem se:
 

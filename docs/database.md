@@ -532,7 +532,7 @@ Ao criar tools, vale pensar em contratos de entrada e saída que respeitem a est
 - buscar fornecedor por documento:
   partir de `fornecedores` e cruzar contratos e licitações
 - detalhar licitação:
-  buscar na `licitacoes` e expandir vencedores, instrumentos e matérias
+  usar `consultar_licitacoes` com `incluir_detalhes=True` para expandir vencedores, instrumentos e matérias
 - resumir receita por período:
   usar `receita_arrecadacoes` com filtros por `exercicio`, `mes`, `unidade_gestora` e `natureza_id`
 - analisar custos de frota:
