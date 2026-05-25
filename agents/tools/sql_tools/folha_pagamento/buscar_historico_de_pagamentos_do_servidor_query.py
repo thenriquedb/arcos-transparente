@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from sqlalchemy import func, select
 from sqlalchemy.orm import joinedload
 
+from agents.tools.registry import PUBLIC_SCOPE, register
 from database import session as session_manager
 from database.models import FolhaPagamentoRegistro, FolhaServidor
 
@@ -15,7 +16,11 @@ from .shared.params import BuscarHistoricoPagamentosServidorParams
 from .shared.responses import HistoricoPagamentosServidorResponse
 from .shared.runtime import resposta_sem_resultados, serializar_servidor
 
-
+@register(
+    name="buscar_historico_de_pagamentos_do_servidor",
+    scope=PUBLIC_SCOPE,
+    tags=["domain:folha", "shape:history"],
+)
 def buscar_historico_de_pagamentos_do_servidor(
     nome: str,
     limite: int = 10,

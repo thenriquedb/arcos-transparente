@@ -1,4 +1,4 @@
-"""Utilitarios compartilhados de serializacao e resposta das tools de servidores."""
+"""Utilitarios compartilhados de serializacao das tools de servidores."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from sqlalchemy import func, select
 from database.models import Servidor
 from shared.utils.decimal_to_float import decimal_to_float
 
-from .responses import ServidorToolItem, ServidoresToolResponse
+from .responses import ServidorToolItem
 
 
 def serializar_servidor(servidor: Servidor) -> dict[str, Any]:
@@ -33,26 +33,3 @@ def obter_mes_de_referencia_mais_recente(session) -> date | None:
     return session.execute(
         select(func.max(Servidor.competencia_referencia))
     ).scalar_one_or_none()
-
-
-def resposta_sem_resultados(
-    *,
-    query: str | None = None,
-    data_inicio: Any | None = None,
-    data_fim: Any | None = None,
-    mes_de_referencia: Any | None = None,
-    secretarias_correspondentes: list[str] | None = None,
-    mensagem: str | None = None,
-    sugestao: str | None = None,
-) -> dict[str, Any]:
-    return ServidoresToolResponse(
-        query=query,
-        data_inicio=data_inicio,
-        data_fim=data_fim,
-        mes_de_referencia=mes_de_referencia,
-        total=0,
-        resultados=[],
-        secretarias_correspondentes=secretarias_correspondentes or [],
-        mensagem=mensagem,
-        sugestao=sugestao,
-    ).model_dump(mode="json")

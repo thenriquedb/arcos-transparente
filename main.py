@@ -1,19 +1,21 @@
 from langchain.agents import create_agent
 from dotenv import load_dotenv
-from agents.tools.registry import get_all_tools
+from agents.router import route_user_query, select_public_tools_for_query
+from agents.tools.registry import get_public_tools
 
 load_dotenv()
 
 
-def criar_agente():
-    tools = get_all_tools()
+def criar_agente(pergunta: str | None = None):
+    tools = select_public_tools_for_query(pergunta)
 
     system_prompt = (
-        "Você é um assistente que ajuda a buscar informações sobre servidores "
-        "públicos. Sempre que a pergunta depender de dados do sistema, use as "
-        "tools disponíveis antes de responder. Para consultas por nome, "
-        "secretaria, cargo, mês de referência ou rankings de salários, prefira "
-        "as tools de servidores em vez de responder de memória."
+        "Você é um assistente que ajuda a consultar dados públicos municipais. "
+        "Sempre que a resposta depender de dados do sistema, use as tools "
+        "disponíveis antes de responder. Use `consultar_servidores` para "
+        "listagens e filtros, `agregar_servidores` para totais e rankings, e "
+        "`buscar_historico_de_pagamentos_do_servidor` para histórico detalhado "
+        "de pagamentos de uma pessoa específica. Não invente dados."
     )
 
     return create_agent(
@@ -23,9 +25,32 @@ def criar_agente():
     )
 
 
-if __name__ == "__main__":
-    agente = criar_agente()
-    resultado = agente.invoke({"messages": ["Quais os 10 maiores salários da prefeitura?"]})
+def ferramentas_publicas_disponiveis() -> list[str]:
+    return [
+        getattr(tool_obj, "name", getattr(tool_obj, "__name__", ""))
+        for tool_obj in get_public_tools()
+    ]
 
-    # pprint(resultado)
+
+def responder_pergunta(pergunta: str):
+    agente = criar_agente(pergunta)
+    return agente.invoke({"messages": [pergunta]})
+
+
+if __name__ == "__main__":
+    pergunta = "Quanto o prefeito recebe?"
+    rota = route_user_query(pergunta)
+    resultado = responder_pergunta(pergunta)
+
+    print(
+        {
+            "rota": {
+                "dominio": rota.domain,
+                "tipo_de_operacao": rota.operation_type,
+                "tool_publica": rota.tool_name,
+                "parametros_sugeridos": rota.tool_kwargs,
+            },
+            "tools_publicas": ferramentas_publicas_disponiveis(),
+        }
+    )
     print(resultado["messages"][-1].content)

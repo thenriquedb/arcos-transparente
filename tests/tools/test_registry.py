@@ -1,19 +1,44 @@
 from __future__ import annotations
 
-from agents.tools.registry import get_all_tools
+from agents.tools.registry import get_all_tools, get_public_tools
 
 
 def _tool_name(tool_obj) -> str:
     return getattr(tool_obj, "name", getattr(tool_obj, "__name__", ""))
 
 
-def test_get_all_tools_descobre_tools_de_servidores() -> None:
-    tools = get_all_tools()
-    tool_names = {_tool_name(tool_obj) for tool_obj in tools}
+def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None:
+    public_tool_names = {_tool_name(tool_obj) for tool_obj in get_public_tools()}
 
-    assert "buscar_servidores_por_nome" in tool_names
-    assert "buscar_servidores_por_secretaria" in tool_names
-    assert "listar_maiores_salarios" in tool_names
+    assert public_tool_names == {
+        "consultar_servidores",
+        "agregar_servidores",
+        "buscar_historico_de_pagamentos_do_servidor",
+    }
+
+
+def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
+    tool_names = {_tool_name(tool_obj) for tool_obj in get_all_tools()}
+
+    assert tool_names == {
+        "consultar_servidores",
+        "agregar_servidores",
+        "buscar_historico_de_pagamentos_do_servidor",
+    }
+
+
+def test_get_all_tools_nao_expoe_nomes_antigos_de_servidores() -> None:
+    tool_names = {_tool_name(tool_obj) for tool_obj in get_all_tools()}
+
+    assert "buscar_servidores_por_nome" not in tool_names
+    assert "buscar_servidores_por_secretaria" not in tool_names
+    assert "listar_servidores_da_secretaria" not in tool_names
+    assert "contar_servidores_por_secretaria" not in tool_names
+    assert "buscar_servidores_por_cargo" not in tool_names
+    assert "listar_maiores_salarios" not in tool_names
+    assert "buscar_servidores_por_mes_de_referencia_no_periodo" not in tool_names
+    assert "listar_secretarias_por_quantidade_de_servidores" not in tool_names
+    assert "buscar_secretaria_com_mais_servidores" not in tool_names
 
 
 def test_get_all_tools_nao_duplica_tools_em_chamadas_repetidas() -> None:
