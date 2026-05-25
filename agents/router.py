@@ -17,6 +17,12 @@ OperationType = Literal[
     "historico_detalhado",
     "desconhecido",
 ]
+GuardrailCategory = Literal[
+    "allowed",
+    "out_of_scope",
+    "prompt_injection",
+    "empty_query",
+]
 
 
 @dataclass(slots=True)
@@ -27,6 +33,50 @@ class RouteDecision:
     tool_kwargs: dict[str, Any] = field(default_factory=dict)
     tags: list[str] = field(default_factory=lambda: ["scope:public"])
     confident: bool = False
+
+
+@dataclass(slots=True)
+class GuardrailDecision:
+    allowed: bool
+    category: GuardrailCategory
+    message: str | None = None
+
+
+PROMPT_INJECTION_PATTERNS = (
+    r"\b(?:ignore|disregard|override|bypass)\b.{0,80}\b(?:instruction|instructions|prompt|system|developer|rules?)\b",
+    r"\b(?:desconsidere|ignore|ignore todas|ignore todos|ignore as|ignore os|burle|contorne)\b.{0,80}\b(?:instrucoes|instrução|instrucao|regras?|prompt|sistema|desenvolvedor|developer)\b",
+    r"\b(?:revele|mostre|exiba|imprima|print|display)\b.{0,80}\b(?:prompt|system prompt|mensagem de sistema|developer message|mensagem do desenvolvedor)\b",
+    r"\b(?:nao use tools|não use tools|do not use tools)\b",
+)
+
+SUPPORTED_SCOPE_STRONG_KEYWORDS = (
+    "prefeitura",
+    "municipal",
+    "servidor",
+    "servidores",
+    "funcionario",
+    "funcionarios",
+    "secretaria",
+    "secretarias",
+    "cargo",
+    "cargos",
+    "folha",
+    "pagamento",
+    "pagamentos",
+)
+
+SUPPORTED_SCOPE_WEAK_KEYWORDS = (
+    "salario",
+    "salarios",
+    "recebeu",
+    "recebe",
+    "trabalha",
+    "trabalham",
+    "saude",
+    "educacao",
+    "obras",
+    "procuradoria",
+)
 
 
 def _normalize(text: str) -> str:
@@ -46,9 +96,9 @@ def _extract_limit(normalized_text: str, default: int = 10) -> int:
 
 def _extract_secretaria(normalized_text: str) -> str | None:
     patterns = [
-        r"(?:na|no|da|do)\s+(?:secretaria\s+de\s+)?([a-z0-9\s]+?)(?:\?|$)",
-        r"funcionarios\s+da\s+([a-z0-9\s]+?)(?:\?|$)",
-        r"trabalham\s+na\s+([a-z0-9\s]+?)(?:\?|$)",
+        r"\b(?:na|no|da|do)\b\s+(?:secretaria\s+de\s+)?([a-z0-9\s]+?)(?:\?|$)",
+        r"\bfuncionarios\b\s+\bda\b\s+([a-z0-9\s]+?)(?:\?|$)",
+        r"\btrabalham\b\s+\bna\b\s+([a-z0-9\s]+?)(?:\?|$)",
     ]
     for pattern in patterns:
         match = re.search(pattern, normalized_text)
@@ -74,6 +124,17 @@ def _extract_nome_para_historico(normalized_text: str) -> str | None:
         if nome:
             return nome
     return None
+
+
+def _contains_prompt_injection(normalized_text: str) -> bool:
+    return any(
+        re.search(pattern, normalized_text) is not None
+        for pattern in PROMPT_INJECTION_PATTERNS
+    )
+
+
+def _count_keyword_hits(normalized_text: str, keywords: tuple[str, ...]) -> int:
+    return sum(1 for keyword in keywords if keyword in normalized_text)
 
 
 def route_user_query(query: str) -> RouteDecision:
@@ -174,11 +235,64 @@ def route_user_query(query: str) -> RouteDecision:
     )
 
 
+def evaluate_query_guardrails(
+    query: str,
+    route: RouteDecision | None = None,
+) -> GuardrailDecision:
+    normalized_text = _normalize(query)
+
+    if not normalized_text:
+        return GuardrailDecision(
+            allowed=False,
+            category="empty_query",
+            message=(
+                "Envie uma pergunta sobre os dados públicos municipais disponíveis "
+                "no sistema, como servidores, secretarias, salários-base ou "
+                "histórico de pagamentos."
+            ),
+        )
+
+    if _contains_prompt_injection(normalized_text):
+        return GuardrailDecision(
+            allowed=False,
+            category="prompt_injection",
+            message=(
+                "Não posso seguir pedidos para ignorar instruções, revelar prompts "
+                "internos ou contornar regras do sistema. Posso ajudar apenas com "
+                "consultas aos dados públicos municipais disponíveis."
+            ),
+        )
+
+    route = route or route_user_query(query)
+    strong_hits = _count_keyword_hits(normalized_text, SUPPORTED_SCOPE_STRONG_KEYWORDS)
+    weak_hits = _count_keyword_hits(normalized_text, SUPPORTED_SCOPE_WEAK_KEYWORDS)
+
+    if route.confident or strong_hits >= 1 or weak_hits >= 2:
+        return GuardrailDecision(
+            allowed=True,
+            category="allowed",
+        )
+
+    return GuardrailDecision(
+        allowed=False,
+        category="out_of_scope",
+        message=(
+            "Posso ajudar apenas com consultas aos dados públicos municipais "
+            "disponíveis neste sistema, especialmente sobre servidores, "
+            "secretarias, salários-base e histórico de pagamentos."
+        ),
+    )
+
+
 def select_public_tools_for_query(query: str | None = None) -> list[object]:
     if not query:
         return get_public_tools()
 
     route = route_user_query(query)
+    guardrail = evaluate_query_guardrails(query, route=route)
+    if not guardrail.allowed:
+        return []
+
     if not route.confident:
         return get_public_tools()
 

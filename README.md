@@ -34,6 +34,12 @@ Veja [INSTRUCTIONS.md](./INSTRUCTIONS.md) para documentação detalhada sobre:
 - Boas práticas operacionais
 - Troubleshooting
 
+Documentos complementares deste repositório:
+
+- [Arquitetura de agent e tools](./docs/arquitetura-agent-tools.md)
+- [Modelagem de banco](./docs/database.md)
+- [Fluxo de importação](./docs/importacao.md)
+
 ## Dados Cobertos
 
 - 📋 **Licitações** - Processos licitatórios e fornecedores

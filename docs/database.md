@@ -522,6 +522,9 @@ Perguntas sobre resultado e detalhamento geralmente exigem join entre:
 
 ## Recomendações para Tools de LLM
 
+Para a arquitetura atual do agente, superfícies públicas reduzidas e estratégia de roteamento,
+consulte também: [docs/arquitetura-agent-tools.md](./arquitetura-agent-tools.md)
+
 Ao criar tools, vale pensar em contratos de entrada e saída que respeitem a estrutura do banco:
 
 - buscar servidor por nome:
