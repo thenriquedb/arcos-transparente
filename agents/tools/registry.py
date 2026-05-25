@@ -104,7 +104,9 @@ def get_tools(
     return filtered_tools
 
 
-def get_public_tools(*, tags: list[str] | tuple[str, ...] | None = None) -> list[object]:
+def get_public_tools(
+    *, tags: list[str] | tuple[str, ...] | None = None
+) -> list[object]:
     """Retorna apenas as tools publicas."""
 
     return get_tools(scope=PUBLIC_SCOPE, tags=tags)
@@ -113,7 +115,5 @@ def get_public_tools(*, tags: list[str] | tuple[str, ...] | None = None) -> list
 def get_tools_by_tag(tag: str, *, scope: str | None = None) -> list[object]:
     """Retorna tools filtradas por tag — útil para agentes especializados."""
     return [
-        tool_obj
-        for tool_obj in get_tools(scope=scope)
-        if tag in (tool_obj.tags or [])
+        tool_obj for tool_obj in get_tools(scope=scope) if tag in (tool_obj.tags or [])
     ]

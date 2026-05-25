@@ -81,7 +81,10 @@ class ServidoresFiltroSchema(ServidoresToolBaseSchema):
                 "mes_de_referencia_inicio ou mes_de_referencia_fim"
             )
 
-        if self.mes_de_referencia_inicio is not None or self.mes_de_referencia_fim is not None:
+        if (
+            self.mes_de_referencia_inicio is not None
+            or self.mes_de_referencia_fim is not None
+        ):
             if (
                 self.mes_de_referencia_inicio is None
                 or self.mes_de_referencia_fim is None

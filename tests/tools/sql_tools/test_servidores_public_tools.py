@@ -235,7 +235,9 @@ def test_consultar_servidores_suporta_top_salarios_com_projecao(monkeypatch) -> 
     session.close()
 
 
-def test_consultar_servidores_filtra_por_periodo_de_mes_de_referencia(monkeypatch) -> None:
+def test_consultar_servidores_filtra_por_periodo_de_mes_de_referencia(
+    monkeypatch,
+) -> None:
     session = _build_session()
     session.add_all(
         [

@@ -31,7 +31,9 @@ class RouteDecision:
 
 def _normalize(text: str) -> str:
     normalized = unicodedata.normalize("NFD", text)
-    without_accents = "".join(char for char in normalized if unicodedata.category(char) != "Mn")
+    without_accents = "".join(
+        char for char in normalized if unicodedata.category(char) != "Mn"
+    )
     return without_accents.lower().strip()
 
 
@@ -78,7 +80,9 @@ def route_user_query(query: str) -> RouteDecision:
     normalized_text = _normalize(query)
 
     nome_para_historico = _extract_nome_para_historico(normalized_text)
-    if nome_para_historico and all(keyword not in normalized_text for keyword in ("maiores", "ranking", "top")):
+    if nome_para_historico and all(
+        keyword not in normalized_text for keyword in ("maiores", "ranking", "top")
+    ):
         return RouteDecision(
             domain="folha_pagamento",
             operation_type="historico_detalhado",
@@ -104,7 +108,9 @@ def route_user_query(query: str) -> RouteDecision:
             confident=True,
         )
 
-    if any(keyword in normalized_text for keyword in ("quantas", "quantos", "total de")):
+    if any(
+        keyword in normalized_text for keyword in ("quantas", "quantos", "total de")
+    ):
         secretaria = _extract_secretaria(normalized_text)
         if secretaria:
             return RouteDecision(
@@ -119,7 +125,9 @@ def route_user_query(query: str) -> RouteDecision:
                 confident=True,
             )
 
-    if ("salario" in normalized_text and any(keyword in normalized_text for keyword in ("maiores", "maior", "top"))):
+    if "salario" in normalized_text and any(
+        keyword in normalized_text for keyword in ("maiores", "maior", "top")
+    ):
         return RouteDecision(
             domain="servidores",
             operation_type="consulta_lista",
@@ -141,7 +149,10 @@ def route_user_query(query: str) -> RouteDecision:
         )
 
     secretaria = _extract_secretaria(normalized_text)
-    if secretaria and any(keyword in normalized_text for keyword in ("lista", "liste", "funcionario", "trabalha", "trabalham")):
+    if secretaria and any(
+        keyword in normalized_text
+        for keyword in ("lista", "liste", "funcionario", "trabalha", "trabalham")
+    ):
         return RouteDecision(
             domain="servidores",
             operation_type="consulta_lista",

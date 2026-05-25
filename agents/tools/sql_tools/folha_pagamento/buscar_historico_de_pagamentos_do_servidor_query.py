@@ -16,6 +16,7 @@ from .shared.params import BuscarHistoricoPagamentosServidorParams
 from .shared.responses import HistoricoPagamentosServidorResponse
 from .shared.runtime import resposta_sem_resultados, serializar_servidor
 
+
 @register(
     name="buscar_historico_de_pagamentos_do_servidor",
     scope=PUBLIC_SCOPE,

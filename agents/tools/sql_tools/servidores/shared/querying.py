@@ -37,7 +37,9 @@ def apply_servidores_filters(
     mes_de_referencia_considerado,
 ):
     if mes_de_referencia_considerado is not None:
-        stmt = stmt.where(Servidor.competencia_referencia == mes_de_referencia_considerado)
+        stmt = stmt.where(
+            Servidor.competencia_referencia == mes_de_referencia_considerado
+        )
     elif (
         filtros.mes_de_referencia_inicio is not None
         and filtros.mes_de_referencia_fim is not None

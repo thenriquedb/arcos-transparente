@@ -85,9 +85,11 @@ def consultar_servidores(
         ).model_dump(mode="json")
 
     with session_manager.get_session() as session:
-        mes_de_referencia_considerado, mes_padrao_aplicado = resolve_mes_de_referencia_padrao(
-            session,
-            params.filtros,
+        mes_de_referencia_considerado, mes_padrao_aplicado = (
+            resolve_mes_de_referencia_padrao(
+                session,
+                params.filtros,
+            )
         )
 
         base_stmt = apply_servidores_filters(
@@ -134,9 +136,7 @@ def consultar_servidores(
     ]
     mensagem = None
     if total > len(resultados):
-        mensagem = (
-            f"Mostrando {len(resultados)} de {total} registros encontrados."
-        )
+        mensagem = f"Mostrando {len(resultados)} de {total} registros encontrados."
 
     return ConsultarServidoresResponse(
         total=total,

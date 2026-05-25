@@ -33,7 +33,9 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
     }
 
 
-def test_criar_agente_com_pergunta_de_top_salarios_restringe_toolset(monkeypatch) -> None:
+def test_criar_agente_com_pergunta_de_top_salarios_restringe_toolset(
+    monkeypatch,
+) -> None:
     capturado: dict[str, object] = {}
 
     def fake_create_agent(*, tools, model, system_prompt):
