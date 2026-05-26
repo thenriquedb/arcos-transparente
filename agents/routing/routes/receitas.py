@@ -123,7 +123,9 @@ def _try_route_receitas_lista(normalized_text: str) -> RouteDecision | None:
     tipo_de_dado = _extract_receitas_tipo_de_dado(normalized_text)
 
     if any(keyword in normalized_text for keyword in ("maiores", "maior", "top")):
-        ordenar_por = "valor_lancado" if tipo_de_dado == "lancamento" else "valor_recebido"
+        ordenar_por = (
+            "valor_lancado" if tipo_de_dado == "lancamento" else "valor_recebido"
+        )
         campos = (
             [
                 "ano",

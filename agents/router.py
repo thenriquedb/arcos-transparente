@@ -22,6 +22,10 @@ from agents.routing.models import (
     RouteDecision,
 )
 from agents.routing.routes.folha_pagamento import _try_route_historico
+from agents.routing.routes.despesas import (
+    _try_route_despesas_agregacao,
+    _try_route_despesas_lista,
+)
 from agents.routing.routes.contratos import (
     _try_route_contratos_agregacao,
     _try_route_contratos_lista,
@@ -33,6 +37,14 @@ from agents.routing.routes.licitacoes import (
 from agents.routing.routes.planejamento import (
     _try_route_planejamento_agregacao,
     _try_route_planejamento_saude_lista,
+)
+from agents.routing.routes.patrimonios import (
+    _try_route_patrimonios_agregacao,
+    _try_route_patrimonios_lista,
+)
+from agents.routing.routes.quadro_pessoal import (
+    _try_route_quadro_pessoal_agregacao,
+    _try_route_quadro_pessoal_lista,
 )
 from agents.routing.routes.receitas import (
     _try_route_receitas_agregacao,
@@ -49,13 +61,19 @@ ROUTE_PRIORITY_CHAIN = (
     _try_route_contratos_agregacao,  # 2. Rankings e totais de contratos
     _try_route_contratos_lista,  # 3. Listas e detalhes de contratos
     _try_route_licitacoes_agregacao,  # 4. Rankings e contagens de licitações
-    _try_route_planejamento_agregacao,  # 5. Totais e rankings de planejamento
-    _try_route_receitas_agregacao,  # 6. Totais e rankings de receitas
-    _try_route_agregacao,  # 7. Rankings e contagens de servidores
-    _try_route_licitacoes_lista,  # 8. Listas e detalhes de licitações
-    _try_route_planejamento_saude_lista,  # 9. Listas de planejamento
-    _try_route_receitas_lista,  # 10. Listas de receitas
-    _try_route_lista,  # 11. Listas de servidores
+    _try_route_despesas_agregacao,  # 5. Totais e rankings de despesas
+    _try_route_patrimonios_agregacao,  # 6. Totais e rankings de patrimônio
+    _try_route_quadro_pessoal_agregacao,  # 7. Totais de quadro de pessoal
+    _try_route_planejamento_agregacao,  # 8. Totais e rankings de planejamento
+    _try_route_receitas_agregacao,  # 9. Totais e rankings de receitas
+    _try_route_agregacao,  # 10. Rankings e contagens de servidores
+    _try_route_licitacoes_lista,  # 11. Listas e detalhes de licitações
+    _try_route_despesas_lista,  # 12. Listas de despesas
+    _try_route_patrimonios_lista,  # 13. Listas de patrimônio
+    _try_route_quadro_pessoal_lista,  # 14. Listas de quadro de pessoal
+    _try_route_planejamento_saude_lista,  # 15. Listas de planejamento
+    _try_route_receitas_lista,  # 16. Listas de receitas
+    _try_route_lista,  # 17. Listas de servidores
 )
 
 
@@ -99,7 +117,7 @@ def evaluate_query_guardrails(
             message=(
                 "Envie uma pergunta sobre os dados públicos municipais disponíveis "
                 "no sistema, como servidores, secretarias, salários-base ou "
-                "licitações, planejamento ou receitas."
+                "licitações, despesas, patrimônio, planejamento ou receitas."
             ),
         )
 
@@ -133,7 +151,7 @@ def evaluate_query_guardrails(
             "Posso ajudar apenas com consultas aos dados públicos municipais "
             "disponíveis neste sistema, especialmente sobre servidores, "
             "secretarias, salários-base, histórico de pagamentos, licitações, "
-            "planejamento e receitas."
+            "despesas, patrimônio, quadro de pessoal, planejamento e receitas."
         ),
     )
 
@@ -172,8 +190,11 @@ __all__ = [
     "_normalize",
     "_try_route_agregacao",
     "_try_route_contratos_agregacao",
+    "_try_route_despesas_agregacao",
     "_try_route_historico",
     "_try_route_lista",
+    "_try_route_patrimonios_agregacao",
     "_try_route_planejamento_agregacao",
+    "_try_route_quadro_pessoal_agregacao",
     "_try_route_receitas_agregacao",
 ]

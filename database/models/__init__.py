@@ -1,4 +1,5 @@
 from database.models.base import Base
+from database.models.assets import Patrimonio
 from database.models.bidding import (
     Fornecedor,
     InstrumentoContratual,
@@ -10,6 +11,11 @@ from database.models.contracts import (
     Contrato,
     ContratoDespesaOrcamentaria,
     ContratoItemAdquirido,
+)
+from database.models.expenses import (
+    DespesaDocumento,
+    DespesaDocumentoComprobatorio,
+    DespesaDocumentoItem,
 )
 from database.models.fleet import FrotaDespesa, FrotaVeiculo
 from database.models.payroll import (
@@ -24,19 +30,24 @@ from database.models.revenue import (
     ReceitaLancamento,
     ReceitaNatureza,
 )
-from database.models.server import Servidor
+from database.models.server import QuadroPessoal, Servidor
 
 __all__ = [
     "Base",
+    "Patrimonio",
     "Contrato",
     "ContratoDespesaOrcamentaria",
     "ContratoItemAdquirido",
+    "DespesaDocumento",
+    "DespesaDocumentoItem",
+    "DespesaDocumentoComprobatorio",
     "Licitacao",
     "Fornecedor",
     "VencedorLicitacao",
     "InstrumentoContratual",
     "MateriaInstrumento",
     "Servidor",
+    "QuadroPessoal",
     "FrotaVeiculo",
     "FrotaDespesa",
     "ReceitaNatureza",

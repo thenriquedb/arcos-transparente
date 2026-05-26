@@ -16,6 +16,9 @@ from sqlalchemy import MetaData, Table as SQLATable
 
 from database.models import (
     Contrato,
+    DespesaDocumento,
+    DespesaDocumentoComprobatorio,
+    DespesaDocumentoItem,
     Fornecedor,
     FolhaCargo,
     FolhaLotacao,
@@ -26,7 +29,9 @@ from database.models import (
     InstrumentoContratual,
     Licitacao,
     MateriaInstrumento,
+    Patrimonio,
     PlanejamentoDespesa,
+    QuadroPessoal,
     ReceitaArrecadacao,
     ReceitaLancamento,
     ReceitaNatureza,
@@ -118,6 +123,19 @@ def db_status() -> None:
             "planejamento_despesas",
             str(session.query(PlanejamentoDespesa).count()),
         )
+        tabela.add_row(
+            "despesa_documentos", str(session.query(DespesaDocumento).count())
+        )
+        tabela.add_row(
+            "despesa_documento_itens",
+            str(session.query(DespesaDocumentoItem).count()),
+        )
+        tabela.add_row(
+            "despesa_documentos_comprobatorios",
+            str(session.query(DespesaDocumentoComprobatorio).count()),
+        )
+        tabela.add_row("patrimonios", str(session.query(Patrimonio).count()))
+        tabela.add_row("quadro_pessoal", str(session.query(QuadroPessoal).count()))
         metadata = MetaData()
         alembic_version = SQLATable(
             "alembic_version", metadata, autoload_with=session.bind
@@ -134,7 +152,7 @@ def importar(
         default=None,
         help=(
             "Tipo: contratos|licitacoes|frotas|receitas|folha_pagamento|"
-            "servidores|planejamentos"
+            "servidores|planejamentos|despesas|patrimonios|quadro_pessoal"
         ),
     ),
     ano: Optional[int] = typer.Option(
@@ -167,6 +185,9 @@ def importar(
         "folha_pagamento",
         "servidores",
         "planejamentos",
+        "despesas",
+        "patrimonios",
+        "quadro_pessoal",
     ]
     total_arquivos = sum(
         len(pipeline._arquivos_por_tipo(t, ano)) for t in tipos_resolvidos

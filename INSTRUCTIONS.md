@@ -17,6 +17,10 @@ Os dados XML atualmente cobertos incluem:
 - receitas (arrecadação e lançamento)
 - folha de pagamento
 - servidores
+- planejamento de despesas
+- documentos de despesa (empenhos, restos a pagar e documentos extras)
+- patrimônios
+- quadro de pessoal
 
 ---
 
@@ -134,6 +138,9 @@ uv run python cli.py importar --tipo licitacoes
 uv run python cli.py importar --tipo frotas
 uv run python cli.py importar --tipo receitas
 uv run python cli.py importar --tipo folha_pagamento
+uv run python cli.py importar --tipo despesas
+uv run python cli.py importar --tipo patrimonios
+uv run python cli.py importar --tipo quadro_pessoal
 ```
 
 ### Importar por ano
@@ -163,6 +170,10 @@ O `--force` foi mantido apenas por compatibilidade.
 - `receitas`
 - `folha_pagamento`
 - `servidores`
+- `planejamentos`
+- `despesas`
+- `patrimonios`
+- `quadro_pessoal`
 
 ---
 
@@ -199,6 +210,15 @@ O `--force` foi mantido apenas por compatibilidade.
 - `folha_lotacoes`
 - `folha_cargos`
 - `folha_pagamentos`
+
+### Despesas, Patrimônio e Quadro
+
+- `planejamento_despesas`
+- `despesa_documentos`
+- `despesa_documento_itens`
+- `despesa_documentos_comprobatorios`
+- `patrimonios`
+- `quadro_pessoal`
 
 Para a visão completa de tabelas, relacionamentos e objetivos de cada domínio, consulte `docs/database.md`.
 

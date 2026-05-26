@@ -61,6 +61,9 @@ python cli.py importar --tipo contratos
 python cli.py importar --tipo licitacoes
 python cli.py importar --tipo servidores
 python cli.py importar --tipo planejamentos
+python cli.py importar --tipo despesas
+python cli.py importar --tipo patrimonios
+python cli.py importar --tipo quadro_pessoal
 ```
 
 ### Importar por ano

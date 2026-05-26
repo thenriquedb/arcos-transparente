@@ -79,7 +79,9 @@ def consultar_receitas(
 
     if not pagina:
         tipo_label = (
-            "arrecadacoes" if params.filtros.tipo_de_dado == "arrecadacao" else "lancamentos"
+            "arrecadacoes"
+            if params.filtros.tipo_de_dado == "arrecadacao"
+            else "lancamentos"
         )
         return ConsultarReceitasResponse(
             total=0,

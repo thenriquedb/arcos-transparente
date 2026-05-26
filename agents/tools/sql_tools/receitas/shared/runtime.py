@@ -19,7 +19,9 @@ def serializar_receita_arrecadacao(registro: ReceitaArrecadacao) -> dict[str, An
         "mes_num": parse_mes(registro.mes),
         "data": registro.data_arrecadacao,
         "unidade_responsavel": registro.unidade_gestora,
-        "categoria_codigo": registro.natureza.identificacao if registro.natureza else None,
+        "categoria_codigo": registro.natureza.identificacao
+        if registro.natureza
+        else None,
         "categoria": registro.natureza.nome if registro.natureza else None,
         "tipo": None,
         "tributo": None,
@@ -64,7 +66,9 @@ def serializar_receita_lancamento(registro: ReceitaLancamento) -> dict[str, Any]
     }
 
 
-def project_receita_fields(registro: dict[str, Any], campos: list[str]) -> dict[str, Any]:
+def project_receita_fields(
+    registro: dict[str, Any], campos: list[str]
+) -> dict[str, Any]:
     if not campos:
         return registro
     return {campo: registro[campo] for campo in campos}

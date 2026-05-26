@@ -64,9 +64,7 @@ METRIC_FIELD_GETTERS = {
     "soma_valor_previsto": lambda row: row.get("valor_previsto") or 0.0,
     "soma_valor_recebido": lambda row: row.get("valor_recebido") or 0.0,
     "soma_valor_lancado": lambda row: row.get("valor_lancado") or 0.0,
-    "soma_valor_em_divida_ativa": (
-        lambda row: row.get("valor_em_divida_ativa") or 0.0
-    ),
+    "soma_valor_em_divida_ativa": (lambda row: row.get("valor_em_divida_ativa") or 0.0),
     "soma_valor_em_cobranca_judicial": (
         lambda row: row.get("valor_em_cobranca_judicial") or 0.0
     ),
@@ -90,7 +88,9 @@ def _get_search_terms(query: str | None) -> tuple[str, ...]:
     return RECEITA_TEMA_ALIASES.get(normalized, (query or "",))
 
 
-def _matches_fields(record: dict[str, object], field_names: tuple[str, ...], query: str) -> bool:
+def _matches_fields(
+    record: dict[str, object], field_names: tuple[str, ...], query: str
+) -> bool:
     search_terms = _get_search_terms(query)
     return any(
         matches_text_query(str(record.get(field_name) or ""), search_term)
@@ -99,7 +99,9 @@ def _matches_fields(record: dict[str, object], field_names: tuple[str, ...], que
     )
 
 
-def _match_receita_filters(record: dict[str, object], filtros: ReceitaFiltroSchema) -> bool:
+def _match_receita_filters(
+    record: dict[str, object], filtros: ReceitaFiltroSchema
+) -> bool:
     if filtros.ano is not None and record.get("ano") != filtros.ano:
         return False
     if filtros.mes is not None and record.get("mes_num") != filtros.mes:
@@ -130,19 +132,33 @@ def _match_receita_filters(record: dict[str, object], filtros: ReceitaFiltroSche
     return True
 
 
-def load_filtered_receitas(session, filtros: ReceitaFiltroSchema) -> list[dict[str, object]]:
+def load_filtered_receitas(
+    session, filtros: ReceitaFiltroSchema
+) -> list[dict[str, object]]:
     if filtros.tipo_de_dado == "lancamento":
         registros = session.execute(select(ReceitaLancamento)).scalars().all()
-        serializados = [serializar_receita_lancamento(registro) for registro in registros]
+        serializados = [
+            serializar_receita_lancamento(registro) for registro in registros
+        ]
     else:
-        stmt = select(ReceitaArrecadacao).options(selectinload(ReceitaArrecadacao.natureza))
+        stmt = select(ReceitaArrecadacao).options(
+            selectinload(ReceitaArrecadacao.natureza)
+        )
         registros = session.execute(stmt).scalars().all()
-        serializados = [serializar_receita_arrecadacao(registro) for registro in registros]
+        serializados = [
+            serializar_receita_arrecadacao(registro) for registro in registros
+        ]
 
-    return [registro for registro in serializados if _match_receita_filters(registro, filtros)]
+    return [
+        registro
+        for registro in serializados
+        if _match_receita_filters(registro, filtros)
+    ]
 
 
-def sort_receitas(registros: list[dict[str, object]], ordenar_por: str, ordem: str) -> list[dict[str, object]]:
+def sort_receitas(
+    registros: list[dict[str, object]], ordenar_por: str, ordem: str
+) -> list[dict[str, object]]:
     return sorted(
         registros,
         key=lambda row: (SORT_FIELD_GETTERS[ordenar_por](row), row.get("id") or 0),
@@ -156,5 +172,7 @@ def calculate_metric(rows: list[dict[str, object]], metrica: str) -> int | float
     return float(sum(METRIC_FIELD_GETTERS[metrica](row) for row in rows))
 
 
-def project_rows(registros: list[dict[str, object]], campos: list[str]) -> list[dict[str, object]]:
+def project_rows(
+    registros: list[dict[str, object]], campos: list[str]
+) -> list[dict[str, object]]:
     return [project_receita_fields(registro, campos) for registro in registros]

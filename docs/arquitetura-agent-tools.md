@@ -42,12 +42,15 @@ Exemplos:
 - "Quantas licitações existem na saúde?" -> `agregar_licitacoes`
 - "Quanto foi pago na saúde em 2025?" -> `agregar_planejamento`
 - "Liste o planejamento da saúde em 2025" -> `consultar_planejamento`
+- "Quanto foi pago em diárias em 2025?" -> `agregar_despesas`
+- "Liste os patrimônios da educação" -> `consultar_patrimonios`
+- "Quantas vagas há por regime?" -> `agregar_quadro_pessoal`
 
 ---
 
 ## Superfície Pública Atual
 
-Atualmente o agente principal enxerga apenas 9 tools:
+Atualmente o agente principal enxerga apenas 17 tools:
 
 1. `consultar_servidores`
 2. `agregar_servidores`
@@ -57,7 +60,15 @@ Atualmente o agente principal enxerga apenas 9 tools:
 6. `agregar_licitacoes`
 7. `consultar_planejamento`
 8. `agregar_planejamento`
-9. `buscar_historico_de_pagamentos_do_servidor`
+9. `consultar_receitas`
+10. `agregar_receitas`
+11. `consultar_despesas`
+12. `agregar_despesas`
+13. `consultar_patrimonios`
+14. `agregar_patrimonios`
+15. `consultar_quadro_pessoal`
+16. `agregar_quadro_pessoal`
+17. `buscar_historico_de_pagamentos_do_servidor`
 
 Isso vale tanto para:
 
@@ -89,6 +100,10 @@ Conceitos importantes:
 - `domain:contratos`
 - `domain:licitacoes`
 - `domain:planejamento`
+- `domain:receitas`
+- `domain:despesas`
+- `domain:patrimonios`
+- `domain:quadro_pessoal`
 - `domain:folha`
 - `shape:lookup`
 - `shape:aggregate`

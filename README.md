@@ -49,7 +49,10 @@ LLM_PROVIDER=openai
 
 - **Contratos** - contratos administrativos, fornecedores e valores contratados
 - **Licitações** - processos licitatorios, vencedores e valores estimados
-- **Planejamento** - planejamento orcamentario, com rollout inicial na saude
+- **Planejamento** - planejamento orcamentario da saude e da prefeitura
+- **Despesas** - empenhos, restos a pagar, documentos extras, itens e comprovantes
+- **Patrimônios** - bens patrimoniais, localização, situação e valores
+- **Quadro de pessoal** - vagas criadas e preenchidas por regime de contratação
 - **Folha de Pagamento** - historico mensal de pagamentos por servidor
 - **Servidores** - quadro de pessoal, cargos, secretarias e salarios base
 - **Receitas** - arrecadacao e lancamentos

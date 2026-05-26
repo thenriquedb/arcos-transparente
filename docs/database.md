@@ -19,6 +19,9 @@ O schema está dividido em domínios:
 - receitas
 - servidores e folha de pagamento
 - planejamento de despesas
+- documentos de despesa
+- patrimônios
+- quadro de pessoal
 
 ---
 
@@ -66,6 +69,14 @@ frota_veiculos
 └── frota_despesas
 
 planejamento_despesas
+
+despesa_documentos
+├── despesa_documento_itens
+└── despesa_documentos_comprobatorios
+
+patrimonios
+
+quadro_pessoal
 ```
 
 ---
@@ -516,7 +527,7 @@ Linhas mensais do planejamento e execução orçamentária da despesa.
 
 Campos principais:
 
-- `origem`: recorte do arquivo importado; inicialmente `saude`
+- `origem`: recorte do arquivo importado, como `saude` ou `prefeitura`
 - `exercicio`
 - `mes` e `mes_num`
 - `unidade_gestora`, `orgao`, `unidade`
@@ -537,7 +548,50 @@ Regras importantes:
 
 - unicidade por origem, ano, mês e principais dimensões orçamentárias
 - filtros textuais nas tools ignoram diferenças de acento
-- o rollout inicial importa apenas `planejamento-saude-*.xml`
+- importa os arquivos de planejamento da saúde e da prefeitura
+
+### `despesa_documentos`
+
+Documentos de despesa importados de empenhos, restos a pagar e documentos extras.
+
+Campos principais:
+
+- `tipo_origem`: `empenho`, `restos_a_pagar` ou `documento_extra`
+- `arquivo_origem` e `sequencia_origem`: preservam a linha original do XML
+- `origem`, `exercicio`, `unidade_gestora`
+- classificações orçamentárias (`funcao`, `subfuncao`, `programa`, fonte, categoria, grupo, elemento)
+- `conta_extra_*` para documentos extraorçamentários
+- `numero_documento`, `data_documento`, `credor`, `cpf_cnpj`
+- `valor_documento`, `valor_empenhado`, `valor_liquidado`, `valor_pago`, `valor_anulado`
+- campos de diária/viagem quando presentes
+
+Relacionamentos:
+
+- possui vários `despesa_documento_itens`
+- possui vários `despesa_documentos_comprobatorios`
+
+### `patrimonios`
+
+Bens patrimoniais importados dos XMLs de administração.
+
+Campos principais:
+
+- `unidade_gestora`, `placa`, `situacao_bem`, `classificacao`
+- `descricao_item`, `tipo_ingresso`, `data_aquisicao`, `data_baixa`
+- `localizacao`, `status`
+- `valor_ingresso`, `valor_atualizado`
+
+### `quadro_pessoal`
+
+Totais mensais de vagas por regime de contratação.
+
+Campos principais:
+
+- `origem`
+- `competencia_referencia`
+- `regime_contratacao`
+- `vagas_criadas`
+- `vagas_preenchidas`
 
 ---
 
@@ -555,6 +609,8 @@ Os relacionamentos abaixo são os mais úteis para queries e tools:
 - `folha_lotacoes -> folha_pagamentos`
 - `receita_naturezas -> receita_arrecadacoes`
 - `frota_veiculos -> frota_despesas`
+- `despesa_documentos -> despesa_documento_itens`
+- `despesa_documentos -> despesa_documentos_comprobatorios`
 
 ---
 

@@ -12,6 +12,9 @@ from database.models import (
     Contrato,
     ContratoDespesaOrcamentaria,
     ContratoItemAdquirido,
+    DespesaDocumento,
+    DespesaDocumentoComprobatorio,
+    DespesaDocumentoItem,
     FolhaCargo,
     FolhaLotacao,
     FolhaPagamentoRegistro,
@@ -22,7 +25,9 @@ from database.models import (
     InstrumentoContratual,
     Licitacao,
     MateriaInstrumento,
+    Patrimonio,
     PlanejamentoDespesa,
+    QuadroPessoal,
     ReceitaArrecadacao,
     ReceitaLancamento,
     ReceitaNatureza,
@@ -32,12 +37,15 @@ from database.models import (
 from database.session import get_session
 from ingestion.loaders.sql_loader import LoadResult, SQLLoader
 from ingestion.parsers.xml.contratos_parser import ContratosParser
+from ingestion.parsers.xml.despesas_parser import DespesasParser
 from ingestion.parsers.xml.licitacoes_parser import LicitacoesParser
 from ingestion.parsers.xml.frotas_parser import FrotasParser
+from ingestion.parsers.xml.patrimonios_parser import PatrimoniosParser
 from ingestion.parsers.xml.servidores_parser import ServidoresParser
 from ingestion.parsers.xml.receitas_parser import ReceitasParser
 from ingestion.parsers.xml.folha_pagamento_parser import FolhaPagamentoParser
 from ingestion.parsers.xml.planejamentos_parser import PlanejamentosParser
+from ingestion.parsers.xml.quadro_pessoal_parser import QuadroPessoalParser
 
 
 class IngestionPipeline:
@@ -55,6 +63,9 @@ class IngestionPipeline:
             "receitas": (ReceitasParser(), ReceitaArrecadacao),
             "folha_pagamento": (FolhaPagamentoParser(), FolhaPagamentoRegistro),
             "planejamentos": (PlanejamentosParser(), PlanejamentoDespesa),
+            "despesas": (DespesasParser(), DespesaDocumento),
+            "patrimonios": (PatrimoniosParser(), Patrimonio),
+            "quadro_pessoal": (QuadroPessoalParser(), QuadroPessoal),
         }
 
     def run(
@@ -120,6 +131,10 @@ class IngestionPipeline:
                         )
                     elif tipo == "frotas":
                         resultado = self._load_frotas(
+                            session=session, registros=registros
+                        )
+                    elif tipo == "despesas":
+                        resultado = self._load_despesas(
                             session=session, registros=registros
                         )
                     elif tipo == "receitas":
@@ -236,6 +251,110 @@ class IngestionPipeline:
                                 quantidade=item.get("quantidade"),
                                 valor_unitario=item.get("valor_unitario"),
                                 valor_total=item.get("valor_total"),
+                            )
+                        )
+            except Exception:
+                session.rollback()
+                resultado.erros += 1
+        return resultado
+
+    def _load_despesas(self, session, registros: list[dict[str, Any]]) -> LoadResult:
+        """Carrega documentos de despesa e entidades filhas relacionadas."""
+        resultado = LoadResult()
+        for registro in registros:
+            try:
+                with session.begin():
+                    payload = dict(registro)
+                    itens = payload.pop("itens", [])
+                    comprovatorios = payload.pop("documentos_comprobatorios", [])
+
+                    existente = session.execute(
+                        select(DespesaDocumento).where(
+                            and_(
+                                DespesaDocumento.tipo_origem == payload["tipo_origem"],
+                                DespesaDocumento.arquivo_origem
+                                == payload["arquivo_origem"],
+                                DespesaDocumento.sequencia_origem
+                                == payload["sequencia_origem"],
+                            )
+                        )
+                    ).scalar_one_or_none()
+                    payload["data_documento"] = self._to_date(payload["data_documento"])
+                    payload["data_homologacao"] = self._to_date(
+                        payload.get("data_homologacao")
+                    )
+                    payload["data_inicial_viagem"] = self._to_date(
+                        payload.get("data_inicial_viagem")
+                    )
+                    payload["data_final_viagem"] = self._to_date(
+                        payload.get("data_final_viagem")
+                    )
+
+                    if existente is None:
+                        documento = DespesaDocumento(**payload)
+                        session.add(documento)
+                        session.flush()
+                        resultado.inseridos += 1
+                    else:
+                        documento = existente
+                        alterou = False
+                        for campo, valor in payload.items():
+                            if getattr(existente, campo) != valor:
+                                setattr(existente, campo, valor)
+                                alterou = True
+                        if alterou:
+                            resultado.atualizados += 1
+                        else:
+                            resultado.ignorados += 1
+                        session.query(DespesaDocumentoItem).filter(
+                            DespesaDocumentoItem.documento_id == documento.id
+                        ).delete()
+                        session.query(DespesaDocumentoComprobatorio).filter(
+                            DespesaDocumentoComprobatorio.documento_id == documento.id
+                        ).delete()
+
+                    for item in itens:
+                        session.add(
+                            DespesaDocumentoItem(
+                                documento_id=documento.id,
+                                ordem=item["ordem"],
+                                numero_item=item.get("numero_item"),
+                                descricao_item=item.get("descricao_item"),
+                                quantidade=item.get("quantidade"),
+                                valor_unitario=item.get("valor_unitario"),
+                                valor_total=item.get("valor_total"),
+                            )
+                        )
+
+                    for comprovatorio in comprovatorios:
+                        session.add(
+                            DespesaDocumentoComprobatorio(
+                                documento_id=documento.id,
+                                ordem=comprovatorio["ordem"],
+                                data_liquidacao=self._to_date(
+                                    comprovatorio.get("data_liquidacao")
+                                ),
+                                codigo_tipo_documento=comprovatorio.get(
+                                    "codigo_tipo_documento"
+                                ),
+                                descricao_tipo_documento=comprovatorio.get(
+                                    "descricao_tipo_documento"
+                                ),
+                                numero_documento=comprovatorio.get("numero_documento"),
+                                serie_modelo_nota_fiscal=comprovatorio.get(
+                                    "serie_modelo_nota_fiscal"
+                                ),
+                                descricao_serie=comprovatorio.get("descricao_serie"),
+                                chave_acesso=comprovatorio.get("chave_acesso"),
+                                data_emissao_documento=self._to_date(
+                                    comprovatorio.get("data_emissao_documento")
+                                ),
+                                valor_documento=comprovatorio.get("valor_documento"),
+                                numero_empenho=comprovatorio.get("numero_empenho"),
+                                codigo_unidade_gestora=comprovatorio.get(
+                                    "codigo_unidade_gestora"
+                                ),
+                                numero_sequencia=comprovatorio.get("numero_sequencia"),
                             )
                         )
             except Exception:
@@ -743,6 +862,18 @@ class IngestionPipeline:
             arquivos = sorted(servidores_path.rglob("*folha-pagamento*.xml"))
         elif tipo == "planejamentos":
             arquivos = sorted(despesas_path.rglob("*planejamento*.xml"))
+            if not arquivos:
+                arquivos = sorted(self.data_dir.rglob("*planejamento*.xml"))
+        elif tipo == "despesas":
+            arquivos = (
+                sorted(despesas_path.rglob("*empenhos*.xml"))
+                + sorted(despesas_path.rglob("*documentos-extras*.xml"))
+                + sorted(despesas_path.rglob("*restos-a-pagar*.xml"))
+            )
+        elif tipo == "patrimonios":
+            arquivos = sorted(administracao_path.rglob("*patrimonio*.xml"))
+        elif tipo == "quadro_pessoal":
+            arquivos = sorted(servidores_path.rglob("*quadro-pessoal*.xml"))
         elif tipo == "servidores":
             arquivos = sorted(servidores_path.rglob("*servidores*.xml"))
             if not arquivos:

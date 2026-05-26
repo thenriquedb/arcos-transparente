@@ -87,6 +87,27 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "pagamento",
     "pagamentos",
     "fumusa",
+    "despesa",
+    "despesas",
+    "empenho",
+    "empenhos",
+    "restos a pagar",
+    "resto a pagar",
+    "documento extra",
+    "documentos extras",
+    "diaria",
+    "diarias",
+    "credor",
+    "credores",
+    "patrimonio",
+    "patrimonios",
+    "bens patrimoniais",
+    "placa",
+    "vagas",
+    "vaga",
+    "regime",
+    "quadro pessoal",
+    "quadro de pessoal",
 )
 
 SUPPORTED_SCOPE_WEAK_KEYWORDS = (
@@ -108,6 +129,40 @@ SUPPORTED_SCOPE_WEAK_KEYWORDS = (
     "educacao",
     "obras",
     "procuradoria",
+)
+
+DESPESAS_DOMAIN_KEYWORDS = (
+    "despesa",
+    "despesas",
+    "empenho",
+    "empenhos",
+    "restos a pagar",
+    "resto a pagar",
+    "documento extra",
+    "documentos extras",
+    "diaria",
+    "diarias",
+    "credor",
+    "credores",
+)
+
+PATRIMONIOS_DOMAIN_KEYWORDS = (
+    "patrimonio",
+    "patrimonios",
+    "bens patrimoniais",
+    "patrimonial",
+    "patrimoniais",
+    "placa",
+    "localizacao",
+)
+
+QUADRO_PESSOAL_DOMAIN_KEYWORDS = (
+    "quadro pessoal",
+    "quadro de pessoal",
+    "vagas",
+    "vaga",
+    "regime",
+    "regime de contratacao",
 )
 
 LICITACOES_DOMAIN_KEYWORDS = (

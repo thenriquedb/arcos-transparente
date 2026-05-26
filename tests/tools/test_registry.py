@@ -21,6 +21,12 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
         "agregar_receitas",
         "consultar_planejamento",
         "agregar_planejamento",
+        "consultar_despesas",
+        "agregar_despesas",
+        "consultar_patrimonios",
+        "agregar_patrimonios",
+        "consultar_quadro_pessoal",
+        "agregar_quadro_pessoal",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 
@@ -39,6 +45,12 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
         "agregar_receitas",
         "consultar_planejamento",
         "agregar_planejamento",
+        "consultar_despesas",
+        "agregar_despesas",
+        "consultar_patrimonios",
+        "agregar_patrimonios",
+        "consultar_quadro_pessoal",
+        "agregar_quadro_pessoal",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 

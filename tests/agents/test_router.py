@@ -9,9 +9,12 @@ from agents.router import (
     _normalize,
     _try_route_agregacao,
     _try_route_contratos_agregacao,
+    _try_route_despesas_agregacao,
     _try_route_historico,
     _try_route_lista,
+    _try_route_patrimonios_agregacao,
     _try_route_planejamento_agregacao,
+    _try_route_quadro_pessoal_agregacao,
     _try_route_receitas_agregacao,
     evaluate_query_guardrails,
     route_user_query,
@@ -305,6 +308,50 @@ from agents.router import (
             },
         ),
         (
+            "Quanto foi pago em diarias em 2025?",
+            "despesas",
+            "agregacao_ranking",
+            "agregar_despesas",
+            {
+                "filtros": {"ano": 2025, "descricao": "diaria"},
+                "agrupar_por": None,
+                "metrica": "soma_valor_pago",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Liste os patrimonios da educacao em 2025",
+            "patrimonios",
+            "consulta_lista",
+            "consultar_patrimonios",
+            {
+                "filtros": {
+                    "data_aquisicao_inicio": "2025-01-01",
+                    "data_aquisicao_fim": "2025-12-31",
+                    "localizacao": "educacao",
+                },
+                "ordenar_por": "data_aquisicao",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Quantas vagas preenchidas por regime no quadro pessoal da prefeitura em 2025?",
+            "quadro_pessoal",
+            "agregacao_ranking",
+            "agregar_quadro_pessoal",
+            {
+                "filtros": {"ano": 2025, "origem": "prefeitura"},
+                "agrupar_por": "regime",
+                "metrica": "soma_vagas_preenchidas",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
             "Quanto foi pago na saude em 2025?",
             "planejamento",
             "agregacao_ranking",
@@ -532,6 +579,36 @@ def test_try_route_receitas_agregacao_isolado_para_iptu() -> None:
     }
 
 
+def test_try_route_despesas_agregacao_isolado_para_diarias() -> None:
+    decision = _try_route_despesas_agregacao(
+        _normalize("Quanto foi pago em diarias em 2025?")
+    )
+
+    assert decision is not None
+    assert decision.tool_name == "agregar_despesas"
+    assert decision.tool_kwargs["filtros"] == {"ano": 2025, "descricao": "diaria"}
+
+
+def test_try_route_patrimonios_agregacao_isolado_para_valor_total() -> None:
+    decision = _try_route_patrimonios_agregacao(
+        _normalize("Qual o valor total do patrimonio em 2025?")
+    )
+
+    assert decision is not None
+    assert decision.tool_name == "agregar_patrimonios"
+    assert decision.tool_kwargs["metrica"] == "soma_valor_atualizado"
+
+
+def test_try_route_quadro_pessoal_agregacao_isolado_por_regime() -> None:
+    decision = _try_route_quadro_pessoal_agregacao(
+        _normalize("Quantas vagas preenchidas por regime no quadro pessoal?")
+    )
+
+    assert decision is not None
+    assert decision.tool_name == "agregar_quadro_pessoal"
+    assert decision.tool_kwargs["agrupar_por"] == "regime"
+
+
 def test_try_route_lista_isolado() -> None:
     decision = _try_route_lista(
         _normalize("lista de todos os funcionarios da educacao")
@@ -583,6 +660,13 @@ def test_route_user_query_restringe_receitas_por_tags() -> None:
     tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
 
     assert tool_names == ["agregar_receitas"]
+
+
+def test_route_user_query_restringe_despesas_por_tags() -> None:
+    tools = select_public_tools_for_query("Quanto foi pago em diarias em 2025?")
+    tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
+
+    assert tool_names == ["agregar_despesas"]
 
 
 def test_evaluate_query_guardrails_permitem_consulta_no_escopo() -> None:

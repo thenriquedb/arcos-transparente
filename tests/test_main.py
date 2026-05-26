@@ -50,6 +50,12 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
         "agregar_receitas",
         "consultar_planejamento",
         "agregar_planejamento",
+        "consultar_despesas",
+        "agregar_despesas",
+        "consultar_patrimonios",
+        "agregar_patrimonios",
+        "consultar_quadro_pessoal",
+        "agregar_quadro_pessoal",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 
