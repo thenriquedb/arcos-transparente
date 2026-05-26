@@ -47,17 +47,40 @@ def consultar_servidores(
     campos: list[str] | None = None,
 ) -> dict[str, Any]:
     """
-    Consulta servidores por filtros, ordenacao e campos de retorno.
+    Lista registros individuais de servidores por nome, cargo, secretaria e salario.
 
-    Use para listagens, buscas filtradas e rankings simples baseados em ordenacao.
+    Use esta tool quando a pergunta pedir quem sao os servidores, quais nomes aparecem
+    ou um ranking simples por ordenacao.
+    NAO use para totais, contagens ou agrupamentos; para isso use
+    `agregar_servidores`.
+    NAO use para historico mensal de pagamento de um servidor com nome informado;
+    para isso use `buscar_historico_de_pagamentos_do_servidor`.
 
-    Exemplos:
-    - 'lista de todos os funcionarios da educacao'
-    - 'quais os 10 maiores salarios da prefeitura?'
-    - 'quais servidores trabalham na saude?'
+    Se `mes_de_referencia` nao for informado, a consulta usa o mes mais recente com
+    dados para evitar misturar snapshots de meses diferentes.
 
-    Quando `mes_de_referencia` nao e informado nos filtros, a consulta usa por padrao
-    o mes mais recente com dados para evitar misturar snapshots de meses diferentes.
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `nome`, `secretaria`,
+            `cargo`, `mes_de_referencia`, `mes_de_referencia_inicio`,
+            `mes_de_referencia_fim`, `salario_min` e `salario_max`.
+            Datas em `YYYY-MM-DD`.
+        ordenar_por: Campo de ordenacao. Aceita `nome`, `cargo`, `secretaria`,
+            `salario_base` ou `mes_de_referencia`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Tamanho da pagina. Inteiro de 1 a 100.
+        offset: Deslocamento da pagina. Inteiro maior ou igual a 0.
+        campos: Lista opcional de campos por item. Cada item pode incluir `id`,
+            `nome`, `cargo`, `secretaria`, `salario_base` e
+            `mes_de_referencia`.
+
+    Returns:
+        dict com:
+        - `total`: total de registros encontrados antes da paginacao.
+        - `resultados`: lista de servidores com os campos solicitados.
+        - `metadata`: filtros aplicados, ordenacao, paginacao e o
+          `mes_de_referencia_considerado`.
+        - `mensagem`: aviso quando a resposta estiver paginada.
+        - `sugestao`: dica quando nenhum registro for encontrado.
     """
     try:
         params = ConsultarServidoresParams.model_validate(

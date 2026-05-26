@@ -54,17 +54,51 @@ def consultar_licitacoes(
     max_itens: int = 10,
 ) -> dict[str, Any]:
     """
-    Consulta licitacoes por filtros, ordenacao e campos de retorno.
+    Lista licitacoes por numero, modalidade, objeto, situacao, secretaria e valor.
 
-    Use para listagens, buscas por objeto, fornecedor, secretaria, situacao,
-    modalidade e rankings simples por valor estimado.
+    Use esta tool quando a pergunta pedir quais licitacoes existem, detalhes de uma
+    licitacao especifica ou uma listagem filtrada de processos licitatorios.
+    NAO use para contratos ja assinados ou executados; para isso use
+    `consultar_contratos`.
+    NAO use para totais, medias ou rankings agregados; para isso use
+    `agregar_licitacoes`.
+
     O retorno inclui `valor_total_estimado`, que soma todas as licitacoes
-    encontradas pelos filtros, mesmo quando a lista exibida esta paginada.
+    encontradas pelos filtros, mesmo quando a lista exibida estiver paginada.
 
-    Exemplos:
-    - 'quais licitacoes da saude?'
-    - 'quais as 10 maiores licitacoes?'
-    - 'detalhe a licitacao numero 12/2025'
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `numero`,
+            `modalidade`, `objeto`, `secretaria`, `situacao`, `fornecedor`,
+            `cnpj_cpf`, `data_abertura`, `data_abertura_inicio`,
+            `data_abertura_fim`, `valor_estimado_min` e `valor_estimado_max`.
+            Datas em `YYYY-MM-DD`.
+        ordenar_por: Campo de ordenacao. Aceita `numero`, `modalidade`,
+            `valor_estimado`, `data_abertura`, `situacao` ou `secretaria`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Tamanho da pagina. Inteiro de 1 a 100.
+        offset: Deslocamento da pagina. Inteiro maior ou igual a 0.
+        campos: Lista opcional de campos por item. Cada item pode incluir `id`,
+            `numero`, `modalidade`, `objeto`, `valor_estimado`, `data_abertura`,
+            `situacao` e `secretaria`.
+        incluir_detalhes: Se `True`, inclui vencedores, instrumentos contratuais
+            e itens relacionados quando esses dados existirem.
+        max_vencedores: Maximo de vencedores por licitacao. Inteiro de 1 a 20.
+        max_instrumentos: Maximo de instrumentos contratuais por licitacao.
+            Inteiro de 1 a 20.
+        max_itens: Maximo de itens retornados por instrumento. Inteiro de 1 a 50.
+
+    Returns:
+        dict com:
+        - `total`: total de licitacoes encontradas antes da paginacao.
+        - `valor_total_estimado`: soma do valor estimado de todas as licitacoes
+          que combinaram com os filtros.
+        - `resultados`: lista de licitacoes com os campos solicitados; quando
+          `incluir_detalhes=True`, cada item pode trazer vencedores,
+          instrumentos contratuais e itens.
+        - `metadata`: filtros aplicados, ordenacao, paginacao e se houve pedido
+          de detalhes.
+        - `mensagem`: aviso quando a resposta estiver paginada.
+        - `sugestao`: dica quando nenhuma licitacao for encontrada.
     """
     try:
         params = ConsultarLicitacoesParams.model_validate(

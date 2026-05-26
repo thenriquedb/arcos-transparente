@@ -32,10 +32,47 @@ def consultar_receitas(
     campos: list[str] | None = None,
 ) -> dict[str, Any]:
     """
-    Consulta arrecadacoes efetivas ou lancamentos de receitas por filtros simples.
+    Lista receitas por categoria, tributo, unidade responsavel, mes e valor.
+
+    Use esta tool quando a pergunta pedir quais receitas foram arrecadadas ou
+    lancadas, ou quando precisar listar registros individuais de arrecadacao.
+    NAO use para totais, comparacoes ou rankings agregados; para isso use
+    `agregar_receitas`.
+    NAO use para planejamento orcamentario ou despesas; para isso use
+    `consultar_planejamento` ou `consultar_despesas`.
 
     Use `tipo_de_dado='arrecadacao'` para valores efetivamente recebidos.
-    Use `tipo_de_dado='lancamento'` para impostos e valores apenas lancados.
+    Use `tipo_de_dado='lancamento'` para valores apenas lancados.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `tipo_de_dado`,
+            `ano`, `mes`, `mes_inicio`, `mes_fim`, `unidade_responsavel`,
+            `categoria`, `categoria_codigo`, `tipo`, `tributo`,
+            `origem_do_recurso`, `tema`, `valor_min` e `valor_max`. `mes`,
+            `mes_inicio` e `mes_fim` aceitam numero de 1 a 12 ou nome do mes.
+        ordenar_por: Campo de ordenacao. Aceita `ano`, `mes_num`, `data`,
+            `unidade_responsavel`, `categoria`, `tipo`, `tributo`,
+            `valor_previsto`, `valor_recebido`, `valor_lancado`,
+            `valor_em_divida_ativa` ou `valor_em_cobranca_judicial`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Tamanho da pagina. Inteiro de 1 a 100.
+        offset: Deslocamento da pagina. Inteiro maior ou igual a 0.
+        campos: Lista opcional com qualquer subconjunto dos campos publicos de
+            receita retornados em cada item.
+
+    Returns:
+        dict com:
+        - `total`: total de registros encontrados antes da paginacao.
+        - `resultados`: lista de receitas; cada item pode incluir `id`,
+          `tipo_de_dado`, `ano`, `mes`, `mes_num`, `data`,
+          `unidade_responsavel`, `categoria_codigo`, `categoria`, `tipo`,
+          `tributo`, `origem_do_recurso`, `valor_previsto`, `valor_recebido`,
+          `valor_previsto_bruto`, `valor_recebido_bruto`,
+          `descontos_previstos`, `descontos_realizados`, `valor_lancado`,
+          `valor_em_divida_ativa` e `valor_em_cobranca_judicial`.
+        - `metadata`: filtros aplicados, ordenacao, paginacao e campos pedidos.
+        - `mensagem`: aviso quando a resposta estiver paginada.
+        - `sugestao`: dica quando nenhum registro for encontrado.
     """
     try:
         params = ConsultarReceitasParams.model_validate(

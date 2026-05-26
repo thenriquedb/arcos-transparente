@@ -181,10 +181,40 @@ def consultar_despesas(
     campos: list[str] | None = None,
 ) -> dict[str, Any]:
     """
-    Consulta empenhos, restos a pagar e documentos extras por filtros públicos.
+    Lista documentos de despesa por credor, area, numero, contrato e descricao.
 
-    Use para listar despesas por credor, área, documento, contrato, tipo de
-    origem ou descrição dos itens.
+    Use esta tool quando a pergunta pedir empenhos, restos a pagar ou documentos
+    extras individuais, inclusive buscas por credor, area, contrato ou texto da
+    despesa.
+    NAO use para planejamento orcamentario; para isso use
+    `consultar_planejamento`.
+    NAO use para totais, comparacoes ou rankings agregados; para isso use
+    `agregar_despesas`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `tipo`, `origem`,
+            `ano`, `data_inicio`, `data_fim`, `numero`, `credor`, `cpf_cnpj`,
+            `unidade_responsavel`, `area`, `conta_extra`, `contrato` e
+            `descricao`. `tipo` aceita `empenho`, `restos_a_pagar` ou
+            `documento_extra`. Datas em `YYYY-MM-DD`.
+        ordenar_por: Campo de ordenacao. Aceita `data`, `valor_documento`,
+            `valor_empenhado`, `valor_pago`, `credor` ou `numero`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Tamanho da pagina. Inteiro de 1 a 100.
+        offset: Deslocamento da pagina. Inteiro maior ou igual a 0.
+        campos: Lista opcional com qualquer subconjunto dos campos publicos de
+            despesa retornados em cada item.
+
+    Returns:
+        dict com:
+        - `total`: total de registros encontrados antes da paginacao.
+        - `resultados`: lista de despesas; cada item pode incluir `tipo`,
+          `origem`, `ano`, `data`, `numero`, `unidade_responsavel`, `area`,
+          `credor`, `valor_documento`, `valor_empenhado`, `valor_pago`,
+          `valor_anulado`, `descricao`, `conta_extra` e `contrato`.
+        - `metadata`: filtros aplicados, ordenacao, paginacao e campos pedidos.
+        - `mensagem`: aviso quando a resposta estiver paginada.
+        - `sugestao`: dica quando nenhuma despesa for encontrada.
     """
     try:
         params = ConsultarDespesasParams.model_validate(

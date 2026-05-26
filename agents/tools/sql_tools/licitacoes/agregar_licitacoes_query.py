@@ -69,12 +69,39 @@ def agregar_licitacoes(
     limite: int = 10,
 ) -> dict[str, Any]:
     """
-    Agrega licitacoes para responder totais, rankings e somatorios.
+    Calcula totais, medias e rankings sobre licitacoes.
 
-    Use para perguntas como:
-    - 'quantas licitacoes existem na saude?'
-    - 'qual secretaria tem maior valor estimado em licitacoes?'
-    - 'quais modalidades aparecem mais?'
+    Use esta tool quando a pergunta pedir quantas licitacoes existem, qual grupo
+    concentra maior valor estimado ou quais modalidades aparecem mais.
+    NAO use para listar licitacoes individuais; para isso use
+    `consultar_licitacoes`.
+    NAO use para valores de contratos assinados; para isso use
+    `agregar_contratos`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `numero`,
+            `modalidade`, `objeto`, `secretaria`, `situacao`, `fornecedor`,
+            `cnpj_cpf`, `data_abertura`, `data_abertura_inicio`,
+            `data_abertura_fim`, `valor_estimado_min` e `valor_estimado_max`.
+            Datas em `YYYY-MM-DD`.
+        agrupar_por: Campo opcional de agrupamento. Aceita `secretaria`,
+            `modalidade`, `situacao` ou `ano_abertura`. Se nao for informado,
+            a tool retorna um `valor_total`.
+        metrica: Metrica calculada. Aceita `contagem`, `soma_valor_estimado`
+            ou `media_valor_estimado`.
+        ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Quantidade maxima de grupos retornados. Inteiro de 1 a 100.
+
+    Returns:
+        dict com:
+        - `total_grupos`: total de grupos encontrados.
+        - `resultados`: lista de grupos; cada item traz o campo de agrupamento e a
+          metrica calculada.
+        - `metadata`: filtros aplicados e configuracao da agregacao.
+        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
+        - `mensagem`: aviso quando so parte dos grupos for exibida.
+        - `sugestao`: dica quando nenhuma licitacao corresponder aos filtros.
     """
     try:
         params = AgregarLicitacoesParams.model_validate(

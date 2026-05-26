@@ -59,10 +59,40 @@ def agregar_patrimonios(
     limite: int = 10,
 ) -> dict[str, Any]:
     """
-    Agrega bens patrimoniais por localização, status, classificação ou origem.
+    Calcula totais, somas e rankings sobre bens patrimoniais.
 
-    Use para totais de bens, rankings de locais com mais patrimônio e somas de
-    valor atualizado ou de ingresso.
+    Use esta tool quando a pergunta pedir quantos bens existem, qual localizacao
+    concentra mais itens ou qual o valor total de ingresso ou atualizado do
+    patrimonio.
+    NAO use para listar bens individuais; para isso use `consultar_patrimonios`.
+    NAO use para contratos ou licitacoes de aquisicao; para isso use
+    `agregar_contratos` ou `agregar_licitacoes`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos:
+            `unidade_responsavel`, `placa`, `descricao`, `classificacao`,
+            `localizacao`, `status`, `situacao`, `tipo_ingresso`,
+            `data_aquisicao_inicio` e `data_aquisicao_fim`. Datas em
+            `YYYY-MM-DD`.
+        agrupar_por: Campo opcional de agrupamento. Aceita
+            `unidade_responsavel`, `localizacao`, `status`, `situacao`,
+            `tipo_ingresso` ou `classificacao`. Se nao for informado, a tool
+            retorna um `valor_total`.
+        metrica: Metrica calculada. Aceita `contagem`, `soma_valor_atualizado`
+            ou `soma_valor_ingresso`.
+        ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Quantidade maxima de grupos retornados. Inteiro de 1 a 100.
+
+    Returns:
+        dict com:
+        - `total_grupos`: total de grupos encontrados.
+        - `resultados`: lista de grupos; cada item traz o campo de agrupamento e a
+          metrica calculada.
+        - `metadata`: filtros aplicados e configuracao da agregacao.
+        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
+        - `mensagem`: aviso quando so parte dos grupos for exibida.
+        - `sugestao`: dica quando nenhum bem corresponder aos filtros.
     """
     try:
         params = AgregarPatrimoniosParams.model_validate(

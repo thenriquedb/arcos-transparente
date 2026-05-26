@@ -54,9 +54,35 @@ def agregar_quadro_pessoal(
     limite: int = 10,
 ) -> dict[str, Any]:
     """
-    Agrega vagas criadas e preenchidas do quadro de pessoal.
+    Calcula totais e rankings sobre vagas do quadro de pessoal.
 
-    Use para totais por origem, regime de contratação ou mês.
+    Use esta tool quando a pergunta pedir quantas vagas existem, quantas foram
+    preenchidas ou qual regime, origem ou mes concentra mais vagas.
+    NAO use para listar registros individuais do quadro de pessoal; para isso use
+    `consultar_quadro_pessoal`.
+    NAO use para contar pessoas da folha ou listar servidores; para isso use
+    `agregar_servidores` ou `consultar_servidores`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `origem`, `ano`,
+            `mes` e `regime`.
+        agrupar_por: Campo opcional de agrupamento. Aceita `origem`, `regime`
+            ou `mes`. Se nao for informado, a tool retorna um `valor_total`.
+        metrica: Metrica calculada. Aceita `contagem`, `soma_vagas_criadas`,
+            `soma_vagas_preenchidas` ou `saldo_vagas`.
+        ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Quantidade maxima de grupos retornados. Inteiro de 1 a 100.
+
+    Returns:
+        dict com:
+        - `total_grupos`: total de grupos encontrados.
+        - `resultados`: lista de grupos; cada item traz o campo de agrupamento e a
+          metrica calculada.
+        - `metadata`: filtros aplicados e configuracao da agregacao.
+        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
+        - `mensagem`: aviso quando so parte dos grupos for exibida.
+        - `sugestao`: dica quando nenhum registro corresponder aos filtros.
     """
     try:
         params = AgregarQuadroPessoalParams.model_validate(

@@ -28,29 +28,30 @@ def buscar_historico_de_pagamentos_do_servidor(
     max_meses: int = 24,
 ) -> dict[str, Any]:
     """
-    Busca um servidor publico pelo nome e retorna seu historico de pagamentos.
+    Busca um servidor pelo nome e retorna seu historico mensal de pagamentos.
 
-    Use quando o usuario perguntar sobre um servidor especifico pelo nome.
-    Exemplos:
-    - 'quanto Joao Silva recebeu em 2024?'
-    - 'qual o salario de Maria Souza?'
-    - 'quais cargos Pedro Oliveira ja ocupou?'
-    - 'quanto foi pago a Jose no ultimo ano?'
-
-    Retorna: cargo atual, setor atual, historico de salarios,
-    ganhos, adicionais, descontos e valor recebido por mes.
-
-    NAO use para perguntas sem nome especifico como 'quais servidores
-    ganham mais de R$ 10 mil' ou 'quais cargos existem na prefeitura'.
+    Use esta tool quando a pergunta citar uma pessoa especifica e pedir salario,
+    quanto recebeu, descontos, ganhos, adicionais ou a evolucao ao longo dos meses.
+    NAO use para listar varios servidores, ordenar por salario ou contar pessoas;
+    para isso use `consultar_servidores` ou `agregar_servidores`.
+    NAO use para perguntas sobre vagas por regime; para isso use
+    `consultar_quadro_pessoal` ou `agregar_quadro_pessoal`.
 
     Args:
-        nome: Nome ou parte do nome do servidor.
-        limite: Numero maximo de resultados (padrao 10, maximo 50).
-        max_meses: Numero maximo de meses do pagamento retornados por servidor.
+        nome: Nome completo ou parcial do servidor. Texto obrigatorio.
+        limite: Numero maximo de servidores retornados. Inteiro de 1 a 50.
+        max_meses: Numero maximo de meses de pagamento por servidor.
+            Inteiro de 1 a 48.
 
     Returns:
-        dict com 'total' e lista de 'resultados' contendo o historico
-        de pagamentos em linguagem simples.
+        dict com:
+        - `query`: nome pesquisado apos saneamento.
+        - `total`: quantidade de servidores encontrados.
+        - `resultados`: lista de servidores; cada item pode incluir `nome`,
+          `cargo_atual`, `setor_atual`, `mes_de_referencia_do_servidor`,
+          `total_meses_considerados`, `pagamentos`, `total_recebido` e `nota`.
+        - `mensagem`: aviso de validacao ou orientacao de uso.
+        - `sugestao`: dica quando nao houver correspondencia para o nome.
     """
     try:
         params = BuscarHistoricoPagamentosServidorParams.model_validate(

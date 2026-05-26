@@ -51,15 +51,41 @@ def agregar_servidores(
     limite: int = 10,
 ) -> dict[str, Any]:
     """
-    Agrega servidores para responder totais, rankings e somatorios.
+    Calcula totais, contagens e rankings sobre servidores.
 
-    Use para perguntas como:
-    - 'quantas pessoas trabalham na saude?'
-    - 'qual secretaria com mais funcionarios?'
-    - 'quais cargos concentram maior massa salarial?'
+    Use esta tool quando a pergunta pedir quantos servidores existem, qual grupo tem
+    mais pessoas ou qual grupo concentra maior massa salarial.
+    NAO use para listar nomes ou detalhes de pessoas; para isso use
+    `consultar_servidores`.
+    NAO use para historico mensal de pagamento de um servidor com nome informado;
+    para isso use `buscar_historico_de_pagamentos_do_servidor`.
 
-    Quando `mes_de_referencia` nao e informado nos filtros, a agregacao usa por padrao
-    o mes mais recente com dados para evitar misturar snapshots de meses diferentes.
+    Se `mes_de_referencia` nao for informado, a agregacao usa o mes mais recente com
+    dados para evitar misturar snapshots de meses diferentes.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `nome`, `secretaria`,
+            `cargo`, `mes_de_referencia`, `mes_de_referencia_inicio`,
+            `mes_de_referencia_fim`, `salario_min` e `salario_max`.
+            Datas em `YYYY-MM-DD`.
+        agrupar_por: Campo opcional de agrupamento. Aceita `secretaria`, `cargo`
+            ou `mes_de_referencia`. Se nao for informado, a tool retorna um
+            `valor_total`.
+        metrica: Metrica calculada. Aceita `contagem` ou `soma_salario_base`.
+        ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Quantidade maxima de grupos retornados. Inteiro de 1 a 100.
+
+    Returns:
+        dict com:
+        - `total_grupos`: total de grupos encontrados.
+        - `resultados`: lista de grupos; cada item traz o campo de agrupamento e a
+          metrica calculada.
+        - `metadata`: filtros aplicados, configuracao da agregacao e o
+          `mes_de_referencia_considerado`.
+        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
+        - `mensagem`: aviso quando so parte dos grupos for exibida.
+        - `sugestao`: dica quando nenhum resultado for encontrado.
     """
     try:
         params = AgregarServidoresParams.model_validate(

@@ -154,10 +154,41 @@ def consultar_patrimonios(
     campos: list[str] | None = None,
 ) -> dict[str, Any]:
     """
-    Consulta bens patrimoniais por placa, descrição, localização, status ou valor.
+    Lista bens patrimoniais por placa, descricao, localizacao, status e valor.
 
-    Use para listar patrimônio municipal, bens por secretaria/localização e itens
-    adquiridos em determinado período.
+    Use esta tool quando a pergunta pedir quais bens existem, onde estao, qual a
+    classificacao de um bem ou quais itens foram adquiridos em certo periodo.
+    NAO use para totais, somas ou rankings agregados; para isso use
+    `agregar_patrimonios`.
+    NAO use para contratos ou licitacoes de aquisicao; para isso use
+    `consultar_contratos` ou `consultar_licitacoes`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos:
+            `unidade_responsavel`, `placa`, `descricao`, `classificacao`,
+            `localizacao`, `status`, `situacao`, `tipo_ingresso`,
+            `data_aquisicao_inicio` e `data_aquisicao_fim`. Datas em
+            `YYYY-MM-DD`.
+        ordenar_por: Campo de ordenacao. Aceita `data_aquisicao`,
+            `valor_atualizado`, `valor_ingresso`, `descricao`, `localizacao`
+            ou `placa`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Tamanho da pagina. Inteiro de 1 a 100.
+        offset: Deslocamento da pagina. Inteiro maior ou igual a 0.
+        campos: Lista opcional com qualquer subconjunto dos campos publicos de
+            patrimonio retornados em cada item.
+
+    Returns:
+        dict com:
+        - `total`: total de bens encontrados antes da paginacao.
+        - `resultados`: lista de bens; cada item pode incluir
+          `unidade_responsavel`, `placa`, `descricao`, `classificacao`,
+          `localizacao`, `status`, `situacao`, `tipo_ingresso`,
+          `data_aquisicao`, `data_baixa`, `valor_ingresso` e
+          `valor_atualizado`.
+        - `metadata`: filtros aplicados, ordenacao, paginacao e campos pedidos.
+        - `mensagem`: aviso quando a resposta estiver paginada.
+        - `sugestao`: dica quando nenhum bem for encontrado.
     """
     try:
         params = ConsultarPatrimoniosParams.model_validate(

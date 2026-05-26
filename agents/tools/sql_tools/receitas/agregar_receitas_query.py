@@ -36,10 +36,44 @@ def agregar_receitas(
     limite: int = 10,
 ) -> dict[str, Any]:
     """
-    Agrega receitas para responder totais, contagens e rankings.
+    Calcula totais, contagens e rankings sobre receitas.
 
-    O padrao usa arrecadacao efetiva. Para impostos apenas lancados,
-    informe `tipo_de_dado='lancamento'`.
+    Use esta tool quando a pergunta pedir quanto foi arrecadado, quanto foi
+    lancado ou qual categoria, tributo ou unidade responsavel mais arrecadou.
+    NAO use para listar registros individuais; para isso use `consultar_receitas`.
+    NAO use para planejamento orcamentario ou despesas; para isso use
+    `agregar_planejamento` ou `agregar_despesas`.
+
+    O padrao usa arrecadacao efetiva. Para valores apenas lancados, informe
+    `tipo_de_dado='lancamento'`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `tipo_de_dado`,
+            `ano`, `mes`, `mes_inicio`, `mes_fim`, `unidade_responsavel`,
+            `categoria`, `categoria_codigo`, `tipo`, `tributo`,
+            `origem_do_recurso`, `tema`, `valor_min` e `valor_max`. `mes`,
+            `mes_inicio` e `mes_fim` aceitam numero de 1 a 12 ou nome do mes.
+        agrupar_por: Campo opcional de agrupamento. Aceita `mes`,
+            `unidade_responsavel`, `categoria`, `tipo`, `tributo` ou
+            `origem_do_recurso`. Se nao for informado, a tool retorna um
+            `valor_total`.
+        metrica: Metrica calculada. Aceita `contagem`, `soma_valor_previsto`,
+            `soma_valor_recebido`, `soma_valor_lancado`,
+            `soma_valor_em_divida_ativa` ou
+            `soma_valor_em_cobranca_judicial`.
+        ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Quantidade maxima de grupos retornados. Inteiro de 1 a 100.
+
+    Returns:
+        dict com:
+        - `total_grupos`: total de grupos encontrados.
+        - `resultados`: lista de grupos; cada item traz o campo de agrupamento e a
+          metrica calculada.
+        - `metadata`: filtros aplicados e configuracao da agregacao.
+        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
+        - `mensagem`: aviso quando so parte dos grupos for exibida.
+        - `sugestao`: dica quando nenhum registro corresponder aos filtros.
     """
     try:
         params = AgregarReceitasParams.model_validate(

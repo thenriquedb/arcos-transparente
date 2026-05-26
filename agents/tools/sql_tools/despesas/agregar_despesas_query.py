@@ -70,10 +70,40 @@ def agregar_despesas(
     limite: int = 10,
 ) -> dict[str, Any]:
     """
-    Agrega documentos de despesa para totais, contagens, rankings e agrupamentos.
+    Calcula totais, contagens e rankings sobre documentos de despesa.
 
-    Use para perguntas sobre total pago, total empenhado, maiores credores,
-    diárias, restos a pagar, documentos extras e grupos por área ou origem.
+    Use esta tool quando a pergunta pedir total pago, total empenhado, total
+    anulado, maiores credores ou comparacoes por area, origem, unidade ou tipo
+    de documento.
+    NAO use para listar documentos individuais; para isso use
+    `consultar_despesas`.
+    NAO use para planejamento orcamentario; para isso use
+    `agregar_planejamento`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `tipo`, `origem`,
+            `ano`, `data_inicio`, `data_fim`, `numero`, `credor`, `cpf_cnpj`,
+            `unidade_responsavel`, `area`, `conta_extra`, `contrato` e
+            `descricao`. `tipo` aceita `empenho`, `restos_a_pagar` ou
+            `documento_extra`. Datas em `YYYY-MM-DD`.
+        agrupar_por: Campo opcional de agrupamento. Aceita `tipo`, `origem`,
+            `ano`, `mes`, `unidade_responsavel`, `area`, `credor` ou
+            `conta_extra`. Se nao for informado, a tool retorna um `valor_total`.
+        metrica: Metrica calculada. Aceita `contagem`, `soma_valor_documento`,
+            `soma_valor_empenhado`, `soma_valor_pago` ou `soma_valor_anulado`.
+        ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Quantidade maxima de grupos retornados. Inteiro de 1 a 100.
+
+    Returns:
+        dict com:
+        - `total_grupos`: total de grupos encontrados.
+        - `resultados`: lista de grupos; cada item traz o campo de agrupamento e a
+          metrica calculada.
+        - `metadata`: filtros aplicados e configuracao da agregacao.
+        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
+        - `mensagem`: aviso quando so parte dos grupos for exibida.
+        - `sugestao`: dica quando nenhuma despesa corresponder aos filtros.
     """
     try:
         params = AgregarDespesasParams.model_validate(

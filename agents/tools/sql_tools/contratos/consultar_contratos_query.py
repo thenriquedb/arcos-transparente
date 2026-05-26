@@ -253,10 +253,45 @@ def consultar_contratos(
     incluir_detalhes: bool = False,
 ) -> dict[str, Any]:
     """
-    Consulta contratos por filtros, ordenacao e campos de retorno.
+    Lista contratos por numero, fornecedor, secretaria, categoria, descricao e valor.
 
-    Use para listagens, busca por fornecedor, secretaria, categoria e periodo,
-    alem de rankings simples por ordenacao.
+    Use esta tool quando a pergunta pedir quais contratos existem, detalhes de um
+    contrato especifico ou uma listagem filtrada.
+    NAO use para totais, medias ou rankings agregados; para isso use
+    `agregar_contratos`.
+    NAO use para perguntas sobre o processo licitatorio antes da assinatura do
+    contrato, como modalidade, situacao da licitacao ou edital; para isso use
+    `consultar_licitacoes`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `numero`,
+            `fornecedor`, `documento_fornecedor`, `categoria`, `secretaria`,
+            `descricao`, `data_inicio`, `data_inicio_inicio`, `data_inicio_fim`,
+            `valor_min` e `valor_max`. Datas em `YYYY-MM-DD`.
+        ordenar_por: Campo de ordenacao. Aceita `numero`, `fornecedor`, `valor`,
+            `data_inicio`, `data_fim`, `categoria` ou `secretaria`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Tamanho da pagina. Inteiro de 1 a 100.
+        offset: Deslocamento da pagina. Inteiro maior ou igual a 0.
+        campos: Lista opcional de campos por item. Cada item pode incluir `id`,
+            `numero`, `fornecedor`, `documento_fornecedor`, `valor`,
+            `data_inicio`, `data_fim`, `categoria`, `secretaria`, `descricao`
+            e `classificacao_da_despesa`.
+        incluir_detalhes: Se `True`, inclui detalhes adicionais do contrato,
+            despesas orcamentarias e itens adquiridos quando esses dados existirem.
+
+    Returns:
+        dict com:
+        - `total`: total de contratos encontrados antes da paginacao.
+        - `resultados`: lista de contratos com os campos solicitados; quando
+          `incluir_detalhes=True`, cada item pode trazer tambem
+          `numero_licitatorio`, `numero_instrumento`, `tipo_do_instrumento`,
+          `possui_aditivo`, `despesas_orcamentarias` e `itens_adquiridos`.
+        - `metadata`: filtros aplicados, possiveis filtros de fallback,
+          ordenacao, paginacao e se houve pedido de detalhes.
+        - `mensagem`: aviso quando a resposta estiver paginada ou quando houver
+          alguma observacao relevante.
+        - `sugestao`: dica quando nenhum contrato for encontrado.
     """
     try:
         params = ConsultarContratosParams.model_validate(

@@ -174,12 +174,37 @@ def agregar_contratos(
     limite: int = 10,
 ) -> dict[str, Any]:
     """
-    Agrega contratos para responder totais, rankings e somatorios.
+    Calcula totais, medias e rankings sobre contratos.
 
-    Use para perguntas como:
-    - 'qual o total contratado pela educacao?'
-    - 'qual secretaria tem mais contratos?'
-    - 'quais categorias concentram maior valor contratado?'
+    Use esta tool quando a pergunta pedir valor total contratado, media de valor
+    ou comparacao entre secretarias, categorias, fornecedores e anos de inicio.
+    NAO use para listar contratos individuais; para isso use `consultar_contratos`.
+    NAO use para somar ou contar licitacoes; para isso use `agregar_licitacoes`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `numero`,
+            `fornecedor`, `documento_fornecedor`, `categoria`, `secretaria`,
+            `descricao`, `data_inicio`, `data_inicio_inicio`, `data_inicio_fim`,
+            `valor_min` e `valor_max`. Datas em `YYYY-MM-DD`.
+        agrupar_por: Campo opcional de agrupamento. Aceita `secretaria`,
+            `categoria`, `fornecedor` ou `ano_inicio`. Se nao for informado,
+            a tool retorna um `valor_total`.
+        metrica: Metrica calculada. Aceita `contagem`, `soma_valor`
+            ou `media_valor`.
+        ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Quantidade maxima de grupos retornados. Inteiro de 1 a 100.
+
+    Returns:
+        dict com:
+        - `total_grupos`: total de grupos encontrados.
+        - `resultados`: lista de grupos; cada item traz o campo de agrupamento e a
+          metrica calculada.
+        - `metadata`: filtros aplicados, possiveis filtros de fallback e
+          configuracao da agregacao.
+        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
+        - `mensagem`: aviso quando so parte dos grupos for exibida.
+        - `sugestao`: dica quando nenhum contrato corresponder aos filtros.
     """
     try:
         params = AgregarContratosParams.model_validate(

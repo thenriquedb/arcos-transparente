@@ -115,10 +115,35 @@ def consultar_quadro_pessoal(
     campos: list[str] | None = None,
 ) -> dict[str, Any]:
     """
-    Consulta vagas criadas e preenchidas por regime de contratação e mês.
+    Lista registros de vagas criadas e preenchidas do quadro de pessoal.
 
-    Use para listar quadro de pessoal da prefeitura ou saúde por regime,
-    competência e origem.
+    Use esta tool quando a pergunta pedir vagas, saldo de vagas ou quadro de
+    pessoal por regime, competencia e origem.
+    NAO use para listar pessoas, nomes ou salarios de servidores; para isso use
+    `consultar_servidores` ou `buscar_historico_de_pagamentos_do_servidor`.
+    NAO use para totais, comparacoes ou rankings agregados; para isso use
+    `agregar_quadro_pessoal`.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `origem`, `ano`,
+            `mes` e `regime`.
+        ordenar_por: Campo de ordenacao. Aceita `mes_de_referencia`, `origem`,
+            `regime`, `vagas_criadas`, `vagas_preenchidas` ou `saldo_vagas`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Tamanho da pagina. Inteiro de 1 a 100.
+        offset: Deslocamento da pagina. Inteiro maior ou igual a 0.
+        campos: Lista opcional com qualquer subconjunto dos campos publicos do
+            quadro de pessoal retornados em cada item.
+
+    Returns:
+        dict com:
+        - `total`: total de registros encontrados antes da paginacao.
+        - `resultados`: lista de registros; cada item pode incluir `origem`,
+          `mes_de_referencia`, `regime`, `vagas_criadas`,
+          `vagas_preenchidas` e `saldo_vagas`.
+        - `metadata`: filtros aplicados, ordenacao, paginacao e campos pedidos.
+        - `mensagem`: aviso quando a resposta estiver paginada.
+        - `sugestao`: dica quando nenhum registro for encontrado.
     """
     try:
         params = ConsultarQuadroPessoalParams.model_validate(

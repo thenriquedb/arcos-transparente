@@ -36,11 +36,48 @@ def consultar_planejamento(
     campos: list[str] | None = None,
 ) -> dict[str, Any]:
     """
-    Consulta linhas do planejamento orcamentario por filtros e ordenacao.
+    Lista linhas do planejamento orcamentario por origem, area, programa, acao e mes.
+
+    Use esta tool quando a pergunta pedir o planejamento, o orcamento ou os valores
+    previstos, comprometidos, confirmados, pagos ou cancelados dentro da estrutura
+    orcamentaria.
+    NAO use para empenhos, restos a pagar ou documentos de despesa efetivamente
+    emitidos; para isso use `consultar_despesas`.
+    NAO use para totais, comparacoes ou rankings agregados; para isso use
+    `agregar_planejamento`.
 
     O filtro `origem` suporta ao menos `saude` e `prefeitura`.
-    Se `origem` nao for informado, o padrao continua sendo `saude`.
-    Use para listar acoes, programas, grupos de gasto e valores mensais.
+    Se `origem` nao for informado, o será ambos.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `origem`, `ano`,
+            `mes`, `mes_inicio`, `mes_fim`, `entidade`, `area`, `subarea`,
+            `programa`, `acao`, `grupo_de_gasto`, `categoria_de_gasto`,
+            `fonte_recurso`, `valor_pago_min` e `valor_pago_max`. `mes`,
+            `mes_inicio` e `mes_fim` aceitam numero de 1 a 12 ou nome do mes.
+        ordenar_por: Campo de ordenacao. Aceita `ano`, `mes_num`, `area`,
+            `subarea`, `programa`, `acao`, `grupo_de_gasto`,
+            `orcamento_inicial`, `orcamento_atualizado`, `valor_comprometido`,
+            `valor_confirmado`, `valor_pago` ou `valor_cancelado`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Tamanho da pagina. Inteiro de 1 a 100.
+        offset: Deslocamento da pagina. Inteiro maior ou igual a 0.
+        campos: Lista opcional com qualquer subconjunto dos campos publicos de
+            planejamento retornados em cada item.
+
+    Returns:
+        dict com:
+        - `total`: total de linhas encontradas antes da paginacao.
+        - `resultados`: lista de linhas de planejamento; cada item pode incluir
+          `id`, `origem`, `ano`, `mes`, `mes_num`, `unidade_gestora`, `orgao`,
+          `unidade`, `area`, `subarea`, `programa`, `tipo_acao`, `acao`,
+          `fonte_recurso`, `esfera`, `categoria_de_gasto`, `grupo_de_gasto`,
+          `orcamento_inicial`, `reforcos_no_orcamento`, `orcamento_atualizado`,
+          `valor_comprometido`, `valor_confirmado`, `valor_pago` e
+          `valor_cancelado`.
+        - `metadata`: filtros aplicados, ordenacao, paginacao e campos pedidos.
+        - `mensagem`: aviso quando a resposta estiver paginada.
+        - `sugestao`: dica quando nenhum registro for encontrado.
     """
     try:
         params = ConsultarPlanejamentoParams.model_validate(

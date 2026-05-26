@@ -37,11 +37,46 @@ def agregar_planejamento(
     limite: int = 10,
 ) -> dict[str, Any]:
     """
-    Agrega planejamento para responder totais, rankings e agrupamentos.
+    Calcula totais, comparacoes e rankings sobre dados de planejamento.
+
+    Use esta tool quando a pergunta pedir quanto foi orcado, comprometido,
+    confirmado, pago ou cancelado dentro do planejamento, ou quando pedir
+    comparacoes por area, programa, acao, grupo de gasto ou fonte de recurso.
+    NAO use para listar linhas individuais do planejamento; para isso use
+    `consultar_planejamento`.
+    NAO use para somar documentos de despesa efetivamente emitidos; para isso use
+    `agregar_despesas`.
 
     O filtro `origem` suporta ao menos `saude` e `prefeitura`.
     Se `origem` nao for informado, o padrao continua sendo `saude`.
-    Use para perguntas sobre orçamento previsto, valor comprometido e valor pago.
+
+    Args:
+        filtros: Objeto com filtros opcionais. Campos aceitos: `origem`, `ano`,
+            `mes`, `mes_inicio`, `mes_fim`, `entidade`, `area`, `subarea`,
+            `programa`, `acao`, `grupo_de_gasto`, `categoria_de_gasto`,
+            `fonte_recurso`, `valor_pago_min` e `valor_pago_max`. `mes`,
+            `mes_inicio` e `mes_fim` aceitam numero de 1 a 12 ou nome do mes.
+        agrupar_por: Campo opcional de agrupamento. Aceita `mes`, `area`,
+            `subarea`, `programa`, `acao`, `grupo_de_gasto`,
+            `categoria_de_gasto` ou `fonte_recurso`. Se nao for informado,
+            a tool retorna um `valor_total`.
+        metrica: Metrica calculada. Aceita `contagem`, `soma_orcamento_inicial`,
+            `soma_orcamento_atualizado`, `soma_valor_comprometido`,
+            `soma_valor_confirmado`, `soma_valor_pago` ou
+            `soma_valor_cancelado`.
+        ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.
+        ordem: Direcao da ordenacao: `asc` ou `desc`.
+        limite: Quantidade maxima de grupos retornados. Inteiro de 1 a 100.
+
+    Returns:
+        dict com:
+        - `total_grupos`: total de grupos encontrados.
+        - `resultados`: lista de grupos; cada item traz o campo de agrupamento e a
+          metrica calculada.
+        - `metadata`: filtros aplicados e configuracao da agregacao.
+        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
+        - `mensagem`: aviso quando so parte dos grupos for exibida.
+        - `sugestao`: dica quando nenhum registro corresponder aos filtros.
     """
     try:
         params = AgregarPlanejamentoParams.model_validate(

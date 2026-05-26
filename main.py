@@ -119,6 +119,7 @@ def ferramentas_publicas_disponiveis() -> list[str]:
         for tool_obj in get_public_tools()
     ]
 
+
 def responder_pergunta(pergunta: str):
     guardrail = evaluate_query_guardrails(pergunta)
     if not guardrail.allowed:
