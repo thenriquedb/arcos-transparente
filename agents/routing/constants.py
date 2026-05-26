@@ -38,6 +38,10 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "vencedores",
     "contrato",
     "contratos",
+    "contratado",
+    "contratada",
+    "contratados",
+    "contratadas",
     "instrumento",
     "instrumentos",
     "planejamento",
@@ -86,10 +90,17 @@ LICITACOES_DOMAIN_KEYWORDS = (
     "pregoes",
     "edital",
     "editais",
-    "contrato",
-    "contratos",
     "instrumento",
     "instrumentos",
+)
+
+CONTRATOS_DOMAIN_KEYWORDS = (
+    "contrato",
+    "contratos",
+    "contratado",
+    "contratada",
+    "contratados",
+    "contratadas",
 )
 
 PLANEJAMENTO_DIRECT_KEYWORDS = (

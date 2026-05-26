@@ -22,6 +22,20 @@ uv run python cli.py db init
 uv run python cli.py importar
 ```
 
+### 4. Configurar o agente com OpenAI
+
+O provider oficial desta fase e a OpenAI.
+
+Configure no `.env`:
+
+```env
+OPENAI_API_KEY=sua_chave_aqui
+OPENAI_MODEL=gpt-4o-mini
+LLM_PROVIDER=openai
+```
+
+`OPENAI_MODEL` e opcional. Se nao for informado, o projeto usa `gpt-4o-mini`.
+
 ## Sumário Da Documentação
 
 - [INSTRUCTIONS.md](./INSTRUCTIONS.md): guia geral do projeto, ambiente, comandos, modelagem e operação
@@ -33,11 +47,13 @@ uv run python cli.py importar
 
 ## Dados Cobertos
 
-- 📋 **Licitações** - Processos licitatórios e fornecedores
-- 🚗 **Frotas** - Veículos e despesas da frota
-- 💰 **Receitas** - Arrecadação e lançamentos
-- 💼 **Folha de Pagamento** - Servidores, lotações e cargos
-- 👤 **Servidores** - Dados de servidores públicos
+- **Contratos** - contratos administrativos, fornecedores e valores contratados
+- **Licitações** - processos licitatorios, vencedores e valores estimados
+- **Planejamento** - planejamento orcamentario, com rollout inicial na saude
+- **Folha de Pagamento** - historico mensal de pagamentos por servidor
+- **Servidores** - quadro de pessoal, cargos, secretarias e salarios base
+- **Receitas** - arrecadacao e lancamentos
+- **Frotas** - veiculos e despesas da frota
 
 ## Requisitos
 

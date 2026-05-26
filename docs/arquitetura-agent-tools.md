@@ -35,6 +35,8 @@ Exemplos:
 - "Quais os 10 maiores salários?" -> `consultar_servidores`
 - "Quantas pessoas trabalham na saúde?" -> `agregar_servidores`
 - "Qual secretaria com mais funcionários?" -> `agregar_servidores`
+- "Quais contratos da saúde?" -> `consultar_contratos`
+- "Qual o total contratado pela educação?" -> `agregar_contratos`
 - "Qual o salário do Jose Silva?" -> `buscar_historico_de_pagamentos_do_servidor`
 - "Quais as maiores licitações?" -> `consultar_licitacoes`
 - "Quantas licitações existem na saúde?" -> `agregar_licitacoes`
@@ -45,15 +47,17 @@ Exemplos:
 
 ## Superfície Pública Atual
 
-Atualmente o agente principal enxerga apenas 7 tools:
+Atualmente o agente principal enxerga apenas 9 tools:
 
 1. `consultar_servidores`
 2. `agregar_servidores`
-3. `consultar_licitacoes`
-4. `agregar_licitacoes`
-5. `consultar_planejamento`
-6. `agregar_planejamento`
-7. `buscar_historico_de_pagamentos_do_servidor`
+3. `consultar_contratos`
+4. `agregar_contratos`
+5. `consultar_licitacoes`
+6. `agregar_licitacoes`
+7. `consultar_planejamento`
+8. `agregar_planejamento`
+9. `buscar_historico_de_pagamentos_do_servidor`
 
 Isso vale tanto para:
 
@@ -82,6 +86,7 @@ Conceitos importantes:
 - `scope:public`
 - `scope:internal`
 - `domain:servidores`
+- `domain:contratos`
 - `domain:licitacoes`
 - `domain:planejamento`
 - `domain:folha`
@@ -154,6 +159,13 @@ Responsabilidades:
 - pedir ao router quais tools públicas usar para a pergunta
 - montar o `system_prompt`
 - criar o agente LangChain com esse subconjunto de tools
+- carregar o provider e o modelo do ambiente, com OpenAI como caminho oficial desta fase
+
+Configuração atual do agente:
+
+- `LLM_PROVIDER=openai`
+- `OPENAI_MODEL=gpt-4o-mini` por padrão
+- `OPENAI_API_KEY` obrigatória para criar o agente
 
 Com isso, o agente quase nunca precisa escolher entre tools muito semelhantes.
 
@@ -184,6 +196,35 @@ Serve para:
 - ranking por cargo
 - agrupamento por mês de referência
 - soma de `salario_base`
+
+#### `consultar_contratos`
+
+Arquivo: `agents/tools/sql_tools/contratos/consultar_contratos_query.py`
+
+Serve para:
+
+- busca por numero do contrato
+- lista filtrada por fornecedor
+- lista filtrada por secretaria
+- lista filtrada por categoria
+- busca por descricao
+- busca por classificacao da despesa
+- filtros por periodo e faixa de valor
+- ranking simples por valor
+- selecao de campos publicos em linguagem clara
+
+#### `agregar_contratos`
+
+Arquivo: `agents/tools/sql_tools/contratos/agregar_contratos_query.py`
+
+Serve para:
+
+- contagens filtradas
+- ranking por secretaria
+- ranking por categoria
+- ranking por fornecedor
+- agrupamento por ano de inicio
+- soma e media de valor contratado
 
 #### `consultar_licitacoes`
 
@@ -277,6 +318,23 @@ agents/tools/sql_tools/licitacoes/
     ├── base.py
     ├── filters.py
     ├── querying.py
+    └── runtime.py
+```
+
+### Contratos
+
+```text
+agents/tools/sql_tools/contratos/
+├── __init__.py
+├── consultar_contratos_query.py
+├── consultar_contratos_schema.py
+├── agregar_contratos_query.py
+├── agregar_contratos_schema.py
+└── shared/
+    ├── base.py
+    ├── filters.py
+    ├── querying.py
+    ├── responses.py
     └── runtime.py
 ```
 
@@ -397,6 +455,27 @@ Além disso:
 
 ---
 
+## Regras de Filtros em `contratos`
+
+O domínio de `contratos` usa a tabela principal de contratos administrativos, com foco em perguntas públicas sobre fornecedor, valor e secretaria.
+
+Por isso:
+
+- `consultar_contratos` deve ser usado para listas, detalhes simples e rankings por valor
+- `agregar_contratos` deve ser usado para contagens, somas, medias e rankings agrupados
+- `data_inicio` exata nao pode coexistir com intervalo
+- `data_inicio_inicio` e `data_inicio_fim` devem vir juntas
+- `valor_min` e `valor_max` funcionam como faixa opcional de filtro
+
+Além disso:
+
+- filtros de fornecedor, categoria, secretaria e descricao usam busca textual parcial
+- o filtro textual de descricao tambem considera a classificacao da despesa importada de `DescricaoDespesa`
+- a busca textual ignora diferencas de acento
+- ranking de maiores contratos usa `ordenar_por="valor"` e `ordem="desc"`
+
+---
+
 ## Regras de Filtros em `planejamento`
 
 O domínio de `planejamento` começa pelo arquivo de planejamento da saúde.
@@ -508,6 +587,8 @@ A arquitetura depende muito de contrato e roteamento, então os testes mais impo
   valida quais tools o agente recebe
 - `tests/tools/sql_tools/test_servidores_public_tools.py`
   valida comportamento funcional das tools amplas
+- `tests/tools/sql_tools/test_contratos_public_tools.py`
+  valida comportamento funcional das tools amplas de contratos
 - `tests/tools/sql_tools/test_licitacoes_public_tools.py`
   valida comportamento funcional das tools amplas de licitações
 - `tests/tools/sql_tools/test_planejamento_public_tools.py`

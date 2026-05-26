@@ -11,6 +11,7 @@ from agents.tools.sql_tools.planejamento.shared.entities import (
 )
 
 from .constants import (
+    CONTRATOS_DOMAIN_KEYWORDS,
     LICITACOES_DOMAIN_KEYWORDS,
     PLANEJAMENTO_DIRECT_KEYWORDS,
     PLANEJAMENTO_ENTITY_HINT_KEYWORDS,
@@ -52,6 +53,7 @@ def _extract_secretaria(normalized_text: str) -> str | None:
 
     patterns = [
         r"\b(?:na|no|da|do)\b\s+(?:secretaria\s+de\s+)?((?:[a-z]+\s?){1,4})(?:\?|\s|$)",
+        r"\b(?:pela|pelo)\b\s+(?:secretaria\s+de\s+)?((?:[a-z]+\s?){1,4})(?:\?|\s|$)",
         r"\bfuncionarios\b\s+\bda\b\s+((?:[a-z]+\s?){1,4})(?:\?|\s|$)",
         r"\btrabalham\b\s+\bna\b\s+((?:[a-z]+\s?){1,4})(?:\?|\s|$)",
     ]
@@ -98,6 +100,12 @@ def _is_licitacoes_query(normalized_text: str) -> bool:
     return _contains_any(normalized_text, LICITACOES_DOMAIN_KEYWORDS)
 
 
+def _is_contratos_query(normalized_text: str) -> bool:
+    """Heurística simples para identificar perguntas sobre contratos."""
+
+    return _contains_any(normalized_text, CONTRATOS_DOMAIN_KEYWORDS)
+
+
 def _extract_licitacao_numero(normalized_text: str) -> str | None:
     """Extrai número de licitação quando a pergunta cita o identificador."""
 
@@ -108,6 +116,35 @@ def _extract_licitacao_numero(normalized_text: str) -> str | None:
     if match is None:
         return None
     return match.group(1).strip()
+
+
+def _extract_contrato_numero(normalized_text: str) -> str | None:
+    """Extrai número de contrato quando a pergunta cita o identificador."""
+
+    match = re.search(
+        r"\b(?:contrato|numero|n)\b\s+([0-9][0-9./-]*)\b",
+        normalized_text,
+    )
+    if match is None:
+        return None
+    return match.group(1).strip()
+
+
+def _extract_contrato_fornecedor(normalized_text: str) -> str | None:
+    """Extrai um nome de fornecedor em perguntas focadas em contratos."""
+
+    patterns = [
+        r"\bfornecedor\b\s+([a-z0-9 .&/-]+?)(?=\s+\b(?:em|com)\b\s+\d{4}\b|\?|$)",
+        r"\bempresa\b\s+([a-z0-9 .&/-]+?)(?=\s+\b(?:em|com)\b\s+\d{4}\b|\?|$)",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, normalized_text)
+        if match is None:
+            continue
+        fornecedor = " ".join(match.group(1).split())
+        if fornecedor:
+            return fornecedor
+    return None
 
 
 def _extract_year(normalized_text: str) -> int | None:
@@ -196,6 +233,26 @@ def _extract_licitacoes_objeto(normalized_text: str) -> str | None:
     return None
 
 
+def _extract_contratos_descricao(normalized_text: str) -> str | None:
+    """Extrai termos de descrição de contrato para alguns eventos recorrentes."""
+
+    if objeto := _extract_licitacoes_objeto(normalized_text):
+        return objeto
+
+    patterns = [
+        r"\brelacionad[oa]s?\s+a\s+([a-z0-9\s.&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
+        r"\bsobre\s+([a-z0-9\s.&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, normalized_text)
+        if match is None:
+            continue
+        descricao = " ".join(match.group(1).split())
+        if descricao:
+            return descricao
+    return None
+
+
 def _build_licitacoes_filters_from_query(normalized_text: str) -> dict[str, Any]:
     """Monta filtros públicos de licitações com base na pergunta do usuário."""
 
@@ -210,6 +267,24 @@ def _build_licitacoes_filters_from_query(normalized_text: str) -> dict[str, Any]
     if year := _extract_year(normalized_text):
         filtros["data_abertura_inicio"] = f"{year}-01-01"
         filtros["data_abertura_fim"] = f"{year}-12-31"
+    return filtros
+
+
+def _build_contratos_filters_from_query(normalized_text: str) -> dict[str, Any]:
+    """Monta filtros públicos de contratos com base na pergunta do usuário."""
+
+    filtros: dict[str, Any] = {}
+    if numero := _extract_contrato_numero(normalized_text):
+        filtros["numero"] = numero
+    if fornecedor := _extract_contrato_fornecedor(normalized_text):
+        filtros["fornecedor"] = fornecedor
+    if secretaria := _extract_secretaria(normalized_text):
+        filtros["secretaria"] = secretaria
+    if descricao := _extract_contratos_descricao(normalized_text):
+        filtros["descricao"] = descricao
+    if year := _extract_year(normalized_text):
+        filtros["data_inicio_inicio"] = f"{year}-01-01"
+        filtros["data_inicio_fim"] = f"{year}-12-31"
     return filtros
 
 

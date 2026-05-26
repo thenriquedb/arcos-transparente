@@ -1,5 +1,6 @@
 """Schemas de validacao da ingestao."""
 
+from .contratos import ContratoInSchema
 from .licitacoes import (
     InstrumentoContratualInSchema,
     LicitacaoInSchema,
@@ -9,6 +10,7 @@ from .licitacoes import (
 from .servidores import ServidorInSchema
 
 __all__ = [
+    "ContratoInSchema",
     "LicitacaoInSchema",
     "VencedorInSchema",
     "InstrumentoContratualInSchema",

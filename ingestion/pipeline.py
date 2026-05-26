@@ -157,6 +157,7 @@ class IngestionPipeline:
                         "categoria": registro["categoria"],
                         "secretaria": registro["secretaria"],
                         "descricao": registro.get("descricao"),
+                        "descricao_despesa": registro.get("descricao_despesa"),
                     }
                     existente = session.execute(
                         select(Contrato).where(

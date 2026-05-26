@@ -16,7 +16,7 @@ Use esta lista para validar:
 
 ## Licitações
 
-Perguntas para validar consultas, rankings, detalhes, contratos e somatórios de licitações.
+Perguntas para validar consultas, rankings, detalhes e somatórios de licitações.
 
 - Quais foram todas as licitações para o festival gastronômico em 2025? E qual foi o valor total estimado?
 - Quais contratos do festival gastronômico em 2025?
@@ -35,6 +35,32 @@ Comportamento esperado:
 - usar `agregar_licitacoes` para contagens, rankings agrupados e somatórios
 - diferenciar valor estimado de gasto efetivamente pago quando a base não trouxer execução financeira
 - buscar por objeto ignorando diferenças de acento, como `gastronomico` e `Gastronômico`
+
+---
+
+## Contratos
+
+Perguntas para validar consultas, filtros, rankings e totais de contratos administrativos.
+
+- Quais contratos da saúde?
+- Qual o total contratado pela educação?
+- Quais os 10 maiores contratos de 2025?
+- Liste contratos do fornecedor Sigma 6.
+- Quais contratos existem para o festival gastronômico em 2025?
+- Liste todos os contratos relacionados a Festividades e Homenagens.
+- Quais contratos da prefeitura começaram em abril de 2025?
+- Liste contratos com valor acima de 50000.
+- Qual categoria de contrato teve maior valor total?
+- Quais fornecedores têm mais contratos?
+- Detalhe o contrato número 001/2025.
+
+Comportamento esperado:
+
+- usar `consultar_contratos` para listas, detalhes simples, filtros e rankings por valor
+- usar `agregar_contratos` para contagens, agrupamentos, somas e médias
+- diferenciar valor contratado de pagamento efetivamente realizado quando a base não trouxer execução
+- permitir busca por fornecedor, secretaria, categoria, descricao, periodo e faixa de valor
+- considerar tambem a classificacao da despesa quando a pergunta usar termos como `Festividades e Homenagens`
 
 ---
 

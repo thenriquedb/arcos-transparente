@@ -9,6 +9,7 @@ from typing import Any, Literal
 Domain = Literal[
     "servidores",
     "folha_pagamento",
+    "contratos",
     "licitacoes",
     "planejamento",
     "desconhecido",

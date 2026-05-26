@@ -22,6 +22,10 @@ from agents.routing.models import (
     RouteDecision,
 )
 from agents.routing.routes.folha_pagamento import _try_route_historico
+from agents.routing.routes.contratos import (
+    _try_route_contratos_agregacao,
+    _try_route_contratos_lista,
+)
 from agents.routing.routes.licitacoes import (
     _try_route_licitacoes_agregacao,
     _try_route_licitacoes_lista,
@@ -38,12 +42,14 @@ from agents.tools.registry import get_public_tools
 # qual domínio vence quando mais de uma heurística faz match.
 ROUTE_PRIORITY_CHAIN = (
     _try_route_historico,  # 1. Histórico individual de pagamentos
-    _try_route_licitacoes_agregacao,  # 2. Rankings e contagens de licitações
-    _try_route_planejamento_agregacao,  # 3. Totais e rankings de planejamento
-    _try_route_agregacao,  # 4. Rankings e contagens de servidores
-    _try_route_licitacoes_lista,  # 5. Listas e detalhes de licitações
-    _try_route_planejamento_saude_lista,  # 6. Listas de planejamento
-    _try_route_lista,  # 7. Listas de servidores
+    _try_route_contratos_agregacao,  # 2. Rankings e totais de contratos
+    _try_route_contratos_lista,  # 3. Listas e detalhes de contratos
+    _try_route_licitacoes_agregacao,  # 4. Rankings e contagens de licitações
+    _try_route_planejamento_agregacao,  # 5. Totais e rankings de planejamento
+    _try_route_agregacao,  # 6. Rankings e contagens de servidores
+    _try_route_licitacoes_lista,  # 7. Listas e detalhes de licitações
+    _try_route_planejamento_saude_lista,  # 8. Listas de planejamento
+    _try_route_lista,  # 9. Listas de servidores
 )
 
 
@@ -159,6 +165,7 @@ __all__ = [
     "_extract_secretaria",
     "_normalize",
     "_try_route_agregacao",
+    "_try_route_contratos_agregacao",
     "_try_route_historico",
     "_try_route_lista",
     "_try_route_planejamento_agregacao",

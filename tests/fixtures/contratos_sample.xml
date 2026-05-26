@@ -1,0 +1,43 @@
+<Root>
+  <InstrumentoContratual>
+    <NumeroInstrumentoContratual>001/2025</NumeroInstrumentoContratual>
+    <NomeFornecedor>Fornecedor Alfa</NomeFornecedor>
+    <CNPJFornecedor>12.345.678/0001-99</CNPJFornecedor>
+    <ValorInstrumentoContratual>R$ 10.500,00</ValorInstrumentoContratual>
+    <DataEmissao>10/01/2025</DataEmissao>
+    <DataExpiracao>10/01/2026</DataExpiracao>
+    <TipoContrato>Prestacao de Servico</TipoContrato>
+    <UnidadeGestora>Secretaria de Saude</UnidadeGestora>
+    <Objeto>Locacao de estrutura para evento de saude</Objeto>
+    <DespesasOrcamentarias>
+      <DespesaOrcamentaria>
+        <DescricaoDespesa>Festividades e Homenagens</DescricaoDespesa>
+      </DespesaOrcamentaria>
+      <DespesaOrcamentaria>
+        <DescricaoDespesa>Festividades e Homenagens</DescricaoDespesa>
+      </DespesaOrcamentaria>
+    </DespesasOrcamentarias>
+  </InstrumentoContratual>
+  <InstrumentoContratual>
+    <NumeroInstrumentoContratual>002/2025</NumeroInstrumentoContratual>
+    <NomeFornecedor>Fornecedor Invalido</NomeFornecedor>
+    <CNPJFornecedor></CNPJFornecedor>
+    <ValorInstrumentoContratual>R$ 900,00</ValorInstrumentoContratual>
+    <DataEmissao>20/01/2025</DataEmissao>
+  </InstrumentoContratual>
+  <InstrumentoContratual>
+    <NumeroLicitatorio>003/2025</NumeroLicitatorio>
+    <NomeFornecedor>Fornecedor Beta</NomeFornecedor>
+    <CNPJFornecedor>98.765.432/0001-55</CNPJFornecedor>
+    <ValorInstrumentoContratual>R$ 2.350,75</ValorInstrumentoContratual>
+    <DataEmissao>2025-02-15</DataEmissao>
+    <TipoContrato></TipoContrato>
+    <UnidadeGestora></UnidadeGestora>
+    <Objeto>Aquisicao de insumos</Objeto>
+    <DespesasOrcamentarias>
+      <DespesaOrcamentaria>
+        <DescricaoDespesa>Outros Materiais de Consumo</DescricaoDespesa>
+      </DespesaOrcamentaria>
+    </DespesasOrcamentarias>
+  </InstrumentoContratual>
+</Root>

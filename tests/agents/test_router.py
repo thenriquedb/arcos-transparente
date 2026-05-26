@@ -8,6 +8,7 @@ from agents.router import (
     _extract_secretaria,
     _normalize,
     _try_route_agregacao,
+    _try_route_contratos_agregacao,
     _try_route_historico,
     _try_route_lista,
     _try_route_planejamento_agregacao,
@@ -128,19 +129,90 @@ from agents.router import (
         ),
         (
             "Quais contratos do festival gastronomico em 2025?",
-            "licitacoes",
+            "contratos",
             "consulta_lista",
-            "consultar_licitacoes",
+            "consultar_contratos",
             {
                 "filtros": {
-                    "objeto": "festival gastronomico",
-                    "data_abertura_inicio": "2025-01-01",
-                    "data_abertura_fim": "2025-12-31",
+                    "descricao": "festival gastronomico",
+                    "data_inicio_inicio": "2025-01-01",
+                    "data_inicio_fim": "2025-12-31",
                 },
-                "ordenar_por": "data_abertura",
+                "ordenar_por": "data_inicio",
                 "ordem": "desc",
                 "limite": 10,
-                "incluir_detalhes": True,
+            },
+        ),
+        (
+            "Quais contratos da saude?",
+            "contratos",
+            "consulta_lista",
+            "consultar_contratos",
+            {
+                "filtros": {"secretaria": "saude"},
+                "ordenar_por": "data_inicio",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Liste todos os contratos relacionados a Festividades e Homenagens",
+            "contratos",
+            "consulta_lista",
+            "consultar_contratos",
+            {
+                "filtros": {"descricao": "festividades e homenagens"},
+                "ordenar_por": "data_inicio",
+                "ordem": "desc",
+                "limite": 100,
+            },
+        ),
+        (
+            "Liste contratos do fornecedor Sigma 6",
+            "contratos",
+            "consulta_lista",
+            "consultar_contratos",
+            {
+                "filtros": {"fornecedor": "sigma 6"},
+                "ordenar_por": "data_inicio",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Qual o total contratado pela educacao?",
+            "contratos",
+            "agregacao_ranking",
+            "agregar_contratos",
+            {
+                "filtros": {"secretaria": "educacao"},
+                "metrica": "soma_valor",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Quais os maiores contratos de 2025?",
+            "contratos",
+            "consulta_lista",
+            "consultar_contratos",
+            {
+                "filtros": {
+                    "data_inicio_inicio": "2025-01-01",
+                    "data_inicio_fim": "2025-12-31",
+                },
+                "ordenar_por": "valor",
+                "ordem": "desc",
+                "limite": 10,
+                "campos": [
+                    "numero",
+                    "fornecedor",
+                    "valor",
+                    "secretaria",
+                    "data_inicio",
+                    "categoria",
+                ],
             },
         ),
         (
@@ -273,6 +345,22 @@ def test_try_route_agregacao_isolado_para_ranking() -> None:
     assert decision.tool_kwargs["ordem"] == "desc"
 
 
+def test_try_route_contratos_agregacao_isolado() -> None:
+    decision = _try_route_contratos_agregacao(
+        _normalize("Qual o total contratado pela educacao?")
+    )
+
+    assert decision is not None
+    assert decision.tool_name == "agregar_contratos"
+    assert decision.tool_kwargs == {
+        "filtros": {"secretaria": "educacao"},
+        "metrica": "soma_valor",
+        "ordenar_por": "metrica",
+        "ordem": "desc",
+        "limite": 10,
+    }
+
+
 def test_try_route_planejamento_agregacao_isolado_para_fumusa() -> None:
     decision = _try_route_planejamento_agregacao(
         _normalize("Foi planejado algum recurso para a fumusa?")
@@ -320,6 +408,13 @@ def test_route_user_query_restringe_licitacoes_por_tags() -> None:
     tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
 
     assert tool_names == ["consultar_licitacoes"]
+
+
+def test_route_user_query_restringe_contratos_por_tags() -> None:
+    tools = select_public_tools_for_query("Qual o total contratado pela educacao?")
+    tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
+
+    assert tool_names == ["agregar_contratos"]
 
 
 def test_route_user_query_restringe_planejamento_por_tags() -> None:

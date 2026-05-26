@@ -60,6 +60,7 @@ class Contrato(Base):
     categoria: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
     secretaria: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
     descricao: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    descricao_despesa: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     fornecedor_rel: Mapped[Optional["Fornecedor"]] = relationship(
         back_populates="contratos"

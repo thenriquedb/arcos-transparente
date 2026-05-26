@@ -3,53 +3,54 @@
 from __future__ import annotations
 
 import xml.etree.ElementTree as ET
-from decimal import Decimal
 from typing import Any
+
+from loguru import logger
+from pydantic import ValidationError
+
+from ingestion.schemas.contratos import ContratoInSchema
 
 
 class ContratosParser:
-    """Converte XML de contratos em lista de dicionários."""
+    """Converte XML de contratos em lista de dicionários validados."""
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
-        """Lê arquivo XML e retorna registros normalizados."""
+        """Lê arquivo XML e retorna registros normalizados com Pydantic."""
         tree = ET.parse(filepath)
         root = tree.getroot()
         registros: list[dict[str, Any]] = []
+        invalidos = 0
 
         for node in root.findall(".//InstrumentoContratual"):
-            numero = self._txt(node, "NumeroInstrumentoContratual") or self._txt(
-                node, "NumeroLicitatorio"
-            )
-            fornecedor = self._txt(node, "NomeFornecedor")
-            cnpj = self._txt(node, "CNPJFornecedor")
-            valor = self._money(node, "ValorInstrumentoContratual")
-            data_inicio = self._date(node, "DataEmissao")
-            data_fim = self._date(node, "DataExpiracao")
-            categoria = self._txt(node, "TipoContrato") or "nao_informado"
-            secretaria = self._txt(node, "UnidadeGestora") or "nao_informado"
-            descricao = self._txt(node, "Objeto")
+            payload_raw = {
+                "numero": self._txt(node, "NumeroInstrumentoContratual")
+                or self._txt(node, "NumeroLicitatorio"),
+                "fornecedor": self._txt(node, "NomeFornecedor"),
+                "cnpj": self._txt(node, "CNPJFornecedor"),
+                "valor": self._txt(node, "ValorInstrumentoContratual"),
+                "data_inicio": self._txt(node, "DataEmissao"),
+                "data_fim": self._txt(node, "DataExpiracao"),
+                "categoria": self._txt(node, "TipoContrato"),
+                "secretaria": self._txt(node, "UnidadeGestora"),
+                "descricao": self._txt(node, "Objeto"),
+                "descricao_despesa": self._join_unique_texts(
+                    node.findall(
+                        ".//DespesasOrcamentarias/DespesaOrcamentaria/DescricaoDespesa"
+                    )
+                ),
+            }
 
-            if (
-                not numero
-                or not fornecedor
-                or not cnpj
-                or valor is None
-                or not data_inicio
-            ):
+            try:
+                payload = ContratoInSchema.model_validate(payload_raw)
+            except ValidationError:
+                invalidos += 1
                 continue
 
-            registros.append(
-                {
-                    "numero": numero,
-                    "fornecedor": fornecedor,
-                    "cnpj": cnpj,
-                    "valor": valor,
-                    "data_inicio": data_inicio,
-                    "data_fim": data_fim,
-                    "categoria": categoria,
-                    "secretaria": secretaria,
-                    "descricao": descricao,
-                }
+            registros.append(payload.model_dump(mode="python"))
+
+        if invalidos:
+            logger.info(
+                f"Descartados {invalidos} registros invalidos de contratos em {filepath}"
             )
 
         return registros
@@ -62,21 +63,20 @@ class ContratosParser:
         value = child.text.strip()
         return value or None
 
-    def _money(self, node: ET.Element, tag: str) -> Decimal | None:
-        value = self._txt(node, tag)
-        if not value:
-            return None
-        normalized = value.replace("R$", "").replace(".", "").replace(",", ".").strip()
-        try:
-            return Decimal(normalized)
-        except Exception:
-            return None
+    @staticmethod
+    def _join_unique_texts(nodes: list[ET.Element]) -> str | None:
+        values: list[str] = []
+        seen: set[str] = set()
 
-    def _date(self, node: ET.Element, tag: str) -> str | None:
-        value = self._txt(node, tag)
-        if not value:
+        for node in nodes:
+            if node.text is None:
+                continue
+            value = node.text.strip()
+            if not value or value in seen:
+                continue
+            seen.add(value)
+            values.append(value)
+
+        if not values:
             return None
-        if "/" in value:
-            dd, mm, yyyy = value.split("/")
-            return f"{yyyy}-{mm}-{dd}"
-        return value
+        return " | ".join(values)

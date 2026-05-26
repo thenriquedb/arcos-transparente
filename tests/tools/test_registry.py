@@ -13,6 +13,8 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
     assert public_tool_names == {
         "consultar_servidores",
         "agregar_servidores",
+        "consultar_contratos",
+        "agregar_contratos",
         "consultar_licitacoes",
         "agregar_licitacoes",
         "consultar_planejamento",
@@ -27,6 +29,8 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
     assert tool_names == {
         "consultar_servidores",
         "agregar_servidores",
+        "consultar_contratos",
+        "agregar_contratos",
         "consultar_licitacoes",
         "agregar_licitacoes",
         "consultar_planejamento",
