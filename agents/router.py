@@ -34,6 +34,10 @@ from agents.routing.routes.planejamento import (
     _try_route_planejamento_agregacao,
     _try_route_planejamento_saude_lista,
 )
+from agents.routing.routes.receitas import (
+    _try_route_receitas_agregacao,
+    _try_route_receitas_lista,
+)
 from agents.routing.routes.servidores import _try_route_agregacao, _try_route_lista
 from agents.tools.registry import get_public_tools
 
@@ -46,10 +50,12 @@ ROUTE_PRIORITY_CHAIN = (
     _try_route_contratos_lista,  # 3. Listas e detalhes de contratos
     _try_route_licitacoes_agregacao,  # 4. Rankings e contagens de licitações
     _try_route_planejamento_agregacao,  # 5. Totais e rankings de planejamento
-    _try_route_agregacao,  # 6. Rankings e contagens de servidores
-    _try_route_licitacoes_lista,  # 7. Listas e detalhes de licitações
-    _try_route_planejamento_saude_lista,  # 8. Listas de planejamento
-    _try_route_lista,  # 9. Listas de servidores
+    _try_route_receitas_agregacao,  # 6. Totais e rankings de receitas
+    _try_route_agregacao,  # 7. Rankings e contagens de servidores
+    _try_route_licitacoes_lista,  # 8. Listas e detalhes de licitações
+    _try_route_planejamento_saude_lista,  # 9. Listas de planejamento
+    _try_route_receitas_lista,  # 10. Listas de receitas
+    _try_route_lista,  # 11. Listas de servidores
 )
 
 
@@ -93,7 +99,7 @@ def evaluate_query_guardrails(
             message=(
                 "Envie uma pergunta sobre os dados públicos municipais disponíveis "
                 "no sistema, como servidores, secretarias, salários-base ou "
-                "licitações ou planejamento."
+                "licitações, planejamento ou receitas."
             ),
         )
 
@@ -126,8 +132,8 @@ def evaluate_query_guardrails(
         message=(
             "Posso ajudar apenas com consultas aos dados públicos municipais "
             "disponíveis neste sistema, especialmente sobre servidores, "
-            "secretarias, salários-base, histórico de pagamentos, licitações "
-            "e planejamento."
+            "secretarias, salários-base, histórico de pagamentos, licitações, "
+            "planejamento e receitas."
         ),
     )
 
@@ -169,4 +175,5 @@ __all__ = [
     "_try_route_historico",
     "_try_route_lista",
     "_try_route_planejamento_agregacao",
+    "_try_route_receitas_agregacao",
 ]

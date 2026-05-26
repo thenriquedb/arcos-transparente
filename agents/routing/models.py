@@ -12,6 +12,7 @@ Domain = Literal[
     "contratos",
     "licitacoes",
     "planejamento",
+    "receitas",
     "desconhecido",
 ]
 OperationType = Literal[

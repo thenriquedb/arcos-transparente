@@ -16,6 +16,7 @@ from .constants import (
     PLANEJAMENTO_DIRECT_KEYWORDS,
     PLANEJAMENTO_ENTITY_HINT_KEYWORDS,
     PROMPT_INJECTION_PATTERNS,
+    RECEITAS_DOMAIN_KEYWORDS,
     SECRETARIAS_CONHECIDAS,
 )
 
@@ -40,6 +41,19 @@ PLANEJAMENTO_AREA_ALIASES = {
     "energia": ("energia",),
     "comercio e servicos": ("comercio", "servicos"),
 }
+
+RECEITAS_TEMA_ALIASES = (
+    "iptu",
+    "issqn",
+    "iss",
+    "itbi",
+    "ipva",
+    "fundeb",
+    "enfermagem",
+    "coleta de lixo",
+    "taxa de servicos",
+    "taxas",
+)
 
 
 def _normalize(text: str) -> str:
@@ -149,6 +163,12 @@ def _is_contratos_query(normalized_text: str) -> bool:
     return _contains_any(normalized_text, CONTRATOS_DOMAIN_KEYWORDS)
 
 
+def _is_receitas_query(normalized_text: str) -> bool:
+    """Heurística simples para identificar perguntas sobre receitas."""
+
+    return _contains_any(normalized_text, RECEITAS_DOMAIN_KEYWORDS)
+
+
 def _extract_licitacao_numero(normalized_text: str) -> str | None:
     """Extrai número de licitação quando a pergunta cita o identificador."""
 
@@ -197,6 +217,94 @@ def _extract_year(normalized_text: str) -> int | None:
     if match is None:
         return None
     return int(match.group(1))
+
+
+def _extract_receitas_tipo_de_dado(normalized_text: str) -> str:
+    """Escolhe entre arrecadação efetiva e valores apenas lançados."""
+
+    if any(
+        keyword in normalized_text
+        for keyword in (
+            "lancamento",
+            "lancamentos",
+            "lancado",
+            "lancada",
+            "lancou",
+            "divida ativa",
+            "cobranca judicial",
+        )
+    ):
+        return "lancamento"
+    return "arrecadacao"
+
+
+def _extract_receitas_unidade(normalized_text: str) -> str | None:
+    """Identifica a unidade responsável mais citada em perguntas de receitas."""
+
+    if "fumusa" in normalized_text or "fundacao" in normalized_text:
+        return "saude"
+    if "saude" in normalized_text:
+        return "saude"
+    if "prefeitura" in normalized_text:
+        return "prefeitura"
+    return None
+
+
+def _extract_receitas_tema(normalized_text: str) -> str | None:
+    """Extrai temas de receitas com alto valor prático para perguntas públicas."""
+
+    for alias in RECEITAS_TEMA_ALIASES:
+        if alias in normalized_text:
+            return alias
+    return None
+
+
+def _extract_receitas_filters_from_query(normalized_text: str) -> dict[str, Any]:
+    """Converte sinais do texto em filtros públicos da tool de receitas."""
+
+    filtros: dict[str, Any] = {
+        "tipo_de_dado": _extract_receitas_tipo_de_dado(normalized_text)
+    }
+
+    if year := _extract_year(normalized_text):
+        filtros["ano"] = year
+
+    if "primeiro trimestre" in normalized_text or "1 trimestre" in normalized_text:
+        filtros["mes_inicio"] = 1
+        filtros["mes_fim"] = 3
+    elif "segundo trimestre" in normalized_text or "2 trimestre" in normalized_text:
+        filtros["mes_inicio"] = 4
+        filtros["mes_fim"] = 6
+    elif "terceiro trimestre" in normalized_text or "3 trimestre" in normalized_text:
+        filtros["mes_inicio"] = 7
+        filtros["mes_fim"] = 9
+    elif "quarto trimestre" in normalized_text or "4 trimestre" in normalized_text:
+        filtros["mes_inicio"] = 10
+        filtros["mes_fim"] = 12
+
+    if unidade := _extract_receitas_unidade(normalized_text):
+        filtros["unidade_responsavel"] = unidade
+
+    if tema := _extract_receitas_tema(normalized_text):
+        filtros["tema"] = tema
+
+    return filtros
+
+
+def _extract_receitas_metric(normalized_text: str, tipo_de_dado: str) -> str:
+    """Seleciona a métrica compatível com o tipo de dado pedido."""
+
+    if any(keyword in normalized_text for keyword in ("quantos", "quantas")):
+        return "contagem"
+    if tipo_de_dado == "lancamento":
+        if "divida ativa" in normalized_text:
+            return "soma_valor_em_divida_ativa"
+        if "cobranca judicial" in normalized_text:
+            return "soma_valor_em_cobranca_judicial"
+        return "soma_valor_lancado"
+    if any(keyword in normalized_text for keyword in ("previsto", "previsao")):
+        return "soma_valor_previsto"
+    return "soma_valor_recebido"
 
 
 def _is_planejamento_query(normalized_text: str) -> bool:

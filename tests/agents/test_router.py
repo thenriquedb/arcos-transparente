@@ -12,6 +12,7 @@ from agents.router import (
     _try_route_historico,
     _try_route_lista,
     _try_route_planejamento_agregacao,
+    _try_route_receitas_agregacao,
     evaluate_query_guardrails,
     route_user_query,
     select_public_tools_for_query,
@@ -229,6 +230,81 @@ from agents.router import (
             },
         ),
         (
+            "Quanto foi arrecadado com IPTU em 2025?",
+            "receitas",
+            "agregacao_ranking",
+            "agregar_receitas",
+            {
+                "filtros": {
+                    "tipo_de_dado": "arrecadacao",
+                    "ano": 2025,
+                    "tema": "iptu",
+                },
+                "agrupar_por": None,
+                "metrica": "soma_valor_recebido",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Quanto foi lancado de ITBI em 2025?",
+            "receitas",
+            "agregacao_ranking",
+            "agregar_receitas",
+            {
+                "filtros": {
+                    "tipo_de_dado": "lancamento",
+                    "ano": 2025,
+                    "tema": "itbi",
+                },
+                "agrupar_por": None,
+                "metrica": "soma_valor_lancado",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Quais as 10 maiores receitas de 2025?",
+            "receitas",
+            "consulta_lista",
+            "consultar_receitas",
+            {
+                "filtros": {
+                    "tipo_de_dado": "arrecadacao",
+                    "ano": 2025,
+                },
+                "ordenar_por": "valor_recebido",
+                "ordem": "desc",
+                "limite": 10,
+                "campos": [
+                    "ano",
+                    "mes",
+                    "unidade_responsavel",
+                    "categoria",
+                    "valor_recebido",
+                    "origem_do_recurso",
+                ],
+            },
+        ),
+        (
+            "Liste receitas do FUNDEB em 2025",
+            "receitas",
+            "consulta_lista",
+            "consultar_receitas",
+            {
+                "filtros": {
+                    "tipo_de_dado": "arrecadacao",
+                    "ano": 2025,
+                    "tema": "fundeb",
+                },
+                "ordenar_por": "data",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
             "Quanto foi pago na saude em 2025?",
             "planejamento",
             "agregacao_ranking",
@@ -435,6 +511,27 @@ def test_try_route_planejamento_agregacao_isolado_para_fumusa() -> None:
     }
 
 
+def test_try_route_receitas_agregacao_isolado_para_iptu() -> None:
+    decision = _try_route_receitas_agregacao(
+        _normalize("Quanto foi arrecadado com IPTU em 2025?")
+    )
+
+    assert decision is not None
+    assert decision.tool_name == "agregar_receitas"
+    assert decision.tool_kwargs == {
+        "filtros": {
+            "tipo_de_dado": "arrecadacao",
+            "ano": 2025,
+            "tema": "iptu",
+        },
+        "agrupar_por": None,
+        "metrica": "soma_valor_recebido",
+        "ordenar_por": "metrica",
+        "ordem": "desc",
+        "limite": 10,
+    }
+
+
 def test_try_route_lista_isolado() -> None:
     decision = _try_route_lista(
         _normalize("lista de todos os funcionarios da educacao")
@@ -479,6 +576,13 @@ def test_route_user_query_restringe_planejamento_por_tags() -> None:
     tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
 
     assert tool_names == ["agregar_planejamento"]
+
+
+def test_route_user_query_restringe_receitas_por_tags() -> None:
+    tools = select_public_tools_for_query("Quanto foi arrecadado com IPTU em 2025?")
+    tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
+
+    assert tool_names == ["agregar_receitas"]
 
 
 def test_evaluate_query_guardrails_permitem_consulta_no_escopo() -> None:

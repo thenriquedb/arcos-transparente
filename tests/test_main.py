@@ -36,6 +36,7 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
     assert "consultar_servidores" in capturado["system_prompt"]
     assert "consultar_contratos" in capturado["system_prompt"]
     assert "valor_total_estimado" in capturado["system_prompt"]
+    assert "consultar_receitas" in capturado["system_prompt"]
     assert "consultar_planejamento" in capturado["system_prompt"]
     assert "planejamento da saúde e da prefeitura" in capturado["system_prompt"]
     assert nomes == {
@@ -45,6 +46,8 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
         "agregar_contratos",
         "consultar_licitacoes",
         "agregar_licitacoes",
+        "consultar_receitas",
+        "agregar_receitas",
         "consultar_planejamento",
         "agregar_planejamento",
         "buscar_historico_de_pagamentos_do_servidor",
@@ -116,6 +119,27 @@ def test_criar_agente_com_pergunta_de_contratos_restringe_toolset(monkeypatch) -
 
     assert resultado == "agente-fake"
     assert nomes == ["consultar_contratos"]
+
+
+def test_criar_agente_com_pergunta_de_receitas_restringe_toolset(monkeypatch) -> None:
+    capturado: dict[str, object] = {}
+
+    def fake_create_agent(*, tools, model, system_prompt):
+        capturado["tools"] = tools
+        capturado["model"] = model
+        capturado["system_prompt"] = system_prompt
+        return "agente-fake"
+
+    monkeypatch.setattr(main, "create_agent", fake_create_agent)
+    monkeypatch.setattr(main, "ChatOpenAI", lambda model: f"openai-model::{model}")
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+    resultado = main.criar_agente("Quanto foi arrecadado com IPTU em 2025?")
+
+    nomes = [_tool_name(tool_obj) for tool_obj in capturado["tools"]]
+
+    assert resultado == "agente-fake"
+    assert nomes == ["agregar_receitas"]
 
 
 def test_criar_agente_rejeita_provider_nao_suportado(monkeypatch) -> None:

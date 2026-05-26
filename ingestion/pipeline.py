@@ -729,22 +729,28 @@ class IngestionPipeline:
 
     def _arquivos_por_tipo(self, tipo: str, ano: Optional[int]) -> list[Path]:
         """Descobre arquivos de entrada por tipo e ano."""
+
+        administracao_path = self.data_dir / "administracao"
+        despesas_path = self.data_dir / "despesas"
+        receitas_path = self.data_dir / "receitas"
+        servidores_path = self.data_dir / "servidores"
+
         if tipo == "receitas":
-            arquivos = sorted(self.data_dir.rglob("*arrecadacao*.xml")) + sorted(
-                self.data_dir.rglob("*lancamento*.xml")
+            arquivos = sorted(receitas_path.rglob("*arrecadacao*.xml")) + sorted(
+                receitas_path.rglob("*lancamento*.xml")
             )
         elif tipo == "folha_pagamento":
-            arquivos = sorted(self.data_dir.rglob("*folha-pagamento*.xml"))
+            arquivos = sorted(servidores_path.rglob("*folha-pagamento*.xml"))
         elif tipo == "planejamentos":
-            arquivos = sorted(self.data_dir.rglob("*planejamento*.xml"))
+            arquivos = sorted(despesas_path.rglob("*planejamento*.xml"))
         elif tipo == "servidores":
-            arquivos = sorted(self.data_dir.rglob("*servidores*.xml"))
+            arquivos = sorted(servidores_path.rglob("*servidores*.xml"))
             if not arquivos:
-                arquivos = sorted(self.data_dir.rglob("*folha-pagamento*.xml"))
+                arquivos = sorted(servidores_path.rglob("*folha-pagamento*.xml"))
         elif tipo == "contratos":
-            arquivos = sorted(self.data_dir.rglob("*contrato*.xml"))
+            arquivos = sorted(administracao_path.rglob("*contrato*.xml"))
             if not arquivos:
-                arquivos = sorted(self.data_dir.rglob("*licitacoes*.xml"))
+                arquivos = sorted(administracao_path.rglob("*licitacoes*.xml"))
         else:
             arquivos = sorted(self.data_dir.rglob(f"*{tipo}*.xml"))
         if ano is None:
