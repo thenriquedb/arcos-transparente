@@ -85,6 +85,7 @@ class AgregarContratosParams(ContratosToolBaseSchema):
 
 class AgregarContratosMetadata(ContratosToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
+    filtros_fallback_aplicados: dict[str, Any] | None = None
     agrupar_por: str | None = None
     metrica: str
     ordenar_por: str

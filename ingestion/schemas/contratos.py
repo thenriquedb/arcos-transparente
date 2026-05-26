@@ -6,17 +6,100 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationError,
+    field_validator,
+    model_validator,
+)
 
-from shared.utils.validation import clean_text, parse_date, parse_decimal
+from shared.utils.validation import clean_text, parse_date, parse_decimal, parse_number
 
 
 class _ContratosBaseSchema(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
 
+class ContratoDespesaOrcamentariaInSchema(_ContratosBaseSchema):
+    unidade_gestora: str | None = None
+    exercicio: int | None = None
+    orgao: str | None = None
+    unidade: str | None = None
+    departamento: str | None = None
+    fonte_recurso: str | None = None
+    natureza_despesa_rubrica: str | None = None
+    descricao_despesa: str | None = None
+    valor_despesa: Decimal | None = None
+
+    @field_validator(
+        "unidade_gestora",
+        "orgao",
+        "unidade",
+        "departamento",
+        "fonte_recurso",
+        "natureza_despesa_rubrica",
+        "descricao_despesa",
+        mode="before",
+    )
+    @classmethod
+    def _normalize_text_fields(cls, value: Any) -> str | None:
+        return clean_text(value)
+
+    @field_validator("exercicio", mode="before")
+    @classmethod
+    def _normalize_exercicio(cls, value: Any) -> int | None:
+        cleaned = clean_text(value)
+        if cleaned is None:
+            return None
+        try:
+            return int(cleaned)
+        except ValueError as exc:
+            raise ValueError("exercicio invalido") from exc
+
+    @field_validator("valor_despesa", mode="before")
+    @classmethod
+    def _normalize_valor_despesa(cls, value: Any) -> Decimal | None:
+        return parse_decimal(value)
+
+
+class ContratoItemAdquiridoInSchema(_ContratosBaseSchema):
+    unidade_gestora: str | None = None
+    numero_lote: str | None = None
+    numero_item: str | None = None
+    identificacao: str | None = None
+    quantidade: Decimal | None = None
+    valor_unitario: Decimal | None = None
+    valor_total: Decimal | None = None
+
+    @field_validator(
+        "unidade_gestora",
+        "numero_lote",
+        "numero_item",
+        "identificacao",
+        mode="before",
+    )
+    @classmethod
+    def _normalize_text_fields(cls, value: Any) -> str | None:
+        return clean_text(value)
+
+    @field_validator("quantidade", mode="before")
+    @classmethod
+    def _normalize_quantidade(cls, value: Any) -> Decimal | None:
+        return parse_number(value)
+
+    @field_validator("valor_unitario", "valor_total", mode="before")
+    @classmethod
+    def _normalize_monetary_fields(cls, value: Any) -> Decimal | None:
+        return parse_decimal(value)
+
+
 class ContratoInSchema(_ContratosBaseSchema):
     numero: str
+    numero_licitatorio: str | None = None
+    numero_instrumento: str | None = None
+    tipo_instrumento_contratual: str | None = None
     fornecedor: str
     cnpj: str
     valor: Decimal
@@ -24,17 +107,28 @@ class ContratoInSchema(_ContratosBaseSchema):
     data_fim: date | None = None
     categoria: str | None = "nao_informado"
     secretaria: str | None = "nao_informado"
+    possui_aditivo: str | None = None
     descricao: str | None = None
     descricao_despesa: str | None = None
+    xml_original: str | None = None
+    despesas_orcamentarias: list[ContratoDespesaOrcamentariaInSchema] = Field(
+        default_factory=list
+    )
+    itens_adquiridos: list[ContratoItemAdquiridoInSchema] = Field(default_factory=list)
 
     @field_validator(
         "numero",
+        "numero_licitatorio",
+        "numero_instrumento",
+        "tipo_instrumento_contratual",
         "fornecedor",
         "cnpj",
         "categoria",
         "secretaria",
+        "possui_aditivo",
         "descricao",
         "descricao_despesa",
+        "xml_original",
         mode="before",
     )
     @classmethod
@@ -50,6 +144,46 @@ class ContratoInSchema(_ContratosBaseSchema):
     @classmethod
     def _normalize_datas(cls, value: Any) -> date | None:
         return parse_date(value)
+
+    @field_validator("despesas_orcamentarias", mode="before")
+    @classmethod
+    def _normalize_despesas(
+        cls,
+        value: Any,
+    ) -> list[ContratoDespesaOrcamentariaInSchema]:
+        if value is None:
+            return []
+        if not isinstance(value, list):
+            raise ValueError("despesas_orcamentarias deve ser uma lista")
+
+        despesas_validas: list[ContratoDespesaOrcamentariaInSchema] = []
+        for item in value:
+            try:
+                despesas_validas.append(
+                    ContratoDespesaOrcamentariaInSchema.model_validate(item)
+                )
+            except ValidationError:
+                continue
+        return despesas_validas
+
+    @field_validator("itens_adquiridos", mode="before")
+    @classmethod
+    def _normalize_itens(
+        cls,
+        value: Any,
+    ) -> list[ContratoItemAdquiridoInSchema]:
+        if value is None:
+            return []
+        if not isinstance(value, list):
+            raise ValueError("itens_adquiridos deve ser uma lista")
+
+        itens_validos: list[ContratoItemAdquiridoInSchema] = []
+        for item in value:
+            try:
+                itens_validos.append(ContratoItemAdquiridoInSchema.model_validate(item))
+            except ValidationError:
+                continue
+        return itens_validos
 
     @model_validator(mode="after")
     def _apply_defaults_and_validate(self) -> "ContratoInSchema":

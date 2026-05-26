@@ -79,6 +79,9 @@ Representa contratos administrativos importados do portal.
 Campos principais:
 
 - `numero`: número do contrato ou instrumento
+- `numero_licitatorio`: número da licitação de origem, quando existir
+- `numero_instrumento`: número específico do instrumento contratual
+- `tipo_instrumento_contratual`
 - `fornecedor`: nome textual do fornecedor como veio da origem
 - `cnpj`: documento textual do fornecedor
 - `fornecedor_id`: vínculo opcional com a tabela `fornecedores`
@@ -87,17 +90,66 @@ Campos principais:
 - `data_fim`
 - `categoria`
 - `secretaria`
+- `possui_aditivo`
 - `descricao`
+- `descricao_despesa`: resumo textual das classificações orçamentárias associadas
+- `xml_original`: XML bruto do `InstrumentoContratual` importado, preservado para auditoria
 
 Regras importantes:
 
 - unicidade por `numero + data_inicio`
 - índice composto para consultas por `secretaria + categoria + data_inicio`
+- índice composto para `numero_licitatorio + data_inicio`
 
 Observação:
 
 Mesmo mantendo `fornecedor` e `cnpj` textuais por rastreabilidade, a coluna `fornecedor_id`
 permite consultas transversais com licitações e outros domínios.
+
+O domínio de contratos também mantém tabelas filhas para preservar a granularidade do XML
+sem achatar a informação em uma única coluna.
+
+### `contrato_despesas_orcamentarias`
+
+Detalha as despesas orçamentárias vinculadas a cada contrato.
+
+Campos principais:
+
+- `contrato_id`
+- `ordem`: posição original do item no XML
+- `unidade_gestora`
+- `exercicio`
+- `orgao`
+- `unidade`
+- `departamento`
+- `fonte_recurso`
+- `natureza_despesa_rubrica`
+- `descricao_despesa`
+- `valor_despesa`
+
+Relacionamentos:
+
+- pertence a um `contrato`
+
+### `contrato_itens_adquiridos`
+
+Detalha os itens adquiridos vinculados a cada contrato.
+
+Campos principais:
+
+- `contrato_id`
+- `ordem`: posição original do item no XML
+- `unidade_gestora`
+- `numero_lote`
+- `numero_item`
+- `identificacao`
+- `quantidade`
+- `valor_unitario`
+- `valor_total`
+
+Relacionamentos:
+
+- pertence a um `contrato`
 
 ### `fornecedores`
 

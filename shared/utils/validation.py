@@ -45,6 +45,31 @@ def parse_decimal(value: Any) -> Decimal | None:
         raise ValueError("valor decimal invalido") from exc
 
 
+def parse_number(value: Any) -> Decimal | None:
+    """Converte numeros gerais preservando ponto decimal quando nao ha virgula."""
+
+    if value is None:
+        return None
+    if isinstance(value, Decimal):
+        return value
+    if isinstance(value, int):
+        return Decimal(value)
+    if isinstance(value, float):
+        return Decimal(str(value))
+
+    text = clean_text(value)
+    if text is None:
+        return None
+
+    normalized = text.replace(" ", "")
+    if "," in normalized:
+        normalized = normalized.replace(".", "").replace(",", ".")
+    try:
+        return Decimal(normalized)
+    except (InvalidOperation, ValueError) as exc:
+        raise ValueError("valor numerico invalido") from exc
+
+
 def parse_date(value: Any) -> date | None:
     """Converte datas em `dd/mm/yyyy`, ISO ou datetime para `date`."""
 

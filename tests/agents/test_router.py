@@ -156,6 +156,19 @@ from agents.router import (
             },
         ),
         (
+            "Detalhe o contrato numero 178/2025",
+            "contratos",
+            "consulta_lista",
+            "consultar_contratos",
+            {
+                "filtros": {"numero": "178/2025"},
+                "ordenar_por": "data_inicio",
+                "ordem": "desc",
+                "limite": 10,
+                "incluir_detalhes": True,
+            },
+        ),
+        (
             "Liste todos os contratos relacionados a Festividades e Homenagens",
             "contratos",
             "consulta_lista",

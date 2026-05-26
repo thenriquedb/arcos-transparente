@@ -45,6 +45,12 @@ ALLOWED_CONTRACT_SORT_FIELDS = (
 ALLOWED_GROUP_FIELDS = ("secretaria", "categoria", "fornecedor", "ano_inicio")
 ALLOWED_METRICS = ("contagem", "soma_valor", "media_valor")
 ALLOWED_ORDER_VALUES = ("asc", "desc")
+TEXT_FALLBACK_TARGETS = {
+    "fornecedor": ("descricao", "categoria", "secretaria"),
+    "descricao": ("fornecedor", "categoria", "secretaria"),
+    "categoria": ("descricao", "fornecedor", "secretaria"),
+    "secretaria": ("descricao", "categoria", "fornecedor"),
+}
 
 
 class ContratosFiltroSchema(ContratosToolBaseSchema):
@@ -112,17 +118,44 @@ class ContratosFiltroSchema(ContratosToolBaseSchema):
             raise ValueError("valor_min deve ser menor ou igual a valor_max")
         return self
 
-    def build_fornecedor_descricao_fallback(self) -> "ContratosFiltroSchema | None":
-        """Cria um filtro alternativo por descricao quando fornecedor nao encontra match."""
+    def build_text_fallback_candidates(
+        self,
+    ) -> list[tuple[str, "ContratosFiltroSchema"]]:
+        """
+        Monta filtros alternativos para um unico termo textual sem match.
 
-        if self.fornecedor is None or self.descricao is not None:
-            return None
-        return self.model_copy(
-            update={
-                "fornecedor": None,
-                "descricao": self.fornecedor,
-            }
-        )
+        A ideia aqui e ser conservador: so tentamos fallback quando ha um unico
+        filtro textual principal ativo. Isso evita combinar varios campos
+        alternativos ao mesmo tempo e devolver resultados confusos.
+        """
+
+        active_fields = [
+            field_name
+            for field_name in TEXT_FALLBACK_TARGETS
+            if getattr(self, field_name) is not None
+        ]
+        if len(active_fields) != 1:
+            return []
+
+        source_field = active_fields[0]
+        source_value = getattr(self, source_field)
+        if source_value is None:
+            return []
+
+        candidates: list[tuple[str, ContratosFiltroSchema]] = []
+        for target_field in TEXT_FALLBACK_TARGETS[source_field]:
+            candidates.append(
+                (
+                    target_field,
+                    self.model_copy(
+                        update={
+                            source_field: None,
+                            target_field: source_value,
+                        }
+                    ),
+                )
+            )
+        return candidates
 
     def to_metadata_dict(self) -> dict[str, Any]:
         return self.model_dump(mode="json", exclude_none=True)

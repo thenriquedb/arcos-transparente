@@ -6,7 +6,11 @@ from database.models.bidding import (
     MateriaInstrumento,
     VencedorLicitacao,
 )
-from database.models.contracts import Contrato
+from database.models.contracts import (
+    Contrato,
+    ContratoDespesaOrcamentaria,
+    ContratoItemAdquirido,
+)
 from database.models.fleet import FrotaDespesa, FrotaVeiculo
 from database.models.payroll import (
     FolhaCargo,
@@ -25,6 +29,8 @@ from database.models.server import Servidor
 __all__ = [
     "Base",
     "Contrato",
+    "ContratoDespesaOrcamentaria",
+    "ContratoItemAdquirido",
     "Licitacao",
     "Fornecedor",
     "VencedorLicitacao",

@@ -10,6 +10,8 @@ from sqlalchemy import and_, select
 
 from database.models import (
     Contrato,
+    ContratoDespesaOrcamentaria,
+    ContratoItemAdquirido,
     FolhaCargo,
     FolhaLotacao,
     FolhaPagamentoRegistro,
@@ -148,6 +150,11 @@ class IngestionPipeline:
                     )
                     payload = {
                         "numero": registro["numero"],
+                        "numero_licitatorio": registro.get("numero_licitatorio"),
+                        "numero_instrumento": registro.get("numero_instrumento"),
+                        "tipo_instrumento_contratual": registro.get(
+                            "tipo_instrumento_contratual"
+                        ),
                         "fornecedor": registro["fornecedor"],
                         "cnpj": registro["cnpj"],
                         "fornecedor_id": fornecedor.id,
@@ -156,8 +163,10 @@ class IngestionPipeline:
                         "data_fim": self._to_date(registro.get("data_fim")),
                         "categoria": registro["categoria"],
                         "secretaria": registro["secretaria"],
+                        "possui_aditivo": registro.get("possui_aditivo"),
                         "descricao": registro.get("descricao"),
                         "descricao_despesa": registro.get("descricao_despesa"),
+                        "xml_original": registro.get("xml_original"),
                     }
                     existente = session.execute(
                         select(Contrato).where(
@@ -168,9 +177,12 @@ class IngestionPipeline:
                         )
                     ).scalar_one_or_none()
                     if existente is None:
-                        session.add(Contrato(**payload))
+                        contrato = Contrato(**payload)
+                        session.add(contrato)
+                        session.flush()
                         resultado.inseridos += 1
                     else:
+                        contrato = existente
                         alterou = False
                         for campo, valor in payload.items():
                             if getattr(existente, campo) != valor:
@@ -180,6 +192,52 @@ class IngestionPipeline:
                             resultado.atualizados += 1
                         else:
                             resultado.ignorados += 1
+                        session.query(ContratoDespesaOrcamentaria).filter(
+                            ContratoDespesaOrcamentaria.contrato_id == contrato.id
+                        ).delete()
+                        session.query(ContratoItemAdquirido).filter(
+                            ContratoItemAdquirido.contrato_id == contrato.id
+                        ).delete()
+
+                    for ordem, despesa in enumerate(
+                        registro.get("despesas_orcamentarias", []),
+                        start=1,
+                    ):
+                        session.add(
+                            ContratoDespesaOrcamentaria(
+                                contrato_id=contrato.id,
+                                ordem=ordem,
+                                unidade_gestora=despesa.get("unidade_gestora"),
+                                exercicio=despesa.get("exercicio"),
+                                orgao=despesa.get("orgao"),
+                                unidade=despesa.get("unidade"),
+                                departamento=despesa.get("departamento"),
+                                fonte_recurso=despesa.get("fonte_recurso"),
+                                natureza_despesa_rubrica=despesa.get(
+                                    "natureza_despesa_rubrica"
+                                ),
+                                descricao_despesa=despesa.get("descricao_despesa"),
+                                valor_despesa=despesa.get("valor_despesa"),
+                            )
+                        )
+
+                    for ordem, item in enumerate(
+                        registro.get("itens_adquiridos", []),
+                        start=1,
+                    ):
+                        session.add(
+                            ContratoItemAdquirido(
+                                contrato_id=contrato.id,
+                                ordem=ordem,
+                                unidade_gestora=item.get("unidade_gestora"),
+                                numero_lote=item.get("numero_lote"),
+                                numero_item=item.get("numero_item"),
+                                identificacao=item.get("identificacao"),
+                                quantidade=item.get("quantidade"),
+                                valor_unitario=item.get("valor_unitario"),
+                                valor_total=item.get("valor_total"),
+                            )
+                        )
             except Exception:
                 session.rollback()
                 resultado.erros += 1

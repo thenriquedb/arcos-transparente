@@ -25,6 +25,7 @@ class ConsultarContratosParams(ContratosToolBaseSchema):
     limite: int = 10
     offset: int = 0
     campos: list[str] = Field(default_factory=list)
+    incluir_detalhes: bool = False
 
     @field_validator("filtros", mode="before")
     @classmethod
@@ -82,6 +83,7 @@ class ConsultarContratosMetadata(ContratosToolBaseSchema):
     ordem: str
     limite: int
     offset: int
+    incluir_detalhes: bool = False
     campos: list[str] = Field(default_factory=lambda: list(ALLOWED_CONTRACT_FIELDS))
 
 

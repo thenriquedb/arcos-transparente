@@ -276,6 +276,7 @@ def _build_contratos_filters_from_query(normalized_text: str) -> dict[str, Any]:
     filtros: dict[str, Any] = {}
     if numero := _extract_contrato_numero(normalized_text):
         filtros["numero"] = numero
+        return filtros
     if fornecedor := _extract_contrato_fornecedor(normalized_text):
         filtros["fornecedor"] = fornecedor
     if secretaria := _extract_secretaria(normalized_text):

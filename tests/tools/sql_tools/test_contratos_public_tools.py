@@ -8,7 +8,12 @@ from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.contratos as contratos_tools
 from database import session as session_manager
-from database.models import Base, Contrato
+from database.models import (
+    Base,
+    Contrato,
+    ContratoDespesaOrcamentaria,
+    ContratoItemAdquirido,
+)
 
 
 def _build_session():
@@ -102,9 +107,17 @@ def _contrato(
     secretaria: str,
     descricao: str,
     descricao_despesa: str | None = None,
+    numero_licitatorio: str | None = None,
+    numero_instrumento: str | None = None,
+    tipo_instrumento_contratual: str | None = None,
+    possui_aditivo: str | None = None,
+    xml_original: str | None = None,
 ) -> Contrato:
     return Contrato(
         numero=numero,
+        numero_licitatorio=numero_licitatorio,
+        numero_instrumento=numero_instrumento,
+        tipo_instrumento_contratual=tipo_instrumento_contratual,
         fornecedor=fornecedor,
         cnpj=cnpj,
         valor=valor,
@@ -112,8 +125,10 @@ def _contrato(
         data_fim=data_fim,
         categoria=categoria,
         secretaria=secretaria,
+        possui_aditivo=possui_aditivo,
         descricao=descricao,
         descricao_despesa=descricao_despesa,
+        xml_original=xml_original,
     )
 
 
@@ -298,6 +313,49 @@ def test_consultar_contratos_faz_fallback_de_fornecedor_para_descricao(
     session.close()
 
 
+def test_consultar_contratos_faz_fallback_de_fornecedor_para_categoria(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _contrato(
+                numero="070/2025",
+                fornecedor="Empresa Exemplo Ltda",
+                cnpj="11222333000144",
+                valor=8000,
+                data_inicio=date(2025, 5, 3),
+                data_fim=None,
+                categoria="Festas e Eventos",
+                secretaria="Prefeitura Municipal",
+                descricao="Apoio logistico",
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.consultar_contratos(
+        filtros={"fornecedor": "Festas e Eventos"},
+        campos=["numero", "categoria", "fornecedor"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "numero": "070/2025",
+            "categoria": "Festas e Eventos",
+            "fornecedor": "Empresa Exemplo Ltda",
+        }
+    ]
+    assert "categoria" in resultado["mensagem"]
+    assert resultado["metadata"]["filtros_fallback_aplicados"] == {
+        "categoria": "Festas e Eventos"
+    }
+
+    session.close()
+
+
 def test_consultar_contratos_busca_em_classificacao_da_despesa(monkeypatch) -> None:
     session = _build_session()
     session.add_all(
@@ -336,6 +394,151 @@ def test_consultar_contratos_busca_em_classificacao_da_despesa(monkeypatch) -> N
     session.close()
 
 
+def test_consultar_contratos_busca_numero_em_colunas_alternativas(monkeypatch) -> None:
+    session = _build_session()
+    session.add(
+        _contrato(
+            numero="178/2025",
+            numero_licitatorio="394/2025",
+            numero_instrumento="178/2025",
+            fornecedor="Fornecedor Numero Alternativo",
+            cnpj="23974941000121",
+            valor=143.0,
+            data_inicio=date(2025, 10, 15),
+            data_fim=date(2025, 12, 31),
+            categoria="Servico",
+            secretaria="Prefeitura Municipal",
+            descricao="Contrato de exemplo",
+        )
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.consultar_contratos(
+        filtros={"numero": "394/2025"},
+        campos=["numero", "fornecedor"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "numero": "178/2025",
+            "fornecedor": "Fornecedor Numero Alternativo",
+        }
+    ]
+
+    session.close()
+
+
+def test_consultar_contratos_busca_no_xml_original_como_ultimo_fallback(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add(
+        _contrato(
+            numero="090/2025",
+            fornecedor="Fornecedor XML",
+            cnpj="12345678000199",
+            valor=1000,
+            data_inicio=date(2025, 7, 1),
+            data_fim=None,
+            categoria="Servico",
+            secretaria="Prefeitura Municipal",
+            descricao="Servico comum",
+            xml_original=(
+                "<InstrumentoContratual>"
+                "<ObservacaoInterna>Projeto Aurora</ObservacaoInterna>"
+                "</InstrumentoContratual>"
+            ),
+        )
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.consultar_contratos(
+        filtros={"descricao": "Projeto Aurora"},
+        campos=["numero", "fornecedor"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "numero": "090/2025",
+            "fornecedor": "Fornecedor XML",
+        }
+    ]
+
+    session.close()
+
+
+def test_consultar_contratos_inclui_detalhes_quando_solicitado(monkeypatch) -> None:
+    session = _build_session()
+    contrato = _contrato(
+        numero="178/2025",
+        numero_licitatorio="394/2025",
+        numero_instrumento="178/2025",
+        tipo_instrumento_contratual="Contrato",
+        fornecedor="Luiz Fernando Carvalho Bravo",
+        cnpj="23974941000121",
+        valor=143.0,
+        data_inicio=date(2025, 10, 15),
+        data_fim=date(2025, 12, 31),
+        categoria="Servico",
+        secretaria="Prefeitura Municipal",
+        possui_aditivo="Nao",
+        descricao="Realizacao do Encontro Municipal dos Grupos de Convivencia de Idosos",
+        descricao_despesa="Festividades e Homenagens",
+    )
+    contrato.despesas_orcamentarias.append(
+        ContratoDespesaOrcamentaria(
+            ordem=1,
+            unidade_gestora="Prefeitura Municipal",
+            exercicio=2025,
+            orgao="Prefeitura Municipal",
+            unidade="Secretaria Mun. Desenv. e Int. Social",
+            fonte_recurso="Recursos nao Vinculados de Impostos",
+            natureza_despesa_rubrica="339039200000",
+            descricao_despesa="Festividades e Homenagens",
+            valor_despesa=69500,
+        )
+    )
+    contrato.itens_adquiridos.append(
+        ContratoItemAdquirido(
+            ordem=1,
+            unidade_gestora="Prefeitura Municipal",
+            numero_lote="2",
+            numero_item="1",
+            identificacao="Servico de decoracao",
+            quantidade=1,
+            valor_unitario=7724,
+            valor_total=7724,
+        )
+    )
+    session.add(contrato)
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.consultar_contratos(
+        filtros={"numero": "178/2025"},
+        incluir_detalhes=True,
+    )
+
+    assert resultado["total"] == 1
+    contrato_resultado = resultado["resultados"][0]
+    assert contrato_resultado["numero_licitatorio"] == "394/2025"
+    assert contrato_resultado["numero_instrumento"] == "178/2025"
+    assert contrato_resultado["tipo_do_instrumento"] == "Contrato"
+    assert contrato_resultado["possui_aditivo"] == "Nao"
+    assert contrato_resultado["total_despesas_orcamentarias"] == 1
+    assert contrato_resultado["despesas_orcamentarias"][0][
+        "classificacao_da_despesa"
+    ] == ("Festividades e Homenagens")
+    assert contrato_resultado["total_itens_adquiridos"] == 1
+    assert contrato_resultado["itens_adquiridos"][0]["numero_item"] == "1"
+
+    session.close()
+
+
 def test_consultar_contratos_nao_quebra_em_base_antiga_sem_descricao_despesa(
     monkeypatch,
 ) -> None:
@@ -355,10 +558,7 @@ def test_consultar_contratos_nao_quebra_em_base_antiga_sem_descricao_despesa(
         {"numero": "001/2025", "fornecedor": "Fornecedor Alfa"}
     ]
     assert resultado_por_classificacao["total"] == 0
-    assert (
-        "classificacao da despesa"
-        in resultado_por_classificacao["sugestao"].lower()
-    )
+    assert "classificacao da despesa" in resultado_por_classificacao["sugestao"].lower()
 
     session.close()
 
@@ -415,6 +615,51 @@ def test_agregar_contratos_soma_total_por_periodo(monkeypatch) -> None:
 
     assert resultado["total_grupos"] == 0
     assert resultado["valor_total"] == 15000.0
+
+    session.close()
+
+
+def test_agregar_contratos_faz_fallback_textual_para_categoria(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _contrato(
+                numero="001/2025",
+                fornecedor="Empresa X",
+                cnpj="123",
+                valor=10000,
+                data_inicio=date(2025, 1, 10),
+                data_fim=None,
+                categoria="Festas e Eventos",
+                secretaria="Secretaria de Cultura",
+                descricao="Apoio operacional",
+            ),
+            _contrato(
+                numero="002/2025",
+                fornecedor="Empresa Y",
+                cnpj="456",
+                valor=5000,
+                data_inicio=date(2025, 1, 12),
+                data_fim=None,
+                categoria="Festas e Eventos",
+                secretaria="Secretaria de Cultura",
+                descricao="Estrutura de palco",
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.agregar_contratos(
+        filtros={"fornecedor": "Festas e Eventos"},
+        metrica="contagem",
+    )
+
+    assert resultado["valor_total"] == 2
+    assert "categoria" in resultado["mensagem"]
+    assert resultado["metadata"]["filtros_fallback_aplicados"] == {
+        "categoria": "Festas e Eventos"
+    }
 
     session.close()
 

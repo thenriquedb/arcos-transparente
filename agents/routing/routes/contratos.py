@@ -125,6 +125,10 @@ def _try_route_contratos_lista(normalized_text: str) -> RouteDecision | None:
         keyword in normalized_text
         for keyword in ("lista", "liste", "quais", "detalhe", "mostre")
     ):
+        incluir_detalhes = any(
+            keyword in normalized_text
+            for keyword in ("detalhe", "detalhes", "completo", "completos")
+        )
         limite = (
             100
             if any(keyword in normalized_text for keyword in ("todas", "todos"))
@@ -139,6 +143,7 @@ def _try_route_contratos_lista(normalized_text: str) -> RouteDecision | None:
                 "ordenar_por": "data_inicio",
                 "ordem": "desc",
                 "limite": limite,
+                **({"incluir_detalhes": True} if incluir_detalhes else {}),
             },
             tags=["scope:public", "domain:contratos", "shape:lookup"],
             confident=True,

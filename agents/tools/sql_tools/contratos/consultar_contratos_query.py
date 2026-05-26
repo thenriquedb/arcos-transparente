@@ -9,7 +9,11 @@ from sqlalchemy import func, literal, select
 
 from agents.tools.registry import PUBLIC_SCOPE, register
 from database import session as session_manager
-from database.models import Contrato
+from database.models import (
+    Contrato,
+    ContratoDespesaOrcamentaria,
+    ContratoItemAdquirido,
+)
 
 from .consultar_contratos_schema import (
     ConsultarContratosMetadata,
@@ -19,10 +23,16 @@ from .consultar_contratos_schema import (
 from .shared.filters import ALLOWED_CONTRACT_FIELDS, ContratosFiltroSchema
 from .shared.querying import (
     apply_contratos_filters,
+    build_contrato_details_unavailable_message,
+    build_contract_fallback_message,
     build_descricao_despesa_unavailable_message,
+    contratos_supports_detalhes_completos,
     contratos_supports_descricao_despesa,
+    contratos_supports_xml_original,
+    get_contratos_available_columns,
     project_contrato_fields,
 )
+from .shared.runtime import serializar_contrato_despesa, serializar_contrato_item
 
 
 CONTRACT_ORDER_COLUMNS = {
@@ -42,14 +52,33 @@ def _fetch_contratos(
     filtros: ContratosFiltroSchema,
     *,
     include_descricao_despesa: bool,
+    include_xml_original: bool,
+    available_columns: set[str],
 ) -> tuple[int, list[dict[str, Any]]]:
     """Executa a consulta principal de contratos com os filtros informados."""
+
+    def _column_or_none(column_name: str, alias: str | None = None):
+        target_alias = alias or column_name
+        if column_name in available_columns:
+            return getattr(Contrato, column_name).label(target_alias)
+        return literal(None).label(target_alias)
 
     descricao_despesa_column = (
         Contrato.descricao_despesa.label("classificacao_da_despesa")
         if include_descricao_despesa
         else literal(None).label("classificacao_da_despesa")
     )
+    extra_columns = []
+    if params.incluir_detalhes:
+        extra_columns = [
+            _column_or_none("numero_licitatorio"),
+            _column_or_none("numero_instrumento"),
+            _column_or_none(
+                "tipo_instrumento_contratual",
+                alias="tipo_do_instrumento",
+            ),
+            _column_or_none("possui_aditivo"),
+        ]
     base_stmt = apply_contratos_filters(
         select(
             Contrato.id.label("id"),
@@ -63,9 +92,12 @@ def _fetch_contratos(
             Contrato.secretaria.label("secretaria"),
             Contrato.descricao.label("descricao"),
             descricao_despesa_column,
+            *extra_columns,
         ),
         filtros,
         include_descricao_despesa=include_descricao_despesa,
+        include_xml_original=include_xml_original,
+        available_columns=available_columns,
     )
     total = session.execute(
         select(func.count()).select_from(base_stmt.order_by(None).subquery())
@@ -85,6 +117,127 @@ def _fetch_contratos(
     return total, contratos
 
 
+def _attach_contract_details(
+    session,
+    contratos: list[dict[str, Any]],
+    *,
+    details_available: bool,
+) -> list[dict[str, Any]]:
+    """Acopla despesas e itens adquiridos ao payload quando solicitado."""
+
+    if not contratos:
+        return contratos
+
+    if not details_available:
+        for contrato in contratos:
+            contrato.update(
+                {
+                    "total_despesas_orcamentarias": 0,
+                    "despesas_orcamentarias": [],
+                    "total_itens_adquiridos": 0,
+                    "itens_adquiridos": [],
+                }
+            )
+        return contratos
+
+    contrato_ids = [contrato["id"] for contrato in contratos]
+    despesas_rows = (
+        session.execute(
+            select(ContratoDespesaOrcamentaria)
+            .where(ContratoDespesaOrcamentaria.contrato_id.in_(contrato_ids))
+            .order_by(
+                ContratoDespesaOrcamentaria.contrato_id.asc(),
+                ContratoDespesaOrcamentaria.ordem.asc(),
+            )
+        )
+        .scalars()
+        .all()
+    )
+    itens_rows = (
+        session.execute(
+            select(ContratoItemAdquirido)
+            .where(ContratoItemAdquirido.contrato_id.in_(contrato_ids))
+            .order_by(
+                ContratoItemAdquirido.contrato_id.asc(),
+                ContratoItemAdquirido.ordem.asc(),
+            )
+        )
+        .scalars()
+        .all()
+    )
+
+    despesas_por_contrato: dict[int, list[dict[str, Any]]] = {}
+    for despesa in despesas_rows:
+        despesas_por_contrato.setdefault(despesa.contrato_id, []).append(
+            serializar_contrato_despesa(despesa)
+        )
+
+    itens_por_contrato: dict[int, list[dict[str, Any]]] = {}
+    for item in itens_rows:
+        itens_por_contrato.setdefault(item.contrato_id, []).append(
+            serializar_contrato_item(item)
+        )
+
+    for contrato in contratos:
+        despesas = despesas_por_contrato.get(contrato["id"], [])
+        itens = itens_por_contrato.get(contrato["id"], [])
+        contrato.update(
+            {
+                "total_despesas_orcamentarias": len(despesas),
+                "despesas_orcamentarias": despesas,
+                "total_itens_adquiridos": len(itens),
+                "itens_adquiridos": itens,
+            }
+        )
+    return contratos
+
+
+def _execute_fallback_candidates(
+    session,
+    params: ConsultarContratosParams,
+    *,
+    include_descricao_despesa: bool,
+    include_xml_original: bool,
+    available_columns: set[str],
+) -> tuple[ContratosFiltroSchema, int, list[dict[str, Any]], str, str] | None:
+    """
+    Tenta filtros alternativos em colunas semanticamente proximas.
+
+    O primeiro fallback com resultado e usado. Isso deixa o comportamento
+    previsivel e evita mesclar registros de varias estrategias diferentes.
+    """
+
+    source_field = next(
+        (
+            field_name
+            for field_name in ("fornecedor", "descricao", "categoria", "secretaria")
+            if getattr(params.filtros, field_name) is not None
+        ),
+        "",
+    )
+    for (
+        target_field,
+        fallback_filters,
+    ) in params.filtros.build_text_fallback_candidates():
+        fallback_total, fallback_contratos = _fetch_contratos(
+            session,
+            params,
+            fallback_filters,
+            include_descricao_despesa=include_descricao_despesa,
+            include_xml_original=include_xml_original,
+            available_columns=available_columns,
+        )
+        if fallback_total > 0:
+            return (
+                fallback_filters,
+                fallback_total,
+                fallback_contratos,
+                source_field,
+                target_field,
+            )
+    return None
+
+
 @register(
     name="consultar_contratos",
     scope=PUBLIC_SCOPE,
@@ -97,6 +250,7 @@ def consultar_contratos(
     limite: int = 10,
     offset: int = 0,
     campos: list[str] | None = None,
+    incluir_detalhes: bool = False,
 ) -> dict[str, Any]:
     """
     Consulta contratos por filtros, ordenacao e campos de retorno.
@@ -113,6 +267,7 @@ def consultar_contratos(
                 "limite": limite,
                 "offset": offset,
                 "campos": campos,
+                "incluir_detalhes": incluir_detalhes,
             }
         )
     except ValidationError as exc:
@@ -130,29 +285,47 @@ def consultar_contratos(
         ).model_dump(mode="json")
 
     with session_manager.get_session() as session:
+        available_columns = get_contratos_available_columns(session)
         include_descricao_despesa = contratos_supports_descricao_despesa(session)
+        include_xml_original = contratos_supports_xml_original(session)
+        details_available = contratos_supports_detalhes_completos(session)
         filtros_execucao = params.filtros
         total, contratos = _fetch_contratos(
             session,
             params,
             filtros_execucao,
             include_descricao_despesa=include_descricao_despesa,
+            include_xml_original=include_xml_original,
+            available_columns=available_columns,
         )
-        fallback_filters = params.filtros.build_fornecedor_descricao_fallback()
         fallback_aplicado = False
+        fallback_source_field = ""
+        fallback_target_field = ""
 
-        if total == 0 and fallback_filters is not None:
-            fallback_total, fallback_contratos = _fetch_contratos(
+        if total == 0:
+            fallback_result = _execute_fallback_candidates(
                 session,
                 params,
-                fallback_filters,
                 include_descricao_despesa=include_descricao_despesa,
+                include_xml_original=include_xml_original,
+                available_columns=available_columns,
             )
-            if fallback_total > 0:
-                filtros_execucao = fallback_filters
-                total = fallback_total
-                contratos = fallback_contratos
+            if fallback_result is not None:
+                (
+                    filtros_execucao,
+                    total,
+                    contratos,
+                    fallback_source_field,
+                    fallback_target_field,
+                ) = fallback_result
                 fallback_aplicado = True
+
+        if params.incluir_detalhes:
+            contratos = _attach_contract_details(
+                session,
+                contratos,
+                details_available=details_available,
+            )
 
     metadata = ConsultarContratosMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -163,6 +336,7 @@ def consultar_contratos(
         ordem=params.ordem,
         limite=params.limite,
         offset=params.offset,
+        incluir_detalhes=params.incluir_detalhes,
         campos=params.campos or list(ALLOWED_CONTRACT_FIELDS),
     )
 
@@ -170,9 +344,10 @@ def consultar_contratos(
         sugestao = "Nenhum contrato encontrado com os filtros informados."
         if not include_descricao_despesa:
             sugestao = (
-                build_descricao_despesa_unavailable_message(params.filtros)
-                or sugestao
+                build_descricao_despesa_unavailable_message(params.filtros) or sugestao
             )
+        if params.incluir_detalhes and not details_available:
+            sugestao = build_contrato_details_unavailable_message()
         return ConsultarContratosResponse(
             total=0,
             resultados=[],
@@ -188,10 +363,14 @@ def consultar_contratos(
         warning = build_descricao_despesa_unavailable_message(params.filtros)
         if warning is not None:
             mensagens.append(warning)
+    if params.incluir_detalhes and not details_available:
+        mensagens.append(build_contrato_details_unavailable_message())
     if fallback_aplicado:
         mensagens.append(
-            "Nenhum contrato foi encontrado pelo fornecedor informado. "
-            "Exibindo contratos relacionados pela descricao."
+            build_contract_fallback_message(
+                fallback_source_field,
+                fallback_target_field,
+            )
         )
     if total > len(resultados):
         mensagens.append(

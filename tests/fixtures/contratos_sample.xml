@@ -1,5 +1,7 @@
 <Root>
   <InstrumentoContratual>
+    <NumeroLicitatorio>123/2025</NumeroLicitatorio>
+    <TipoInstrumentoContratual>Contrato</TipoInstrumentoContratual>
     <NumeroInstrumentoContratual>001/2025</NumeroInstrumentoContratual>
     <NomeFornecedor>Fornecedor Alfa</NomeFornecedor>
     <CNPJFornecedor>12.345.678/0001-99</CNPJFornecedor>
@@ -8,15 +10,34 @@
     <DataExpiracao>10/01/2026</DataExpiracao>
     <TipoContrato>Prestacao de Servico</TipoContrato>
     <UnidadeGestora>Secretaria de Saude</UnidadeGestora>
+    <PossuiAditivo>Nao</PossuiAditivo>
     <Objeto>Locacao de estrutura para evento de saude</Objeto>
     <DespesasOrcamentarias>
       <DespesaOrcamentaria>
+        <UnidadeGestora>Secretaria de Saude</UnidadeGestora>
+        <Exercicio>2025</Exercicio>
+        <Orgao>Prefeitura Municipal</Orgao>
+        <Unidade>Secretaria de Saude</Unidade>
+        <FonteRecurso>Recursos Proprios</FonteRecurso>
+        <NaturezaDespesaRubrica>339039200000</NaturezaDespesaRubrica>
         <DescricaoDespesa>Festividades e Homenagens</DescricaoDespesa>
+        <ValorDespesa>R$ 7.500,00</ValorDespesa>
       </DespesaOrcamentaria>
       <DespesaOrcamentaria>
         <DescricaoDespesa>Festividades e Homenagens</DescricaoDespesa>
       </DespesaOrcamentaria>
     </DespesasOrcamentarias>
+    <ItensAdquiridos>
+      <Item>
+        <UnidadeGestora>Secretaria de Saude</UnidadeGestora>
+        <NumeroLote>1</NumeroLote>
+        <NumeroItem>2</NumeroItem>
+        <Identificacao>Estrutura de evento</Identificacao>
+        <Quantidade>2.0000</Quantidade>
+        <ValorUnitario>R$ 5.250,00</ValorUnitario>
+        <ValorTotal>R$ 10.500,00</ValorTotal>
+      </Item>
+    </ItensAdquiridos>
   </InstrumentoContratual>
   <InstrumentoContratual>
     <NumeroInstrumentoContratual>002/2025</NumeroInstrumentoContratual>
@@ -27,6 +48,7 @@
   </InstrumentoContratual>
   <InstrumentoContratual>
     <NumeroLicitatorio>003/2025</NumeroLicitatorio>
+    <TipoInstrumentoContratual>Ata</TipoInstrumentoContratual>
     <NomeFornecedor>Fornecedor Beta</NomeFornecedor>
     <CNPJFornecedor>98.765.432/0001-55</CNPJFornecedor>
     <ValorInstrumentoContratual>R$ 2.350,75</ValorInstrumentoContratual>
@@ -39,5 +61,15 @@
         <DescricaoDespesa>Outros Materiais de Consumo</DescricaoDespesa>
       </DespesaOrcamentaria>
     </DespesasOrcamentarias>
+    <ItensAdquiridos>
+      <Item>
+        <NumeroLote>3</NumeroLote>
+        <NumeroItem>1</NumeroItem>
+        <Identificacao>Caixa de insumos</Identificacao>
+        <Quantidade>1.0000</Quantidade>
+        <ValorUnitario>R$ 2.350,75</ValorUnitario>
+        <ValorTotal>R$ 2.350,75</ValorTotal>
+      </Item>
+    </ItensAdquiridos>
   </InstrumentoContratual>
 </Root>

@@ -212,6 +212,15 @@ Serve para:
 - filtros por periodo e faixa de valor
 - ranking simples por valor
 - selecao de campos publicos em linguagem clara
+- detalhes completos do contrato quando `incluir_detalhes=True`
+- fallback conservador para outras colunas semanticas quando o termo principal nao encontra match
+
+Observacao importante:
+
+No banco, o dominio de contratos agora preserva tanto os campos normalizados quanto o
+`xml_original` de cada `InstrumentoContratual`. Isso reduz risco de divergencia entre o
+portal de origem e o SQL, porque o payload bruto continua auditavel mesmo quando surgirem
+novos campos ainda nao expostos nas tools.
 
 #### `agregar_contratos`
 
