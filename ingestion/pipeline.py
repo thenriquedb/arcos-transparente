@@ -736,7 +736,7 @@ class IngestionPipeline:
         elif tipo == "folha_pagamento":
             arquivos = sorted(self.data_dir.rglob("*folha-pagamento*.xml"))
         elif tipo == "planejamentos":
-            arquivos = sorted(self.data_dir.rglob("*planejamento-saude*.xml"))
+            arquivos = sorted(self.data_dir.rglob("*planejamento*.xml"))
         elif tipo == "servidores":
             arquivos = sorted(self.data_dir.rglob("*servidores*.xml"))
             if not arquivos:

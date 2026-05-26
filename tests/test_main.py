@@ -37,6 +37,7 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
     assert "consultar_contratos" in capturado["system_prompt"]
     assert "valor_total_estimado" in capturado["system_prompt"]
     assert "consultar_planejamento" in capturado["system_prompt"]
+    assert "planejamento da saúde e da prefeitura" in capturado["system_prompt"]
     assert nomes == {
         "consultar_servidores",
         "agregar_servidores",

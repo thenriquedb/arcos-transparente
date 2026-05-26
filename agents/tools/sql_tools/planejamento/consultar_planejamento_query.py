@@ -38,7 +38,8 @@ def consultar_planejamento(
     """
     Consulta linhas do planejamento orcamentario por filtros e ordenacao.
 
-    Nesta fase, o filtro padrao `origem=saude` usa o planejamento da saude.
+    O filtro `origem` suporta ao menos `saude` e `prefeitura`.
+    Se `origem` nao for informado, o padrao continua sendo `saude`.
     Use para listar acoes, programas, grupos de gasto e valores mensais.
     """
     try:

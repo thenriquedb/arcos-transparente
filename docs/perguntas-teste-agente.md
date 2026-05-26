@@ -105,9 +105,9 @@ Comportamento esperado:
 
 ---
 
-## Planejamento da Saúde
+## Planejamento
 
-Perguntas para validar consultas e agregações sobre o planejamento orçamentário da saúde.
+Perguntas para validar consultas e agregações sobre o planejamento orçamentário da saúde e da prefeitura.
 
 - Quanto foi planejado para a saúde em 2025?
 - Quanto foi pago na saúde em 2025?
@@ -119,13 +119,17 @@ Perguntas para validar consultas e agregações sobre o planejamento orçamentá
 - Qual grupo de gasto teve maior valor pago na saúde?
 - Quanto foi comprometido na saúde em 2025?
 - Quanto foi confirmado/liquidado na saúde em 2025?
+- Quanto foi pago na prefeitura em 2025?
+- Quanto foi pago na educação em 2025?
+- Liste o planejamento da prefeitura em 2025.
+- Quais ações da prefeitura tiveram maior orçamento em 2025?
 
 Comportamento esperado:
 
 - usar `agregar_planejamento` para totais, rankings e perguntas com "quanto"
 - usar `consultar_planejamento` para listas de ações, programas e linhas mensais
 - explicar que `valor_comprometido` vem de empenhado, `valor_confirmado` vem de liquidado e `valor_pago` vem do campo pago
-- lembrar que, nesta fase, o domínio de planejamento começa pelo arquivo de saúde
+- diferenciar `origem=saude` e `origem=prefeitura` conforme a pergunta
 
 ---
 

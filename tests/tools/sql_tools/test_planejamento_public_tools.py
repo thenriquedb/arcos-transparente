@@ -40,20 +40,22 @@ def _planejamento(
     grupo: str,
     orcamento_atualizado: Decimal,
     valor_pago: Decimal,
+    origem: str = "saude",
+    funcao: str = "Saúde",
     unidade_gestora: str = "FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS",
     orgao: str = "FUNDAÇÃO M. SAÚDE",
     unidade: str = "FUNDAÇÃO M. SAÚDE",
     programa: str = "Promoção das Ações de Saúde - FUMUSA",
 ) -> PlanejamentoDespesa:
     return PlanejamentoDespesa(
-        origem="saude",
+        origem=origem,
         exercicio=2025,
         mes=mes,
         mes_num=mes_num,
         unidade_gestora=unidade_gestora,
         orgao=orgao,
         unidade=unidade,
-        funcao="Saúde",
+        funcao=funcao,
         subfuncao=subfuncao,
         programa=programa,
         tipo_acao="Atividade",
@@ -231,3 +233,120 @@ def test_agregar_planejamento_valida_periodo_de_mes_invalido() -> None:
 
     assert resultado["total_grupos"] == 0
     assert "Parametros invalidos" in resultado["mensagem"]
+
+
+def test_consultar_planejamento_suporta_prefeitura_por_origem_e_area(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _planejamento(
+                origem="prefeitura",
+                funcao="Educação",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="PREFEITURA MUNICIPAL",
+                unidade="SECRETARIA MUNICIPAL DE EDUCACAO",
+                programa="Apoio a Manutencao do Ensino",
+                mes="ABRIL",
+                mes_num=4,
+                subfuncao="Administração Geral",
+                acao="Manutenção das Atividades da Secretaria de Educação",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("25000.00"),
+                valor_pago=Decimal("2345.67"),
+            ),
+            _planejamento(
+                origem="saude",
+                funcao="Saúde",
+                mes="ABRIL",
+                mes_num=4,
+                subfuncao="Atenção Básica",
+                acao="Manutenção da Atenção Primária à Saúde",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("150000.00"),
+                valor_pago=Decimal("9277.07"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"origem": "prefeitura", "ano": 2025, "area": "educacao"},
+        campos=["origem", "area", "acao", "valor_pago"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "origem": "prefeitura",
+            "area": "Educação",
+            "acao": "Manutenção das Atividades da Secretaria de Educação",
+            "valor_pago": 2345.67,
+        }
+    ]
+
+    session.close()
+
+
+def test_agregar_planejamento_suporta_prefeitura_por_origem(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _planejamento(
+                origem="prefeitura",
+                funcao="Educação",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="PREFEITURA MUNICIPAL",
+                unidade="SECRETARIA MUNICIPAL DE EDUCACAO",
+                programa="Apoio a Manutencao do Ensino",
+                mes="ABRIL",
+                mes_num=4,
+                subfuncao="Administração Geral",
+                acao="Manutenção das Atividades da Secretaria de Educação",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("25000.00"),
+                valor_pago=Decimal("2345.67"),
+            ),
+            _planejamento(
+                origem="prefeitura",
+                funcao="Educação",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="PREFEITURA MUNICIPAL",
+                unidade="SECRETARIA MUNICIPAL DE EDUCACAO",
+                programa="Apoio a Manutencao do Ensino",
+                mes="MAIO",
+                mes_num=5,
+                subfuncao="Ensino Fundamental",
+                acao="Manutenção do Ensino Fundamental",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("30000.00"),
+                valor_pago=Decimal("5000.00"),
+            ),
+            _planejamento(
+                origem="saude",
+                funcao="Saúde",
+                mes="MAIO",
+                mes_num=5,
+                subfuncao="Atenção Básica",
+                acao="Manutenção da Atenção Primária à Saúde",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("100000.00"),
+                valor_pago=Decimal("6000.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.agregar_planejamento(
+        filtros={"origem": "prefeitura", "ano": 2025},
+        metrica="soma_valor_pago",
+    )
+
+    assert resultado["valor_total"] == 7345.67
+
+    session.close()

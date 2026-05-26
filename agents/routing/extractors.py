@@ -20,6 +20,28 @@ from .constants import (
 )
 
 
+PLANEJAMENTO_AREA_ALIASES = {
+    "saude": ("saude",),
+    "educacao": ("educacao",),
+    "assistencia social": ("assistencia social", "assistencia"),
+    "administracao": ("administracao",),
+    "transporte": ("transporte",),
+    "cultura": ("cultura",),
+    "desporto e lazer": ("desporto", "esporte", "lazer"),
+    "seguranca publica": ("seguranca publica", "seguranca"),
+    "gestao ambiental": ("meio ambiente", "ambiental", "gestao ambiental"),
+    "saneamento": ("saneamento",),
+    "agricultura": ("agricultura",),
+    "judiciaria": ("judiciaria", "juridica", "procuradoria"),
+    "legislativa": ("legislativa", "camara", "legislativo"),
+    "direitos da cidadania": ("cidadania",),
+    "habitacao": ("habitacao",),
+    "trabalho": ("trabalho",),
+    "energia": ("energia",),
+    "comercio e servicos": ("comercio", "servicos"),
+}
+
+
 def _normalize(text: str) -> str:
     """Remove acentos e normaliza caixa para simplificar match por texto."""
 
@@ -34,6 +56,18 @@ def _contains_any(normalized_text: str, keywords: tuple[str, ...]) -> bool:
     """Retorna True quando qualquer palavra-chave aparece no texto normalizado."""
 
     return any(keyword in normalized_text for keyword in keywords)
+
+
+def _contains_term(normalized_text: str, term: str) -> bool:
+    """Faz match por termo completo para evitar falsos positivos por substring."""
+
+    return re.search(rf"\b{re.escape(term)}\b", normalized_text) is not None
+
+
+def _contains_any_term(normalized_text: str, terms: tuple[str, ...]) -> bool:
+    """Versão por termo completo de `_contains_any`."""
+
+    return any(_contains_term(normalized_text, term) for term in terms)
 
 
 def _extract_limit(normalized_text: str, default: int = 10) -> int:
@@ -92,6 +126,15 @@ def _extract_planejamento_entidade(normalized_text: str) -> str | None:
     """Reconhece entidades de planejamento já conhecidas, como `fumusa`."""
 
     return extract_planejamento_entidade_alias(normalized_text)
+
+
+def _extract_planejamento_area(normalized_text: str) -> str | None:
+    """Mapeia termos comuns do usuário para as funções reais do planejamento."""
+
+    for area, aliases in PLANEJAMENTO_AREA_ALIASES.items():
+        if any(alias in normalized_text for alias in aliases):
+            return area
+    return None
 
 
 def _is_licitacoes_query(normalized_text: str) -> bool:
@@ -159,12 +202,18 @@ def _extract_year(normalized_text: str) -> int | None:
 def _is_planejamento_query(normalized_text: str) -> bool:
     """Detecta perguntas de planejamento por termos explícitos ou entidades."""
 
-    if _contains_any(normalized_text, PLANEJAMENTO_DIRECT_KEYWORDS):
+    if _contains_any_term(normalized_text, PLANEJAMENTO_DIRECT_KEYWORDS):
         return True
 
-    if _extract_planejamento_entidade(normalized_text) and _contains_any(
+    if _extract_planejamento_entidade(normalized_text) and _contains_any_term(
         normalized_text,
         PLANEJAMENTO_ENTITY_HINT_KEYWORDS,
+    ):
+        return True
+    if _contains_any_term(normalized_text, PLANEJAMENTO_ENTITY_HINT_KEYWORDS) and (
+        "prefeitura" in normalized_text
+        or _extract_planejamento_area(normalized_text) is not None
+        or _extract_secretaria(normalized_text) is not None
     ):
         return True
 
@@ -177,8 +226,21 @@ def _is_planejamento_query(normalized_text: str) -> bool:
 def _extract_planejamento_filters_from_query(normalized_text: str) -> dict[str, Any]:
     """Converte sinais do texto em filtros públicos da tool de planejamento."""
 
-    filtros: dict[str, Any] = {"origem": "saude"}
     entidade = _extract_planejamento_entidade(normalized_text)
+    area = _extract_planejamento_area(normalized_text)
+    secretaria = _extract_secretaria(normalized_text)
+
+    origem = "saude"
+    if entidade is not None:
+        origem = "saude"
+    elif "prefeitura" in normalized_text:
+        origem = "prefeitura"
+    elif area is not None and area != "saude":
+        origem = "prefeitura"
+    elif secretaria is not None and secretaria != "saude":
+        origem = "prefeitura"
+
+    filtros: dict[str, Any] = {"origem": origem}
 
     if year := _extract_year(normalized_text):
         filtros["ano"] = year
@@ -200,8 +262,11 @@ def _extract_planejamento_filters_from_query(normalized_text: str) -> dict[str, 
     if entidade is not None:
         filtros["entidade"] = entidade
 
-    # Quando a pergunta cita saúde de forma ampla, restringimos a área.
-    if "saude" in normalized_text and entidade is None:
+    if area is not None and entidade is None:
+        filtros["area"] = area
+    elif origem == "prefeitura" and secretaria is not None and secretaria != "saude":
+        filtros["entidade"] = secretaria
+    elif "saude" in normalized_text and entidade is None:
         filtros["area"] = "saude"
 
     return filtros

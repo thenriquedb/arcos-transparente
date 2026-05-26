@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from agents.routing.extractors import (
+    _contains_term,
     _extract_limit,
     _extract_planejamento_filters_from_query,
     _extract_planejamento_metric,
@@ -13,12 +14,14 @@ from agents.routing.models import RouteDecision
 
 def _try_route_planejamento_agregacao(normalized_text: str) -> RouteDecision | None:
     """
-    Roteia para totais e rankings do planejamento da saude.
+    Roteia para totais e rankings do planejamento publico.
 
     Casos que devem retornar RouteDecision:
         "quanto foi planejado para saude em 2025"
         "quanto foi pago em saude no primeiro trimestre de 2025"
         "quais acoes de saude tiveram maior orcamento"
+        "quanto foi pago na prefeitura em 2025"
+        "quanto foi pago na educacao em 2025"
 
     Casos que devem retornar None:
         "licitacoes da saude"       -> vai para _try_route_licitacoes_lista
@@ -42,15 +45,23 @@ def _try_route_planejamento_agregacao(normalized_text: str) -> RouteDecision | N
     metrica = _extract_planejamento_metric(normalized_text)
 
     # O agrupamento é inferido pela dimensão mais explícita mencionada na pergunta.
-    if any(keyword in normalized_text for keyword in ("por mes", "mes a mes")):
+    if any(
+        _contains_term(normalized_text, keyword) for keyword in ("por mes", "mes a mes")
+    ):
         agrupar_por = "mes"
-    elif "programa" in normalized_text:
+    elif _contains_term(normalized_text, "programa"):
         agrupar_por = "programa"
-    elif "subarea" in normalized_text or "subfuncao" in normalized_text:
+    elif _contains_term(normalized_text, "subarea") or _contains_term(
+        normalized_text, "subfuncao"
+    ):
         agrupar_por = "subarea"
-    elif "acao" in normalized_text or "acoes" in normalized_text:
+    elif _contains_term(normalized_text, "acao") or _contains_term(
+        normalized_text, "acoes"
+    ):
         agrupar_por = "acao"
-    elif "grupo" in normalized_text or "tipo de gasto" in normalized_text:
+    elif _contains_term(normalized_text, "grupo") or _contains_term(
+        normalized_text, "tipo de gasto"
+    ):
         agrupar_por = "grupo_de_gasto"
     else:
         agrupar_por = None
@@ -74,12 +85,14 @@ def _try_route_planejamento_agregacao(normalized_text: str) -> RouteDecision | N
 
 def _try_route_planejamento_saude_lista(normalized_text: str) -> RouteDecision | None:
     """
-    Roteia para listagens do planejamento da saude.
+    Roteia para listagens do planejamento publico.
 
     Casos que devem retornar RouteDecision:
         "liste o planejamento da saude em 2025"
         "mostre as acoes planejadas da saude"
         "quais linhas do orcamento da saude"
+        "liste o planejamento da prefeitura em 2025"
+        "mostre as acoes planejadas da educacao"
 
     Casos que devem retornar None:
         "quanto foi pago na saude"  -> vai para _try_route_planejamento_agregacao

@@ -268,7 +268,7 @@ Arquivo: `agents/tools/sql_tools/planejamento/consultar_planejamento_query.py`
 
 Serve para:
 
-- listar linhas do planejamento da saúde
+- listar linhas do planejamento da saúde e da prefeitura
 - filtrar por ano, mês, área, subárea, programa, ação e grupo de gasto
 - ordenar por mês, orçamento atualizado, valor comprometido ou valor pago
 - selecionar campos públicos em linguagem simples
@@ -279,7 +279,7 @@ Arquivo: `agents/tools/sql_tools/planejamento/agregar_planejamento_query.py`
 
 Serve para:
 
-- totais do planejamento da saúde
+- totais do planejamento da saúde e da prefeitura
 - ranking de ações, programas, subáreas e grupos de gasto
 - soma de orçamento inicial, orçamento atualizado, valor comprometido, valor confirmado e valor pago
 

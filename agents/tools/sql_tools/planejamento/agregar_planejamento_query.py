@@ -39,7 +39,8 @@ def agregar_planejamento(
     """
     Agrega planejamento para responder totais, rankings e agrupamentos.
 
-    Nesta fase, o filtro padrao `origem=saude` usa o planejamento da saude.
+    O filtro `origem` suporta ao menos `saude` e `prefeitura`.
+    Se `origem` nao for informado, o padrao continua sendo `saude`.
     Use para perguntas sobre orçamento previsto, valor comprometido e valor pago.
     """
     try:

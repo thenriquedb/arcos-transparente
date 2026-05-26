@@ -282,6 +282,50 @@ from agents.router import (
                 "limite": 10,
             },
         ),
+        (
+            "Quanto foi pago na prefeitura em 2025?",
+            "planejamento",
+            "agregacao_ranking",
+            "agregar_planejamento",
+            {
+                "filtros": {"origem": "prefeitura", "ano": 2025},
+                "agrupar_por": None,
+                "metrica": "soma_valor_pago",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Quanto foi pago na educacao em 2025?",
+            "planejamento",
+            "agregacao_ranking",
+            "agregar_planejamento",
+            {
+                "filtros": {
+                    "origem": "prefeitura",
+                    "ano": 2025,
+                    "area": "educacao",
+                },
+                "agrupar_por": None,
+                "metrica": "soma_valor_pago",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Liste o planejamento da prefeitura em 2025",
+            "planejamento",
+            "consulta_lista",
+            "consultar_planejamento",
+            {
+                "filtros": {"origem": "prefeitura", "ano": 2025},
+                "ordenar_por": "mes_num",
+                "ordem": "asc",
+                "limite": 10,
+            },
+        ),
     ],
 )
 def test_route_user_query_mapeia_exemplos_publicos(
