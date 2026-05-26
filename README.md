@@ -22,23 +22,14 @@ uv run python cli.py db init
 uv run python cli.py importar
 ```
 
-## Documentação Completa
+## Sumário Da Documentação
 
-Veja [INSTRUCTIONS.md](./INSTRUCTIONS.md) para documentação detalhada sobre:
-
-- Configuração de ambiente
-- Estrutura do projeto
-- Comandos disponíveis
-- Modelagem de dados
-- Garantias ACID e consistência
-- Boas práticas operacionais
-- Troubleshooting
-
-Documentos complementares deste repositório:
-
-- [Arquitetura de agent e tools](./docs/arquitetura-agent-tools.md)
-- [Modelagem de banco](./docs/database.md)
-- [Fluxo de importação](./docs/importacao.md)
+- [INSTRUCTIONS.md](./INSTRUCTIONS.md): guia geral do projeto, ambiente, comandos, modelagem e operação
+- [Arquitetura de agent e tools](./docs/arquitetura-agent-tools.md): visão da arquitetura híbrida com router, registry e tools públicas
+- [Guia curto para novas regras do router](./docs/router-regras.md): como evoluir o roteamento sem quebrar prioridade nem espalhar lógica
+- [Modelagem de banco](./docs/database.md): visão das tabelas, relacionamentos e decisões de persistência
+- [Fluxo de importação](./docs/importacao.md): pipeline de ingestão, validação e carga dos dados
+- [Perguntas de teste do agente](./docs/perguntas-teste-agente.md): conjunto de perguntas para validação manual do comportamento do agente
 
 ## Dados Cobertos
 

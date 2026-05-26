@@ -1,6 +1,7 @@
 from langchain.agents import create_agent
 from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, HumanMessage
+from pprint import pprint
 
 from agents.router import (
     evaluate_query_guardrails,
@@ -75,11 +76,11 @@ def responder_pergunta(pergunta: str):
 
 
 if __name__ == "__main__":
-    pergunta = "Qual foi a folha salarial do sindnei correa"
+    pergunta = "Quais ações de saúde tiveram menor orçamento em 2025?"
     rota = route_user_query(pergunta)
     resultado = responder_pergunta(pergunta)
 
-    print(
+    pprint(
         {
             "rota": {
                 "dominio": rota.domain,

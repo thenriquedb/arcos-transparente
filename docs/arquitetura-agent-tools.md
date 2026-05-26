@@ -93,7 +93,10 @@ Mesmo com suporte a `scope:internal`, a decisão atual foi remover os wrappers a
 
 ### 2. Router
 
-Arquivo: `agents/router.py`
+Arquivos:
+
+- `agents/router.py`
+- `agents/routing/`
 
 Responsabilidades:
 
@@ -102,6 +105,17 @@ Responsabilidades:
 - inferir tipo de operação
 - aplicar guardrails antes da execução
 - reduzir o conjunto de tools expostas ao agente para a pergunta atual
+
+Organização interna atual:
+
+- `agents/router.py` funciona como fachada pública e orquestra a ordem de prioridade
+- `agents/routing/extractors.py` concentra normalização e extração
+- `agents/routing/routes/` separa as regras por domínio
+- `agents/routing/models.py` centraliza os tipos do router
+
+Guia de manutenção:
+
+- veja [Guia Curto Para Novas Regras Do Router](./router-regras.md)
 
 Hoje o router trabalha com estas classes:
 
