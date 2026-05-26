@@ -626,7 +626,7 @@ def _try_route_lista(normalized_text: str) -> RouteDecision | None:
     return None
 
 
-def _try_route_planejamento_lista(normalized_text: str) -> RouteDecision | None:
+def _try_route_planejamento_saude_lista(normalized_text: str) -> RouteDecision | None:
     """
     Roteia para listagens do planejamento da saude.
 
@@ -751,7 +751,7 @@ def route_user_query(query: str) -> RouteDecision:
         return route
 
     # Prioridade 6 — listagens de planejamento
-    if route := _try_route_planejamento_lista(normalized_text):
+    if route := _try_route_planejamento_saude_lista(normalized_text):
         return route
 
     # Prioridade 7 — listagens com filtro de secretaria
