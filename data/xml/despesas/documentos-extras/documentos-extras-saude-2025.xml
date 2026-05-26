@@ -1,0 +1,3907 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<DocumentosExtras>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000001</NumeroDocumento>
+		<DataEmissaoDocumento>31/01/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 165,01</ValorDocumenro>
+		<ValorPago>R$ 165,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária correspondente aos vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 165,01</ValorUnitario>
+				<ValorTotal>R$ 165,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor precisa ser separado.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -48.937,78</ValorUnitario>
+				<ValorTotal>R$ -48.937,78</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha ref. contratação de empresa especializada para cessão de direito de uso (locação) de sistemas integrados de gestão pública - compreendendo implantações não realizadas, mensalidade, horas técnicas e treinamentos - ate a data de 25/04/2025, conforme contrato 001/2023.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 48.937,78</ValorUnitario>
+				<ValorTotal>R$ 48.937,78</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000002</NumeroDocumento>
+		<DataEmissaoDocumento>31/01/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 5.333,51</ValorDocumenro>
+		<ValorPago>R$ 5.333,51</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulação valor excedente</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -4.300,00</ValorUnitario>
+				<ValorTotal>R$ -4.300,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária correspondente aos vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 5.333,51</ValorUnitario>
+				<ValorTotal>R$ 5.333,51</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha ref. contratação de empresa especializada em cessão de direito de uso (locação) de sistemas integrados de gestão pública, até a data de 25/04/2025 - implantações não realizadas.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.300,00</ValorUnitario>
+				<ValorTotal>R$ 4.300,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000003</NumeroDocumento>
+		<DataEmissaoDocumento>31/01/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 15.207,91</ValorDocumenro>
+		<ValorPago>R$ 15.207,91</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária correspondente aos vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 15.207,91</ValorUnitario>
+				<ValorTotal>R$ 15.207,91</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha ref. contratação de empresa especializada em cessão de direito de uso (locação) de sistemas integrados de gestão pública, até a data de 25/04/2025 - 04 mensalidades de $ 10.859,44.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 43.437,78</ValorUnitario>
+				<ValorTotal>R$ 43.437,78</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000004</NumeroDocumento>
+		<DataEmissaoDocumento>31/01/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulação valor excedente</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.600,00</ValorUnitario>
+				<ValorTotal>R$ -.600,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária correspondente aos vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha ref. contratação de empresa especializada em cessão de direito de uso (locação) de sistemas integrados de gestão pública, até a data de 25/04/2025 - 90 horas técnicas.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 600,00</ValorUnitario>
+				<ValorTotal>R$ 600,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000005</NumeroDocumento>
+		<DataEmissaoDocumento>31/01/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 23.382,20</ValorDocumenro>
+		<ValorPago>R$ 23.382,20</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulação valor excedente</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.600,00</ValorUnitario>
+				<ValorTotal>R$ -.600,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária correspondente aos vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 23.382,20</ValorUnitario>
+				<ValorTotal>R$ 23.382,20</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha ref. contratação de empresa especializada em cessão de direito de uso (locação) de sistemas integrados de gestão pública, até a data de 25/04/2025 - 90 horas para treinamento.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 600,00</ValorUnitario>
+				<ValorTotal>R$ 600,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000006</NumeroDocumento>
+		<DataEmissaoDocumento>31/01/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 27.544,46</ValorDocumenro>
+		<ValorPago>R$ 27.544,46</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária correspondente aos vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 27.544,46</ValorUnitario>
+				<ValorTotal>R$ 27.544,46</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Suspensão contratual.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -58.000,00</ValorUnitario>
+				<ValorTotal>R$ -58.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha ref. contratação de empresa para fornecimento de auxílio alimentação, conforme especificações do edital, para os funcionários da Fundação Mun. de Saúde e Assistência de Arcos, conforme contrato 319/2023, vigente até a data de 27/10/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 191.436,00</ValorUnitario>
+				<ValorTotal>R$ 191.436,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000007</NumeroDocumento>
+		<DataEmissaoDocumento>31/01/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4951</Identificacao>
+			<Descricao>Desconto Eventual 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>DESATIVADA FUNDAÇÃO MUNICIPAL  SAÚDE E ASS. ARCOS</Credor>
+		<CPFCNPJ>1895</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 77,28</ValorDocumenro>
+		<ValorPago>R$ 77,28</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Receita extra-orçamentária correspondente aos descontos indevidos de INSS das seguradas Leila Jacinto Moreira Gomes e Valdirene Borges nos vencimentos ref. ao mês de janeiro de 2025, a serem devolvidos em folha no mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 77,28</ValorUnitario>
+				<ValorTotal>R$ 77,28</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 29.234,09</ValorUnitario>
+				<ValorTotal>R$ 29.234,09</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000008</NumeroDocumento>
+		<DataEmissaoDocumento>31/01/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária correspondente aos vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 14.300,66</ValorUnitario>
+				<ValorTotal>R$ 14.300,66</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000009</NumeroDocumento>
+		<DataEmissaoDocumento>07/02/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 442,41</ValorDocumenro>
+		<ValorPago>R$ 442,41</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. 1º parcela NE 003/2025 ref. ao mês de janeiro/2025, contratação de empresa especializada em cessão de direito de uso (locação) de sistemas integrados de gestão pública, até a data de 25/04/2025, referente notas fiscais nº 125951, 125952 e 126143.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 442,41</ValorUnitario>
+				<ValorTotal>R$ 442,41</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 43.178,22</ValorUnitario>
+				<ValorTotal>R$ 43.178,22</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000010</NumeroDocumento>
+		<DataEmissaoDocumento>28/02/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 165,01</ValorDocumenro>
+		<ValorPago>R$ 165,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. aos vencimentos do mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 165,01</ValorUnitario>
+				<ValorTotal>R$ 165,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 10.689,20</ValorUnitario>
+				<ValorTotal>R$ 10.689,20</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000011</NumeroDocumento>
+		<DataEmissaoDocumento>28/02/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 5.045,35</ValorDocumenro>
+		<ValorPago>R$ 5.045,35</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. aos vencimentos do mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 5.045,35</ValorUnitario>
+				<ValorTotal>R$ 5.045,35</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.277,07</ValorUnitario>
+				<ValorTotal>R$ 9.277,07</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000012</NumeroDocumento>
+		<DataEmissaoDocumento>28/02/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 15.207,91</ValorDocumenro>
+		<ValorPago>R$ 15.207,91</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. aos vencimentos do mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 15.207,91</ValorUnitario>
+				<ValorTotal>R$ 15.207,91</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.364,64</ValorUnitario>
+				<ValorTotal>R$ 9.364,64</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000013</NumeroDocumento>
+		<DataEmissaoDocumento>28/02/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. aos vencimentos do mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.694,35</ValorUnitario>
+				<ValorTotal>R$ 9.694,35</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000014</NumeroDocumento>
+		<DataEmissaoDocumento>28/02/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. aos vencimentos do mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 97.291,33</ValorUnitario>
+				<ValorTotal>R$ 97.291,33</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000015</NumeroDocumento>
+		<DataEmissaoDocumento>28/02/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 23.191,98</ValorDocumenro>
+		<ValorPago>R$ 23.191,98</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. aos vencimentos do mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 23.191,98</ValorUnitario>
+				<ValorTotal>R$ 23.191,98</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.498,32</ValorUnitario>
+				<ValorTotal>R$ 9.498,32</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000016</NumeroDocumento>
+		<DataEmissaoDocumento>28/02/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 25.741,97</ValorDocumenro>
+		<ValorPago>R$ 25.741,97</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. aos vencimentos do mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 25.741,97</ValorUnitario>
+				<ValorTotal>R$ 25.741,97</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 55.090,15</ValorUnitario>
+				<ValorTotal>R$ 55.090,15</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000017</NumeroDocumento>
+		<DataEmissaoDocumento>28/02/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>7768</Identificacao>
+			<Descricao>Salário Família 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>FOLHA DE PAGAMENTO</Credor>
+		<CPFCNPJ>54</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 65,00</ValorDocumenro>
+		<ValorPago>R$ 65,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 65,00</ValorUnitario>
+				<ValorTotal>R$ 65,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 12.685,71</ValorUnitario>
+				<ValorTotal>R$ 12.685,71</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000018</NumeroDocumento>
+		<DataEmissaoDocumento>20/03/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 464,01</ValorDocumenro>
+		<ValorPago>R$ 464,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. IRRF NFs: 127690, 127692 e 128843, Governança Brasil S/A Tecnologia e Gestão em Serviços.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 464,01</ValorUnitario>
+				<ValorTotal>R$ 464,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 6.580,68</ValorUnitario>
+				<ValorTotal>R$ 6.580,68</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000019</NumeroDocumento>
+		<DataEmissaoDocumento>31/03/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 165,01</ValorDocumenro>
+		<ValorPago>R$ 165,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 165,01</ValorUnitario>
+				<ValorTotal>R$ 165,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 6.142,66</ValorUnitario>
+				<ValorTotal>R$ 6.142,66</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000020</NumeroDocumento>
+		<DataEmissaoDocumento>31/03/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 5.038,32</ValorDocumenro>
+		<ValorPago>R$ 5.038,32</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 5.038,32</ValorUnitario>
+				<ValorTotal>R$ 5.038,32</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 3.003,14</ValorUnitario>
+				<ValorTotal>R$ 3.003,14</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000021</NumeroDocumento>
+		<DataEmissaoDocumento>31/03/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 15.207,90</ValorDocumenro>
+		<ValorPago>R$ 15.207,90</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 15.207,90</ValorUnitario>
+				<ValorTotal>R$ 15.207,90</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.067,54</ValorUnitario>
+				<ValorTotal>R$ 9.067,54</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000022</NumeroDocumento>
+		<DataEmissaoDocumento>31/03/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.244,73</ValorUnitario>
+				<ValorTotal>R$ 2.244,73</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000023</NumeroDocumento>
+		<DataEmissaoDocumento>31/03/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.948,20</ValorUnitario>
+				<ValorTotal>R$ 1.948,20</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000024</NumeroDocumento>
+		<DataEmissaoDocumento>31/03/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 22.909,67</ValorDocumenro>
+		<ValorPago>R$ 22.909,67</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 22.909,67</ValorUnitario>
+				<ValorTotal>R$ 22.909,67</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.666,95</ValorUnitario>
+				<ValorTotal>R$ 1.666,95</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000025</NumeroDocumento>
+		<DataEmissaoDocumento>31/03/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 25.772,69</ValorDocumenro>
+		<ValorPago>R$ 25.772,69</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 25.772,69</ValorUnitario>
+				<ValorTotal>R$ 25.772,69</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.035,81</ValorUnitario>
+				<ValorTotal>R$ 2.035,81</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000026</NumeroDocumento>
+		<DataEmissaoDocumento>03/04/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 464,01</ValorDocumenro>
+		<ValorPago>R$ 464,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulação de valor referente divergências encontradas após ser emitida a guia no site do e-social.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -69,43</ValorUnitario>
+				<ValorTotal>R$ -69,43</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref 4º parcela NE-03/2025, notas fiscais 129465, 169466 e 129467. GOVERNAÇABRASIL S/A TECNOLOGIA E GESTÃO EM SERVIÇOS.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 464,01</ValorUnitario>
+				<ValorTotal>R$ 464,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 20.444,65</ValorUnitario>
+				<ValorTotal>R$ 20.444,65</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000027</NumeroDocumento>
+		<DataEmissaoDocumento>30/04/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 165,01</ValorDocumenro>
+		<ValorPago>R$ 165,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 165,01</ValorUnitario>
+				<ValorTotal>R$ 165,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.994,63</ValorUnitario>
+				<ValorTotal>R$ 1.994,63</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000028</NumeroDocumento>
+		<DataEmissaoDocumento>30/04/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.753,95</ValorDocumenro>
+		<ValorPago>R$ 4.753,95</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.753,95</ValorUnitario>
+				<ValorTotal>R$ 4.753,95</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.040,23</ValorUnitario>
+				<ValorTotal>R$ 1.040,23</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000029</NumeroDocumento>
+		<DataEmissaoDocumento>30/04/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 15.207,91</ValorDocumenro>
+		<ValorPago>R$ 15.207,91</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulação de valor referente divergências encontradas após ser emitida a guia no site do e-social.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -14,44</ValorUnitario>
+				<ValorTotal>R$ -14,44</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 15.207,91</ValorUnitario>
+				<ValorTotal>R$ 15.207,91</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Pis ref. aos vencimentos do mês de janeiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.372,32</ValorUnitario>
+				<ValorTotal>R$ 2.372,32</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000030</NumeroDocumento>
+		<DataEmissaoDocumento>30/04/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha ref. aditivo ao contrato 319/2023, referente a fornecimento de vale alimentação oas servidores da Fundação Mun. de Saúde e Assist. de Arcos até a data de 27/10/2025, conforme acréscimo concedido pelo decreto 7080/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 7.396,00</ValorUnitario>
+				<ValorTotal>R$ 7.396,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000031</NumeroDocumento>
+		<DataEmissaoDocumento>30/04/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4951</Identificacao>
+			<Descricao>Desconto Eventual 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>RODRIGO ANDRE DA SILVA</Credor>
+		<CPFCNPJ>3.12134e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 26,64</ValorDocumenro>
+		<ValorPago>R$ 26,64</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária correspondente ao desconto indevido dos venciemntos referentes á folha de pagamento do mês de abril de 2025, a ser devolvido o valor ao servidor Rodrigo André da Silva.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 26,64</ValorUnitario>
+				<ValorTotal>R$ 26,64</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.322,44</ValorUnitario>
+				<ValorTotal>R$ 9.322,44</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000032</NumeroDocumento>
+		<DataEmissaoDocumento>30/04/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 28.328,21</ValorDocumenro>
+		<ValorPago>R$ 28.328,21</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 28.328,21</ValorUnitario>
+				<ValorTotal>R$ 28.328,21</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 8.793,57</ValorUnitario>
+				<ValorTotal>R$ 8.793,57</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000033</NumeroDocumento>
+		<DataEmissaoDocumento>30/04/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 30.353,27</ValorUnitario>
+				<ValorTotal>R$ 30.353,27</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000035</NumeroDocumento>
+		<DataEmissaoDocumento>30/04/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 23.485,51</ValorDocumenro>
+		<ValorPago>R$ 23.485,51</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente á folha de pagamento do mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 23.485,51</ValorUnitario>
+				<ValorTotal>R$ 23.485,51</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 14.649,38</ValorUnitario>
+				<ValorTotal>R$ 14.649,38</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000034</NumeroDocumento>
+		<DataEmissaoDocumento>07/05/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 464,01</ValorDocumenro>
+		<ValorPago>R$ 464,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. IRRF, notas fiscais 130990, 130991 e 130992, serviços prestados no mês de abril de 2025, Governança Brasil.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 464,01</ValorUnitario>
+				<ValorTotal>R$ 464,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 52.909,41</ValorUnitario>
+				<ValorTotal>R$ 52.909,41</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000039</NumeroDocumento>
+		<DataEmissaoDocumento>30/05/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de maio de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 50.258,12</ValorUnitario>
+				<ValorTotal>R$ 50.258,12</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000040</NumeroDocumento>
+		<DataEmissaoDocumento>30/05/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de maio de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 18.516,02</ValorUnitario>
+				<ValorTotal>R$ 18.516,02</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000041</NumeroDocumento>
+		<DataEmissaoDocumento>30/05/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 24.876,98</ValorDocumenro>
+		<ValorPago>R$ 24.876,98</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de maio de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 24.876,98</ValorUnitario>
+				<ValorTotal>R$ 24.876,98</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 13.670,78</ValorUnitario>
+				<ValorTotal>R$ 13.670,78</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000042</NumeroDocumento>
+		<DataEmissaoDocumento>30/05/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 27.819,81</ValorDocumenro>
+		<ValorPago>R$ 27.819,81</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de maio de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 27.819,81</ValorUnitario>
+				<ValorTotal>R$ 27.819,81</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.105,43</ValorUnitario>
+				<ValorTotal>R$ 9.105,43</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000036</NumeroDocumento>
+		<DataEmissaoDocumento>30/05/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 165,01</ValorDocumenro>
+		<ValorPago>R$ 165,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de maio de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 165,01</ValorUnitario>
+				<ValorTotal>R$ 165,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 7.854,21</ValorUnitario>
+				<ValorTotal>R$ 7.854,21</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000037</NumeroDocumento>
+		<DataEmissaoDocumento>30/05/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.525,98</ValorDocumenro>
+		<ValorPago>R$ 4.525,98</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de maio de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.525,98</ValorUnitario>
+				<ValorTotal>R$ 4.525,98</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 98.802,01</ValorUnitario>
+				<ValorTotal>R$ 98.802,01</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000038</NumeroDocumento>
+		<DataEmissaoDocumento>30/05/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 16.567,16</ValorDocumenro>
+		<ValorPago>R$ 16.567,16</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de maio de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 16.567,16</ValorUnitario>
+				<ValorTotal>R$ 16.567,16</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.437,53</ValorUnitario>
+				<ValorTotal>R$ 9.437,53</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000043</NumeroDocumento>
+		<DataEmissaoDocumento>30/06/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 165,01</ValorDocumenro>
+		<ValorPago>R$ 165,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de junho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 165,01</ValorUnitario>
+				<ValorTotal>R$ 165,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 6.374,17</ValorUnitario>
+				<ValorTotal>R$ 6.374,17</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000044</NumeroDocumento>
+		<DataEmissaoDocumento>30/06/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.904,06</ValorDocumenro>
+		<ValorPago>R$ 4.904,06</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de junho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.904,06</ValorUnitario>
+				<ValorTotal>R$ 4.904,06</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.870,87</ValorUnitario>
+				<ValorTotal>R$ 2.870,87</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000045</NumeroDocumento>
+		<DataEmissaoDocumento>30/06/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 13.980,37</ValorDocumenro>
+		<ValorPago>R$ 13.980,37</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de junho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 13.980,37</ValorUnitario>
+				<ValorTotal>R$ 13.980,37</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.028,71</ValorUnitario>
+				<ValorTotal>R$ 9.028,71</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000046</NumeroDocumento>
+		<DataEmissaoDocumento>30/06/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de junho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.330,57</ValorUnitario>
+				<ValorTotal>R$ 2.330,57</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000047</NumeroDocumento>
+		<DataEmissaoDocumento>30/06/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de junho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.649,40</ValorUnitario>
+				<ValorTotal>R$ 1.649,40</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000048</NumeroDocumento>
+		<DataEmissaoDocumento>30/06/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 24.424,86</ValorDocumenro>
+		<ValorPago>R$ 24.424,86</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de junho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 24.424,86</ValorUnitario>
+				<ValorTotal>R$ 24.424,86</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.658,09</ValorUnitario>
+				<ValorTotal>R$ 1.658,09</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000049</NumeroDocumento>
+		<DataEmissaoDocumento>30/06/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 27.512,69</ValorDocumenro>
+		<ValorPago>R$ 27.512,69</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de junho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 27.512,69</ValorUnitario>
+				<ValorTotal>R$ 27.512,69</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.846,64</ValorUnitario>
+				<ValorTotal>R$ 1.846,64</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000050</NumeroDocumento>
+		<DataEmissaoDocumento>10/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 487,01</ValorDocumenro>
+		<ValorPago>R$ 487,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. IRRF, notas fiscais 134643, 134644 e 134645, serviços prestados no mês de junho de 2025, Governança Brasil.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 487,01</ValorUnitario>
+				<ValorTotal>R$ 487,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 19.746,52</ValorUnitario>
+				<ValorTotal>R$ 19.746,52</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000051</NumeroDocumento>
+		<DataEmissaoDocumento>10/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 487,01</ValorDocumenro>
+		<ValorPago>R$ 487,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. IRRF, notas fiscais 133110, 133111 e 133112, serviços prestados no mês de maio de 2025, Governança Brasil.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 487,01</ValorUnitario>
+				<ValorTotal>R$ 487,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.981,89</ValorUnitario>
+				<ValorTotal>R$ 1.981,89</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000052</NumeroDocumento>
+		<DataEmissaoDocumento>31/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 175,48</ValorDocumenro>
+		<ValorPago>R$ 175,48</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 4955 - Itavida Seguro 1500 mediante Empenho 2025/000168, no dia 31/07/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 175,48</ValorUnitario>
+				<ValorTotal>R$ 175,48</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.155,81</ValorUnitario>
+				<ValorTotal>R$ 1.155,81</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000053</NumeroDocumento>
+		<DataEmissaoDocumento>31/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4951</Identificacao>
+			<Descricao>Desconto Eventual 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>FUNDAÇAO MUN DE SAUDE E ASSIST ARCOS</Credor>
+		<CPFCNPJ>2.07156e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 3.601,80</ValorDocumenro>
+		<ValorPago>R$ 3.601,80</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 9734 - Desconto Eventual 100/1500 mediante Empenho 2025/000172, no dia 31/07/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 3.601,80</ValorUnitario>
+				<ValorTotal>R$ 3.601,80</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Pis ref. ao mês de fevereiro de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.313,56</ValorUnitario>
+				<ValorTotal>R$ 2.313,56</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000054</NumeroDocumento>
+		<DataEmissaoDocumento>31/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 1488 - Pensão Alimentícia mediante Empenho 2025/000172, no dia 31/07/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 29.375,96</ValorUnitario>
+				<ValorTotal>R$ 29.375,96</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000055</NumeroDocumento>
+		<DataEmissaoDocumento>31/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 23.234,09</ValorDocumenro>
+		<ValorPago>R$ 23.234,09</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de julho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 23.234,09</ValorUnitario>
+				<ValorTotal>R$ 23.234,09</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 14.173,96</ValorUnitario>
+				<ValorTotal>R$ 14.173,96</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000056</NumeroDocumento>
+		<DataEmissaoDocumento>31/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de julho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 53.056,31</ValorUnitario>
+				<ValorTotal>R$ 53.056,31</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000057</NumeroDocumento>
+		<DataEmissaoDocumento>31/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 26.727,95</ValorDocumenro>
+		<ValorPago>R$ 26.727,95</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de julho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 26.727,95</ValorUnitario>
+				<ValorTotal>R$ 26.727,95</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 10.753,97</ValorUnitario>
+				<ValorTotal>R$ 10.753,97</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000058</NumeroDocumento>
+		<DataEmissaoDocumento>31/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 13.980,37</ValorDocumenro>
+		<ValorPago>R$ 13.980,37</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de julho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 13.980,37</ValorUnitario>
+				<ValorTotal>R$ 13.980,37</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 7.854,21</ValorUnitario>
+				<ValorTotal>R$ 7.854,21</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000059</NumeroDocumento>
+		<DataEmissaoDocumento>31/07/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.731,19</ValorDocumenro>
+		<ValorPago>R$ 4.731,19</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de julho de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.731,19</ValorUnitario>
+				<ValorTotal>R$ 4.731,19</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 8.811,09</ValorUnitario>
+				<ValorTotal>R$ 8.811,09</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000060</NumeroDocumento>
+		<DataEmissaoDocumento>29/08/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 175,48</ValorDocumenro>
+		<ValorPago>R$ 175,48</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 4955 - Itavida Seguro 1500 mediante Empenho 2025/000192, no dia 29/08/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 175,48</ValorUnitario>
+				<ValorTotal>R$ 175,48</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.291,59</ValorUnitario>
+				<ValorTotal>R$ 9.291,59</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000061</NumeroDocumento>
+		<DataEmissaoDocumento>29/08/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 1488 - Pensão Alimentícia mediante Empenho 2025/000196, no dia 29/08/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100.552,21</ValorUnitario>
+				<ValorTotal>R$ 100.552,21</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000064</NumeroDocumento>
+		<DataEmissaoDocumento>29/08/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.408,72</ValorDocumenro>
+		<ValorPago>R$ 4.408,72</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de agosto de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.408,72</ValorUnitario>
+				<ValorTotal>R$ 4.408,72</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 12.685,71</ValorUnitario>
+				<ValorTotal>R$ 12.685,71</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000065</NumeroDocumento>
+		<DataEmissaoDocumento>29/08/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 14.015,70</ValorDocumenro>
+		<ValorPago>R$ 14.015,70</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de agosto de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 14.015,70</ValorUnitario>
+				<ValorTotal>R$ 14.015,70</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 5.228,73</ValorUnitario>
+				<ValorTotal>R$ 5.228,73</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000066</NumeroDocumento>
+		<DataEmissaoDocumento>29/08/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de agosto de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos (Rescisão) ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.701,95</ValorUnitario>
+				<ValorTotal>R$ 2.701,95</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000067</NumeroDocumento>
+		<DataEmissaoDocumento>29/08/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 23.499,96</ValorDocumenro>
+		<ValorPago>R$ 23.499,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de agosto de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 23.499,96</ValorUnitario>
+				<ValorTotal>R$ 23.499,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos (Rescisão) ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.200,86</ValorUnitario>
+				<ValorTotal>R$ 1.200,86</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000068</NumeroDocumento>
+		<DataEmissaoDocumento>29/08/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 26.219,73</ValorDocumenro>
+		<ValorPago>R$ 26.219,73</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de agosto de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 26.219,73</ValorUnitario>
+				<ValorTotal>R$ 26.219,73</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 6.168,95</ValorUnitario>
+				<ValorTotal>R$ 6.168,95</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000062</NumeroDocumento>
+		<DataEmissaoDocumento>02/09/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 487,01</ValorDocumenro>
+		<ValorPago>R$ 487,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. IRRF, notas fiscais 136379, 136380 e 136381, serviços prestados no mês de julho de 2025, Governança Brasil.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 487,01</ValorUnitario>
+				<ValorTotal>R$ 487,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.437,53</ValorUnitario>
+				<ValorTotal>R$ 9.437,53</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000063</NumeroDocumento>
+		<DataEmissaoDocumento>02/09/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 487,01</ValorDocumenro>
+		<ValorPago>R$ 487,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária ref. IRRF, notas fiscais 137962, 137963 e 137964, serviços prestados no mês de agosto de 2025, Governança Brasil.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 487,01</ValorUnitario>
+				<ValorTotal>R$ 487,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 49.021,51</ValorUnitario>
+				<ValorTotal>R$ 49.021,51</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000069</NumeroDocumento>
+		<DataEmissaoDocumento>30/09/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 175,48</ValorDocumenro>
+		<ValorPago>R$ 175,48</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 4955 - Itavida Seguro 1500 mediante Empenho 2025/000216, no dia 30/09/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 175,48</ValorUnitario>
+				<ValorTotal>R$ 175,48</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.976,53</ValorUnitario>
+				<ValorTotal>R$ 2.976,53</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000070</NumeroDocumento>
+		<DataEmissaoDocumento>30/09/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 1488 - Pensão Alimentícia mediante Empenho 2025/000220, no dia 30/09/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.167,56</ValorUnitario>
+				<ValorTotal>R$ 9.167,56</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000071</NumeroDocumento>
+		<DataEmissaoDocumento>30/09/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 24.338,17</ValorDocumenro>
+		<ValorPago>R$ 24.338,17</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de setembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 24.338,17</ValorUnitario>
+				<ValorTotal>R$ 24.338,17</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.258,33</ValorUnitario>
+				<ValorTotal>R$ 2.258,33</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000072</NumeroDocumento>
+		<DataEmissaoDocumento>30/09/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 29.423,93</ValorDocumenro>
+		<ValorPago>R$ 29.423,93</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de setembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 29.423,93</ValorUnitario>
+				<ValorTotal>R$ 29.423,93</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.649,40</ValorUnitario>
+				<ValorTotal>R$ 1.649,40</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000073</NumeroDocumento>
+		<DataEmissaoDocumento>30/09/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de setembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.550,70</ValorUnitario>
+				<ValorTotal>R$ 1.550,70</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000074</NumeroDocumento>
+		<DataEmissaoDocumento>30/09/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 14.233,04</ValorDocumenro>
+		<ValorPago>R$ 14.233,04</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de setembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 14.233,04</ValorUnitario>
+				<ValorTotal>R$ 14.233,04</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.3</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.951,22</ValorUnitario>
+				<ValorTotal>R$ 1.951,22</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000075</NumeroDocumento>
+		<DataEmissaoDocumento>30/09/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.672,71</ValorDocumenro>
+		<ValorPago>R$ 4.672,71</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de setembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.672,71</ValorUnitario>
+				<ValorTotal>R$ 4.672,71</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 19.949,57</ValorUnitario>
+				<ValorTotal>R$ 19.949,57</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000076</NumeroDocumento>
+		<DataEmissaoDocumento>08/10/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 487,01</ValorDocumenro>
+		<ValorPago>R$ 487,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 9727 - IRRF Terceiros 1500 mediante Empenho 2025/000084/5, no dia 08/10/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 487,01</ValorUnitario>
+				<ValorTotal>R$ 487,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.981,89</ValorUnitario>
+				<ValorTotal>R$ 1.981,89</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000077</NumeroDocumento>
+		<DataEmissaoDocumento>24/10/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 175,48</ValorDocumenro>
+		<ValorPago>R$ 175,48</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 4955 - Itavida Seguro 1500 mediante Empenho 2025/000241, no dia 24/10/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 175,48</ValorUnitario>
+				<ValorTotal>R$ 175,48</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.098,02</ValorUnitario>
+				<ValorTotal>R$ 1.098,02</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000078</NumeroDocumento>
+		<DataEmissaoDocumento>24/10/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 1488 - Pensão Alimentícia mediante Empenho 2025/000245, no dia 24/10/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Pis ref. ao mês de março de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.300,19</ValorUnitario>
+				<ValorTotal>R$ 2.300,19</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000079</NumeroDocumento>
+		<DataEmissaoDocumento>24/10/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.775,83</ValorDocumenro>
+		<ValorPago>R$ 4.775,83</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de outubro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.775,83</ValorUnitario>
+				<ValorTotal>R$ 4.775,83</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 28.095,39</ValorUnitario>
+				<ValorTotal>R$ 28.095,39</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000080</NumeroDocumento>
+		<DataEmissaoDocumento>24/10/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 14.888,55</ValorDocumenro>
+		<ValorPago>R$ 14.888,55</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de outubro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 14.888,55</ValorUnitario>
+				<ValorTotal>R$ 14.888,55</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 14.821,26</ValorUnitario>
+				<ValorTotal>R$ 14.821,26</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000081</NumeroDocumento>
+		<DataEmissaoDocumento>24/10/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de outubro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 43.654,83</ValorUnitario>
+				<ValorTotal>R$ 43.654,83</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000082</NumeroDocumento>
+		<DataEmissaoDocumento>24/10/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 23.781,50</ValorDocumenro>
+		<ValorPago>R$ 23.781,50</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de outubro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 23.781,50</ValorUnitario>
+				<ValorTotal>R$ 23.781,50</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 16.157,88</ValorUnitario>
+				<ValorTotal>R$ 16.157,88</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000083</NumeroDocumento>
+		<DataEmissaoDocumento>24/10/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 29.319,10</ValorDocumenro>
+		<ValorPago>R$ 29.319,10</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de outubro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 29.319,10</ValorUnitario>
+				<ValorTotal>R$ 29.319,10</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 7.854,21</ValorUnitario>
+				<ValorTotal>R$ 7.854,21</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000085</NumeroDocumento>
+		<DataEmissaoDocumento>24/10/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4951</Identificacao>
+			<Descricao>Desconto Eventual 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ADRIANA VELOSO PARREIRA</Credor>
+		<CPFCNPJ>8.46429e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 43,58</ValorDocumenro>
+		<ValorPago>R$ 43,58</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de outubro de 2025, correspondente ao desconto a maior de INSS Segurado, a ser devolvido para servidora Adriana Veloso Parreira.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 43,58</ValorUnitario>
+				<ValorTotal>R$ 43,58</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 8.811,09</ValorUnitario>
+				<ValorTotal>R$ 8.811,09</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000084</NumeroDocumento>
+		<DataEmissaoDocumento>06/11/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 487,01</ValorDocumenro>
+		<ValorPago>R$ 487,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulação valor excedente</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -21.928,06</ValorUnitario>
+				<ValorTotal>R$ -21.928,06</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 9727 - IRRF Terceiros 1500 mediante Empenho 2025/000084/6, no dia 06/11/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 487,01</ValorUnitario>
+				<ValorTotal>R$ 487,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha ref. aditivo 04 ao contrato 001/2023, referente a cessão do direito de uso de sistemas integrados em gestão pública, inclusos serviços de implantação, migração de dados, parametrizações, treinamento e suporte, além de solução em datacenter para usuários da Fundação Mun. de Saúde e Assist. de Arcos, ate a data de 31/12/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 97.875,56</ValorUnitario>
+				<ValorTotal>R$ 97.875,56</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000086</NumeroDocumento>
+		<DataEmissaoDocumento>28/11/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 122,96</ValorDocumenro>
+		<ValorPago>R$ 122,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento (rescisão) do mês de novembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 122,96</ValorUnitario>
+				<ValorTotal>R$ 122,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.327,39</ValorUnitario>
+				<ValorTotal>R$ 9.327,39</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000087</NumeroDocumento>
+		<DataEmissaoDocumento>28/11/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 175,48</ValorDocumenro>
+		<ValorPago>R$ 175,48</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 4955 - Itavida Seguro 1500 mediante Empenho 2025/000268, no dia 28/11/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 175,48</ValorUnitario>
+				<ValorTotal>R$ 175,48</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 104.140,11</ValorUnitario>
+				<ValorTotal>R$ 104.140,11</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000088</NumeroDocumento>
+		<DataEmissaoDocumento>28/11/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 630,96</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 1488 - Pensão Alimentícia mediante Empenho 2025/000272, no dia 28/11/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.437,53</ValorUnitario>
+				<ValorTotal>R$ 9.437,53</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000089</NumeroDocumento>
+		<DataEmissaoDocumento>28/11/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.592,67</ValorDocumenro>
+		<ValorPago>R$ 4.592,67</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de novembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.592,67</ValorUnitario>
+				<ValorTotal>R$ 4.592,67</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 5.228,73</ValorUnitario>
+				<ValorTotal>R$ 5.228,73</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000090</NumeroDocumento>
+		<DataEmissaoDocumento>28/11/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 14.888,55</ValorDocumenro>
+		<ValorPago>R$ 14.888,55</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de novembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 14.888,55</ValorUnitario>
+				<ValorTotal>R$ 14.888,55</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 49.021,51</ValorUnitario>
+				<ValorTotal>R$ 49.021,51</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000091</NumeroDocumento>
+		<DataEmissaoDocumento>28/11/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 4.375,63</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de novembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de abril de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 12.685,71</ValorUnitario>
+				<ValorTotal>R$ 12.685,71</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000092</NumeroDocumento>
+		<DataEmissaoDocumento>28/11/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 24.509,53</ValorDocumenro>
+		<ValorPago>R$ 24.509,53</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de novembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 24.509,53</ValorUnitario>
+				<ValorTotal>R$ 24.509,53</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 5.900,02</ValorUnitario>
+				<ValorTotal>R$ 5.900,02</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000093</NumeroDocumento>
+		<DataEmissaoDocumento>28/11/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 29.806,07</ValorDocumenro>
+		<ValorPago>R$ 29.806,07</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente descontos na folha de pagamento do mês de novembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 29.806,07</ValorUnitario>
+				<ValorTotal>R$ 29.806,07</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 3.112,46</ValorUnitario>
+				<ValorTotal>R$ 3.112,46</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000094</NumeroDocumento>
+		<DataEmissaoDocumento>04/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 487,01</ValorDocumenro>
+		<ValorPago>R$ 487,01</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 9727 - IRRF Terceiros 1500 mediante Empenho 2025/000084/7, no dia 04/12/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 487,01</ValorUnitario>
+				<ValorTotal>R$ 487,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 9.167,54</ValorUnitario>
+				<ValorTotal>R$ 9.167,54</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000095</NumeroDocumento>
+		<DataEmissaoDocumento>15/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 22.880,17</ValorDocumenro>
+		<ValorPago>R$ 22.880,17</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente ao 13º salário anual do mês de dezembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 22.880,17</ValorUnitario>
+				<ValorTotal>R$ 22.880,17</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 3.393,16</ValorUnitario>
+				<ValorTotal>R$ 3.393,16</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000096</NumeroDocumento>
+		<DataEmissaoDocumento>15/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 25.264,52</ValorDocumenro>
+		<ValorPago>R$ 25.264,52</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente ao 13º salário anual do mês de dezembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 25.264,52</ValorUnitario>
+				<ValorTotal>R$ 25.264,52</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.649,40</ValorUnitario>
+				<ValorTotal>R$ 1.649,40</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000097</NumeroDocumento>
+		<DataEmissaoDocumento>30/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4955</Identificacao>
+			<Descricao>ITAVIDA SEGURO 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>ITAVIDA CLUBE DE SEGUROS</Credor>
+		<CPFCNPJ>2.6692e+012</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 34,24</ValorDocumenro>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 4955 - Itavida Seguro 1500 mediante Empenho 2025/000316, no dia 30/12/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 34,24</ValorUnitario>
+				<ValorTotal>R$ 34,24</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.550,70</ValorUnitario>
+				<ValorTotal>R$ 1.550,70</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000098</NumeroDocumento>
+		<DataEmissaoDocumento>30/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>1488</Identificacao>
+			<Descricao>PENSAO ALIMENTÍCIA</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>Kellen Cristina de Moura Sant`ana</Credor>
+		<CPFCNPJ>4.10268e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 630,96</ValorDocumenro>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 1488 - Pensão Alimentícia mediante Empenho 2025/000320, no dia 30/12/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 630,96</ValorUnitario>
+				<ValorTotal>R$ 630,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.958,74</ValorUnitario>
+				<ValorTotal>R$ 1.958,74</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000099</NumeroDocumento>
+		<DataEmissaoDocumento>30/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4948</Identificacao>
+			<Descricao>Convenio S.T.M.A. 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>SINDICATO DOS TRABALHADORES MUNICIPAIS DE ARCOS</Credor>
+		<CPFCNPJ>2.37654e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.876,98</ValorDocumenro>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de dezembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.876,98</ValorUnitario>
+				<ValorTotal>R$ 4.876,98</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 20.854,43</ValorUnitario>
+				<ValorTotal>R$ 20.854,43</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000100</NumeroDocumento>
+		<DataEmissaoDocumento>30/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>4954</Identificacao>
+			<Descricao>Empréstimo Caixa 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>CAIXA ECONOMICA FEDERAL</Credor>
+		<CPFCNPJ>3.60305e+011</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 14.888,55</ValorDocumenro>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de dezembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 14.888,55</ValorUnitario>
+				<ValorTotal>R$ 14.888,55</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.981,89</ValorUnitario>
+				<ValorTotal>R$ 1.981,89</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000101</NumeroDocumento>
+		<DataEmissaoDocumento>30/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>6171</Identificacao>
+			<Descricao>Emprestimo Bradesco 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>BANCO BRADESCO S/A</Credor>
+		<CPFCNPJ>6.07469e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 4.375,63</ValorDocumenro>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de dezembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 4.375,63</ValorUnitario>
+				<ValorTotal>R$ 4.375,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Obrigação Patronal ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.098,02</ValorUnitario>
+				<ValorTotal>R$ 1.098,02</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000102</NumeroDocumento>
+		<DataEmissaoDocumento>30/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9685</Identificacao>
+			<Descricao>INSS Segurado 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>INSS</Credor>
+		<CPFCNPJ>2.9979e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 24.451,63</ValorDocumenro>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de dezembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 24.451,63</ValorUnitario>
+				<ValorTotal>R$ 24.451,63</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Pis correspondente à folha de pagamento ref. ao mês de abril de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.381,92</ValorUnitario>
+				<ValorTotal>R$ 2.381,92</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000103</NumeroDocumento>
+		<DataEmissaoDocumento>30/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9728</Identificacao>
+			<Descricao>IRRF F.Pagamento 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 30.746,79</ValorDocumenro>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Despesa extra-orçamentária referente aos descontos na folha de pagamento do mês de dezembro de 2025, conforme relatórios anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 30.746,79</ValorUnitario>
+				<ValorTotal>R$ 30.746,79</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Referente contribuições segurados e patronais, de exercícios anteriores, Termo de Intimação Nº100000117264735, em 11/04/2025, Regularização Fiscal FUMUSA. Conforme documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 7.478,06</ValorUnitario>
+				<ValorTotal>R$ 7.478,06</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>FUNDAÇÃO MUNIC. SAÚDE E ASSIST. ARCOS</UnidadeGestora>
+		<NumeroDocumento>000104</NumeroDocumento>
+		<DataEmissaoDocumento>30/12/2025</DataEmissaoDocumento>
+		<ContaExtraorcamentaria>
+			<Identificacao>9727</Identificacao>
+			<Descricao>IRRF Terceiros 100/1500</Descricao>
+		</ContaExtraorcamentaria>
+		<Credor>MUNICIPIO DE ARCOS</Credor>
+		<CPFCNPJ>1.83067e+013</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao/>
+		<AnoLicitacao/>
+		<DataHomologacao/>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato/>
+		<ValorDocumenro>R$ 487,01</ValorDocumenro>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Documento extraorçamentário referente a retenção 9727 - IRRF Terceiros 1500 mediante Empenho 2025/000084/8, no dia 30/12/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 487,01</ValorUnitario>
+				<ValorTotal>R$ 487,01</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Vencimentos referentes à folha de pagamento do mês de maio de 2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 36.955,55</ValorUnitario>
+				<ValorTotal>R$ 36.955,55</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+</DocumentosExtras>

@@ -1,0 +1,3833 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<RestosPagar>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>007455</NumeroEmpenho>
+		<DataEmissaoEmpenho>12/08/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>FERNANDA APARECIDA DA SILVA</Credor>
+		<CPFCNPJ>4.30749e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 360,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 360,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulado saldo excedente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.120,00</ValorUnitario>
+				<ValorTotal>R$ -.120,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 3.000,00</ValorUnitario>
+				<ValorTotal>R$ 3.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 13/12/2024, acompanhar pacientes eletivos, ao Nefrocentro, para sessão de hemodiálise, veículo KQU-7581, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 22/12/2024, acompanhar pacientes eletivos, ao Nefrocentro, para sessão de hemodiálise, veículo KQU-7581, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 24/12/2024, acompanhar pacientes eletivos, ao Nefrocentro, para sessão de hemodiálise, veículo KQU-7581, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 27/12/2024, acompanhar pacientes eletivos, ao Nefrocentro, para sessão de hemodiálise, veículo KQU-7581, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 29/12/2024, acompanhar pacientes eletivos, ao Nefrocentro, para sessão de hemodiálise, veículo KQU-7581, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 31/12/2024, acompanhar pacientes, ao Nefrocentro, para sessão de hemodiálise, veículo KQU-7581, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>009183</NumeroEmpenho>
+		<DataEmissaoEmpenho>04/10/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>LENICE CANDIDA ALVES</Credor>
+		<CPFCNPJ>7.98533e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 480,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 480,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulado saldo excedente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -80,00</ValorUnitario>
+				<ValorTotal>R$ -80,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulado valor excedente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.260,00</ValorUnitario>
+				<ValorTotal>R$ -.260,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Divinópolis-MG, dia 28/12/2024, transferência do paciente Júlio César Ferreira, da Santa Casa de Arcos para o Hospital São João de Deus, veículo SHR-4F73, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Divinópolis-MG, dia 29/12/2024, transferência do paciente Kayron Felipe Santana, do Hospital Municipal São José para o Hospital São João de Deus, veículo SHR-4F73, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Lagoa da Prata-MG, dia 31/12/2024, transferência da paciente Ana Maria Ribeiro, do Hospital São Carlos para o Hospital Municipal são José, veículo SHR-4F73, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, dia 23/12/2024, acompanhar paciente Wesley Rosa da Silva, para consulta na ACCOM, veículo RNM-9C30, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 19/12/2024, transferência da paciente Maria Concebida de Morais, da Santa Casa de Arcos para o Hospital São Luiz, veículo RNM-9C30, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Lagoa da Prata-MG, dia 21/12/2024, acompanhar paciente Analir Ribeiro Cardoso, para realização de TC de abdômen, com contrate, no Hospital São Carlos, veículo RNM-9C30, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>010241</NumeroEmpenho>
+		<DataEmissaoEmpenho>08/11/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>CAMILA FARIA DA SILVA</Credor>
+		<CPFCNPJ>6.56036e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 240,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 240,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulado valor excedente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -40,00</ValorUnitario>
+				<ValorTotal>R$ -40,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 760,00</ValorUnitario>
+				<ValorTotal>R$ 760,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 20/12/2024, acompanhar paciente Maria Evangelista Pessoa, ao Nefrocentro, para sessão de hemodiálise, veículo RNM-9C30, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 24/12/2024, acompanhar paciente Maria Evangelista Pessoa, ao Nefrocentro, para sessão de hemodiálise, veículo RNM-9C31, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 27/12/2024, acompanhar paciente Maria Evangelista Pessoa, ao Nefrocentro, para sessão de hemodiálise, veículo RNM-9C31, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 31/12/2024, acompanhar paciente Maria Evangelista Pessoa, ao Nefrocentro, para sessão de hemodiálise, veículo RNM-9C31, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>010460</NumeroEmpenho>
+		<DataEmissaoEmpenho>22/11/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>AMILDA GASPAR SILVA</Credor>
+		<CPFCNPJ>7.8088e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 120,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 120,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.000,00</ValorUnitario>
+				<ValorTotal>R$ 1.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 20/12/2024, buscar a paciente Juliana Rosa dos Santos, no Nefrocentro, após Sessão de hemodiálise, veículo QWS-5745, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 22/12/2024, buscar a paciente Maria Evangelista Pessoa, no Nefrocentro, após Sessão de hemodiálise, veículo RNM-9C31, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>010490</NumeroEmpenho>
+		<DataEmissaoEmpenho>22/11/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>CONCEICAO APARECIDA MUNIZ</Credor>
+		<CPFCNPJ>2.68713e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 360,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 360,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulado valor excedente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.400,00</ValorUnitario>
+				<ValorTotal>R$ -.400,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.000,00</ValorUnitario>
+				<ValorTotal>R$ 1.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 18/12/2024, acompanhar pacientes ao Nefrocentro para sessão de hemodiálise, veículo HIM-3G07, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 20/12/2024, acompanhar pacientes ao Nefrocentro para sessão de hemodiálise, veículo HIM-3G07, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 22/12/2024, acompanhar pacientes ao Nefrocentro para sessão de hemodiálise, veículo HIM-3G07, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 24/12/2024, acompanhar pacientes ao Nefrocentro para sessão de hemodiálise, veículo HIM-3G07, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 29/12/2024, acompanhar pacientes ao Nefrocentro para sessão de hemodiálise, veículo HIM-3G07, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 31/12/2024, acompanhar pacientes, ao Nefrocentro, para sessão de hemodiálise, veículo HIM-3G07, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>010769</NumeroEmpenho>
+		<DataEmissaoEmpenho>29/11/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>AMILDA GASPAR SILVA</Credor>
+		<CPFCNPJ>7.8088e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 480,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 480,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulado saldo excedente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -1.520,00</ValorUnitario>
+				<ValorTotal>R$ -1.520,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Formiga-MG, acompanhar paciente Maria Evangelista Pessoa, ao Nefrocentro, para sessão de hemodiálise, veículo SHR-4F73, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 24/12/2024, buscar paciente Juliana Rosa dos Santos, no Nefrocentro, após sessão de hemodiálise, veículo QWS-5745, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 30/12/2024, transferência do paciente Luiz Antônio Dias, internado na Santa Casa de Arcos, para o Santa Casa de Misericórdia de Formiga, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira/Divinópolis-MG, dia 29/12/2024, transferência do paciente Rafael Contins, internado no Hospital Municipal são José, para o Hospital São Judas Tadeu, e paciente Marta coutinho para o Hospital São João de Deus, veículo QNN-8618, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira-MG, dia 25/12/2024, transferência da paciente Gislene Maria de Souza, internada na Santa Casa de Arcos para Santa Casa de Oliveira, veículo RNM-9C31, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira-MG, dia 28/12/2024, transferência do paciente Lucimar dos Reis Silva, para o Hospital São João de Deus, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Educação</Funcao>
+		<SubFuncao>Ensino Superior</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>012277</NumeroEmpenho>
+		<DataEmissaoEmpenho>17/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>JOENE DAS DORES DE OLIVEIRA</Credor>
+		<CPFCNPJ>4.33007e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 60,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 60,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, dia 17/12/2024, PZN-2644 conduzindo Estudantes Universitarios para a Faculdade UNIFOR, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Cultura</Funcao>
+		<SubFuncao>Difusão Cultural</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>012293</NumeroEmpenho>
+		<DataEmissaoEmpenho>18/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>JOAO GONZAGA FILHO</Credor>
+		<CPFCNPJ>2.53757e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 150,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 150,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Ribeirão Preto -SP, RVX-5J54, a pedido da Secretaria de Governo foi acompanhar a ediçao do Livro sobre a História de Arcos, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 150,00</ValorUnitario>
+				<ValorTotal>R$ 150,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011119</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>ANDERSON FELIX COSTA</Credor>
+		<CPFCNPJ>1.19621e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 500,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 400,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 3.000,00</ValorUnitario>
+				<ValorTotal>R$ 3.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 26/12/2024, TCL-0F40, para buscar paciente de alta hospitalar em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 27/12/2024, QNN-8618, para levar a paciente Joice A. Sousa para consulta no Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 29/12/2024, QNN-8618, para transferir o paciente Rafael Martins para o Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis-MG, no dia 31/12/2024, QNN-8618, para buscar sangue a pedido da Santa Casa e buscar a paciente Iraci C. Borges de alta médica no Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira-MG e Divinópolis-MG, no dia 28/12/2024, QNN-8618, para transferir a paciente Adelia M. Couto para a Santa Casa de Oliveira-MG e a paciente Maria C. Camargo para transferencia ao Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.760,00</ValorUnitario>
+				<ValorTotal>R$ -.760,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011124</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>GIORDANO JUNIOR ASSUNÇÃO</Credor>
+		<CPFCNPJ>2.99602e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 420,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 420,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 5.000,00</ValorUnitario>
+				<ValorTotal>R$ 5.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de São José do Rio Preto-SP, nos dias 29 a 30/12/2024, RTL-7H53, para levar o paciente Antonio G. Campos para tratamento no Hospital de Base em São José do Rio Preto-SP, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 420,00</ValorUnitario>
+				<ValorTotal>R$ 420,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -2.030,00</ValorUnitario>
+				<ValorTotal>R$ -2.030,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011128</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>JOSE GERALDO PEDROSO</Credor>
+		<CPFCNPJ>3.02056e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 180,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 120,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 27/12/2024, QWS-5745, para levar a paciente Juliana R. Santos para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 29/12/2024, QWS-5745, para levar a paciente Juliana R. Santos para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 31/12/2024, QWX-5745, para levar a paciente Juliana R. Santos para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -1.320,00</ValorUnitario>
+				<ValorTotal>R$ -1.320,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011131</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>ROBSON JORGE FERREIRA</Credor>
+		<CPFCNPJ>1.25808e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 300,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 200,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 27/12/2024, SHH-3A92, para levar pacientes para tratamento médico no Hospital Sao João de Deus e ACCOM em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 30/12/2024, SHH-3A92, para levar pacientes para tratamento médico no Hospital São João de Deus e na ACCOM em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis-MG, no dia 31/12/2024, SHH-3A92, para levar pacientes para tratamento médico na ACCOM e Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -1.200,00</ValorUnitario>
+				<ValorTotal>R$ -1.200,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011132</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>SANDRO SOARES TEIXEIRA</Credor>
+		<CPFCNPJ>7.11787e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 500,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 400,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Campo Belo-MG, no dia 31/12/2024, TCL-0F40, para levar o paciente José V. S. Filho para retorno e consulta pos cirurgia ortopédica em Campo Belo-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 5.000,00</ValorUnitario>
+				<ValorTotal>R$ 5.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 27/12/2024, TCL-0F40, para buscar sangue no Hemominas em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 28/12/2024, TCL-0F40, para levar paciente Lucimar R. Silva internado no Hospital São José para avaliaçao médica no Hospital Sao João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 30/12/2024, TCL-0F40, para levar o paciente Gilson Lourenço para fazer ressonancia magnetica no Hospital São João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira-MG, no dia 29/12/2024, TCL-0F40, para transferir a paciente Eliana M. Moura internada na Santa Casa de Arcos para o Hospital Sao Judas Tadeu em Oliveira-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -2.700,00</ValorUnitario>
+				<ValorTotal>R$ -2.700,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011133</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>ROGERIO JUNIO RODRIGUES</Credor>
+		<CPFCNPJ>7.13775e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 700,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 500,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Belo Horizonte-MG dia 23/12/2024, RLT-7H53, levar pacientes para tramaneto médico em Belo Horizonte-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Bom Despacho-MG, no dia 30/12/2024, SHR-4F73, para transferir o paciente Adailton N. Mendonça da UPA de Formiga-MG para a UPA de Bom Despacho-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 26/12/2024, TDD-7E75, para levar pacientes para tratamento médico em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 27/12/2024, TDD-4H17, para levar o paciente Pablo R. Pereira para avaliação médica na Upa em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 28/12/2024, SHR-4F73, para transferir a paciente Vanea C. Santos da Santa Casa de Arcos para o Hospital São João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 29/12/2024, SHR-4F73, para transferir o paciente Kayron F Santana do Hospital São José para o Hospital São João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG e Lagoa da Prata-MG, no dia 31/12/2024, SHR-4F73, para levar a paciente Maria E. Pessoa para hemodiálise em Formiga-MG e transferir a paciente Ana M. Ribeiro do Hospital Sao Carlos em Lagoa da Prata-MG para o Hospital São José, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.580,00</ValorUnitario>
+				<ValorTotal>R$ -.580,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011135</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>DIOGENES JOSE BARBOSA</Credor>
+		<CPFCNPJ>4.88445e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 100,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 100,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 27/12/2024, para levar a paciente Patricia A. Fortunato em tratamento oncológico na ACCOM em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -1.480,00</ValorUnitario>
+				<ValorTotal>R$ -1.480,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011137</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>ANTONIO GARCIA PINTO</Credor>
+		<CPFCNPJ>4.7614e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 60,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 60,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 29/12/2024, TCL-0F40, para levar a paciente Maria E. Pessoa para tartamento em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -1.580,00</ValorUnitario>
+				<ValorTotal>R$ -1.580,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011138</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>FLAVIO JOSE SANTOS TEIXEIRA</Credor>
+		<CPFCNPJ>4.52673e+008</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 60,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 60,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 3.000,00</ValorUnitario>
+				<ValorTotal>R$ 3.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 27/12/2024, RNM-9C30, para levar paciente Maria E. Pessoa para hemodiálise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -2.180,00</ValorUnitario>
+				<ValorTotal>R$ -2.180,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011140</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>WEBERT LEANDRO DE PAULA</Credor>
+		<CPFCNPJ>6.82808e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 480,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 320,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Belo Horizonte-MG, no dia 31/12/2024, TLC-0F40, para transferir o paciente Edgar A. Machado do Hospital São José para a Santa Casa de Belo Horizonte-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Cláudio-MG, no dia 29/12/2024, TDD-7E83, para buscara paciente Karolina L. Nogueira de alta hospitalar na Santa Casa de Misericordia em Cláudio-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 28/12/2024, QNN-8618, para transferir a paciente Dalila G. Oliveira do Hospital São José para o Hospital São João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 26/12/2024, SHR-4F73, para transferir o paciente Pedro A. F. Afonso do Hospital Municipal Sao José para a Santa Casa de Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 30/12/2024, TCL-0F40, para transferir o paciente Luis A. Dias da Santa Casa de Arcos para o Hospital São Luís em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 27/12/2024, QNN-8618, buscar a paciente Maria J. Costa no Hospital da Mulher em Santo Antonio do Monte-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.440,00</ValorUnitario>
+				<ValorTotal>R$ -.440,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011173</NumeroEmpenho>
+		<DataEmissaoEmpenho>10/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>SHEILER DA CUNHA SANT'ANA</Credor>
+		<CPFCNPJ>9.54517e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 180,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 120,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.500,00</ValorUnitario>
+				<ValorTotal>R$ 1.500,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 27/12/2024, PUN-8424, para levar pacientes para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 29/12/2024, PUN-8424, para levar pacientes para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 31/12/2024, PUN-8424, para levar pacientes na hemodiálise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.700,00</ValorUnitario>
+				<ValorTotal>R$ -.700,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Assistência Social</Funcao>
+		<SubFuncao>Administração Geral</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>012278</NumeroEmpenho>
+		<DataEmissaoEmpenho>17/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>GETULIO QUIRINO DE LIMA</Credor>
+		<CPFCNPJ>6.98637e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 100,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 100,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, dia 20/12/2024, RVW-7F39, acompanhar servidora da Secretaria de Integraçao Social a trabalho na SEDESE, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Assistência Social</Funcao>
+		<SubFuncao>Administração Geral</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>012346</NumeroEmpenho>
+		<DataEmissaoEmpenho>20/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>DIOGENES JOSE BARBOSA</Credor>
+		<CPFCNPJ>4.88445e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 60,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 60,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Lagoa da Prata MG, no dia 21/12/2024, RVW-7F39 conduzindo usuario da Secretaria de Integração Social para serviço de Fortalecimento de Vinculos, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>012347</NumeroEmpenho>
+		<DataEmissaoEmpenho>20/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>CELIO DE SÁ</Credor>
+		<CPFCNPJ>5.45068e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 100,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 100,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Pouso Alegre MG, no dia 24/12/2024, RUY-9G07 conduzindo o paciente Eduardo Magelo Pimenta e acompanhante Beatriz Rodrigues, para tratamento de saude, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>010770</NumeroEmpenho>
+		<DataEmissaoEmpenho>29/11/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>MONICA CELINA BORGES DA SILVA</Credor>
+		<CPFCNPJ>6.21106e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 780,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 780,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulado saldo excedente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.400,00</ValorUnitario>
+				<ValorTotal>R$ -.400,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Campo Belo-MG, dia 31/12/2024, acompamhar paciente, José Vitor da Silva Filho, recém operado do fêmur, para retorno e retirada de pontos, na Santa Casa de Campo Belo, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Divinópolis-MG, dia 26/12/2024, buscar paciente, Cleonice Gonçalves G. Teixeira, de alta, no Hospital São João de Deus, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Divinópolis-MG, dia 28/12/2024, transferência paciente, Vanea da Conceição dos Santos, da Santa Casa de Arcos para o Hospital São João de Deus, veículo SHR-4F73, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Formiga/Bom Despacho-MG, dia 30/12/2024, transferência paciente, Adailton Nelson Mendonça, internado na UPA de Formiga, para Sala Vermelha da UPA de Bom Despacho, veículo SHR-4F73, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Formiga-MG, dia 22/12/2024, acompamhar paciente, Iraci Correia Borges, para consulta e internção, na Santa Casa de Formiga, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Formiga-MG, dia 23/12/2024, acompamhar paciente, Luis Antônio Dias, internado no Hospital Municipal São José, para exame de cateterismo cardíaco, em Oliveira, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Formiga-MG, dia 25/12/2024, acompamhar paciente, Antônia A. Souza, internado no Hospital Municipal São José, para angio TC de torax, na Santa Casa de Formiga, veículo RNM-9C30, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Oliveira-MG, dia 29/12/2024, transferência paciente, Eliana Mateus de Moura, da santa casa de Arcos, para Santa Casa de Oliveira, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Santo Antônio do Monte-MG, dia 27/12/2024, acompamhar paciente, Maria José da Costa Santos, para consulta e exames, no CEAE, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>010772</NumeroEmpenho>
+		<DataEmissaoEmpenho>29/11/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>JOSIELE PAULA FONSECA DE OLIVEIRA</Credor>
+		<CPFCNPJ>4.62809e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 680,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 680,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Anulado saldo excedente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.160,00</ValorUnitario>
+				<ValorTotal>R$ -.160,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.000,00</ValorUnitario>
+				<ValorTotal>R$ 1.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a Belo Horizonte-MG, dia 31/12/2024, transferência paciente, Edgar Alves Machado, internado no Hospital Municipal São José, para o Hospital Santa Casa de BH, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a Campo Belo-MG, dia 24/12/2024, acompanhar paciente, Adélia Maria Couto, para avaliação com o Dr. Ricardo de Souza Andrade, no Hospital Santa Casa de Campo Belo, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a Cláudio-MG, dia 25/12/2024, transferência paciente, Daniel Vinícius Barbosa, internado no Hospital Municipal São José, para Santa Casa de Misericórdia, em Cláudio, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a Divinópolis-MG, dia 19/12/2024, acompanhar paciente, Dulci Aparecida de Oliveira, internada no Hospital Santa Casa de Arcos, para realização de exame de imagem, na clínica Inal, veículo TCL-0F40, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a Divinópolis-MG, dia 28/12/2024, transferência paciente, Dalila Garcia de Oliveira, internada no Hospital MunicipalSão José, para o Hospital São João de Deus, veículo QNN-8618, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a Formiga-MG, dia 22/12/2024, acompanhar paciente, Maria Evangelista Pessoa, para sessão de hemodiálise, veículo RNM-9C30, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a Formiga-MG, dia 27/12/2024, acompanhar paciente, Juliana Rosa dos Santos, para sessão de hemodiálise, veículo QWS-5745, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a Formiga-MG, dia 29/12/2024, acompanhar paciente, Juliana Rosa dos Santos, para sessão de hemodiálise, veículo QWS-5745, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Educação</Funcao>
+		<SubFuncao>Administração Geral</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011371</NumeroEmpenho>
+		<DataEmissaoEmpenho>13/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>RONALDO JOSE DE CARVALHO</Credor>
+		<CPFCNPJ>4.54483e+008</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 100,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 100,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis MG dia 19/12/2024, para levar/buscar documentos relativos ao Processo do RJA e AVCB, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011119</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>ANDERSON FELIX COSTA</Credor>
+		<CPFCNPJ>1.19621e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 0,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 100,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 3.000,00</ValorUnitario>
+				<ValorTotal>R$ 3.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 26/12/2024, TCL-0F40, para buscar paciente de alta hospitalar em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 27/12/2024, QNN-8618, para levar a paciente Joice A. Sousa para consulta no Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 29/12/2024, QNN-8618, para transferir o paciente Rafael Martins para o Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis-MG, no dia 31/12/2024, QNN-8618, para buscar sangue a pedido da Santa Casa e buscar a paciente Iraci C. Borges de alta médica no Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira-MG e Divinópolis-MG, no dia 28/12/2024, QNN-8618, para transferir a paciente Adelia M. Couto para a Santa Casa de Oliveira-MG e a paciente Maria C. Camargo para transferencia ao Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.760,00</ValorUnitario>
+				<ValorTotal>R$ -.760,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011121</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>ATAIDE ORTIZ DE ARANTES</Credor>
+		<CPFCNPJ>4.47599e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 400,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 400,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 12/12/2024, SHR-4D92, para levar pacientes para consultar na ACCOM em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 13/12/2024, SHH-3A92, para levar pacientes para tratamento médico na ACCOM e Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 17/12/2024, SIU-7I40, para levar pacientes para tratamento médico na ACCOM e no Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Luz-MG, no dia 11/12/2024, SHR-4F73, para levar o paciente Lucas R. Sacramento para o Hospital Nossa Senhora Aparecida em Luz-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -1.600,00</ValorUnitario>
+				<ValorTotal>R$ -1.600,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011123</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>BRUNO ALVES</Credor>
+		<CPFCNPJ>6.33962e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 200,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 200,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis-MG, no dia 26/12/2024, TDD-7E83, para levar paciente Maria C. Alves para consulta oncologica na ACCOM em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis-MG, no dia 31/12/2024, TDD-7E75, para levar paciente Lazara G. Duarte para consulta oncologica na ACCOM em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.880,00</ValorUnitario>
+				<ValorTotal>R$ -.880,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011128</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>JOSE GERALDO PEDROSO</Credor>
+		<CPFCNPJ>3.02056e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 0,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 60,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 27/12/2024, QWS-5745, para levar a paciente Juliana R. Santos para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 29/12/2024, QWS-5745, para levar a paciente Juliana R. Santos para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 31/12/2024, QWX-5745, para levar a paciente Juliana R. Santos para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -1.320,00</ValorUnitario>
+				<ValorTotal>R$ -1.320,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011129</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>DALTON APARECIDO MENDONÇA</Credor>
+		<CPFCNPJ>5.63199e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 300,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 300,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis-MG, no dia 27/12/2024, QWX-5872, para levar paciente Maria G. Castro e resolver papeis do TFD em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis-MG, no dia 30/12/2024, QWX-5872, para levar paciente Maria H. Castro para consulta e procedimento médico na ACCOM em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis-MG, no dia 31/12/2024, QWX-5872, para levar a paciente Elizabete Silva para consulta e procedimento médico na ACCOM em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.600,00</ValorUnitario>
+				<ValorTotal>R$ -.600,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011131</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>ROBSON JORGE FERREIRA</Credor>
+		<CPFCNPJ>1.25808e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 0,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 100,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 27/12/2024, SHH-3A92, para levar pacientes para tratamento médico no Hospital Sao João de Deus e ACCOM em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 30/12/2024, SHH-3A92, para levar pacientes para tratamento médico no Hospital São João de Deus e na ACCOM em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinopolis-MG, no dia 31/12/2024, SHH-3A92, para levar pacientes para tratamento médico na ACCOM e Hospital São João de Deus em Divinopolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -1.200,00</ValorUnitario>
+				<ValorTotal>R$ -1.200,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011132</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>SANDRO SOARES TEIXEIRA</Credor>
+		<CPFCNPJ>7.11787e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 0,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 100,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Campo Belo-MG, no dia 31/12/2024, TCL-0F40, para levar o paciente José V. S. Filho para retorno e consulta pos cirurgia ortopédica em Campo Belo-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 5.000,00</ValorUnitario>
+				<ValorTotal>R$ 5.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 27/12/2024, TCL-0F40, para buscar sangue no Hemominas em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 28/12/2024, TCL-0F40, para levar paciente Lucimar R. Silva internado no Hospital São José para avaliaçao médica no Hospital Sao João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 30/12/2024, TCL-0F40, para levar o paciente Gilson Lourenço para fazer ressonancia magnetica no Hospital São João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira-MG, no dia 29/12/2024, TCL-0F40, para transferir a paciente Eliana M. Moura internada na Santa Casa de Arcos para o Hospital Sao Judas Tadeu em Oliveira-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -2.700,00</ValorUnitario>
+				<ValorTotal>R$ -2.700,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011133</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>ROGERIO JUNIO RODRIGUES</Credor>
+		<CPFCNPJ>7.13775e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 0,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 200,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Belo Horizonte-MG dia 23/12/2024, RLT-7H53, levar pacientes para tramaneto médico em Belo Horizonte-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Bom Despacho-MG, no dia 30/12/2024, SHR-4F73, para transferir o paciente Adailton N. Mendonça da UPA de Formiga-MG para a UPA de Bom Despacho-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 26/12/2024, TDD-7E75, para levar pacientes para tratamento médico em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 27/12/2024, TDD-4H17, para levar o paciente Pablo R. Pereira para avaliação médica na Upa em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 28/12/2024, SHR-4F73, para transferir a paciente Vanea C. Santos da Santa Casa de Arcos para o Hospital São João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 29/12/2024, SHR-4F73, para transferir o paciente Kayron F Santana do Hospital São José para o Hospital São João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG e Lagoa da Prata-MG, no dia 31/12/2024, SHR-4F73, para levar a paciente Maria E. Pessoa para hemodiálise em Formiga-MG e transferir a paciente Ana M. Ribeiro do Hospital Sao Carlos em Lagoa da Prata-MG para o Hospital São José, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.580,00</ValorUnitario>
+				<ValorTotal>R$ -.580,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011140</NumeroEmpenho>
+		<DataEmissaoEmpenho>09/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>WEBERT LEANDRO DE PAULA</Credor>
+		<CPFCNPJ>6.82808e+009</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 0,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 160,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Belo Horizonte-MG, no dia 31/12/2024, TLC-0F40, para transferir o paciente Edgar A. Machado do Hospital São José para a Santa Casa de Belo Horizonte-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Cláudio-MG, no dia 29/12/2024, TDD-7E83, para buscara paciente Karolina L. Nogueira de alta hospitalar na Santa Casa de Misericordia em Cláudio-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 28/12/2024, QNN-8618, para transferir a paciente Dalila G. Oliveira do Hospital São José para o Hospital São João de Deus em Divinópolis-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 100,00</ValorUnitario>
+				<ValorTotal>R$ 100,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 26/12/2024, SHR-4F73, para transferir o paciente Pedro A. F. Afonso do Hospital Municipal Sao José para a Santa Casa de Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 30/12/2024, TCL-0F40, para transferir o paciente Luis A. Dias da Santa Casa de Arcos para o Hospital São Luís em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 27/12/2024, QNN-8618, buscar a paciente Maria J. Costa no Hospital da Mulher em Santo Antonio do Monte-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.440,00</ValorUnitario>
+				<ValorTotal>R$ -.440,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>011173</NumeroEmpenho>
+		<DataEmissaoEmpenho>10/12/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>SHEILER DA CUNHA SANT'ANA</Credor>
+		<CPFCNPJ>9.54517e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 0,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 60,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.500,00</ValorUnitario>
+				<ValorTotal>R$ 1.500,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 27/12/2024, PUN-8424, para levar pacientes para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 29/12/2024, PUN-8424, para levar pacientes para hemodialise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 31/12/2024, PUN-8424, para levar pacientes na hemodiálise em Formiga-MG, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 60,00</ValorUnitario>
+				<ValorTotal>R$ 60,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Saldo remanescente.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.700,00</ValorUnitario>
+				<ValorTotal>R$ -.700,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Administração Geral</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>010178</NumeroEmpenho>
+		<DataEmissaoEmpenho>07/11/2024</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>JOÃO BATISTA DAMASENO</Credor>
+		<CPFCNPJ>5.6768e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 50,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 50,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 6.373/2022, para viagem a Belo Horizonte-MG, nos dias 07 e 08 de Novembro/2024, para realizar serviços de manutençao e instalação de ventiladores na Casa de Apoio, conf. relatorio de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 50,00</ValorUnitario>
+				<ValorTotal>R$ 50,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2025</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao/>
+		<Unidade/>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa> </Programa>
+		<Acao>
+			<Tipo/>
+			<Descricao/>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao/>
+			<Descricao/>
+		</FonteRecurso>
+		<EsferaAdministrativa> </EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao/>
+			<Descricao/>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao/>
+			<Descricao/>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao/>
+			<Descricao/>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>004760</NumeroEmpenho>
+		<DataEmissaoEmpenho>27/08/2020</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>MARIA LUCIENE LOPES MARINHO</Credor>
+		<CPFCNPJ>5.86201e+010</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao> </AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 50,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 50,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Cancelamento de Restos a Pagar conforme Decreto 7327 de 30/12/2025.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -50,00</ValorUnitario>
+				<ValorTotal>R$ -50,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. art. nº 61, parág. 1º e 2º da Lei Municipal nº 1453/1993 e Decreto Municipal n. 4.678/2018 e 4.837/2019, para viagem a Lagoa da Prata, dia 18/12/2020, veiculo QNN-8618, acompanhar o paciente Jaime da Silva Nascimento para exame, conforme relatório de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 50,00</ValorUnitario>
+				<ValorTotal>R$ 50,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Diária concedida conf. art. nº 61, parág. 1º e 2º da Lei Municipal nº 1453/1993 e Decreto Municipal n. 5.272/2019, para viagem a, conf. relatório de viagem anexo.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 950,00</ValorUnitario>
+				<ValorTotal>R$ 950,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor a maior que ora se regulariza.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ -.180,00</ValorUnitario>
+				<ValorTotal>R$ -.180,00</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+</RestosPagar>
