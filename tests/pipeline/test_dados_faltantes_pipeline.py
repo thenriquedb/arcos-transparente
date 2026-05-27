@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import ingestion.pipeline as pipeline_module
-from database.models import Base, DespesaDocumento, Patrimonio, QuadroPessoal
+from database.models import Base, DespesaDocumento, Eleito, Patrimonio, QuadroPessoal
 from ingestion.pipeline import IngestionPipeline
 
 
@@ -29,9 +29,11 @@ def test_pipeline_importa_despesas_patrimonios_e_quadro_pessoal(
     despesas_dir = tmp_path / "despesas" / "empenhos"
     patrimonios_dir = tmp_path / "administracao" / "patrimonios"
     quadro_dir = tmp_path / "servidores" / "quadro-pessoal"
+    eleitos_dir = tmp_path / "camara"
     despesas_dir.mkdir(parents=True)
     patrimonios_dir.mkdir(parents=True)
     quadro_dir.mkdir(parents=True)
+    eleitos_dir.mkdir(parents=True)
 
     (despesas_dir / "empenhos-2025.xml").write_text(
         """<?xml version="1.0" encoding="ISO-8859-1"?>
@@ -61,6 +63,17 @@ def test_pipeline_importa_despesas_patrimonios_e_quadro_pessoal(
 """,
         encoding="ISO-8859-1",
     )
+    (eleitos_dir / "eleitos.xml").write_text(
+        """<?xml version="1.0" encoding="UTF-8"?>
+<transparencia>
+<vereadores municipio="Arcos" estado="MG"><vereador id="1">
+<nomeCompleto>Maria Silva</nomeCompleto><partido>PL</partido>
+<mandatos><mandato><inicio>2025</inicio><fim>2028</fim><status>em exercício</status></mandato></mandatos>
+</vereador></vereadores>
+</transparencia>
+""",
+        encoding="utf-8",
+    )
 
     session = _build_session()
 
@@ -71,15 +84,17 @@ def test_pipeline_importa_despesas_patrimonios_e_quadro_pessoal(
     monkeypatch.setattr(pipeline_module, "get_session", fake_get_session)
 
     resultado = IngestionPipeline(data_dir=str(tmp_path)).run(
-        tipos=["despesas", "patrimonios", "quadro_pessoal"],
-        ano=2025,
+        tipos=["despesas", "patrimonios", "quadro_pessoal", "eleitos"],
+        ano=None,
     )
 
     assert resultado["despesas"].inseridos == 1
     assert resultado["patrimonios"].inseridos == 1
     assert resultado["quadro_pessoal"].inseridos == 1
+    assert resultado["eleitos"].inseridos == 1
     assert session.query(DespesaDocumento).count() == 1
     assert session.query(Patrimonio).count() == 1
     assert session.query(QuadroPessoal).count() == 1
+    assert session.query(Eleito).count() == 1
 
     session.close()

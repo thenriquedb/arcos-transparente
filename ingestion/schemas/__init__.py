@@ -6,6 +6,7 @@ from .despesas import (
     DespesaDocumentoInSchema,
     DespesaDocumentoItemInSchema,
 )
+from .eleitos import EleitoInSchema
 from .licitacoes import (
     InstrumentoContratualInSchema,
     LicitacaoInSchema,
@@ -21,6 +22,7 @@ __all__ = [
     "DespesaDocumentoInSchema",
     "DespesaDocumentoItemInSchema",
     "DespesaDocumentoComprobatorioInSchema",
+    "EleitoInSchema",
     "LicitacaoInSchema",
     "VencedorInSchema",
     "InstrumentoContratualInSchema",

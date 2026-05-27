@@ -1,4 +1,4 @@
-# Lista de Prefeitos - Piumhi, MG
+# Lista de Prefeitos 
 
 ## Wellington Francelli Estevão Rodrigues Roque
 - **Exercício:** 2025 a 2028

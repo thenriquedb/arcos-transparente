@@ -17,10 +17,11 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
     capturado: dict[str, object] = {}
     prompt_esperado = main.carregar_system_prompt()
 
-    def fake_create_agent(*, tools, model, system_prompt):
+    def fake_create_agent(*, tools, model, system_prompt, checkpointer=None):
         capturado["tools"] = tools
         capturado["model"] = model
         capturado["system_prompt"] = system_prompt
+        capturado["checkpointer"] = checkpointer
         return "agente-fake"
 
     monkeypatch.setattr(main, "create_agent", fake_create_agent)
@@ -39,6 +40,7 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
         "Sempre que a resposta depender de dados, use as ferramentas disponíveis."
         in prompt_esperado
     )
+    assert "políticos eleitos" in prompt_esperado
     assert nomes == {
         "consultar_servidores",
         "agregar_servidores",
@@ -56,6 +58,7 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
         "agregar_patrimonios",
         "consultar_quadro_pessoal",
         "agregar_quadro_pessoal",
+        "consultar_eleitos",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 
@@ -75,10 +78,11 @@ def test_criar_agente_com_pergunta_de_top_salarios_restringe_toolset(
 ) -> None:
     capturado: dict[str, object] = {}
 
-    def fake_create_agent(*, tools, model, system_prompt):
+    def fake_create_agent(*, tools, model, system_prompt, checkpointer=None):
         capturado["tools"] = tools
         capturado["model"] = model
         capturado["system_prompt"] = system_prompt
+        capturado["checkpointer"] = checkpointer
         return "agente-fake"
 
     monkeypatch.setattr(main, "create_agent", fake_create_agent)
@@ -98,10 +102,11 @@ def test_criar_agente_com_pergunta_de_planejamento_restringe_toolset(
 ) -> None:
     capturado: dict[str, object] = {}
 
-    def fake_create_agent(*, tools, model, system_prompt):
+    def fake_create_agent(*, tools, model, system_prompt, checkpointer=None):
         capturado["tools"] = tools
         capturado["model"] = model
         capturado["system_prompt"] = system_prompt
+        capturado["checkpointer"] = checkpointer
         return "agente-fake"
 
     monkeypatch.setattr(main, "create_agent", fake_create_agent)
@@ -119,10 +124,11 @@ def test_criar_agente_com_pergunta_de_planejamento_restringe_toolset(
 def test_criar_agente_com_pergunta_de_contratos_restringe_toolset(monkeypatch) -> None:
     capturado: dict[str, object] = {}
 
-    def fake_create_agent(*, tools, model, system_prompt):
+    def fake_create_agent(*, tools, model, system_prompt, checkpointer=None):
         capturado["tools"] = tools
         capturado["model"] = model
         capturado["system_prompt"] = system_prompt
+        capturado["checkpointer"] = checkpointer
         return "agente-fake"
 
     monkeypatch.setattr(main, "create_agent", fake_create_agent)
@@ -140,10 +146,11 @@ def test_criar_agente_com_pergunta_de_contratos_restringe_toolset(monkeypatch) -
 def test_criar_agente_com_pergunta_de_receitas_restringe_toolset(monkeypatch) -> None:
     capturado: dict[str, object] = {}
 
-    def fake_create_agent(*, tools, model, system_prompt):
+    def fake_create_agent(*, tools, model, system_prompt, checkpointer=None):
         capturado["tools"] = tools
         capturado["model"] = model
         capturado["system_prompt"] = system_prompt
+        capturado["checkpointer"] = checkpointer
         return "agente-fake"
 
     monkeypatch.setattr(main, "create_agent", fake_create_agent)
@@ -158,14 +165,13 @@ def test_criar_agente_com_pergunta_de_receitas_restringe_toolset(monkeypatch) ->
     assert nomes == ["agregar_receitas"]
 
 
-def test_criar_agente_rejeita_provider_nao_suportado(monkeypatch) -> None:
+def test_obter_configuracao_llm_preserva_provider_configurado(monkeypatch) -> None:
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")
     monkeypatch.setenv("LLM_PROVIDER", "ollama")
 
-    with pytest.raises(ValueError) as exc_info:
-        main.criar_modelo_llm()
+    config = main.obter_configuracao_llm()
 
-    assert "Use apenas 'openai'" in str(exc_info.value)
+    assert config["provider"] == "ollama"
 
 
 def test_criar_agente_rejeita_ausencia_de_api_key(monkeypatch) -> None:
@@ -182,7 +188,7 @@ def test_criar_agente_rejeita_ausencia_de_api_key(monkeypatch) -> None:
 def test_criar_agente_rejeita_pergunta_fora_do_escopo(monkeypatch) -> None:
     chamado = {"create_agent": False}
 
-    def fake_create_agent(*, tools, model, system_prompt):
+    def fake_create_agent(*, tools, model, system_prompt, checkpointer=None):
         chamado["create_agent"] = True
         return "agente-fake"
 
@@ -220,7 +226,7 @@ def test_responder_pergunta_fluxo_e2e_basico_com_tools_restritas(monkeypatch) ->
     capturado: dict[str, object] = {}
 
     class FakeAgent:
-        def invoke(self, payload):
+        def invoke(self, payload, _config=None):
             capturado["payload"] = payload
             return {
                 "messages": [

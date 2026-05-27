@@ -338,6 +338,33 @@ from agents.router import (
             },
         ),
         (
+            "Quem sao os vereadores em exercicio?",
+            "eleitos",
+            "consulta_lista",
+            "consultar_eleitos",
+            {
+                "filtros": {
+                    "tipo_politico": "vereador",
+                    "em_exercicio": True,
+                },
+                "ordenar_por": "mandato_inicio",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Quem e Carlos David Borges?",
+            "eleitos",
+            "consulta_lista",
+            "consultar_eleitos",
+            {
+                "filtros": {"nome": "carlos david borges"},
+                "ordenar_por": "mandato_inicio",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
             "Quantas vagas preenchidas por regime no quadro pessoal da prefeitura em 2025?",
             "quadro_pessoal",
             "agregacao_ranking",
@@ -667,6 +694,13 @@ def test_route_user_query_restringe_despesas_por_tags() -> None:
     tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
 
     assert tool_names == ["agregar_despesas"]
+
+
+def test_route_user_query_restringe_eleitos_por_tags() -> None:
+    tools = select_public_tools_for_query("Quem sao os vereadores em exercicio?")
+    tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
+
+    assert tool_names == ["consultar_eleitos"]
 
 
 def test_evaluate_query_guardrails_permitem_consulta_no_escopo() -> None:
