@@ -15,6 +15,7 @@ def _tool_name(tool_obj) -> str:
 
 def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
     capturado: dict[str, object] = {}
+    prompt_esperado = main.carregar_system_prompt()
 
     def fake_create_agent(*, tools, model, system_prompt):
         capturado["tools"] = tools
@@ -32,13 +33,12 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
 
     assert resultado == "agente-fake"
     assert capturado["model"] == "openai-model::gpt-4o-mini"
-    assert "use as tools disponíveis antes de responder" in capturado["system_prompt"]
-    assert "consultar_servidores" in capturado["system_prompt"]
-    assert "consultar_contratos" in capturado["system_prompt"]
-    assert "valor_total_estimado" in capturado["system_prompt"]
-    assert "consultar_receitas" in capturado["system_prompt"]
-    assert "consultar_planejamento" in capturado["system_prompt"]
-    assert "planejamento da saúde e da prefeitura" in capturado["system_prompt"]
+    assert capturado["system_prompt"] == prompt_esperado
+    assert "dados públicos e na transparência da cidade de Arcos" in prompt_esperado
+    assert (
+        "Sempre que a resposta depender de dados, use as ferramentas disponíveis."
+        in prompt_esperado
+    )
     assert nomes == {
         "consultar_servidores",
         "agregar_servidores",
@@ -58,6 +58,16 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
         "agregar_quadro_pessoal",
         "buscar_historico_de_pagamentos_do_servidor",
     }
+
+
+def test_carregar_system_prompt_ler_markdown_versionado() -> None:
+    prompt = main.carregar_system_prompt()
+
+    assert main.SYSTEM_PROMPT_PATH.name == "agent-system-prompt.md"
+    assert main.SYSTEM_PROMPT_PATH.exists()
+    assert prompt.startswith(
+        "Você é o assistente virtual do projeto Arcos Transparente"
+    )
 
 
 def test_criar_agente_com_pergunta_de_top_salarios_restringe_toolset(
@@ -161,6 +171,7 @@ def test_criar_agente_rejeita_provider_nao_suportado(monkeypatch) -> None:
 def test_criar_agente_rejeita_ausencia_de_api_key(monkeypatch) -> None:
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     monkeypatch.delenv("LLM_PROVIDER", raising=False)
+    monkeypatch.delenv("MODEL_PROVIDER", raising=False)
 
     with pytest.raises(ValueError) as exc_info:
         main.criar_modelo_llm()

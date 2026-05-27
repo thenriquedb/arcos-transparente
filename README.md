@@ -40,6 +40,7 @@ LLM_PROVIDER=openai
 
 - [INSTRUCTIONS.md](./INSTRUCTIONS.md): guia geral do projeto, ambiente, comandos, modelagem e operação
 - [Arquitetura de agent e tools](./docs/arquitetura-agent-tools.md): visão da arquitetura híbrida com router, registry e tools públicas
+- [Prompt do agente](./docs/agent-system-prompt.md): instruções de sistema usadas pelo assistente em produção
 - [Guia curto para novas regras do router](./docs/router-regras.md): como evoluir o roteamento sem quebrar prioridade nem espalhar lógica
 - [Modelagem de banco](./docs/database.md): visão das tabelas, relacionamentos e decisões de persistência
 - [Fluxo de importação](./docs/importacao.md): pipeline de ingestão, validação e carga dos dados
