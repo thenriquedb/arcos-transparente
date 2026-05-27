@@ -83,7 +83,7 @@ def ferramentas_publicas_disponiveis() -> list[str]:
     ]
 
 
-def responder_pergunta(pergunta: str):
+def responder_pergunta(pergunta: str, thread_id: str = "1"):
     guardrail = evaluate_query_guardrails(pergunta)
     if not guardrail.allowed:
         return {
@@ -97,7 +97,7 @@ def responder_pergunta(pergunta: str):
 
     agente = criar_agente(pergunta)
 
-    config = {"configurable": {"thread_id": "1"}}
+    config = {"configurable": {"thread_id": thread_id}}
 
     return agente.invoke({"messages": [pergunta]}, config)
 

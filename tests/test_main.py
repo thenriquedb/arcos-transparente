@@ -71,6 +71,13 @@ def test_carregar_system_prompt_ler_markdown_versionado() -> None:
     assert prompt.startswith(
         "Você é o assistente virtual do projeto Arcos Transparente"
     )
+    prompt_normalizado = prompt.lower()
+    assert (
+        "liste os candidatos com nome completo, cargo e secretaria ou setor"
+        in prompt_normalizado
+        or "liste os candidatos com nome completo, cargo e secretaria ou setor quando esses campos estiverem disponíveis"
+        in prompt_normalizado
+    )
 
 
 def test_criar_agente_com_pergunta_de_top_salarios_restringe_toolset(

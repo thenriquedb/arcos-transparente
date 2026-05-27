@@ -35,9 +35,19 @@ class HistoricoPagamentosServidorItem(FolhaPagamentoToolBaseSchema):
     nota: str | None = None
 
 
+class FolhaServidorCandidato(FolhaPagamentoToolBaseSchema):
+    folha_servidor_id: int
+    nome: str
+    cargo_atual: str | None = None
+    secretaria_atual: str | None = None
+    setor_atual: str | None = None
+    mes_de_referencia_do_servidor: date | None = None
+
+
 class HistoricoPagamentosServidorResponse(FolhaPagamentoToolBaseSchema):
     query: str | None = None
     total: int
     resultados: list[HistoricoPagamentosServidorItem] = Field(default_factory=list)
+    candidatos: list[FolhaServidorCandidato] = Field(default_factory=list)
     mensagem: str | None = None
     sugestao: str | None = None

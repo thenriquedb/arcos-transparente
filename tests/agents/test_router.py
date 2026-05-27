@@ -534,6 +534,34 @@ def test_try_route_historico_isolado() -> None:
     assert decision.tool_kwargs == {"nome": "pedro oliveira"}
 
 
+def test_try_route_historico_reconhece_salario_de_nome() -> None:
+    decision = _try_route_historico(
+        _normalize("qual o salario de sidnei jose correa?")
+    )
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": "sidnei jose correa"}
+
+
+def test_try_route_historico_reconhece_quanto_nome_recebe() -> None:
+    decision = _try_route_historico(_normalize("quanto ronaldo ribeiro recebe"))
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": "ronaldo ribeiro"}
+
+
+def test_try_route_historico_reconhece_pesquise_por_nome() -> None:
+    decision = _try_route_historico(
+        _normalize("pesquise por ronaldo gaspar ribeiro")
+    )
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": "ronaldo gaspar ribeiro"}
+
+
 def test_try_route_historico_retorna_none_quando_caso_e_de_agregacao() -> None:
     decision = _try_route_historico(
         _normalize("quais os 10 maiores salarios da prefeitura?")
@@ -705,6 +733,13 @@ def test_route_user_query_restringe_eleitos_por_tags() -> None:
 
 def test_evaluate_query_guardrails_permitem_consulta_no_escopo() -> None:
     decision = evaluate_query_guardrails("Quais os 10 maiores salários da prefeitura?")
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
+def test_evaluate_query_guardrails_permitem_quanto_nome_recebe() -> None:
+    decision = evaluate_query_guardrails("quanto ronaldo ribeiro recebe")
 
     assert decision.allowed is True
     assert decision.category == "allowed"

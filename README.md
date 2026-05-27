@@ -39,6 +39,7 @@ LLM_PROVIDER=openai
 ## Sumário Da Documentação
 
 - [INSTRUCTIONS.md](./INSTRUCTIONS.md): guia geral do projeto, ambiente, comandos, modelagem e operação
+- [Contexto para Codex CLI](./docs/codex-cli-contexto.md): resumo atual do projeto, decisoes tecnicas e pontos de atencao para novas sessoes
 - [Arquitetura de agent e tools](./docs/arquitetura-agent-tools.md): visão da arquitetura híbrida com router, registry e tools públicas
 - [Prompt do agente](./docs/agent-system-prompt.md): instruções de sistema usadas pelo assistente em produção
 - [Guia curto para novas regras do router](./docs/router-regras.md): como evoluir o roteamento sem quebrar prioridade nem espalhar lógica

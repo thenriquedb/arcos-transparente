@@ -122,9 +122,10 @@ def _extract_nome_para_historico(normalized_text: str) -> str | None:
     """Extrai nomes em perguntas sobre salário ou histórico de pagamentos."""
 
     patterns = [
-        r"salario\s+do\s+([a-z\s]+?)(?:\?|$)",
-        r"quanto\s+([a-z\s]+?)\s+recebeu(?:\?|$)",
-        r"pagamentos\s+do\s+([a-z\s]+?)(?:\?|$)",
+        r"salario\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
+        r"quanto\s+([a-z\s]+?)\s+(?:recebe|recebeu|ganha|ganhou)(?:\?|$)",
+        r"pagamentos\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
+        r"(?:pesquise|busque|procure|pesquisar|buscar|procurar)\s+(?:por\s+)?([a-z\s]+?)(?:\?|$)",
     ]
     for pattern in patterns:
         match = re.search(pattern, normalized_text)

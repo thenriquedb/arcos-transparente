@@ -91,12 +91,12 @@ def test_busca_historico_de_pagamentos_serializa_contrato_leigo(monkeypatch) -> 
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
-        " Maria ",
+        " Maria da Silva ",
         limite=5,
         max_meses=2,
     )
 
-    assert resultado["query"] == "Maria"
+    assert resultado["query"] == "Maria da Silva"
     assert resultado["total"] == 1
     assert resultado["resultados"][0]["folha_servidor_id"] == folha_servidor.id
     assert resultado["resultados"][0]["nome"] == "Maria da Silva"
@@ -151,11 +151,248 @@ def test_busca_historico_de_pagamentos_serializa_contrato_leigo(monkeypatch) -> 
     session.close()
 
 
+def test_busca_historico_de_pagamentos_aceita_termos_nao_contiguos(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+
+    folha_servidor = FolhaServidor(nome="Ronaldo Gaspar Ribeiro")
+    cargo = FolhaCargo(nome="Motorista")
+    lotacao = FolhaLotacao(nome="Transportes")
+
+    session.add_all([folha_servidor, cargo, lotacao])
+    session.flush()
+    session.add(
+        FolhaPagamentoRegistro(
+            competencia_ano=2025,
+            competencia_mes_num=3,
+            competencia_mes_nome="Marco",
+            servidor=folha_servidor,
+            cargo=cargo,
+            lotacao=lotacao,
+            salario_base=2200,
+            proventos=2200,
+            vantagens=0,
+            vencimentos_totais=2200,
+            descontos=200,
+            liquido=2000,
+        )
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
+        "Ronaldo Ribeiro"
+    )
+
+    assert resultado["query"] == "Ronaldo Ribeiro"
+    assert resultado["total"] == 1
+    assert resultado["resultados"][0]["nome"] == "Ronaldo Gaspar Ribeiro"
+
+    session.close()
+
+
+def test_busca_historico_de_pagamentos_desambigua_multiplos_candidatos(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+
+    servidor_canonico_primeiro = Servidor(
+        nome="Ronaldo Gaspar Ribeiro",
+        cargo="Motorista",
+        secretaria="Secretaria de Transportes",
+        salario_base=2200,
+        competencia_referencia=date(2025, 3, 1),
+    )
+    servidor_canonico_segundo = Servidor(
+        nome="Ronaldo Ribeiro Silva",
+        cargo="Auxiliar Administrativo",
+        secretaria="Secretaria de Saude",
+        salario_base=2500,
+        competencia_referencia=date(2025, 4, 1),
+    )
+    primeiro = FolhaServidor(
+        nome="Ronaldo Gaspar Ribeiro",
+        servidor_canonico=servidor_canonico_primeiro,
+    )
+    segundo = FolhaServidor(
+        nome="Ronaldo Ribeiro Silva",
+        servidor_canonico=servidor_canonico_segundo,
+    )
+    cargo_primeiro = FolhaCargo(nome="Motorista")
+    cargo_segundo = FolhaCargo(nome="Auxiliar Administrativo")
+    lotacao_primeira = FolhaLotacao(nome="Transportes")
+    lotacao_segunda = FolhaLotacao(nome="UPA Central")
+
+    session.add_all(
+        [
+            servidor_canonico_primeiro,
+            servidor_canonico_segundo,
+            primeiro,
+            segundo,
+            cargo_primeiro,
+            cargo_segundo,
+            lotacao_primeira,
+            lotacao_segunda,
+        ]
+    )
+    session.flush()
+    session.add_all(
+        [
+            FolhaPagamentoRegistro(
+                competencia_ano=2025,
+                competencia_mes_num=3,
+                competencia_mes_nome="Marco",
+                servidor=primeiro,
+                cargo=cargo_primeiro,
+                lotacao=lotacao_primeira,
+                salario_base=2200,
+                proventos=2200,
+                vantagens=0,
+                vencimentos_totais=2200,
+                descontos=200,
+                liquido=2000,
+            ),
+            FolhaPagamentoRegistro(
+                competencia_ano=2025,
+                competencia_mes_num=4,
+                competencia_mes_nome="Abril",
+                servidor=segundo,
+                cargo=cargo_segundo,
+                lotacao=lotacao_segunda,
+                salario_base=2500,
+                proventos=2500,
+                vantagens=150,
+                vencimentos_totais=2650,
+                descontos=300,
+                liquido=2350,
+            ),
+        ]
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
+        "Ronaldo Ribeiro"
+    )
+
+    assert resultado["query"] == "Ronaldo Ribeiro"
+    assert resultado["total"] == 2
+    assert resultado["resultados"] == []
+    assert resultado["candidatos"] == [
+        {
+            "folha_servidor_id": primeiro.id,
+            "nome": "Ronaldo Gaspar Ribeiro",
+            "cargo_atual": "Motorista",
+            "secretaria_atual": "Secretaria de Transportes",
+            "setor_atual": "Transportes",
+            "mes_de_referencia_do_servidor": "2025-03-01",
+        },
+        {
+            "folha_servidor_id": segundo.id,
+            "nome": "Ronaldo Ribeiro Silva",
+            "cargo_atual": "Auxiliar Administrativo",
+            "secretaria_atual": "Secretaria de Saude",
+            "setor_atual": "UPA Central",
+            "mes_de_referencia_do_servidor": "2025-04-01",
+        },
+    ]
+    assert "mais de um servidor" in resultado["mensagem"]
+    assert "folha_servidor_id" in resultado["mensagem"]
+
+    session.close()
+
+
+def test_busca_historico_de_pagamentos_aceita_folha_servidor_id_para_desempate(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+
+    servidor_canonico = Servidor(
+        nome="Ronaldo Gaspar Ribeiro",
+        cargo="Motorista",
+        secretaria="Secretaria de Transportes",
+        salario_base=2200,
+        competencia_referencia=date(2025, 3, 1),
+    )
+    folha_servidor = FolhaServidor(
+        nome="Ronaldo Gaspar Ribeiro",
+        servidor_canonico=servidor_canonico,
+    )
+    cargo = FolhaCargo(nome="Motorista")
+    lotacao = FolhaLotacao(nome="Transportes")
+
+    session.add_all([servidor_canonico, folha_servidor, cargo, lotacao])
+    session.flush()
+    session.add(
+        FolhaPagamentoRegistro(
+            competencia_ano=2025,
+            competencia_mes_num=3,
+            competencia_mes_nome="Marco",
+            servidor=folha_servidor,
+            cargo=cargo,
+            lotacao=lotacao,
+            salario_base=2200,
+            proventos=2200,
+            vantagens=0,
+            vencimentos_totais=2200,
+            descontos=200,
+            liquido=2000,
+        )
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
+        folha_servidor_id=folha_servidor.id
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"][0]["folha_servidor_id"] == folha_servidor.id
+    assert resultado["resultados"][0]["nome"] == "Ronaldo Gaspar Ribeiro"
+    assert resultado["resultados"][0]["cargo_atual"] == "Motorista"
+
+    session.close()
+
+
 def test_busca_historico_de_pagamentos_retorna_mensagem_para_nome_vazio() -> None:
     resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("   ")
 
     assert resultado["total"] == 0
-    assert resultado["mensagem"] == "Informe um nome de servidor para realizar a busca."
+    assert resultado["mensagem"] == (
+        "Informe um nome de servidor ou selecione um `folha_servidor_id` "
+        "para realizar a busca."
+    )
+
+
+def test_busca_historico_de_pagamentos_exige_nome_suficiente() -> None:
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
+        "Ronaldo"
+    )
+
+    assert resultado["query"] == "Ronaldo"
+    assert resultado["total"] == 0
+    assert resultado["resultados"] == []
+    assert resultado["mensagem"] == (
+        "Informação insuficiente para consultar salário individual. "
+        "Informe o nome completo ou pelo menos primeiro nome e outro sobrenome "
+        "do servidor."
+    )
 
 
 def test_busca_historico_de_pagamentos_retorna_sugestao_sem_resultados(
@@ -169,13 +406,16 @@ def test_busca_historico_de_pagamentos_retorna_sugestao_sem_resultados(
 
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
-    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("Jose")
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
+        "Jose Silva"
+    )
 
-    assert resultado["query"] == "Jose"
+    assert resultado["query"] == "Jose Silva"
     assert resultado["total"] == 0
     assert resultado["sugestao"] == (
-        "Nenhum servidor encontrado com 'Jose'. "
-        "Tente buscar por partes do nome, ex: só o sobrenome."
+        "Nenhum servidor encontrado com 'Jose Silva'. "
+        "Confira a grafia ou tente uma combinação menos ambígua do nome, "
+        "como primeiro nome e outro sobrenome."
     )
 
     session.close()
