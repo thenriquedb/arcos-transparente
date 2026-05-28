@@ -6,10 +6,13 @@ devem depender de ChatbotApplication e de um AgentBackend.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 import re
 from typing import Any, Protocol
 from uuid import uuid4
+
+from agents.chatbot.agent import criar_agente_chatbot
 
 
 @dataclass(frozen=True)
@@ -37,13 +40,21 @@ class AgentBackend(Protocol):
         """Responde uma pergunta usando a sessao informada."""
 
 
-class MainAgentBackend:
-    """Backend que reaproveita o bootstrap oficial definido em main.py."""
+class ChatbotAgentBackend:
+    """Backend que executa o agente conversacional do modulo de chatbot."""
+
+    def __init__(self, agent_factory: Callable[[], Any] = criar_agente_chatbot) -> None:
+        self._agent_factory = agent_factory
+        self._agent = None
 
     def answer(self, question: str, session_id: str) -> ChatResponse:
-        from main import responder_pergunta
+        if self._agent is None:
+            self._agent = self._agent_factory()
 
-        result = responder_pergunta(question, thread_id=session_id)
+        result = self._agent.invoke(
+            {"messages": [question]},
+            {"configurable": {"thread_id": session_id}},
+        )
         content = _extract_last_message_content(result)
 
         return ChatResponse(
@@ -64,7 +75,7 @@ class ChatbotApplication:
         backend: AgentBackend | None = None,
         session: ChatSession | None = None,
     ) -> None:
-        self.backend = backend or MainAgentBackend()
+        self.backend = backend or ChatbotAgentBackend()
         self.session = session or ChatSession()
 
     def ask(self, question: str) -> ChatResponse:

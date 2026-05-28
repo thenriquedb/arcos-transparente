@@ -535,9 +535,7 @@ def test_try_route_historico_isolado() -> None:
 
 
 def test_try_route_historico_reconhece_salario_de_nome() -> None:
-    decision = _try_route_historico(
-        _normalize("qual o salario de sidnei jose correa?")
-    )
+    decision = _try_route_historico(_normalize("qual o salario de sidnei jose correa?"))
 
     assert decision is not None
     assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
@@ -552,10 +550,29 @@ def test_try_route_historico_reconhece_quanto_nome_recebe() -> None:
     assert decision.tool_kwargs == {"nome": "ronaldo ribeiro"}
 
 
+@pytest.mark.parametrize(
+    ("pergunta", "nome"),
+    [
+        ("quanto ganha ronaldo ribeiro", "ronaldo ribeiro"),
+        ("quanto recebe ronaldo ribeiro", "ronaldo ribeiro"),
+        ("qual salario ronaldo ribeiro", "ronaldo ribeiro"),
+        ("salario ronaldo ribeiro", "ronaldo ribeiro"),
+        ("qual o salario do servidor ronaldo ribeiro", "ronaldo ribeiro"),
+    ],
+)
+def test_try_route_historico_reconhece_salario_com_nome_em_ordem_variada(
+    pergunta: str,
+    nome: str,
+) -> None:
+    decision = _try_route_historico(_normalize(pergunta))
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": nome}
+
+
 def test_try_route_historico_reconhece_pesquise_por_nome() -> None:
-    decision = _try_route_historico(
-        _normalize("pesquise por ronaldo gaspar ribeiro")
-    )
+    decision = _try_route_historico(_normalize("pesquise por ronaldo gaspar ribeiro"))
 
     assert decision is not None
     assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"

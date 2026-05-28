@@ -395,10 +395,37 @@ def test_busca_historico_de_pagamentos_exige_nome_suficiente() -> None:
     )
 
 
+def test_busca_historico_de_pagamentos_avisa_quando_base_de_folha_esta_vazia(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
+        "Jose Silva"
+    )
+
+    assert resultado["query"] == "Jose Silva"
+    assert resultado["total"] == 0
+    assert resultado["mensagem"] == (
+        "A base local de folha de pagamento esta vazia. "
+        "Importe os XMLs de folha antes de consultar salarios."
+    )
+
+    session.close()
+
+
 def test_busca_historico_de_pagamentos_retorna_sugestao_sem_resultados(
     monkeypatch,
 ) -> None:
     session = _build_session()
+    session.add(FolhaServidor(nome="Maria da Silva"))
+    session.commit()
 
     @contextmanager
     def fake_get_session():

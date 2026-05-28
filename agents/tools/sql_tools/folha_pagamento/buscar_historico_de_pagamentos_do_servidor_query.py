@@ -145,6 +145,19 @@ def buscar_historico_de_pagamentos_do_servidor(
         candidatos_ids = session.execute(candidatos_stmt).scalars().all()
 
         if not candidatos_ids:
+            total_servidores_folha = session.execute(
+                select(func.count(FolhaServidor.id))
+            ).scalar_one()
+
+            if total_servidores_folha == 0:
+                return resposta_sem_resultados(
+                    query=params.nome,
+                    mensagem=(
+                        "A base local de folha de pagamento esta vazia. "
+                        "Importe os XMLs de folha antes de consultar salarios."
+                    ),
+                )
+
             return resposta_sem_resultados(
                 query=params.nome,
                 sugestao=(
@@ -172,8 +185,7 @@ def buscar_historico_de_pagamentos_do_servidor(
 
         if len(servidores) > 1:
             candidatos = [
-                serializar_candidato_servidor(servidor)
-                for servidor in servidores
+                serializar_candidato_servidor(servidor) for servidor in servidores
             ]
             return resposta_sem_resultados(
                 query=params.nome,

@@ -123,7 +123,10 @@ def _extract_nome_para_historico(normalized_text: str) -> str | None:
 
     patterns = [
         r"salario\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
+        r"salario\s+([a-z\s]+?)(?:\?|$)",
         r"quanto\s+([a-z\s]+?)\s+(?:recebe|recebeu|ganha|ganhou)(?:\?|$)",
+        r"quanto\s+(?:recebe|recebeu|ganha|ganhou)\s+([a-z\s]+?)(?:\?|$)",
+        r"(?:quanto\s+e\s+)?(?:o\s+)?salario\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
         r"pagamentos\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
         r"(?:pesquise|busque|procure|pesquisar|buscar|procurar)\s+(?:por\s+)?([a-z\s]+?)(?:\?|$)",
     ]
@@ -131,7 +134,11 @@ def _extract_nome_para_historico(normalized_text: str) -> str | None:
         match = re.search(pattern, normalized_text)
         if match is None:
             continue
-        nome = match.group(1).strip()
+        nome = re.sub(
+            r"^(?:servidor publico|servidora publica|servidor|servidora|funcionario|funcionaria)\s+",
+            "",
+            match.group(1).strip(),
+        )
         if nome:
             return nome
     return None

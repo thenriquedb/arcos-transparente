@@ -2,18 +2,18 @@
 
 from agents.chatbot.core import (
     AgentBackend,
+    ChatbotAgentBackend,
     ChatMessage,
     ChatResponse,
     ChatSession,
     ChatbotApplication,
-    MainAgentBackend,
 )
 
 __all__ = [
     "AgentBackend",
+    "ChatbotAgentBackend",
     "ChatMessage",
     "ChatResponse",
     "ChatSession",
     "ChatbotApplication",
-    "MainAgentBackend",
 ]
