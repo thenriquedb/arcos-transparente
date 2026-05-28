@@ -23,10 +23,7 @@ from .consultar_frota_schema import (
 
 
 def _total_despesas(registro: FrotaVeiculo) -> Decimal:
-    return sum(
-        despesa.total_despesa or Decimal("0")
-        for despesa in registro.despesas
-    )
+    return sum(despesa.total_despesa or Decimal("0") for despesa in registro.despesas)
 
 
 def _row_to_public_dict(registro: FrotaVeiculo) -> dict[str, Any]:
@@ -88,9 +85,7 @@ def load_filtered_frota(
             if matches_text_query(r.tipo_veiculo, filtros.tipo_veiculo)
         ]
     if filtros.marca:
-        registros = [
-            r for r in registros if matches_text_query(r.marca, filtros.marca)
-        ]
+        registros = [r for r in registros if matches_text_query(r.marca, filtros.marca)]
     if filtros.modelo:
         registros = [
             r for r in registros if matches_text_query(r.modelo, filtros.modelo)

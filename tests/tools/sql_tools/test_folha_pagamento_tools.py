@@ -3,11 +3,12 @@ from __future__ import annotations
 from contextlib import contextmanager
 from datetime import date
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.folha_pagamento as folha_pagamento_tools
 from database import session as session_manager
+from database.session import _normalizar_texto
 from database.models import (
     Base,
     FolhaCargo,
@@ -20,6 +21,11 @@ from database.models import (
 
 def _build_session():
     engine = create_engine("sqlite:///:memory:", future=True)
+
+    @event.listens_for(engine, "connect")
+    def on_connect(conn, _):
+        conn.create_function("normalizar", 1, _normalizar_texto)
+
     Base.metadata.create_all(bind=engine)
     session_local = sessionmaker(
         bind=engine,
@@ -193,6 +199,55 @@ def test_busca_historico_de_pagamentos_aceita_termos_nao_contiguos(
     assert resultado["query"] == "Ronaldo Ribeiro"
     assert resultado["total"] == 1
     assert resultado["resultados"][0]["nome"] == "Ronaldo Gaspar Ribeiro"
+
+    session.close()
+
+
+def test_busca_historico_de_pagamentos_ignora_diferenca_de_acentos(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+
+    folha_servidor = FolhaServidor(nome="Wellington Francelli Estevao Rodrigues Roque")
+    cargo = FolhaCargo(nome="Prefeito Municipal")
+    lotacao = FolhaLotacao(nome="M. SEC. GOV-SUB.PREF")
+
+    session.add_all([folha_servidor, cargo, lotacao])
+    session.flush()
+    session.add(
+        FolhaPagamentoRegistro(
+            competencia_ano=2025,
+            competencia_mes_num=12,
+            competencia_mes_nome="Dezembro",
+            servidor=folha_servidor,
+            cargo=cargo,
+            lotacao=lotacao,
+            salario_base=22614.44,
+            proventos=22614.44,
+            vantagens=0,
+            vencimentos_totais=22614.44,
+            descontos=4500,
+            liquido=18114.44,
+        )
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
+        "Wellington Francelli Estevão Rodrigues Roque"
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"][0]["nome"] == (
+        "Wellington Francelli Estevao Rodrigues Roque"
+    )
+    assert resultado["resultados"][0]["cargo_atual"] == "Prefeito Municipal"
+    assert resultado["resultados"][0]["pagamentos"][0]["salario_base"] == 22614.44
 
     session.close()
 

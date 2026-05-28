@@ -4,16 +4,22 @@ from contextlib import contextmanager
 from datetime import date
 
 import pytest
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.servidores as servidores_tools
 from database import session as session_manager
+from database.session import _normalizar_texto
 from database.models import Base, Servidor
 
 
 def _build_session():
     engine = create_engine("sqlite:///:memory:", future=True)
+
+    @event.listens_for(engine, "connect")
+    def on_connect(conn, _):
+        conn.create_function("normalizar", 1, _normalizar_texto)
+
     Base.metadata.create_all(bind=engine)
     session_local = sessionmaker(
         bind=engine,
@@ -123,6 +129,36 @@ def test_consultar_servidores_busca_nome_por_multiplos_termos(monkeypatch) -> No
 
     assert resultado["total"] == 1
     assert resultado["resultados"][0]["nome"] == "Maria da Silva"
+
+    session.close()
+
+
+def test_consultar_servidores_ignora_diferenca_de_acentos_no_nome(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add(
+        Servidor(
+            nome="Wellington Francelli Estevao Rodrigues Roque",
+            cargo="Prefeito Municipal",
+            secretaria="Governo",
+            salario_base=22614.44,
+            competencia_referencia=date(2025, 12, 1),
+        )
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = servidores_tools.consultar_servidores(
+        filtros={"nome": "Wellington Francelli Estevão Rodrigues Roque"},
+        ordenar_por="nome",
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"][0]["nome"] == (
+        "Wellington Francelli Estevao Rodrigues Roque"
+    )
+    assert resultado["resultados"][0]["cargo"] == "Prefeito Municipal"
 
     session.close()
 

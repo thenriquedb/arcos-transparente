@@ -542,6 +542,17 @@ def test_try_route_historico_reconhece_salario_de_nome() -> None:
     assert decision.tool_kwargs == {"nome": "sidnei jose correa"}
 
 
+@pytest.mark.parametrize(
+    "pergunta",
+    [
+        "qual o salario dele?",
+        "qual o salario do prefeito?",
+    ],
+)
+def test_try_route_historico_nao_trata_referencia_como_nome(pergunta: str) -> None:
+    assert _try_route_historico(_normalize(pergunta)) is None
+
+
 def test_try_route_historico_reconhece_quanto_nome_recebe() -> None:
     decision = _try_route_historico(_normalize("quanto ronaldo ribeiro recebe"))
 

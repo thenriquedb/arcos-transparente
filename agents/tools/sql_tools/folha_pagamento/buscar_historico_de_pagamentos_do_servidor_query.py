@@ -10,6 +10,7 @@ from sqlalchemy.orm import joinedload
 
 from agents.tools.registry import PUBLIC_SCOPE, register
 from database import session as session_manager
+from database.session import _normalizar_texto
 from database.models import FolhaPagamentoRegistro, FolhaServidor
 
 from .shared.params import BuscarHistoricoPagamentosServidorParams
@@ -37,6 +38,15 @@ def buscar_historico_de_pagamentos_do_servidor(
 
     Use esta tool quando a pergunta citar uma pessoa especifica e pedir salario,
     quanto recebeu, descontos, ganhos, adicionais ou a evolucao ao longo dos meses.
+    Use tambem quando a pergunta for uma continuacao contextual, como
+    "qual o salario dele?", "quanto ele recebe?" ou "qual o salario do prefeito?",
+    resolvendo o nome completo a partir do historico da conversa antes de chamar
+    esta tool.
+    Se a pergunta mencionar apenas cargo politico, como "prefeito", "vice" ou
+    "vereador", primeiro use `consultar_eleitos` para descobrir o `nome_completo`
+    em exercicio; em seguida chame esta tool com esse nome completo.
+    Para "qual o salario do prefeito?", use o `nome_completo` do prefeito em
+    exercicio retornado por `consultar_eleitos`, nao solicite o nome ao usuario.
     NAO use para listar varios servidores, ordenar por salario ou contar pessoas;
     para isso use `consultar_servidores` ou `agregar_servidores`.
     NAO use para perguntas sobre vagas por regime; para isso use
@@ -130,16 +140,19 @@ def buscar_historico_de_pagamentos_do_servidor(
                 resultados=resultados,
             ).model_dump(mode="json")
 
-        termos_normalizados = params.nome.lower().split()
-
+        termos = [
+            t
+            for t in _normalizar_texto(params.nome).split()
+            if len(t) > 2  # ignora artigos: "de", "da", "do", "e"
+        ]
         candidatos_stmt = (
             select(FolhaServidor.id)
             .order_by(FolhaServidor.nome.asc())
             .limit(params.limite)
         )
-        for termo in termos_normalizados:
+        for termo in termos:
             candidatos_stmt = candidatos_stmt.where(
-                func.lower(FolhaServidor.nome).like(f"%{termo}%")
+                func.normalizar(FolhaServidor.nome).like(f"%{termo}%")
             )
 
         candidatos_ids = session.execute(candidatos_stmt).scalars().all()

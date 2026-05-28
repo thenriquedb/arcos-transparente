@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 import os
+import unicodedata
 from typing import Generator
 
 from dotenv import load_dotenv
@@ -42,3 +43,20 @@ def get_session() -> Generator[Session, None, None]:
         yield session
     finally:
         session.close()
+
+
+def _normalizar_texto(texto: str | None) -> str | None:
+    """
+    Remove acentos e converte para minúsculas.
+    Registrada no SQLite como função 'normalizar'.
+    """
+    if texto is None:
+        return None
+    sem_acento = unicodedata.normalize("NFD", texto)
+    return "".join(c for c in sem_acento if unicodedata.category(c) != "Mn").lower()
+
+
+# Registra no SQLite ao criar cada conexão
+@event.listens_for(engine, "connect")
+def on_connect(conn, _):
+    conn.create_function("normalizar", 1, _normalizar_texto)

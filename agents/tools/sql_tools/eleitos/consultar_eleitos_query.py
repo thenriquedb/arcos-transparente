@@ -152,8 +152,15 @@ def consultar_eleitos(
 
     Use esta tool quando a pergunta pedir quem foram/quem sao os eleitos,
     quais mandatos uma pessoa teve, partido de um eleito ou status do mandato.
-    NAO use para despesas, receitas, licitacoes, contratos, servidores ou folha.
-    Para esses temas, use as tools especificas de cada dominio.
+    Use tambem para resolver o `nome_completo` quando a pergunta pedir salario
+    ou pagamento de um cargo politico sem nome explicito, como "salario do
+    prefeito" ou "quanto o vereador recebe"; depois chame
+    `buscar_historico_de_pagamentos_do_servidor` com esse `nome_completo`.
+    Para cargo politico atual, use `em_exercicio=True` e o `tipo_politico`
+    correspondente, por exemplo `tipo_politico="prefeito"`.
+    NAO use como fonte final para responder valores de despesas, salarios,
+    receitas, licitacoes, contratos, servidores ou folha. Para esses temas,
+    use as tools especificas de cada dominio.
 
     Args:
         filtros: Objeto com filtros opcionais. Campos aceitos:

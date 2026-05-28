@@ -6,6 +6,7 @@ import agents.chatbot.agent as chatbot_agent
 from agents.chatbot.cli import run_interactive, run_once
 from agents.chatbot.core import (
     ChatbotAgentBackend,
+    ChatMessage,
     ChatResponse,
     ChatSession,
     ChatbotApplication,
@@ -19,6 +20,13 @@ class FakeBackend:
     def answer(self, question: str, session_id: str) -> ChatResponse:
         self.calls.append((question, session_id))
         return ChatResponse(content=f"resposta para: {question}")
+
+
+class FakeStreamingBackend(FakeBackend):
+    def stream_answer(self, question: str, session_id: str):
+        self.calls.append((question, session_id))
+        yield "resposta"
+        yield f" em stream para: {question}"
 
 
 def _tool_name(tool_obj) -> str:
@@ -54,6 +62,14 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     assert capturado["checkpointer"] is chatbot_agent.CHECKPOINTER
     assert "buscar_historico_de_pagamentos_do_servidor" in nomes
     assert "consultar_contratos" in nomes
+
+
+def test_system_prompt_orienta_salario_de_cargo_eleito_sem_pedir_nome() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "NÃO peça o nome ao usuário" in prompt
+    assert "Primeiro use `consultar_eleitos`" in prompt
+    assert "depois chame `buscar_historico_de_pagamentos_do_servidor`" in prompt
 
 
 def test_chatbot_application_mantem_estado_da_sessao() -> None:
@@ -93,6 +109,118 @@ def test_chatbot_application_responde_identidade_sem_chamar_backend() -> None:
     assert backend.calls == []
 
 
+def test_chatbot_application_stream_com_backend_fake() -> None:
+    backend = FakeStreamingBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-stream"),
+    )
+
+    chunks = list(app.stream("  Quais veiculos da prefeitura?  "))
+
+    assert chunks == [
+        "resposta",
+        " em stream para: Quais veiculos da prefeitura?",
+    ]
+    assert backend.calls == [("Quais veiculos da prefeitura?", "sessao-stream")]
+
+
+def test_chatbot_application_stream_fallback_para_resposta_unica() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-fallback"),
+    )
+
+    chunks = list(app.stream("Quanto foi contratado?"))
+
+    assert chunks == ["resposta para: Quanto foi contratado?"]
+    assert backend.calls == [("Quanto foi contratado?", "sessao-fallback")]
+
+
+def test_chatbot_application_stream_atualiza_historico_ao_final() -> None:
+    app = ChatbotApplication(
+        backend=FakeStreamingBackend(),
+        session=ChatSession(id="sessao-historico"),
+    )
+
+    assert list(app.stream("Pergunta em streaming")) == [
+        "resposta",
+        " em stream para: Pergunta em streaming",
+    ]
+    assert [(msg.role, msg.content) for msg in app.session.history] == [
+        ("user", "Pergunta em streaming"),
+        ("assistant", "resposta em stream para: Pergunta em streaming"),
+    ]
+
+
+def test_chatbot_application_nao_reescreve_pergunta_contextual_no_core() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-prefeito"),
+    )
+    app.session.history.append(
+        ChatMessage(
+            role="assistant",
+            content=(
+                "O prefeito de Arcos é o Wellington Francelli Estevão Rodrigues "
+                "Roque, que está em exercício no mandato de 2025 a 2028."
+            ),
+        )
+    )
+
+    response = app.ask("e qual o salario dele?")
+
+    assert response.content == "resposta para: e qual o salario dele?"
+    assert backend.calls == [("e qual o salario dele?", "sessao-prefeito")]
+    assert [(msg.role, msg.content) for msg in app.session.history[-2:]] == [
+        ("user", "e qual o salario dele?"),
+        ("assistant", response.content),
+    ]
+
+
+def test_chatbot_application_stream_nao_reescreve_pergunta_contextual_no_core() -> None:
+    backend = FakeStreamingBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-stream-prefeito"),
+    )
+    app.session.history.append(
+        ChatMessage(
+            role="assistant",
+            content=(
+                "Segundo os dados disponíveis na base local, o prefeito eleito "
+                "para o mandato 2025-2028 é Wellington Francelli Estevão Rodrigues "
+                "Roque."
+            ),
+        )
+    )
+
+    chunks = list(app.stream("qual o salario do prefeito?"))
+
+    assert chunks == [
+        "resposta",
+        " em stream para: qual o salario do prefeito?",
+    ]
+    assert backend.calls == [("qual o salario do prefeito?", "sessao-stream-prefeito")]
+    assert app.session.history[-2].content == "qual o salario do prefeito?"
+
+
+def test_chatbot_application_reset_mantem_backend_reutilizavel() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-antiga"),
+    )
+
+    nova_sessao = app.reset("sessao-nova")
+
+    assert nova_sessao.id == "sessao-nova"
+    assert app.backend is backend
+    assert app.session.history == []
+
+
 def test_chatbot_agent_backend_reaproveita_agente_e_thread_id() -> None:
     calls: list[tuple[dict[str, object], dict[str, object]]] = []
 
@@ -119,6 +247,57 @@ def test_chatbot_agent_backend_reaproveita_agente_e_thread_id() -> None:
             {"configurable": {"thread_id": "sessao-teste"}},
         ),
     ]
+
+
+def test_chatbot_agent_backend_stream_usa_agente_langgraph() -> None:
+    calls: list[tuple[dict[str, object], dict[str, object], str]] = []
+
+    class FakeChunk:
+        def __init__(self, content: str) -> None:
+            self.content = content
+
+    class FakeAgent:
+        def stream(self, payload, config, stream_mode):
+            calls.append((payload, config, stream_mode))
+            yield (FakeChunk("resposta "), {"langgraph_node": "model"})
+            yield (FakeChunk("final"), {"langgraph_node": "model"})
+
+    backend = ChatbotAgentBackend(agent_factory=FakeAgent)
+
+    chunks = list(backend.stream_answer("quais os veiculos", session_id="thread-web"))
+
+    assert chunks == ["resposta ", "final"]
+    assert calls == [
+        (
+            {"messages": ["quais os veiculos"]},
+            {"configurable": {"thread_id": "thread-web"}},
+            "messages",
+        )
+    ]
+
+
+def test_chatbot_agent_backend_stream_nao_exibe_saida_de_tools() -> None:
+    class FakeMessage:
+        def __init__(self, content: str, message_type: str = "ai") -> None:
+            self.content = content
+            self.type = message_type
+
+    class FakeAgent:
+        def stream(self, payload, config, stream_mode):
+            yield (
+                FakeMessage('{"total": 31, "resultados": []}', message_type="tool"),
+                {"langgraph_node": "tools"},
+            )
+            yield (
+                FakeMessage("O prefeito de Arcos e Wellington Francelli."),
+                {"langgraph_node": "model"},
+            )
+
+    backend = ChatbotAgentBackend(agent_factory=FakeAgent)
+
+    chunks = list(backend.stream_answer("quem e o prefeito?", session_id="thread-web"))
+
+    assert chunks == ["O prefeito de Arcos e Wellington Francelli."]
 
 
 def test_cli_run_once_imprime_resposta() -> None:

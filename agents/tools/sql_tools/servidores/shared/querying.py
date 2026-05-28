@@ -7,6 +7,7 @@ from typing import Any
 
 from sqlalchemy import func
 
+from database.session import _normalizar_texto
 from database.models import Servidor
 from shared.utils.decimal_to_float import decimal_to_float
 
@@ -52,19 +53,26 @@ def apply_servidores_filters(
         )
 
     if filtros.nome:
-        for term in filtros.nome.lower().split():
-            stmt = stmt.where(func.lower(Servidor.nome).like(f"%{term}%"))
+        for term in (_normalizar_texto(filtros.nome) or "").split():
+            stmt = _apply_text_contains_filter(stmt, Servidor.nome, term)
     if filtros.secretaria:
-        stmt = stmt.where(
-            func.lower(Servidor.secretaria).like(f"%{filtros.secretaria.lower()}%")
+        stmt = _apply_text_contains_filter(
+            stmt, Servidor.secretaria, filtros.secretaria
         )
     if filtros.cargo:
-        stmt = stmt.where(func.lower(Servidor.cargo).like(f"%{filtros.cargo.lower()}%"))
+        stmt = _apply_text_contains_filter(stmt, Servidor.cargo, filtros.cargo)
     if filtros.salario_min is not None:
         stmt = stmt.where(Servidor.salario_base >= filtros.salario_min)
     if filtros.salario_max is not None:
         stmt = stmt.where(Servidor.salario_base <= filtros.salario_max)
     return stmt
+
+
+def _apply_text_contains_filter(stmt, column, value: str):
+    normalized = _normalizar_texto(value)
+    if not normalized:
+        return stmt
+    return stmt.where(func.normalizar(column).like(f"%{normalized}%"))
 
 
 def project_servidor_fields(
