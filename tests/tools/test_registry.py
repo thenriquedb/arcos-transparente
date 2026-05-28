@@ -28,6 +28,7 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
         "consultar_quadro_pessoal",
         "agregar_quadro_pessoal",
         "consultar_eleitos",
+        "consultar_frota",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 
@@ -53,6 +54,7 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
         "consultar_quadro_pessoal",
         "agregar_quadro_pessoal",
         "consultar_eleitos",
+        "consultar_frota",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 

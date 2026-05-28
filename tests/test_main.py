@@ -56,6 +56,7 @@ def test_criar_agente_sem_pergunta_usa_so_tools_publicas(monkeypatch) -> None:
         "agregar_despesas",
         "consultar_patrimonios",
         "agregar_patrimonios",
+        "consultar_frota",
         "consultar_quadro_pessoal",
         "agregar_quadro_pessoal",
         "consultar_eleitos",
@@ -73,11 +74,10 @@ def test_carregar_system_prompt_ler_markdown_versionado() -> None:
     )
     prompt_normalizado = prompt.lower()
     assert (
-        "liste os candidatos com nome completo, cargo e secretaria ou setor"
-        in prompt_normalizado
-        or "liste os candidatos com nome completo, cargo e secretaria ou setor quando esses campos estiverem disponíveis"
+        "liste os candidatos com nome completo, cargo e secretaria"
         in prompt_normalizado
     )
+    assert "consultar_frota" in prompt
 
 
 def test_criar_agente_com_pergunta_de_top_salarios_restringe_toolset(
