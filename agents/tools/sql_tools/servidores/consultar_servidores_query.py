@@ -47,10 +47,16 @@ def consultar_servidores(
     campos: list[str] | None = None,
 ) -> dict[str, Any]:
     """
-    Lista registros individuais de servidores por nome, cargo, secretaria e salario.
+    Lista registros cadastrais de servidores por nome, cargo e secretaria.
 
     Use esta tool quando a pergunta pedir quem sao os servidores, quais nomes aparecem
-    ou um ranking simples por ordenacao.
+    ou um ranking simples por ordenacao, como maiores salarios da prefeitura.
+    NAO use para responder salario individual, valor recebido, "quanto recebe",
+    "qual o salario de [pessoa]", "qual o salario dele" ou salario de prefeito,
+    vice ou vereador. Para esses casos, use
+    `buscar_historico_de_pagamentos_do_servidor`; se o usuário disser apenas
+    "prefeito", "vice" ou "vereador", use antes `consultar_eleitos` para obter
+    o nome completo.
     NAO use para totais, contagens ou agrupamentos; para isso use
     `agregar_servidores`.
     NAO use para historico mensal de pagamento de um servidor com nome informado;

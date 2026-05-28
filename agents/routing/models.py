@@ -16,6 +16,7 @@ Domain = Literal[
     "despesas",
     "patrimonios",
     "quadro_pessoal",
+    "eleitos",
     "desconhecido",
 ]
 OperationType = Literal[

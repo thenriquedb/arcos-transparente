@@ -338,6 +338,33 @@ from agents.router import (
             },
         ),
         (
+            "Quem sao os vereadores em exercicio?",
+            "eleitos",
+            "consulta_lista",
+            "consultar_eleitos",
+            {
+                "filtros": {
+                    "tipo_politico": "vereador",
+                    "em_exercicio": True,
+                },
+                "ordenar_por": "mandato_inicio",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
+            "Quem e Carlos David Borges?",
+            "eleitos",
+            "consulta_lista",
+            "consultar_eleitos",
+            {
+                "filtros": {"nome": "carlos david borges"},
+                "ordenar_por": "mandato_inicio",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
             "Quantas vagas preenchidas por regime no quadro pessoal da prefeitura em 2025?",
             "quadro_pessoal",
             "agregacao_ranking",
@@ -507,6 +534,62 @@ def test_try_route_historico_isolado() -> None:
     assert decision.tool_kwargs == {"nome": "pedro oliveira"}
 
 
+def test_try_route_historico_reconhece_salario_de_nome() -> None:
+    decision = _try_route_historico(_normalize("qual o salario de sidnei jose correa?"))
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": "sidnei jose correa"}
+
+
+@pytest.mark.parametrize(
+    "pergunta",
+    [
+        "qual o salario dele?",
+        "qual o salario do prefeito?",
+    ],
+)
+def test_try_route_historico_nao_trata_referencia_como_nome(pergunta: str) -> None:
+    assert _try_route_historico(_normalize(pergunta)) is None
+
+
+def test_try_route_historico_reconhece_quanto_nome_recebe() -> None:
+    decision = _try_route_historico(_normalize("quanto ronaldo ribeiro recebe"))
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": "ronaldo ribeiro"}
+
+
+@pytest.mark.parametrize(
+    ("pergunta", "nome"),
+    [
+        ("quanto ganha ronaldo ribeiro", "ronaldo ribeiro"),
+        ("quanto recebe ronaldo ribeiro", "ronaldo ribeiro"),
+        ("qual salario ronaldo ribeiro", "ronaldo ribeiro"),
+        ("salario ronaldo ribeiro", "ronaldo ribeiro"),
+        ("qual o salario do servidor ronaldo ribeiro", "ronaldo ribeiro"),
+    ],
+)
+def test_try_route_historico_reconhece_salario_com_nome_em_ordem_variada(
+    pergunta: str,
+    nome: str,
+) -> None:
+    decision = _try_route_historico(_normalize(pergunta))
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": nome}
+
+
+def test_try_route_historico_reconhece_pesquise_por_nome() -> None:
+    decision = _try_route_historico(_normalize("pesquise por ronaldo gaspar ribeiro"))
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": "ronaldo gaspar ribeiro"}
+
+
 def test_try_route_historico_retorna_none_quando_caso_e_de_agregacao() -> None:
     decision = _try_route_historico(
         _normalize("quais os 10 maiores salarios da prefeitura?")
@@ -669,8 +752,22 @@ def test_route_user_query_restringe_despesas_por_tags() -> None:
     assert tool_names == ["agregar_despesas"]
 
 
+def test_route_user_query_restringe_eleitos_por_tags() -> None:
+    tools = select_public_tools_for_query("Quem sao os vereadores em exercicio?")
+    tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
+
+    assert tool_names == ["consultar_eleitos"]
+
+
 def test_evaluate_query_guardrails_permitem_consulta_no_escopo() -> None:
     decision = evaluate_query_guardrails("Quais os 10 maiores salários da prefeitura?")
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
+def test_evaluate_query_guardrails_permitem_quanto_nome_recebe() -> None:
+    decision = evaluate_query_guardrails("quanto ronaldo ribeiro recebe")
 
     assert decision.allowed is True
     assert decision.category == "allowed"

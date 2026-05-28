@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transparencia>
+	<vereadores municipio="Arcos" estado="MG">
+		<vereador id="1">
+			<nomeCompleto>Carlos David Borges</nomeCompleto>
+			<partido>PL</partido>
+			<telefone>(37) 3351 3422</telefone>
+			<email>ver.carlosdavid@camaraarcos.mg.gov.br</email>
+			<homepage>https://www.arcos.mg.leg.br/</homepage>
+			<numerogabinete></numerogabinete>
+			<mandatos>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+				</mandato>
+			</mandatos>
+			<biografia>
+        Nascido em 1975, Carlos David Borges está em seu primeiro mandato como vereador.
+      </biografia>
+		</vereador>
+		<vereador id="2">
+			<nomeCompleto>Alex Gracieres Ribeiro</nomeCompleto>
+			<nomePopular>Alex Didier</nomePopular>
+			<partido>SD</partido>
+			<telefone>(37) 3351 3422</telefone>
+			<email>ver.alexribeiro@camaraarcos.mg.gov.br</email>
+			<homepage>http://www.arcos.mg.leg.br/</homepage>
+			<numerogabinete></numerogabinete>
+			<mandatos>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+				</mandato>
+			</mandatos>
+			<biografia>
+        Morador de Arcos desde criança, Alex Gracieres Ribeiro, conhecido como Alex Didier, tem 46 anos
+        e está em seu primeiro mandato como vereador. É casado com Bruna de Fátima Pimentel Ribeiro e
+        pai de Alaf Kauan Didier Ribeiro e João Gabriel Didier Ribeiro. É formado em Técnico em
+        Segurança do Trabalho. Na política, acredita em fazer a diferença com transparência e dedicação.
+      </biografia>
+		</vereador>
+		<vereador id="3">
+			<nomeCompleto>José Agenor Da Silva</nomeCompleto>
+			<nomePopular>Genorinho</nomePopular>
+			<partido>PODE</partido>
+			<telefone>(37) 3351 3422</telefone>
+			<email>ver.joseagenor@camaraarcos.mg.gov.br</email>
+			<homepage>https://www.arcos.mg.leg.br/</homepage>
+			<numerogabinete></numerogabinete>
+			<mandatos>
+				<mandato>
+					<inicio>1997</inicio>
+					<fim>2000</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>2005</inicio>
+					<fim>2008</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>2013</inicio>
+					<fim>2016</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+				</mandato>
+			</mandatos>
+			<biografia>
+        Conhecido como Genorinho, José Agenor da Silva nasceu em 1965 e está em sua quarta legislatura
+        (2025-2028). Foi vereador nos mandatos que compreendem o período entre 1997 e 2000, 2005 e 2008,
+        2013 e 2016.
+      </biografia>
+		</vereador>
+		<vereador id="4">
+			<nomeCompleto>Jaiane Fátima Soares</nomeCompleto>
+			<partido>REPUBLICANOS</partido>
+			<telefone>(37) 3351 3422</telefone>
+			<email>ver.jaianesoares@camaraarcos.mg.gov.br</email>
+			<homepage>https://www.arcos.mg.leg.br/</homepage>
+			<numerogabinete></numerogabinete>
+			<mandatos>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+				</mandato>
+			</mandatos>
+			<biografia>
+        Jaiane Fátima Soares nasceu em 8 de agosto de 1989, em Arcos, Minas Gerais. Médica veterinária
+        com pós-graduação em clínica e cirurgia de pequenos animais, soma nove anos de dedicação à
+        profissão. Em 2024, foi eleita vereadora de Arcos com 536 votos, iniciando seu primeiro mandato
+        na vida pública. Casada com o médico veterinário e professor universitário Leonardo Ituassú, é
+        mãe da pequena Helena, de quatro anos, e madrasta de Mateus, de 14, e Luísa, de 12.
+      </biografia>
+		</vereador>
+		<vereador id="5">
+			<nomeCompleto>João Paulo Ferreira</nomeCompleto>
+			<nomePopular>Joãozinho</nomePopular>
+			<partido>PSD</partido>
+			<telefone>(37) 3351 3422</telefone>
+			<email></email>
+			<homepage>https://www.arcos.mg.leg.br/</homepage>
+			<numerogabinete></numerogabinete>
+			<mandatos>
+				<mandato>
+					<inicio>2021</inicio>
+					<fim>2024</fim>
+					<status>encerrado</status>
+					<observacao>Candidato mais votado com 1.170 votos</observacao>
+				</mandato>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+					<observacao>Segundo mais votado com 1.174 votos</observacao>
+				</mandato>
+			</mandatos>
+			<biografia>
+        João Paulo Ferreira, o Joãozinho, é arcoense, filho de Conceição Cândida Ferreira e João
+        Ferreira de Faria. Aos 39 anos, possui formação superior incompleta. Em 2020, foi o candidato
+        mais votado com 1.170 votos. Em 2024, concorreu à reeleição com 1.174 votos, sendo o segundo
+        mais votado.
+      </biografia>
+		</vereador>
+		<vereador id="6">
+			<nomeCompleto>Kátia Mateus de Moura Sousa</nomeCompleto>
+			<partido>PL</partido>
+			<telefone>(37) 3351 3422</telefone>
+			<email>ver.katiamateus@camaraarcos.mg.gov.br</email>
+			<homepage>https://www.arcos.mg.leg.br/</homepage>
+			<numerogabinete></numerogabinete>
+			<cargo>Presidente da Câmara (2025)</cargo>
+			<mandatos>
+				<mandato>
+					<inicio>2021</inicio>
+					<fim>2024</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+				</mandato>
+			</mandatos>
+			<biografia>
+        Natural de Arcos/MG, Kátia Mateus de Moura Sousa tem 54 anos. Eleita presidente da Câmara em
+        2025, está em seu segundo mandato como vereadora. Tem formação em Magistério, licenciatura em
+        Letras e pós-graduação em Supervisão Escolar e Gestão de Projetos. É professora na Creche
+        Municipal Ana Lúcia Franco e há 34 anos trabalha na rede municipal de ensino de Arcos.
+      </biografia>
+		</vereador>
+		<vereador id="7">
+			<nomeCompleto>Leslie Mariana Silva Costa</nomeCompleto>
+			<partido>AGIR36</partido>
+			<telefone>(37) 3351 3422</telefone>
+			<email>ver.lesliecosta@camaraarcos.mg.gov.br</email>
+			<homepage></homepage>
+			<numerogabinete></numerogabinete>
+			<mandatos>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+				</mandato>
+			</mandatos>
+			<biografia>
+        Leslie Mariana Silva Costa, 31 anos, natural de Arcos/MG, é técnica em Química e em Recursos
+        Humanos, com trajetória marcada pela atuação no setor agropecuário e hoje como coordenadora de
+        RH em uma empresa de montagem mecânica. Mãe de Melissa Augusta e Mariana Luiza.
+      </biografia>
+		</vereador>
+		<vereador id="8">
+			<nomeCompleto>Orlando Martins Ferreira</nomeCompleto>
+			<partido>AVANTE</partido>
+			<telefone>(37) 3351 3422</telefone>
+			<email>ver.orlandoferreira@camaraarcos.mg.gov.br</email>
+			<homepage>https://www.arcos.mg.leg.br/</homepage>
+			<numerogabinete></numerogabinete>
+			<mandatos>
+				<mandato>
+					<inicio>2021</inicio>
+					<fim>2024</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+				</mandato>
+			</mandatos>
+			<biografia>
+        Orlando Martins Ferreira é formado em História pela Unifor-MG e pós-graduado em Gestão do
+        Sistema Único de Assistência Social pelo Pitágoras. É professor efetivo da rede estadual de
+        ensino. Foi Secretário de Desenvolvimento e Integração Social em dois mandatos, entre 2009 e
+        2012 e de 2014 a 2016. Esta é sua segunda legislatura como vereador.
+      </biografia>
+		</vereador>
+		<vereador id="9">
+			<nomeCompleto>Hernane Honório Dias</nomeCompleto>
+			<nomePopular>Queijinho</nomePopular>
+			<partido>AVANTE</partido>
+			<telefone>(37) 3351 3422</telefone>
+			<email>ver.hernanedias@camaraarcos.mg.gov.br</email>
+			<homepage>https://www.arcos.mg.leg.br/</homepage>
+			<numerogabinete></numerogabinete>
+			<mandatos>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+					<observacao>Vereador mais votado com 1.439 votos</observacao>
+				</mandato>
+			</mandatos>
+			<biografia>
+        Hernane Honório Dias, conhecido como Queijinho, é casado com Edilene e pai da atleta Isabella.
+        Sua trajetória política começou aos 18 anos em Iguatama. Foi o vereador mais votado de Arcos na
+        última eleição, com 1.439 votos. Dedica-se a todas as áreas do município, com bandeira principal
+        na saúde e defesa dos profissionais da área.
+      </biografia>
+		</vereador>
+	</vereadores>
+	<prefeitos municipio="Arcos" estado="MG">
+		<prefeito id="1">
+			<nomeCompleto>Wellington Francelli Estevão Rodrigues Roque</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>2025</inicio>
+					<fim>2028</fim>
+					<status>em exercício</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="2">
+			<nomeCompleto>Claudenir José de Melo</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>2009</inicio>
+					<fim>2012</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>2014</inicio>
+					<fim>2016</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>2021</inicio>
+					<fim>2024</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="3">
+			<nomeCompleto>Denilson Francisco Teixeira</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>2017</inicio>
+					<fim>2020</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="4">
+			<nomeCompleto>Roberto Alves da Silva</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>2013</inicio>
+					<fim>2014</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="5">
+			<nomeCompleto>Lécio Rodrigues de Sousa</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>2001</inicio>
+					<fim>2004</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="6">
+			<nomeCompleto>Hilda Borges de Andrade</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1989</inicio>
+					<fim>1992</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>1997</inicio>
+					<fim>2000</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="7">
+			<nomeCompleto>Plácido Ribeiro Vaz</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1983</inicio>
+					<fim>1988</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>1993</inicio>
+					<fim>1996</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>2005</inicio>
+					<fim>2008</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="8">
+			<nomeCompleto>Paulo Marques de Oliveira</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1977</inicio>
+					<fim>1983</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="9">
+			<nomeCompleto>Olívio Guimarães de Faria</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1973</inicio>
+					<fim>1977</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="10">
+			<nomeCompleto>José Teixeira Rezende</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1971</inicio>
+					<fim>1973</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="11">
+			<nomeCompleto>Albertino da Cunha Amorim</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1963</inicio>
+					<fim>1967</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="12">
+			<nomeCompleto>Edgard Faria Gontijo</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1959</inicio>
+					<fim>1963</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="13">
+			<nomeCompleto>Trajano Vieira de Faria</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1952</inicio>
+					<fim>1952</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="14">
+			<nomeCompleto>José Vilela de Oliveira</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1951</inicio>
+					<fim>1952</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>1952</inicio>
+					<fim>1955</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="15">
+			<nomeCompleto>Azor Vieira de Faria</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1947</inicio>
+					<fim>1947</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="16">
+			<nomeCompleto>Heli Duarte de Figueiredo</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1945</inicio>
+					<fim>1946</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="17">
+			<nomeCompleto>Moacir Dias de Carvalho</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1945</inicio>
+					<fim>1945</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>1946</inicio>
+					<fim>1947</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="18">
+			<nomeCompleto>Aderbal Teixeira Amorim</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1944</inicio>
+					<fim>1944</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>1944</inicio>
+					<fim>1945</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>1947</inicio>
+					<fim>1947</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="19">
+			<nomeCompleto>João Vaz Sobrinho</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1939</inicio>
+					<fim>1944</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>1948</inicio>
+					<fim>1951</fim>
+					<status>encerrado</status>
+				</mandato>
+				<mandato>
+					<inicio>1955</inicio>
+					<fim>1959</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+		<prefeito id="20">
+			<nomeCompleto>José Ribeiro do Vale</nomeCompleto>
+			<mandatos>
+				<mandato>
+					<inicio>1939</inicio>
+					<fim>1939</fim>
+					<status>encerrado</status>
+				</mandato>
+			</mandatos>
+		</prefeito>
+	</prefeitos>
+</transparencia>

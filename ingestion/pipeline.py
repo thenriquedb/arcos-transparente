@@ -15,6 +15,7 @@ from database.models import (
     DespesaDocumento,
     DespesaDocumentoComprobatorio,
     DespesaDocumentoItem,
+    Eleito,
     FolhaCargo,
     FolhaLotacao,
     FolhaPagamentoRegistro,
@@ -46,6 +47,7 @@ from ingestion.parsers.xml.receitas_parser import ReceitasParser
 from ingestion.parsers.xml.folha_pagamento_parser import FolhaPagamentoParser
 from ingestion.parsers.xml.planejamentos_parser import PlanejamentosParser
 from ingestion.parsers.xml.quadro_pessoal_parser import QuadroPessoalParser
+from ingestion.parsers.xml.eleitos_parser import EleitosParser
 
 
 class IngestionPipeline:
@@ -66,6 +68,7 @@ class IngestionPipeline:
             "despesas": (DespesasParser(), DespesaDocumento),
             "patrimonios": (PatrimoniosParser(), Patrimonio),
             "quadro_pessoal": (QuadroPessoalParser(), QuadroPessoal),
+            "eleitos": (EleitosParser(), Eleito),
         }
 
     def run(
@@ -853,6 +856,7 @@ class IngestionPipeline:
         despesas_path = self.data_dir / "despesas"
         receitas_path = self.data_dir / "receitas"
         servidores_path = self.data_dir / "servidores"
+        camara_path = self.data_dir / "camara"
 
         if tipo == "receitas":
             arquivos = sorted(receitas_path.rglob("*arrecadacao*.xml")) + sorted(
@@ -874,6 +878,8 @@ class IngestionPipeline:
             arquivos = sorted(administracao_path.rglob("*patrimonio*.xml"))
         elif tipo == "quadro_pessoal":
             arquivos = sorted(servidores_path.rglob("*quadro-pessoal*.xml"))
+        elif tipo == "eleitos":
+            arquivos = sorted(camara_path.rglob("*eleitos*.xml"))
         elif tipo == "servidores":
             arquivos = sorted(servidores_path.rglob("*servidores*.xml"))
             if not arquivos:
@@ -884,7 +890,7 @@ class IngestionPipeline:
                 arquivos = sorted(administracao_path.rglob("*licitacoes*.xml"))
         else:
             arquivos = sorted(self.data_dir.rglob(f"*{tipo}*.xml"))
-        if ano is None:
+        if ano is None or tipo == "eleitos":
             return arquivos
         marcador = str(ano)
         return [arquivo for arquivo in arquivos if marcador in arquivo.name]

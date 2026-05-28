@@ -55,6 +55,15 @@ RECEITAS_TEMA_ALIASES = (
     "taxas",
 )
 
+REFERENTIAL_NAME_TOKENS = {
+    "dele",
+    "dela",
+    "ele",
+    "ela",
+    "prefeito",
+    "prefeita",
+}
+
 
 def _normalize(text: str) -> str:
     """Remove acentos e normaliza caixa para simplificar match por texto."""
@@ -122,15 +131,26 @@ def _extract_nome_para_historico(normalized_text: str) -> str | None:
     """Extrai nomes em perguntas sobre salário ou histórico de pagamentos."""
 
     patterns = [
-        r"salario\s+do\s+([a-z\s]+?)(?:\?|$)",
-        r"quanto\s+([a-z\s]+?)\s+recebeu(?:\?|$)",
-        r"pagamentos\s+do\s+([a-z\s]+?)(?:\?|$)",
+        r"salario\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
+        r"salario\s+([a-z\s]+?)(?:\?|$)",
+        r"quanto\s+([a-z\s]+?)\s+(?:recebe|recebeu|ganha|ganhou)(?:\?|$)",
+        r"quanto\s+(?:recebe|recebeu|ganha|ganhou)\s+([a-z\s]+?)(?:\?|$)",
+        r"(?:quanto\s+e\s+)?(?:o\s+)?salario\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
+        r"pagamentos\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
+        r"(?:pesquise|busque|procure|pesquisar|buscar|procurar)\s+(?:por\s+)?([a-z\s]+?)(?:\?|$)",
     ]
     for pattern in patterns:
         match = re.search(pattern, normalized_text)
         if match is None:
             continue
-        nome = match.group(1).strip()
+        nome = re.sub(
+            r"^(?:servidor publico|servidora publica|servidor|servidora|funcionario|funcionaria)\s+",
+            "",
+            match.group(1).strip(),
+        )
+        nome = re.sub(r"^(?:do|da|de|o|a)\s+", "", nome)
+        if set(nome.split()).issubset(REFERENTIAL_NAME_TOKENS):
+            continue
         if nome:
             return nome
     return None

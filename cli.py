@@ -19,6 +19,7 @@ from database.models import (
     DespesaDocumento,
     DespesaDocumentoComprobatorio,
     DespesaDocumentoItem,
+    Eleito,
     Fornecedor,
     FolhaCargo,
     FolhaLotacao,
@@ -136,6 +137,7 @@ def db_status() -> None:
         )
         tabela.add_row("patrimonios", str(session.query(Patrimonio).count()))
         tabela.add_row("quadro_pessoal", str(session.query(QuadroPessoal).count()))
+        tabela.add_row("eleitos", str(session.query(Eleito).count()))
         metadata = MetaData()
         alembic_version = SQLATable(
             "alembic_version", metadata, autoload_with=session.bind
@@ -152,7 +154,7 @@ def importar(
         default=None,
         help=(
             "Tipo: contratos|licitacoes|frotas|receitas|folha_pagamento|"
-            "servidores|planejamentos|despesas|patrimonios|quadro_pessoal"
+            "servidores|planejamentos|despesas|patrimonios|quadro_pessoal|eleitos"
         ),
     ),
     ano: Optional[int] = typer.Option(
@@ -188,6 +190,7 @@ def importar(
         "despesas",
         "patrimonios",
         "quadro_pessoal",
+        "eleitos",
     ]
     total_arquivos = sum(
         len(pipeline._arquivos_por_tipo(t, ano)) for t in tipos_resolvidos

@@ -8,6 +8,7 @@ from database.models import FolhaServidor
 from shared.utils.decimal_to_float import decimal_to_float
 
 from .responses import (
+    FolhaServidorCandidato,
     HistoricoPagamentosServidorItem,
     HistoricoPagamentosServidorResponse,
     PagamentoMensalItem,
@@ -17,13 +18,16 @@ from .responses import (
 def resposta_sem_resultados(
     *,
     query: str | None = None,
+    total: int = 0,
+    candidatos: list[dict[str, object]] | None = None,
     mensagem: str | None = None,
     sugestao: str | None = None,
 ) -> dict[str, object]:
     return HistoricoPagamentosServidorResponse(
         query=query,
-        total=0,
+        total=total,
         resultados=[],
+        candidatos=candidatos or [],
         mensagem=mensagem,
         sugestao=sugestao,
     ).model_dump(mode="json")
@@ -91,6 +95,49 @@ def serializar_servidor(
             "nota": (
                 f"Dados consultados em {date.today().isoformat()}. "
                 f"Historico limitado aos ultimos {max_meses} meses de pagamento."
+            ),
+        }
+    )
+    return payload.model_dump(mode="json")
+
+
+def serializar_candidato_servidor(
+    servidor: FolhaServidor,
+) -> dict[str, object]:
+    pagamentos = sorted(
+        servidor.pagamentos,
+        key=lambda registro: (
+            registro.competencia_ano,
+            registro.competencia_mes_num,
+        ),
+        reverse=True,
+    )
+    pagamento_recente = pagamentos[0] if pagamentos else None
+
+    payload = FolhaServidorCandidato.model_validate(
+        {
+            "folha_servidor_id": servidor.id,
+            "nome": servidor.nome,
+            "cargo_atual": (
+                pagamento_recente.cargo.nome
+                if pagamento_recente and pagamento_recente.cargo
+                else None
+            ),
+            "secretaria_atual": (
+                servidor.servidor_canonico.secretaria
+                if servidor.servidor_canonico
+                else None
+            ),
+            "setor_atual": (
+                pagamento_recente.lotacao.nome
+                if pagamento_recente and pagamento_recente.lotacao
+                else None
+            ),
+            "mes_de_referencia_do_servidor": (
+                servidor.servidor_canonico.competencia_referencia
+                if servidor.servidor_canonico
+                and servidor.servidor_canonico.competencia_referencia
+                else None
             ),
         }
     )

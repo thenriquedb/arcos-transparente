@@ -27,6 +27,8 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
         "agregar_patrimonios",
         "consultar_quadro_pessoal",
         "agregar_quadro_pessoal",
+        "consultar_eleitos",
+        "consultar_frota",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 
@@ -51,6 +53,8 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
         "agregar_patrimonios",
         "consultar_quadro_pessoal",
         "agregar_quadro_pessoal",
+        "consultar_eleitos",
+        "consultar_frota",
         "buscar_historico_de_pagamentos_do_servidor",
     }
 
@@ -78,3 +82,28 @@ def test_get_all_tools_nao_duplica_tools_em_chamadas_repetidas() -> None:
 
     assert nomes_primeira == nomes_segunda
     assert len(nomes_primeira) == len(set(nomes_primeira))
+
+
+def test_descricoes_orientam_salario_de_cargo_eleito_para_folha() -> None:
+    tools = {_tool_name(tool_obj): tool_obj for tool_obj in get_public_tools()}
+
+    consultar_eleitos = tools["consultar_eleitos"].description
+    consultar_servidores = tools["consultar_servidores"].description
+    buscar_historico = tools["buscar_historico_de_pagamentos_do_servidor"].description
+
+    assert "salario do" in consultar_eleitos
+    assert "prefeito" in consultar_eleitos
+    assert "buscar_historico_de_pagamentos_do_servidor" in consultar_eleitos
+    assert "NAO use para responder salario individual" in consultar_servidores
+    assert "use antes `consultar_eleitos`" in consultar_servidores
+    assert "primeiro use `consultar_eleitos`" in buscar_historico
+
+
+def test_descricao_de_contratos_orienta_confirmar_siglas_ambiguas() -> None:
+    tools = {_tool_name(tool_obj): tool_obj for tool_obj in get_public_tools()}
+
+    descricao = tools["consultar_contratos"].description
+
+    assert "sigla curta ou termo ambiguo" in descricao
+    assert "UPA" in descricao
+    assert "primeiro confirme o significado" in descricao

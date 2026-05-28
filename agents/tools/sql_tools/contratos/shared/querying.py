@@ -7,6 +7,7 @@ from typing import Any, Mapping
 
 from sqlalchemy import func, inspect, or_
 
+from database.session import _normalizar_texto
 from database.models import Contrato
 from shared.utils.decimal_to_float import decimal_to_float
 
@@ -28,6 +29,7 @@ SEARCH_FIELD_LABELS = {
     "categoria": "categoria",
     "secretaria": "secretaria",
 }
+SHORT_TEXT_TERM_MAX_LENGTH = 3
 
 
 def get_contratos_available_columns(session) -> set[str]:
@@ -124,39 +126,31 @@ def apply_contratos_filters(
                 )
         stmt = stmt.where(or_(*numero_expressions))
     if filtros.fornecedor:
-        for term in filtros.fornecedor.lower().split():
-            stmt = stmt.where(func.lower(Contrato.fornecedor).like(f"%{term}%"))
+        for term in _normalized_filter_terms(filtros.fornecedor):
+            stmt = stmt.where(_text_contains_term(Contrato.fornecedor, term))
     if filtros.documento_fornecedor:
         stmt = stmt.where(
             func.lower(Contrato.cnpj).like(f"%{filtros.documento_fornecedor.lower()}%")
         )
     if filtros.categoria:
-        stmt = stmt.where(
-            func.lower(Contrato.categoria).like(f"%{filtros.categoria.lower()}%")
-        )
+        for term in _normalized_filter_terms(filtros.categoria):
+            stmt = stmt.where(_text_contains_term(Contrato.categoria, term))
     if filtros.secretaria:
-        stmt = stmt.where(
-            func.lower(Contrato.secretaria).like(f"%{filtros.secretaria.lower()}%")
-        )
+        for term in _normalized_filter_terms(filtros.secretaria):
+            stmt = stmt.where(_text_contains_term(Contrato.secretaria, term))
     if filtros.descricao:
-        for term in filtros.descricao.lower().split():
-            descricao_expressions = [
-                func.lower(func.coalesce(Contrato.descricao, "")).like(f"%{term}%")
-            ]
+        for term in _normalized_filter_terms(filtros.descricao):
+            descricao_expressions = [_text_contains_term(Contrato.descricao, term)]
             if include_descricao_despesa:
                 descricao_expressions.append(
-                    func.lower(func.coalesce(Contrato.descricao_despesa, "")).like(
-                        f"%{term}%"
-                    )
+                    _text_contains_term(Contrato.descricao_despesa, term)
                 )
 
             # O XML bruto entra apenas como ultimo apoio para nao perder termos
             # existentes no portal que ainda nao viraram colunas estruturadas.
             if include_xml_original:
                 descricao_expressions.append(
-                    func.lower(func.coalesce(Contrato.xml_original, "")).like(
-                        f"%{term}%"
-                    )
+                    _text_contains_term(Contrato.xml_original, term)
                 )
             stmt = stmt.where(or_(*descricao_expressions))
     if filtros.data_inicio is not None:
@@ -173,6 +167,22 @@ def apply_contratos_filters(
     if filtros.valor_max is not None:
         stmt = stmt.where(Contrato.valor <= filtros.valor_max)
     return stmt
+
+
+def _normalized_filter_terms(value: str) -> list[str]:
+    return (_normalizar_texto(value) or "").split()
+
+
+def _text_contains_term(column, term: str):
+    normalized_column = func.normalizar(func.coalesce(column, ""))
+    if len(term) <= SHORT_TEXT_TERM_MAX_LENGTH and term.isalnum():
+        return or_(
+            normalized_column == term,
+            normalized_column.op("GLOB")(f"{term}[^0-9a-z]*"),
+            normalized_column.op("GLOB")(f"*[^0-9a-z]{term}"),
+            normalized_column.op("GLOB")(f"*[^0-9a-z]{term}[^0-9a-z]*"),
+        )
+    return normalized_column.like(f"%{term}%")
 
 
 def project_contrato_fields(

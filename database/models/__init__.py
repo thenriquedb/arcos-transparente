@@ -17,6 +17,7 @@ from database.models.expenses import (
     DespesaDocumentoComprobatorio,
     DespesaDocumentoItem,
 )
+from database.models.elected import Eleito
 from database.models.fleet import FrotaDespesa, FrotaVeiculo
 from database.models.payroll import (
     FolhaCargo,
@@ -58,4 +59,5 @@ __all__ = [
     "FolhaCargo",
     "FolhaPagamentoRegistro",
     "PlanejamentoDespesa",
+    "Eleito",
 ]

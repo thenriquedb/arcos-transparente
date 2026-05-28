@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 from pprint import pprint
+from langgraph.checkpoint.memory import InMemorySaver
 
 from agents.router import (
     evaluate_query_guardrails,
@@ -30,14 +31,11 @@ def obter_configuracao_llm() -> dict[str, str]:
         .strip()
         .lower()
     )
-    if provider != DEFAULT_MODEL_PROVIDER:
-        raise ValueError(
-            f"Provider nao suportado nesta fase: {provider}. Use apenas 'openai'."
-        )
 
     model_name = (
         os.getenv("OPENAI_MODEL") or os.getenv("AGENT_MODEL") or DEFAULT_OPENAI_MODEL
     ).strip()
+
     if not model_name:
         raise ValueError("OPENAI_MODEL deve ser informado.")
 
@@ -74,6 +72,7 @@ def criar_agente(pergunta: str | None = None):
         tools=tools,
         model=criar_modelo_llm(),
         system_prompt=carregar_system_prompt(),
+        checkpointer=InMemorySaver(),
     )
 
 
@@ -84,7 +83,7 @@ def ferramentas_publicas_disponiveis() -> list[str]:
     ]
 
 
-def responder_pergunta(pergunta: str):
+def responder_pergunta(pergunta: str, thread_id: str = "1"):
     guardrail = evaluate_query_guardrails(pergunta)
     if not guardrail.allowed:
         return {
@@ -97,7 +96,10 @@ def responder_pergunta(pergunta: str):
         }
 
     agente = criar_agente(pergunta)
-    return agente.invoke({"messages": [pergunta]})
+
+    config = {"configurable": {"thread_id": thread_id}}
+
+    return agente.invoke({"messages": [pergunta]}, config)
 
 
 if __name__ == "__main__":

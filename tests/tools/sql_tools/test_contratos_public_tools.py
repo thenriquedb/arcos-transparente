@@ -3,11 +3,12 @@ from __future__ import annotations
 from contextlib import contextmanager
 from datetime import date
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.contratos as contratos_tools
 from database import session as session_manager
+from database.session import _normalizar_texto
 from database.models import (
     Base,
     Contrato,
@@ -18,6 +19,11 @@ from database.models import (
 
 def _build_session():
     engine = create_engine("sqlite:///:memory:", future=True)
+
+    @event.listens_for(engine, "connect")
+    def on_connect(conn, _):
+        conn.create_function("normalizar", 1, _normalizar_texto)
+
     Base.metadata.create_all(bind=engine)
     session_local = sessionmaker(
         bind=engine,
@@ -30,6 +36,11 @@ def _build_session():
 
 def _build_legacy_session():
     engine = create_engine("sqlite:///:memory:", future=True)
+
+    @event.listens_for(engine, "connect")
+    def on_connect(conn, _):
+        conn.create_function("normalizar", 1, _normalizar_texto)
+
     with engine.begin() as conn:
         conn.exec_driver_sql(
             """
@@ -465,6 +476,69 @@ def test_consultar_contratos_busca_no_xml_original_como_ultimo_fallback(
         {
             "numero": "090/2025",
             "fornecedor": "Fornecedor XML",
+        }
+    ]
+
+    session.close()
+
+
+def test_consultar_contratos_nao_confunde_sigla_curta_com_pedaco_de_palavra(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _contrato(
+                numero="115/2025",
+                fornecedor="Fornecedor Roupa",
+                cnpj="12345678000199",
+                valor=1000,
+                data_inicio=date(2025, 8, 18),
+                data_fim=None,
+                categoria="Compra",
+                secretaria="Secretaria de Educacao",
+                descricao="Confeccao de fantasias",
+                xml_original="<Identificacao>Roupa professoras</Identificacao>",
+            ),
+            _contrato(
+                numero="172/2025",
+                fornecedor="Fornecedor Lupa",
+                cnpj="12345678000199",
+                valor=1000,
+                data_inicio=date(2025, 10, 8),
+                data_fim=None,
+                categoria="Compra",
+                secretaria="Secretaria de Educacao",
+                descricao="Aquisicao de materiais pedagogicos",
+                xml_original="<Identificacao>Lupa escolar</Identificacao>",
+            ),
+            _contrato(
+                numero="200/2025",
+                fornecedor="Fornecedor Saude",
+                cnpj="12345678000199",
+                valor=1000,
+                data_inicio=date(2025, 10, 20),
+                data_fim=None,
+                categoria="Servico",
+                secretaria="Secretaria de Saude",
+                descricao="Manutencao da UPA Municipal",
+                xml_original="<Identificacao>UPA Municipal</Identificacao>",
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.consultar_contratos(
+        filtros={"descricao": "UPA"},
+        campos=["numero", "descricao"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "numero": "200/2025",
+            "descricao": "Manutencao da UPA Municipal",
         }
     ]
 

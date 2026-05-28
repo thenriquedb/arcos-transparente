@@ -42,6 +42,7 @@ from agents.routing.routes.patrimonios import (
     _try_route_patrimonios_agregacao,
     _try_route_patrimonios_lista,
 )
+from agents.routing.routes.eleitos import _try_route_eleitos_lista
 from agents.routing.routes.quadro_pessoal import (
     _try_route_quadro_pessoal_agregacao,
     _try_route_quadro_pessoal_lista,
@@ -70,10 +71,11 @@ ROUTE_PRIORITY_CHAIN = (
     _try_route_licitacoes_lista,  # 11. Listas e detalhes de licitações
     _try_route_despesas_lista,  # 12. Listas de despesas
     _try_route_patrimonios_lista,  # 13. Listas de patrimônio
-    _try_route_quadro_pessoal_lista,  # 14. Listas de quadro de pessoal
-    _try_route_planejamento_saude_lista,  # 15. Listas de planejamento
-    _try_route_receitas_lista,  # 16. Listas de receitas
-    _try_route_lista,  # 17. Listas de servidores
+    _try_route_eleitos_lista,  # 14. Listas de eleitos
+    _try_route_quadro_pessoal_lista,  # 15. Listas de quadro de pessoal
+    _try_route_planejamento_saude_lista,  # 16. Listas de planejamento
+    _try_route_receitas_lista,  # 17. Listas de receitas
+    _try_route_lista,  # 18. Listas de servidores
 )
 
 
@@ -117,7 +119,8 @@ def evaluate_query_guardrails(
             message=(
                 "Envie uma pergunta sobre os dados públicos municipais disponíveis "
                 "no sistema, como servidores, secretarias, salários-base ou "
-                "licitações, despesas, patrimônio, planejamento ou receitas."
+                "licitações, despesas, patrimônio, planejamento, receitas "
+                "ou políticos eleitos."
             ),
         )
 
@@ -151,7 +154,8 @@ def evaluate_query_guardrails(
             "Posso ajudar apenas com consultas aos dados públicos municipais "
             "disponíveis neste sistema, especialmente sobre servidores, "
             "secretarias, salários-base, histórico de pagamentos, licitações, "
-            "despesas, patrimônio, quadro de pessoal, planejamento e receitas."
+            "despesas, patrimônio, quadro de pessoal, planejamento, receitas "
+            "e políticos eleitos."
         ),
     )
 

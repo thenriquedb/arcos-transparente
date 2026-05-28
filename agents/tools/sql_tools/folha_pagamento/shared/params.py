@@ -12,7 +12,8 @@ from .base import FolhaPagamentoToolBaseSchema
 
 
 class BuscarHistoricoPagamentosServidorParams(FolhaPagamentoToolBaseSchema):
-    nome: str | None
+    nome: str | None = None
+    folha_servidor_id: int | None = None
     limite: int = 10
     max_meses: int = 24
 
@@ -20,6 +21,16 @@ class BuscarHistoricoPagamentosServidorParams(FolhaPagamentoToolBaseSchema):
     @classmethod
     def _normalize_nome(cls, value: Any) -> str | None:
         return clean_text(value)
+
+    @field_validator("folha_servidor_id", mode="before")
+    @classmethod
+    def _normalize_folha_servidor_id(cls, value: Any) -> int | None:
+        if value in (None, ""):
+            return None
+        folha_servidor_id = int(value)
+        if folha_servidor_id <= 0:
+            raise ValueError("folha_servidor_id deve ser maior que zero.")
+        return folha_servidor_id
 
     @field_validator("limite", mode="before")
     @classmethod

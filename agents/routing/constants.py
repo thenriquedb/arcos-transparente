@@ -108,6 +108,20 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "regime",
     "quadro pessoal",
     "quadro de pessoal",
+    "vereador",
+    "vereadores",
+    "prefeito",
+    "prefeitos",
+    "prefeita",
+    "prefeitas",
+    "camara",
+    "câmara",
+    "eleito",
+    "eleitos",
+    "mandato",
+    "mandatos",
+    "legislatura",
+    "legislaturas",
 )
 
 SUPPORTED_SCOPE_WEAK_KEYWORDS = (
@@ -129,6 +143,8 @@ SUPPORTED_SCOPE_WEAK_KEYWORDS = (
     "educacao",
     "obras",
     "procuradoria",
+    "partido",
+    "partidos",
 )
 
 DESPESAS_DOMAIN_KEYWORDS = (
@@ -163,6 +179,25 @@ QUADRO_PESSOAL_DOMAIN_KEYWORDS = (
     "vaga",
     "regime",
     "regime de contratacao",
+)
+
+ELEITOS_DOMAIN_KEYWORDS = (
+    "vereador",
+    "vereadores",
+    "prefeito",
+    "prefeitos",
+    "prefeita",
+    "prefeitas",
+    "camara",
+    "câmara",
+    "eleito",
+    "eleitos",
+    "mandato",
+    "mandatos",
+    "legislatura",
+    "legislaturas",
+    "partido",
+    "partidos",
 )
 
 LICITACOES_DOMAIN_KEYWORDS = (
