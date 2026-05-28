@@ -257,6 +257,10 @@ def consultar_contratos(
 
     Use esta tool quando a pergunta pedir quais contratos existem, detalhes de um
     contrato especifico ou uma listagem filtrada.
+    Se o filtro textual vier apenas de uma sigla curta ou termo ambiguo, como
+    "UPA", "UBS", "PSF", "CRAS" ou "CREAS", primeiro confirme o significado
+    com o usuario e sugira a expansao provavel. So use a tool depois dessa
+    confirmacao.
     NAO use para totais, medias ou rankings agregados; para isso use
     `agregar_contratos`.
     NAO use para perguntas sobre o processo licitatorio antes da assinatura do

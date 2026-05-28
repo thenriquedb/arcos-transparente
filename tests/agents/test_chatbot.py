@@ -51,13 +51,15 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     )
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")
     monkeypatch.setenv("LLM_PROVIDER", "openai")
+    monkeypatch.setenv("OPENAI_MODEL", chatbot_agent.DEFAULT_OPENAI_MODEL)
+    monkeypatch.delenv("AGENT_MODEL", raising=False)
 
     resultado = chatbot_agent.criar_agente_chatbot()
 
     nomes = {_tool_name(tool_obj) for tool_obj in capturado["tools"]}
 
     assert resultado == "agente-chatbot-fake"
-    assert capturado["model"] == "openai-model::gpt-4o-mini"
+    assert capturado["model"] == f"openai-model::{chatbot_agent.DEFAULT_OPENAI_MODEL}"
     assert capturado["system_prompt"] == chatbot_agent.carregar_system_prompt()
     assert capturado["checkpointer"] is chatbot_agent.CHECKPOINTER
     assert "buscar_historico_de_pagamentos_do_servidor" in nomes
@@ -70,6 +72,14 @@ def test_system_prompt_orienta_salario_de_cargo_eleito_sem_pedir_nome() -> None:
     assert "NÃO peça o nome ao usuário" in prompt
     assert "Primeiro use `consultar_eleitos`" in prompt
     assert "depois chame `buscar_historico_de_pagamentos_do_servidor`" in prompt
+
+
+def test_system_prompt_pede_confirmacao_para_siglas_ambiguas() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "siglas ou termos muito curtos e ambíguos" in prompt
+    assert "NÃO execute a busca ainda" in prompt
+    assert "Você quer dizer UPA como Unidade de Pronto Atendimento?" in prompt
 
 
 def test_chatbot_application_mantem_estado_da_sessao() -> None:

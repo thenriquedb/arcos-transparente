@@ -97,3 +97,13 @@ def test_descricoes_orientam_salario_de_cargo_eleito_para_folha() -> None:
     assert "NAO use para responder salario individual" in consultar_servidores
     assert "use antes `consultar_eleitos`" in consultar_servidores
     assert "primeiro use `consultar_eleitos`" in buscar_historico
+
+
+def test_descricao_de_contratos_orienta_confirmar_siglas_ambiguas() -> None:
+    tools = {_tool_name(tool_obj): tool_obj for tool_obj in get_public_tools()}
+
+    descricao = tools["consultar_contratos"].description
+
+    assert "sigla curta ou termo ambiguo" in descricao
+    assert "UPA" in descricao
+    assert "primeiro confirme o significado" in descricao
