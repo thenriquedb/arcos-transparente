@@ -15,7 +15,7 @@ from agents.tools.registry import get_public_tools
 load_dotenv()
 
 DEFAULT_MODEL_PROVIDER = "openai"
-DEFAULT_OPENAI_MODEL = "gpt-4o-mini"
+DEFAULT_OPENAI_MODEL = "gpt-4.1"
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SYSTEM_PROMPT_PATH = PROJECT_ROOT / "docs" / "agent-system-prompt.md"
 CHECKPOINTER = InMemorySaver()

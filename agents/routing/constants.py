@@ -114,6 +114,8 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "prefeitos",
     "prefeita",
     "prefeitas",
+    "viceprefeito",
+    "vice-prefeito",
     "camara",
     "câmara",
     "eleito",
