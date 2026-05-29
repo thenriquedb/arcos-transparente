@@ -36,7 +36,7 @@ ALLOWED_ELEITO_SORT_FIELDS = {
     "tipo_politico",
 }
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
-ALLOWED_TIPO_POLITICO = {"vereador", "prefeito"}
+ALLOWED_TIPO_POLITICO = {"vereador", "prefeito", "vice-prefeito"}
 
 
 class EleitoToolBaseSchema(BaseModel):
