@@ -196,6 +196,7 @@ def _extract_last_message_content(result: dict[str, Any]) -> str:
 
     last_message = messages[-1]
     content = getattr(last_message, "content", last_message)
+    # return messages
     return str(content)
 
 

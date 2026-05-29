@@ -22,8 +22,9 @@ class EleitosParser:
         invalidos = 0
 
         for secao_tag, item_tag, tipo_politico in (
-            ("vereadores", "vereador", "vereador"),
+            ("vereadores", "vereador", "vereador", ),
             ("prefeitos", "prefeito", "prefeito"),
+            ("vicePrefeitos", "vicePrefeito", "vice-prefeito"),
         ):
             secao = root.find(secao_tag)
             if secao is None:

@@ -28,6 +28,8 @@ def _extract_eleitos_filters(normalized_text: str) -> dict[str, object]:
         filtros["tipo_politico"] = "prefeito"
     elif "vereador" in normalized_text:
         filtros["tipo_politico"] = "vereador"
+    elif "viceprefeito" in normalized_text:
+        filtros["tipo_politico"] = "vice-prefeito"
 
     if year := _extract_year(normalized_text):
         filtros["ano"] = year

@@ -482,4 +482,16 @@
 			</mandatos>
 		</prefeito>
 	</prefeitos>
+	<vicePrefeitos municipio="Arcos" estado="MG">
+		<vicePrefeito id="1">
+			<nomeCompleto>Ronaldo Goncalves de Oliveira</nomeCompleto>
+					<mandatos>
+						<mandato>
+							<inicio>2025</inicio>
+							<fim>2028</fim>
+							<status>em exercício</status>
+						</mandato>
+				</mandatos>
+			</vicePrefeito>
+		</vicePrefeitos>
 </transparencia>

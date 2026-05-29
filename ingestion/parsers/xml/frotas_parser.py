@@ -16,6 +16,10 @@ class FrotasParser:
         root = tree.getroot()
         registros: list[dict[str, Any]] = []
 
+        with open(filepath, mode="r", encoding="cp1252", errors="replace") as f:
+            xml_data = f.read()
+            root = ET.fromstring(xml_data)
+
         for node in root.findall("./Frotas"):
             codigo_veiculo = self._txt(node, "CodigoVeiculo")
             if not codigo_veiculo:
