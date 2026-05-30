@@ -1,0 +1,1683 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<Empenhos>
+	<Principal>
+		<Exercicio>2026</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao>PREFEITURA MUNICIPAL</Orgao>
+		<Unidade>FUNDO MUNICIPAL DE SAÚDE</Unidade>
+		<Departamento/>
+		<Funcao>Saúde</Funcao>
+		<SubFuncao>Assistência Hospitalar e Ambulatorial</SubFuncao>
+		<Programa>Promoção de Açoes de Saude - FMS</Programa>
+		<Acao>
+			<Tipo>Atividade</Tipo>
+			<Descricao>Manutenção Transporte para Tratamento Fora Domicilio</Descricao>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao>1500</Identificacao>
+			<Descricao>Recursos não Vinculados de Impostos</Descricao>
+		</FonteRecurso>
+		<EsferaAdministrativa>Seguridade Social</EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao>0</Identificacao>
+			<Descricao>Não se aplica</Descricao>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao>3.3.90.33</Identificacao>
+			<Descricao>Passagens e Despesas com Locomoção</Descricao>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao>3.3.00.00.00.00.00</Identificacao>
+			<Descricao>OUTRAS DESPESAS CORRENTES</Descricao>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao>3.3.90.00.00.00.00</Identificacao>
+			<Descricao>Aplicações Diretas</Descricao>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao>3.3.90.33.99</Identificacao>
+			<Descricao>Outras Despesas com Locomoção</Descricao>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>000300</NumeroEmpenho>
+		<DataEmissaoEmpenho>01/01/2026</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>EXPRESSO UNIAO LTDA</Credor>
+		<CPFCNPJ>19350180000160</CPFCNPJ>
+		<ModalidadeLicitacao>Inexigibilidade</ModalidadeLicitacao>
+		<NumeroLicitacao>6</NumeroLicitacao>
+		<AnoLicitacao>2023</AnoLicitacao>
+		<DataHomologacao>25/01/2023</DataHomologacao>
+		<ProcessoCompra>15</ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 30.619,25</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 7.663,40</ValorLiquidado>
+		<ValorPago>R$ 7.663,40</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 02022026 e volta dia 03022026, entre ArcosMG e São PauloSP, com a finalidade de atender paciente em Tratamento Fora de Domicilio (TFD), Ana Claudia da Silva Rodrigues, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 425,40</ValorUnitario>
+				<ValorTotal>R$ 425,40</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 04052026 e volta dia 06052026 entre ArcosMG e São PauloSP, com a finalidade de atender paciente em Tratamento Fora de Domicilio (TFD), Ana Claudia da Silva Rodrigues, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 487,34</ValorUnitario>
+				<ValorTotal>R$ 487,34</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 05032025 e volta dia 09032025, entre ArcosMG e São PauloSP, com a finalidade de atender o paciente em Tratamento Fora de Domicilio (TFD), Dyana Pereira da Silva e sua acompanhante Edna  Pereira da Silva, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 699,92</ValorUnitario>
+				<ValorTotal>R$ 699,92</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 08022026 e volta dia 11022026, entre ArcosMG e São PauloSP, com a finalidade de atender o paciente em Tratamento Fora de Domicilio (TFD), Lucas Leão Costa e sua acompanhante Márcia da Silva Leão Costa, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 783,92</ValorUnitario>
+				<ValorTotal>R$ 783,92</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 18012026 e volta dia 20012026, entre ArcosMG e São PauloSP, com a finalidade de atender o paciente em Tratamento Fora de Domicilio (TFD), Lucas Leão Costa e sua acompanhante Márcia da Silva Leão Costa, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 849,90</ValorUnitario>
+				<ValorTotal>R$ 849,90</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 24032026 e volta dia 26032026, entre ArcosMG e São PauloSP, com a finalidade de atender a paciente em Tratamento Fora de Domicilio (TFD), Ana Claudia da Silva Rodrigues, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 397,30</ValorUnitario>
+				<ValorTotal>R$ 397,30</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 24032026 e volta dia 26032026, entre ArcosMG e São PauloSP, com a finalidade de atender o paciente em Tratamento Fora de Domicilio (TFD), Lucas Leão Costa e sua acompanhante Márcia da Silva Leão Costa, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 683,90</ValorUnitario>
+				<ValorTotal>R$ 683,90</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 25022026 e volta dia 26022026, entre ArcosMG e São PauloSP, com a finalidade de atender o paciente em Tratamento Fora de Domicilio (TFD), Lucas Leão Costa e sua acompanhante Márcia da Silva Leão Costa, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 687,92</ValorUnitario>
+				<ValorTotal>R$ 687,92</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 28012026 e volta dia 29012026, entre ArcosMG e São PauloSP, com a finalidade de atender paciente em Tratamento Fora de Domicilio (TFD), Leila Regina Cardoso Borges e sua acompanhante Liliane Cristina de Souza Cardoso, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 691,92</ValorUnitario>
+				<ValorTotal>R$ 691,92</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 29032026 e volta dia 30032026, entre ArcosMG e São PauloSP, com a finalidade de atender paciente em Tratamento Fora de Domicilio (TFD), Leila Regina Cardoso Borges e seu acompanhante Everaldo Ferreira Borges, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 797,92</ValorUnitario>
+				<ValorTotal>R$ 797,92</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida dia 29042026 e volta dia 30042026 entre ArcosMG e São PauloSP, com a finalidade de atender paciente em Tratamento Fora de Domicilio (TFD), Kenya Cristina Fioratti e seu acompanhante Alex Parula da Costa, de acordo com documentos anexos.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 1.157,96</ValorUnitario>
+				<ValorTotal>R$ 1.157,96</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagens rodoviárias de ida e volta entre ArcosMG e São PauloSP, com a finalidade de atender os pacientes em Tratamento Fora de Domicilio (TFD), de acordo com as demandas do Departamento de Transporte da Secretaria Municipal de Saúde de ArcosMG.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 30.619,25</ValorUnitario>
+				<ValorTotal>R$ 30.619,25</ValorTotal>
+			</Item>
+		</Itens>
+		<documentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>06/02/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>1</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>15/01/2026</dt_emissao_documento>
+				<valor_documento>R$ 849,90</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>92583</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>06/02/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>06/02/2026</dt_emissao_documento>
+				<valor_documento>R$ 691,92</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>92641</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>06/02/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>3</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>21/01/2026</dt_emissao_documento>
+				<valor_documento>R$ 425,40</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>92689</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>20/03/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>4</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>04/02/2026</dt_emissao_documento>
+				<valor_documento>R$ 783,92</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>239968</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>20/03/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>5</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>20/03/2026</dt_emissao_documento>
+				<valor_documento>R$ 687,92</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>239992</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>20/03/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>6</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>23/02/2026</dt_emissao_documento>
+				<valor_documento>R$ 699,92</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>240072</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>13/04/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>8</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>13/04/2026</dt_emissao_documento>
+				<valor_documento>R$ 397,30</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>310518</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>13/04/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>9</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>13/04/2026</dt_emissao_documento>
+				<valor_documento>R$ 797,92</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>310719</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>13/04/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>7</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>13/04/2026</dt_emissao_documento>
+				<valor_documento>R$ 683,90</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>310334</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>12/05/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>10</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>29/04/2026</dt_emissao_documento>
+				<valor_documento>R$ 487,34</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>404431</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>12/05/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>300</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>11</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>08/04/2026</dt_emissao_documento>
+				<valor_documento>R$ 1.157,96</valor_documento>
+				<nr_empenho>000300</nr_empenho>
+				<cdUnidadeGestora>0</cdUnidadeGestora>
+				<nrSequencia>404497</nrSequencia>
+			</DocumentosComprobatorios>
+		</documentosComprobatorios>
+	</Principal>
+	<Principal>
+		<Exercicio>2026</Exercicio>
+		<UnidadeGestora>CÂMARA MUNICIPAL</UnidadeGestora>
+		<Orgao>CAMARA MUNICIPAL</Orgao>
+		<Unidade>GABINETE E SECRETARIA DA CAMARA</Unidade>
+		<Departamento/>
+		<Funcao>Legislativa</Funcao>
+		<SubFuncao>Ação Legislativa</SubFuncao>
+		<Programa>Aplicação Recursos da Câmara Municipal</Programa>
+		<Acao>
+			<Tipo>Atividade</Tipo>
+			<Descricao>Manutencao da Secretaria da Camara</Descricao>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao>1500</Identificacao>
+			<Descricao>Recursos não Vinculados de Impostos</Descricao>
+		</FonteRecurso>
+		<EsferaAdministrativa>Fiscal</EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao>0</Identificacao>
+			<Descricao>Não se aplica</Descricao>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao>3.3.90.33</Identificacao>
+			<Descricao>Passagens e Despesas com Locomoção</Descricao>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao>3.3.00.00.00.00.00</Identificacao>
+			<Descricao>OUTRAS DESPESAS CORRENTES</Descricao>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao>3.3.90.00.00.00.00</Identificacao>
+			<Descricao>Aplicações Diretas</Descricao>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao>3.3.90.33.99</Identificacao>
+			<Descricao>Outras Despesas com Locomoção</Descricao>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>000015</NumeroEmpenho>
+		<DataEmissaoEmpenho>14/01/2026</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>SEM PARAR INSTITUIÇÃO DE PAGAMENTO</Credor>
+		<CPFCNPJ>04088208000165</CPFCNPJ>
+		<ModalidadeLicitacao>Dispensa por Limite</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao>0</AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 3.000,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 1.240,71</ValorLiquidado>
+		<ValorPago>R$ 1.240,71</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha referente a pagamento de pedágios do veículo oficial da Câmara Municipal de Arcos, placa RVA-6C53, utilizados por meio de TAG automática, no mês de de 2025, conforme Nota Fiscal</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 3.000,00</ValorUnitario>
+				<ValorTotal>R$ 3.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha referente a pagamento de pedágios do veículo oficial da Câmara Municipal de Arcos, placa RVA-6C53, utilizados por meio de TAG automática, no mês de de 2025, conforme Nota Fiscal 26101103952.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 242,15</ValorUnitario>
+				<ValorTotal>R$ 242,15</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha referente a pagamento de pedágios do veículo oficial da Câmara Municipal de Arcos, placa RVA-6C53, utilizados por meio de TAG automática, no mês de de 2025, conforme Nota Fiscal 2611590397.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 217,20</ValorUnitario>
+				<ValorTotal>R$ 217,20</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha referente a pagamento de pedágios do veículo oficial da Câmara Municipal de Arcos, placa RVA-6C53, utilizados por meio de TAG automática, no mês de Fvereiro de 2025, conforme Nota Fisca l2656404625.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 242,70</ValorUnitario>
+				<ValorTotal>R$ 242,70</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha referente a pagamento de pedágios do veículo oficial da Câmara Municipal de Arcos, placa RVA-6C53, utilizados por meio de TAG automática, no mês de Janeiro de 2026, conforme Nota Fiscal 2634689810.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 179,37</ValorUnitario>
+				<ValorTotal>R$ 179,37</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor que se empenha referente a pagamento de pedágios do veículo oficial da Câmara Municipal de Arcos, placa RVA-6C53, utilizados por meio de TAG automática, no mês de Março de 2025, conforme Nota Fiscal 687481358.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 359,29</ValorUnitario>
+				<ValorTotal>R$ 359,29</ValorTotal>
+			</Item>
+		</Itens>
+		<documentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>14/01/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>2611590397</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>1</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>14/01/2026</dt_emissao_documento>
+				<valor_documento>R$ 217,20</valor_documento>
+				<nr_empenho>000015</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>609</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>02/02/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>2634689810</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>1</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>02/02/2026</dt_emissao_documento>
+				<valor_documento>R$ 179,37</valor_documento>
+				<nr_empenho>000015</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>2343</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>04/03/2026</dt_liquidacao>
+				<cod_tipo_documento>49</cod_tipo_documento>
+				<num_documento>2656404625</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>E</desc_serie>
+				<chave_acesso>16462251</chave_acesso>
+				<dt_emissao_documento>04/03/2026</dt_emissao_documento>
+				<valor_documento>R$ 242,70</valor_documento>
+				<nr_empenho>000015</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>5699</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>04/04/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>687481358</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>1</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>04/04/2026</dt_emissao_documento>
+				<valor_documento>R$ 359,29</valor_documento>
+				<nr_empenho>000015</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>8764</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>04/05/2026</dt_liquidacao>
+				<cod_tipo_documento>49</cod_tipo_documento>
+				<num_documento>15</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>5</desc_serie>
+				<chave_acesso>26101103952</chave_acesso>
+				<dt_emissao_documento>04/05/2026</dt_emissao_documento>
+				<valor_documento>R$ 242,15</valor_documento>
+				<nr_empenho>000015</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>10164</nrSequencia>
+			</DocumentosComprobatorios>
+		</documentosComprobatorios>
+	</Principal>
+	<Principal>
+		<Exercicio>2026</Exercicio>
+		<UnidadeGestora>CÂMARA MUNICIPAL</UnidadeGestora>
+		<Orgao>CAMARA MUNICIPAL</Orgao>
+		<Unidade>GABINETE E SECRETARIA DA CAMARA</Unidade>
+		<Departamento/>
+		<Funcao>Legislativa</Funcao>
+		<SubFuncao>Ação Legislativa</SubFuncao>
+		<Programa>Aplicação Recursos da Câmara Municipal</Programa>
+		<Acao>
+			<Tipo>Atividade</Tipo>
+			<Descricao>Manutencao da Secretaria da Camara</Descricao>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao>1500</Identificacao>
+			<Descricao>Recursos não Vinculados de Impostos</Descricao>
+		</FonteRecurso>
+		<EsferaAdministrativa>Fiscal</EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao>0</Identificacao>
+			<Descricao>Não se aplica</Descricao>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao>3.3.90.33</Identificacao>
+			<Descricao>Passagens e Despesas com Locomoção</Descricao>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao>3.3.00.00.00.00.00</Identificacao>
+			<Descricao>OUTRAS DESPESAS CORRENTES</Descricao>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao>3.3.90.00.00.00.00</Identificacao>
+			<Descricao>Aplicações Diretas</Descricao>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao>3.3.90.33.99</Identificacao>
+			<Descricao>Outras Despesas com Locomoção</Descricao>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>000017</NumeroEmpenho>
+		<DataEmissaoEmpenho>14/01/2026</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>EDISON DOS SANTOS</Credor>
+		<CPFCNPJ>74076000668</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao>0</AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 2.000,00</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 1.500,09</ValorLiquidado>
+		<ValorPago>R$ 906,18</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 2.000,00</ValorUnitario>
+				<ValorTotal>R$ 2.000,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à BH-MG, em 1202, levando o vereador Carlos David Borges à Assembleia Legislativa de MG.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 33,00</ValorUnitario>
+				<ValorTotal>R$ 33,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à BH-MG, em 1505, buscando os servidores Vinicius de Carvalho, Vivian Kathleen e Virginia Oliveira.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 35,00</ValorUnitario>
+				<ValorTotal>R$ 35,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à BH-MG, em 2001, levando o servidor Lucas Dias para realizar curso de capacitação.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 35,20</ValorUnitario>
+				<ValorTotal>R$ 35,20</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à BH-MG, em 2301, buscando Lucas Dias, que realizou curso entre 20 e 2301.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 35,20</ValorUnitario>
+				<ValorTotal>R$ 35,20</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à BH-MG, em 2703, buscando o servidor RENATO CARDOSO, que realizo curso entre 24 e 2703.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 12,50</ValorUnitario>
+				<ValorTotal>R$ 12,50</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à BH-MG, em 2804, levando o vereador CARLOS DAVID BORGES à Assembleia Legislativa de MG.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 45,00</ValorUnitario>
+				<ValorTotal>R$ 45,00</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à Brasília-DF, entre 03 e 0603, levando Alex Gracieres, Leslie Mariana e Dyenderson Rodrigues.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 512,38</ValorUnitario>
+				<ValorTotal>R$ 512,38</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à Divinopolis-MG, em 2201, buscar primas de identificaçao na empresa GILMAR FREITAS ARTNOX.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 17,60</ValorUnitario>
+				<ValorTotal>R$ 17,60</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção do veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, e Port.82024, ida à Ponte Nova-MG, entre 05 e 0704, levando a servidora ROSSELA NATACHA para realizar curso.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 180,30</ValorUnitario>
+				<ValorTotal>R$ 180,30</ValorTotal>
+			</Item>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção veículo oficial da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 91325, e Port.824, ida à Brasília-DF, entre 18-2205, levando Dyenderson Rodrigues e Hernane Dias à Marcha em Defesa Municipios.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 593,91</ValorUnitario>
+				<ValorTotal>R$ 593,91</ValorTotal>
+			</Item>
+		</Itens>
+		<documentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>20/01/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017001</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>20/01/2026</dt_emissao_documento>
+				<valor_documento>R$ 35,20</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>915</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>22/01/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017002</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>22/01/2026</dt_emissao_documento>
+				<valor_documento>R$ 17,60</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>960</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>23/01/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017003</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>23/01/2026</dt_emissao_documento>
+				<valor_documento>R$ 35,20</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>1190</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>12/02/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017004</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>12/02/2026</dt_emissao_documento>
+				<valor_documento>R$ 33,00</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>3795</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>06/03/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017005</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>06/03/2026</dt_emissao_documento>
+				<valor_documento>R$ 512,38</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>6339</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>27/03/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017006</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>27/03/2026</dt_emissao_documento>
+				<valor_documento>R$ 12,50</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>7999</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>07/04/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>7</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>07/04/2026</dt_emissao_documento>
+				<valor_documento>R$ 180,30</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>9030</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>29/04/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017008</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>29/04/2026</dt_emissao_documento>
+				<valor_documento>R$ 45,00</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>9938</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>15/05/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017009</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>15/05/2026</dt_emissao_documento>
+				<valor_documento>R$ 35,00</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>11814</nrSequencia>
+			</DocumentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>22/05/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>017010</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>22/05/2026</dt_emissao_documento>
+				<valor_documento>R$ 593,91</valor_documento>
+				<nr_empenho>000017</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>12255</nrSequencia>
+			</DocumentosComprobatorios>
+		</documentosComprobatorios>
+		<informacoesviagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>01/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>01/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 01/02/2026, TDD-7E83, levar paciente Antonio I. Santos para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>01/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>01/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 01/03/2026, SIU-7I40, levar paciente Sergio T. Gomes para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>01/04/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>01/04/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 01/04/2026, RNM-9C25, levar paciente Vania F. Lira para fazer exames, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>02/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>02/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Oliveira/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 02/02/2026, TYI-1C72, levar paciente Maria G. F. Ribeiro para exames medicos, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>02/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>02/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Formiga/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 02/03/2026, SIU-7I40, levar paciente Teresa de Souza para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>02/04/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>02/04/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 02/04/2026, RMR-0428, levar pacientes Elizabete, Neusa, Cirlena, Raimunda e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>03/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>03/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 03/02/2026, RNM-9C30, buscar paciente Ademar A. Filipe de alta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>03/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>03/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 03/03/2026, SIH-3H91, levar paciente Antoniony C. Sousa para tratamento médico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>03/04/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>03/04/2026</Data_final_Viagem>
+				<Destino_Viagem>Formiga/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 03/04/2026, RNM-9C31, levar paciente Maria E. Pessoa para hemodiálise, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>04/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>04/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 04/02/2026, TDD-7E75, levar paciente janusa B. Siqueira para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>04/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>04/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 04/03/2026, HLF-8735, levar pacientes Celia, Antonio, Monica, Terezinha e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>04/04/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>04/04/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 04/04/2026, TDD-7E75, levar paciente Matilde Oliveira para fazer exames, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>05/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>05/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 05/01/2026, TDD-4H17, levar paciente Nicolli Duarte para tratamento medico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>05/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>05/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Bom Despacho/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Bom Despacho-MG, no dia 05/02/2026, TDD-4H17, levar paciente Caio N. Gontijo para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>05/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>05/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Luz/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Luz-MG, no dia 05/03/2026, TDD-7E75, levar paciente Bruno P. Silva para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>06/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>06/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 06/01/2026, RFA-8G59, levar pacientes Sarah, Rosely, Maria, Sueli e etc para tratamento medico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>06/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>06/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 06/02/2026, TDD-7E75, levar paciente Darcilio R. Costa para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>06/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>06/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 06/03/2026, SHR-4D92, levar paciente Leandro Stenio Sobrinho para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>06/04/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>06/04/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 06/04/2026, RTQ-6F30, levar pacientes Selma, José, Pedro e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>07/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>07/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 07/01/2026, RNM-9C22, levar paciente Maria G. cunha para tratamento medico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>07/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>07/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 07/02/2026, TDD-7E75, levar paciente Nilda S. Gonçalves para exames médicos, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>07/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>07/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 07/03/2026, QNM-9C31, buscar paciente Sergio H. Simões de alta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>08/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>08/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Oliveira/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira-MG, no dia 08/02/2026, TDD-4H17, levar paciente Francisco I. Filho para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>08/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>08/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 08/03/2026, RNM-9C31, levar paciente Katia F. Ramos para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>09/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>09/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 09/01/2026, TDD-7E75, levar paciente Maria G. Cunha para tratamento medico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>09/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>09/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Formiga/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 09/02/2026, TDD-7E75, levar pacientes Marcelo, Francisco e Geralda para hemodiálise, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>09/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>09/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Formiga/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 09/03/2026, QWS-5745, levar paciente Lazaro C. Santos para hemodiálise, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>10/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>10/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Campo Belo/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Campo Belo-MG, no dia 10/02/2026, RTU-2B57, levar paciente Katia B. Brito para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>11/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>11/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 11/02/2026, RFA-8G59, levar pacientes Leandro, Nilda, Thaina e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>11/04/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>11/04/2026</Data_final_Viagem>
+				<Destino_Viagem>Passos/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Passos-MG, no dia 11/04/2026, SHH-3A92, levar paciente Donizette J. Lucas para tratamento médico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>12/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>12/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 12/01/2026, RTQ-6F30, levar paciente Doroti R. Modesto para tratamento medico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>12/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>12/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Campo Belo/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Campo Belo-MG, no dia 12/02/2026, TYI-1C72, levar paciente Roberti Azevedo para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>12/04/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>12/04/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 12/04/2026, RNM-9C30, levar paciente Samuel R. A. Ribeiro para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>13/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>13/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 13/01/2026, HLF-8735, levar pacientes Neusa, Josiane, Aparecida, Antonio e etc para tratamento medico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>13/04/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>13/04/2026</Data_final_Viagem>
+				<Destino_Viagem>Passos/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Passos-MG, no dia 13/04/2026, SHH-3A92, levar paciente Neila G. T. Silva para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>14/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>14/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Formiga/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 14/01/2026, RNM-9C30, levar paciente Maria E. Pessoa para hemodialise, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>14/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>14/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 14/03/2026, OQM-9414, levar pacientes para tratamento médico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>15/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>15/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 15/01/2026, HLF-8735, levar pacientes Maria, João, Odete, Terezinha e etc para tratamento medico, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>15/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>15/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 15/03/2026, TDD-7E75, levar paciente Marcelo H. Soares para exames médicos, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>16/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>16/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 16/01/2026, RNM-9C22, levar paciente Célio Batista para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>17/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>17/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 17/01/2026, RNM-9C31, levar paciente Marcus A. Silva para exames médicos, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>17/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>17/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 17/03/2026, HLF-8735, levar pacientes Julia, Gabriela, Rosemar, Jose e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>18/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>18/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 18/01/2026, TDD-7E83, levar paciente Helio Tavares para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>18/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>18/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 18/02/2026, TYI-1C72, levar pacientes Gilson e Maria para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>19/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>19/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Passos/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Passos-MG, no dia 19/01/2026, TDF-5H72, levar paciente Maria G. Miranda para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>19/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>19/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 19/02/2026, HLF-8735, levar pacientes Ana, Eustaquio, Mara, Ataide e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>20/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>20/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 20/01/2026, HLF-8735, levar pacientes Rosenilda, Aparecida, Maria, José e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>20/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>20/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Luz/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Luz-MG, no dia 20/02/2026, TDD-7E75, levar paciente Bruno P. Silva para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>21/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>21/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 21/01/2026, RFA-8G59, levar pacientes Itamar, Maria, José e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>21/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>21/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 21/02/2026, TDD-7E75, levar paciente Gilmara dos Santos para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>21/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>21/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Campo Belo/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Campo Belo-MG, no dia 21/03/2026, TDD-7E75, levar paciente Sergio T. Gomes para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>22/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>22/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Pitangui/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Pitangui-MG, no dia 22/01/2026, TDD-7E75, levar paciente Leonardo Coutinho para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>22/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>22/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Oliveira/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira-MG, no dia 22/03/2026, RNM-9C30, levar paciente Alessandra A. Calacio para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>23/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>23/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 23/01/2026, HLF-8735, levar pacientes Dalila, Joana, Maria, Rosana e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>23/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>23/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 23/03/2026, OQM-9414, levar pacientes Rosenilda, Sebastião, Vera e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>24/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>24/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 24/02/2026, SIU-7I40, levar paciente Luis T. Marques para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>25/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>25/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Oliveira/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Oliveira-MG, no dia 25/03/2026, TYI-1C68, levar paciente Lucelia para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>26/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>26/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 26/01/2026, HLF-8735, levar pacientes Geni, José, Clayton, e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>26/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>26/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Santo Antônio do Monte/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Santo Antonio do Monte-MG, no dia 26/02/2026, HLF-8735, levar pacientes Elizabete, Terezinha, Elenice e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>26/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>26/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Formiga/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 26/03/2026, RVS-6E77, levar pacientes Larissa e Luiza para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>27/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>27/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Formiga/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Formiga-MG, no dia 27/01/2026, SIU-7I40, levar paciente Roberta P. Santos para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>60.0000</Valor_Unitario>
+				<Valor_Total>60.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>27/03/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>27/03/2026</Data_final_Viagem>
+				<Destino_Viagem>Luz/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Luz-MG, no dia 27/03/2026, RVS-6E77, levar paciente Bruno P. Silva para exames médicos, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>28/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>28/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 28/01/2026, RNM-9C30, levar paciente Vitor G. M. Andrade para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>28/02/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>28/02/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 28/02/2026, SIU-7I40, levar paciente Alessandra A. Calacio para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>29/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>29/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 29/01/2026, TDD-7E83, levar paciente Celio B. Moura para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>30/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>30/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 30/01/2026, RTQ-6F30, levar pacientes Denilson, Amanda, Norma e etc para consulta médica, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+			<InformacoesViagem>
+				<Lei_Autorizativa>1453</Lei_Autorizativa>
+				<Ato_Concessao>7036</Ato_Concessao>
+				<Data_Inicial_Viagem>31/01/2026</Data_Inicial_Viagem>
+				<Data_final_Viagem>31/01/2026</Data_final_Viagem>
+				<Destino_Viagem>Divinópolis/MG</Destino_Viagem>
+				<Objetivo_Viagem>Diária concedida conf. artigo nº 61, parágrafos 1º e 2º da Lei Municipal nº 1.453/1993 e Decreto Municipal 7.036/2024, para viagem a cidade de Divinópolis-MG, no dia 31/01/2026, TYI-1C72, levar paciente Matilde O. Faria para exames médicos, conf. relatorio de viagem anexo.</Objetivo_Viagem>
+				<Quantidade>1</Quantidade>
+				<Valor_Unitario>100.0000</Valor_Unitario>
+				<Valor_Total>100.0000</Valor_Total>
+			</InformacoesViagem>
+		</informacoesviagem>
+		<ListaBeneficiarios>
+			<ListaBeneficiarios>
+				<Beneficiarios>CHRISTIAN JORDANI DA SILVA*Motorista* / </Beneficiarios>
+			</ListaBeneficiarios>
+		</ListaBeneficiarios>
+	</Principal>
+	<Principal>
+		<Exercicio>2026</Exercicio>
+		<UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+		<Orgao>PREFEITURA MUNICIPAL</Orgao>
+		<Unidade>FUNDO MUNICIPAL DE ASSISTÊNCIA SOCIAL</Unidade>
+		<Departamento/>
+		<Funcao>Assistência Social</Funcao>
+		<SubFuncao>Assistência Comunitária</SubFuncao>
+		<Programa>Fundo Municipal de Assistência Social</Programa>
+		<Acao>
+			<Tipo>Atividade</Tipo>
+			<Descricao>Benefícios de Prestações Eventuais</Descricao>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao>1500</Identificacao>
+			<Descricao>Recursos não Vinculados de Impostos</Descricao>
+		</FonteRecurso>
+		<EsferaAdministrativa>Seguridade Social</EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao>0</Identificacao>
+			<Descricao>Não se aplica</Descricao>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao>3.3.90.33</Identificacao>
+			<Descricao>Passagens e Despesas com Locomoção</Descricao>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao>3.3.00.00.00.00.00</Identificacao>
+			<Descricao>OUTRAS DESPESAS CORRENTES</Descricao>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao>3.3.90.00.00.00.00</Identificacao>
+			<Descricao>Aplicações Diretas</Descricao>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao>3.3.90.33.99</Identificacao>
+			<Descricao>Outras Despesas com Locomoção</Descricao>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>003174</NumeroEmpenho>
+		<DataEmissaoEmpenho>24/03/2026</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>EXPRESSO UNIAO LTDA</Credor>
+		<CPFCNPJ>19350180000160</CPFCNPJ>
+		<ModalidadeLicitacao>Dispensa por Limite</ModalidadeLicitacao>
+		<NumeroLicitacao>20</NumeroLicitacao>
+		<AnoLicitacao>2026</AnoLicitacao>
+		<DataHomologacao>24/03/2026</DataHomologacao>
+		<ProcessoCompra>75</ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 251,09</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 0,00</ValorLiquidado>
+		<ValorPago>R$ 0,00</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Passagem - ida - com destino a São PauloSP.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 251,09</ValorUnitario>
+				<ValorTotal>R$ 251,09</ValorTotal>
+			</Item>
+		</Itens>
+	</Principal>
+	<Principal>
+		<Exercicio>2026</Exercicio>
+		<UnidadeGestora>CÂMARA MUNICIPAL</UnidadeGestora>
+		<Orgao>CAMARA MUNICIPAL</Orgao>
+		<Unidade>GABINETE E SECRETARIA DA CAMARA</Unidade>
+		<Departamento/>
+		<Funcao>Legislativa</Funcao>
+		<SubFuncao>Ação Legislativa</SubFuncao>
+		<Programa>Aplicação Recursos da Câmara Municipal</Programa>
+		<Acao>
+			<Tipo>Atividade</Tipo>
+			<Descricao>Manutencao da Secretaria da Camara</Descricao>
+		</Acao>
+		<FonteRecurso>
+			<Identificacao>1500</Identificacao>
+			<Descricao>Recursos não Vinculados de Impostos</Descricao>
+		</FonteRecurso>
+		<EsferaAdministrativa>Fiscal</EsferaAdministrativa>
+		<ModalidadeAplicacao>
+			<Identificacao>0</Identificacao>
+			<Descricao>Não se aplica</Descricao>
+		</ModalidadeAplicacao>
+		<CategoriaEconomica>
+			<Identificacao>3.3.90.33</Identificacao>
+			<Descricao>Passagens e Despesas com Locomoção</Descricao>
+		</CategoriaEconomica>
+		<GrupoDespesa>
+			<Identificacao>3.3.00.00.00.00.00</Identificacao>
+			<Descricao>OUTRAS DESPESAS CORRENTES</Descricao>
+		</GrupoDespesa>
+		<ElementoDespesa>
+			<Identificacao>3.3.90.00.00.00.00</Identificacao>
+			<Descricao>Aplicações Diretas</Descricao>
+		</ElementoDespesa>
+		<DesdobramentoDespesa>
+			<Identificacao>3.3.90.33.99</Identificacao>
+			<Descricao>Outras Despesas com Locomoção</Descricao>
+		</DesdobramentoDespesa>
+		<NumeroEmpenho>000209</NumeroEmpenho>
+		<DataEmissaoEmpenho>10/04/2026</DataEmissaoEmpenho>
+		<CategoriaEmpenho>Comum</CategoriaEmpenho>
+		<Credor>RENATO GONÇALVES MARCIANO</Credor>
+		<CPFCNPJ>09485282656</CPFCNPJ>
+		<ModalidadeLicitacao>Não se Aplica</ModalidadeLicitacao>
+		<NumeroLicitacao> </NumeroLicitacao>
+		<AnoLicitacao>0</AnoLicitacao>
+		<DataHomologacao> </DataHomologacao>
+		<ProcessoCompra> </ProcessoCompra>
+		<NumeroContrato> </NumeroContrato>
+		<NumeroConvenio> </NumeroConvenio>
+		<ValorEmpenhado>R$ 113,50</ValorEmpenhado>
+		<ValorLiquidacao>R$ 0,00</ValorLiquidacao>
+		<ValorLiquidado>R$ 113,50</ValorLiquidado>
+		<ValorPago>R$ 113,50</ValorPago>
+		<ValorAnulado>R$ 0,00</ValorAnulado>
+		<ObjetivoViagem> </ObjetivoViagem>
+		<LegislacaoAssociada> </LegislacaoAssociada>
+		<AtoLegal> </AtoLegal>
+		<Destino> </Destino>
+		<DataInicialViagem> </DataInicialViagem>
+		<DataFinalViagem> </DataFinalViagem>
+		<QuantidadeDiasDiarias>0.0000</QuantidadeDiasDiarias>
+		<ValorDiaria> </ValorDiaria>
+		<ValorTotal> </ValorTotal>
+		<Itens>
+			<Item>
+				<Numero>1</Numero>
+				<Item>Valor ref. a ressarcimento de despesas com locomoção de servidor da Câmara de Arcos, placa RVA-6C53, conf. Res. 8922020 e 9132025, ida à BH-MG, em 0704, ida de Renato Gonçalves ao Inst. CEAP Brasil, para realizar curso de capacitação.</Item>
+				<Quantidade>1.0000</Quantidade>
+				<ValorUnitario>R$ 113,50</ValorUnitario>
+				<ValorTotal>R$ 113,50</ValorTotal>
+			</Item>
+		</Itens>
+		<documentosComprobatorios>
+			<DocumentosComprobatorios>
+				<dt_liquidacao>10/04/2026</dt_liquidacao>
+				<cod_tipo_documento>3</cod_tipo_documento>
+				<desc_tipo_documento>3 - Outros</desc_tipo_documento>
+				<num_documento>209</num_documento>
+				<serie_modelo_nota_fiscal/>
+				<desc_serie>2026</desc_serie>
+				<chave_acesso/>
+				<dt_emissao_documento>10/04/2026</dt_emissao_documento>
+				<valor_documento>R$ 113,50</valor_documento>
+				<nr_empenho>000209</nr_empenho>
+				<cdUnidadeGestora>1</cdUnidadeGestora>
+				<nrSequencia>9228</nrSequencia>
+			</DocumentosComprobatorios>
+		</documentosComprobatorios>
+	</Principal>
+</Empenhos>
