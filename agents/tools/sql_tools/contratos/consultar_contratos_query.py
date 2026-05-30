@@ -45,6 +45,29 @@ CONTRACT_ORDER_COLUMNS = {
     "secretaria": Contrato.secretaria,
 }
 
+_SUGESTAO_VALOR_ZERO = (
+    "Valor registrado como R$ 0,00. Consulte também `consultar_licitacoes` "
+    "e `consultar_despesas` com o mesmo fornecedor ou período para verificar "
+    "se houve pagamento efetivo registrado separadamente."
+)
+
+_SUGESTAO_SEM_RESULTADOS = (
+    "Nenhum contrato encontrado com os filtros informados. "
+    "Consulte também `consultar_licitacoes` com os mesmos termos — "
+    "pode existir processo licitatório sem contrato formalizado ainda, "
+    "ou o evento/serviço pode constar apenas como licitação na base."
+)
+
+
+def _valor_e_zero(valor: Any) -> bool:
+    """Retorna True quando o valor do contrato está ausente ou igual a zero."""
+    if valor is None:
+        return True
+    try:
+        return float(valor) == 0.0
+    except (TypeError, ValueError):
+        return False
+
 
 def _fetch_contratos(
     session,
@@ -205,6 +228,10 @@ def _execute_fallback_candidates(
 
     O primeiro fallback com resultado e usado. Isso deixa o comportamento
     previsivel e evita mesclar registros de varias estrategias diferentes.
+
+    Nota: quando multiplos campos de filtro estao preenchidos simultaneamente,
+    apenas o primeiro campo da lista de prioridade e usado como source do
+    fallback. Os demais campos preenchidos sao ignorados nessa etapa.
     """
 
     source_field = next(
@@ -238,6 +265,21 @@ def _execute_fallback_candidates(
     return None
 
 
+def _aplicar_aviso_valor_zero(
+    resultados: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """
+    Adiciona campo 'aviso' em contratos com valor zero ou ausente.
+
+    Orienta o LLM a consultar licitacoes e despesas antes de concluir
+    que nao houve gasto efetivo associado ao contrato.
+    """
+    for contrato in resultados:
+        if _valor_e_zero(contrato.get("valor")):
+            contrato["aviso"] = _SUGESTAO_VALOR_ZERO
+    return resultados
+
+
 @register(
     name="consultar_contratos",
     scope=PUBLIC_SCOPE,
@@ -253,19 +295,41 @@ def consultar_contratos(
     incluir_detalhes: bool = False,
 ) -> dict[str, Any]:
     """
-    Lista contratos por numero, fornecedor, secretaria, categoria, descricao e valor.
+    Lista contratos firmados pela prefeitura por fornecedor, secretaria,
+    categoria, descricao, valor e periodo.
 
-    Use esta tool quando a pergunta pedir quais contratos existem, detalhes de um
-    contrato especifico ou uma listagem filtrada.
-    Se o filtro textual vier apenas de uma sigla curta ou termo ambiguo, como
-    "UPA", "UBS", "PSF", "CRAS" ou "CREAS", primeiro confirme o significado
-    com o usuario e sugira a expansao provavel. So use a tool depois dessa
-    confirmacao.
+    Use para perguntas sobre contratos existentes, gastos contratados,
+    fornecedores contratados ou detalhes de um contrato especifico.
+    Exemplos:
+    - 'quais contratos foram firmados em 2024?'
+    - 'contratos com a empresa X'
+    - 'quanto foi gasto com o fornecedor Y?' (valor do contrato)
+    - 'contratos da secretaria de saude'
+    - 'quanto custou o Natal Fest?' (busca por descricao do evento)
+    - 'quais servicos foram contratados para o evento X?'
+
+    Quando esta tool retornar valor R$ 0,00 em algum contrato, o campo
+    'aviso' do resultado ja orienta a proxima acao. Nesse caso, consulte
+    tambem `consultar_licitacoes` e `consultar_despesas` com os mesmos
+    termos para verificar se houve pagamento efetivo registrado.
+
+    Quando esta tool retornar resultado vazio, consulte tambem
+    `consultar_licitacoes` com os mesmos termos antes de concluir que
+    nao ha dados — pode existir processo licitatorio sem contrato
+    formalizado ou com valor ainda nao registrado na base.
+
+    Se o filtro textual vier apenas de uma sigla curta ou termo ambiguo,
+    como 'UPA', 'UBS', 'PSF', 'CRAS' ou 'CREAS', primeiro confirme o
+    significado com o usuario e sugira a expansao provavel. So use a
+    tool depois dessa confirmacao.
+
     NAO use para totais, medias ou rankings agregados; para isso use
     `agregar_contratos`.
-    NAO use para perguntas sobre o processo licitatorio antes da assinatura do
-    contrato, como modalidade, situacao da licitacao ou edital; para isso use
+    NAO use para o processo licitatorio antes da assinatura do contrato,
+    como modalidade, situacao da licitacao ou edital; para isso use
     `consultar_licitacoes`.
+    NAO use para pagamentos efetivos realizados; para isso use
+    `consultar_despesas`.
 
     Args:
         filtros: Objeto com filtros opcionais. Campos aceitos: `numero`,
@@ -290,12 +354,15 @@ def consultar_contratos(
         - `resultados`: lista de contratos com os campos solicitados; quando
           `incluir_detalhes=True`, cada item pode trazer tambem
           `numero_licitatorio`, `numero_instrumento`, `tipo_do_instrumento`,
-          `possui_aditivo`, `despesas_orcamentarias` e `itens_adquiridos`.
+          `possui_aditivo`, `despesas_orcamentarias` e `itens_adquiridos`;
+          quando o contrato tiver valor zero ou ausente, o campo `aviso`
+          orienta a consulta em `consultar_licitacoes` e `consultar_despesas`.
         - `metadata`: filtros aplicados, possiveis filtros de fallback,
           ordenacao, paginacao e se houve pedido de detalhes.
         - `mensagem`: aviso quando a resposta estiver paginada ou quando houver
           alguma observacao relevante.
-        - `sugestao`: dica quando nenhum contrato for encontrado.
+        - `sugestao`: dica quando nenhum contrato for encontrado, incluindo
+          orientacao para consultar `consultar_licitacoes` com os mesmos termos.
     """
     try:
         params = ConsultarContratosParams.model_validate(
@@ -380,7 +447,7 @@ def consultar_contratos(
     )
 
     if not contratos:
-        sugestao = "Nenhum contrato encontrado com os filtros informados."
+        sugestao = _SUGESTAO_SEM_RESULTADOS
         if not include_descricao_despesa:
             sugestao = (
                 build_descricao_despesa_unavailable_message(params.filtros) or sugestao
@@ -397,6 +464,10 @@ def consultar_contratos(
     resultados = [
         project_contrato_fields(contrato, params.campos) for contrato in contratos
     ]
+
+    # Sinaliza contratos com valor zero para o LLM encadear com licitacoes
+    resultados = _aplicar_aviso_valor_zero(resultados)
+
     mensagens: list[str] = []
     if not include_descricao_despesa:
         warning = build_descricao_despesa_unavailable_message(params.filtros)
