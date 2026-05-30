@@ -177,11 +177,31 @@ def handle_prompt(prompt: str) -> None:
         )
 
 
+def render_question_suggestions() -> None:
+    suggestions = [
+        "Quantos servidores ativos existem atualmente?",
+        "Qual é a receita total do último mês?",
+        "Quais contratos estão prestes a vencer?",
+        "Quantos veículos estão na frota e quais são os modelos mais comuns?",
+        "Qual é a folha de pagamento atual e como ela se compara ao mês anterior?",
+    ]
+
+    st.subheader("Sugestões de perguntas")
+
+    for suggestion in suggestions:
+        if st.button(suggestion, use_container_width=True):
+            handle_prompt(suggestion)
+            st.rerun()
+
+
 def main() -> None:
     configure_page()
     ensure_session_state()
     render_header()
     render_history()
+
+    if not st.session_state.messages:
+        render_question_suggestions()
 
     prompt = st.chat_input(
         INPUT_PLACEHOLDER,
