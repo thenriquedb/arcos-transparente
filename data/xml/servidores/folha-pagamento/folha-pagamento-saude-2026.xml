@@ -1,0 +1,4611 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<FolhasPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Abilio Candido da Rocha</NomServidor>
+		<SalarioBase>R$ 1.622,18</SalarioBase>
+		<Proventos>R$ 1.622,18</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.622,18</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.622,18</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Abilio Candido da Rocha</NomServidor>
+		<SalarioBase>R$ 1.709,77</SalarioBase>
+		<Proventos>R$ 1.797,36</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.797,36</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.797,36</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Abilio Candido da Rocha</NomServidor>
+		<SalarioBase>R$ 1.709,77</SalarioBase>
+		<Proventos>R$ 1.709,77</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.709,77</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.709,77</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Abilio Candido da Rocha</NomServidor>
+		<SalarioBase>R$ 1.709,77</SalarioBase>
+		<Proventos>R$ 1.709,77</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.709,77</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.709,77</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Abilio Candido da Rocha</NomServidor>
+		<SalarioBase>R$ 1.709,77</SalarioBase>
+		<Proventos>R$ 1.709,77</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.709,77</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.709,77</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ademar Nogueira Leao</NomServidor>
+		<SalarioBase>R$ 5.350,78</SalarioBase>
+		<Proventos>R$ 5.350,78</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.350,78</VencimentosTotais>
+		<Descontos>R$ 3.562,65</Descontos>
+		<Liquido>R$ 1.788,13</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ademar Nogueira Leao</NomServidor>
+		<SalarioBase>R$ 5.350,78</SalarioBase>
+		<Proventos>R$ 5.350,78</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.350,78</VencimentosTotais>
+		<Descontos>R$ 2.766,76</Descontos>
+		<Liquido>R$ 2.584,02</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ademar Nogueira Leao</NomServidor>
+		<SalarioBase>R$ 5.350,78</SalarioBase>
+		<Proventos>R$ 5.350,78</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.350,78</VencimentosTotais>
+		<Descontos>R$ 4.285,30</Descontos>
+		<Liquido>R$ 1.065,48</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ademar Nogueira Leao</NomServidor>
+		<SalarioBase>R$ 5.350,78</SalarioBase>
+		<Proventos>R$ 10.975,69</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.975,69</VencimentosTotais>
+		<Descontos>R$ 3.132,17</Descontos>
+		<Liquido>R$ 5.168,13</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ademar Nogueira Leao</NomServidor>
+		<SalarioBase>R$ 5.076,65</SalarioBase>
+		<Proventos>R$ 5.076,65</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.076,65</VencimentosTotais>
+		<Descontos>R$ 2.792,57</Descontos>
+		<Liquido>R$ 2.284,08</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Adriana de Castro Neves</NomServidor>
+		<SalarioBase>R$ 1.102,91</SalarioBase>
+		<Proventos>R$ 1.102,91</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.102,91</VencimentosTotais>
+		<Descontos>R$ 512,63</Descontos>
+		<Liquido>R$ 590,28</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Adriana de Castro Neves</NomServidor>
+		<SalarioBase>R$ 1.162,46</SalarioBase>
+		<Proventos>R$ 2.384,47</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.384,47</VencimentosTotais>
+		<Descontos>R$ 460,28</Descontos>
+		<Liquido>R$ 1.342,96</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Adriana de Castro Neves</NomServidor>
+		<SalarioBase>R$ 1.162,46</SalarioBase>
+		<Proventos>R$ 1.162,46</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.162,46</VencimentosTotais>
+		<Descontos>R$ 511,62</Descontos>
+		<Liquido>R$ 650,84</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Adriana de Castro Neves</NomServidor>
+		<SalarioBase>R$ 1.162,46</SalarioBase>
+		<Proventos>R$ 1.162,46</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.162,46</VencimentosTotais>
+		<Descontos>R$ 522,77</Descontos>
+		<Liquido>R$ 639,69</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Adriana de Castro Neves</NomServidor>
+		<SalarioBase>R$ 1.162,46</SalarioBase>
+		<Proventos>R$ 1.162,46</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.162,46</VencimentosTotais>
+		<Descontos>R$ 497,04</Descontos>
+		<Liquido>R$ 665,42</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Adriana Veloso Parreira</NomServidor>
+		<SalarioBase>R$ 4.679,37</SalarioBase>
+		<Proventos>R$ 239,73</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 239,73</VencimentosTotais>
+		<Descontos>R$ 17,97</Descontos>
+		<Liquido>R$ 221,76</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Adriana Veloso Parreira</NomServidor>
+		<SalarioBase>R$ 4.439,63</SalarioBase>
+		<Proventos>R$ 4.940,66</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.940,66</VencimentosTotais>
+		<Descontos>R$ 460,87</Descontos>
+		<Liquido>R$ 4.479,79</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Amanda Arantes Franco</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 5.819,25</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.819,25</VencimentosTotais>
+		<Descontos>R$ 830,20</Descontos>
+		<Liquido>R$ 4.989,05</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Amanda Arantes Franco</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 11.240,98</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.240,98</VencimentosTotais>
+		<Descontos>R$ 1.133,14</Descontos>
+		<Liquido>R$ 7.497,31</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Amanda Arantes Franco</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 6.019,92</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.019,92</VencimentosTotais>
+		<Descontos>R$ 932,48</Descontos>
+		<Liquido>R$ 5.087,44</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Amanda Arantes Franco</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 6.019,92</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.019,92</VencimentosTotais>
+		<Descontos>R$ 932,48</Descontos>
+		<Liquido>R$ 5.087,44</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ana Dulce Pamplona Frade</NomServidor>
+		<SalarioBase>R$ 3.724,92</SalarioBase>
+		<Proventos>R$ 3.724,92</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.724,92</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.724,92</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ana Dulce Pamplona Frade</NomServidor>
+		<SalarioBase>R$ 3.724,92</SalarioBase>
+		<Proventos>R$ 3.724,92</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.724,92</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.724,92</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ana Dulce Pamplona Frade</NomServidor>
+		<SalarioBase>R$ 3.724,92</SalarioBase>
+		<Proventos>R$ 3.724,92</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.724,92</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.724,92</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ana Dulce Pamplona Frade</NomServidor>
+		<SalarioBase>R$ 3.724,92</SalarioBase>
+		<Proventos>R$ 3.915,76</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.915,76</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.915,76</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Ana Dulce Pamplona Frade</NomServidor>
+		<SalarioBase>R$ 3.534,08</SalarioBase>
+		<Proventos>R$ 3.534,08</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.534,08</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.534,08</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Coordenador de àrea</Cargo>
+		<NomServidor>Andreia de Fatima Roque Ebias</NomServidor>
+		<SalarioBase>R$ 1.943,12</SalarioBase>
+		<Proventos>R$ 1.943,12</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.943,12</VencimentosTotais>
+		<Descontos>R$ 150,56</Descontos>
+		<Liquido>R$ 1.792,56</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Coordenador de àrea</Cargo>
+		<NomServidor>Andreia de Fatima Roque Ebias</NomServidor>
+		<SalarioBase>R$ 2.048,05</SalarioBase>
+		<Proventos>R$ 2.266,75</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.266,75</VencimentosTotais>
+		<Descontos>R$ 179,68</Descontos>
+		<Liquido>R$ 2.087,07</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Coordenador de àrea</Cargo>
+		<NomServidor>Andreia de Fatima Roque Ebias</NomServidor>
+		<SalarioBase>R$ 2.048,05</SalarioBase>
+		<Proventos>R$ 2.048,05</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.048,05</VencimentosTotais>
+		<Descontos>R$ 160,00</Descontos>
+		<Liquido>R$ 1.888,05</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Coordenador de àrea</Cargo>
+		<NomServidor>Andreia de Fatima Roque Ebias</NomServidor>
+		<SalarioBase>R$ 2.048,05</SalarioBase>
+		<Proventos>R$ 2.048,05</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.048,05</VencimentosTotais>
+		<Descontos>R$ 160,00</Descontos>
+		<Liquido>R$ 1.888,05</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Coordenador de àrea</Cargo>
+		<NomServidor>Andreia de Fatima Roque Ebias</NomServidor>
+		<SalarioBase>R$ 2.048,05</SalarioBase>
+		<Proventos>R$ 2.048,05</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.048,05</VencimentosTotais>
+		<Descontos>R$ 160,00</Descontos>
+		<Liquido>R$ 1.888,05</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Angela Margarete Mendonça Costa Ribeiro</NomServidor>
+		<SalarioBase>R$ 892,40</SalarioBase>
+		<Proventos>R$ 892,40</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 892,40</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 892,40</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Angela Margarete Mendonça Costa Ribeiro</NomServidor>
+		<SalarioBase>R$ 892,40</SalarioBase>
+		<Proventos>R$ 892,40</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 892,40</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 892,40</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Angela Margarete Mendonça Costa Ribeiro</NomServidor>
+		<SalarioBase>R$ 892,40</SalarioBase>
+		<Proventos>R$ 892,40</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 892,40</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 892,40</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Angela Margarete Mendonça Costa Ribeiro</NomServidor>
+		<SalarioBase>R$ 892,40</SalarioBase>
+		<Proventos>R$ 938,12</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 938,12</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 938,12</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Angela Margarete Mendonça Costa Ribeiro</NomServidor>
+		<SalarioBase>R$ 846,68</SalarioBase>
+		<Proventos>R$ 846,68</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 846,68</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 846,68</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Antonio Miranda Neto</NomServidor>
+		<SalarioBase>R$ 118,18</SalarioBase>
+		<Proventos>R$ 118,18</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 118,18</VencimentosTotais>
+		<Descontos>R$ 35,01</Descontos>
+		<Liquido>R$ 83,17</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Antonio Miranda Neto</NomServidor>
+		<SalarioBase>R$ 124,56</SalarioBase>
+		<Proventos>R$ 124,56</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 124,56</VencimentosTotais>
+		<Descontos>R$ 35,01</Descontos>
+		<Liquido>R$ 89,55</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Antonio Miranda Neto</NomServidor>
+		<SalarioBase>R$ 124,56</SalarioBase>
+		<Proventos>R$ 124,56</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 124,56</VencimentosTotais>
+		<Descontos>R$ 35,01</Descontos>
+		<Liquido>R$ 89,55</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Antonio Miranda Neto</NomServidor>
+		<SalarioBase>R$ 124,56</SalarioBase>
+		<Proventos>R$ 130,94</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 130,94</VencimentosTotais>
+		<Descontos>R$ 35,01</Descontos>
+		<Liquido>R$ 95,93</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Antonio Miranda Neto</NomServidor>
+		<SalarioBase>R$ 124,56</SalarioBase>
+		<Proventos>R$ 124,56</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 124,56</VencimentosTotais>
+		<Descontos>R$ 35,01</Descontos>
+		<Liquido>R$ 89,55</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Adm Geral</Lotacao>
+		<Cargo>F.P.Assistente Social</Cargo>
+		<NomServidor>Athaylla Alves Pimenta Lima</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 4.131,95</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.131,95</VencimentosTotais>
+		<Descontos>R$ 384,42</Descontos>
+		<Liquido>R$ 3.747,53</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>F.P.Assistente Social</Cargo>
+		<NomServidor>Athaylla Alves Pimenta Lima</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 4.762,15</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.762,15</VencimentosTotais>
+		<Descontos>R$ 468,20</Descontos>
+		<Liquido>R$ 4.293,95</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Adm Geral</Lotacao>
+		<Cargo>F.P.Assistente Social</Cargo>
+		<NomServidor>Athaylla Alves Pimenta Lima</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 528,47</Proventos>
+		<Vantagens>R$ 135,08</Vantagens>
+		<VencimentosTotais>R$ 663,55</VencimentosTotais>
+		<Descontos>R$ 39,63</Descontos>
+		<Liquido>R$ 623,92</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Carlos Antonio da Silva</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 8.227,14</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 8.227,14</VencimentosTotais>
+		<Descontos>R$ 869,24</Descontos>
+		<Liquido>R$ 7.357,90</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Carlos Antonio da Silva</NomServidor>
+		<SalarioBase>R$ 5.403,91</SalarioBase>
+		<Proventos>R$ 5.403,91</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.403,91</VencimentosTotais>
+		<Descontos>R$ 709,28</Descontos>
+		<Liquido>R$ 4.694,63</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Carlos Antonio da Silva</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 5.987,53</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.987,53</VencimentosTotais>
+		<Descontos>R$ 1.020,23</Descontos>
+		<Liquido>R$ 4.967,30</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Carlos Antonio da Silva</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 5.695,72</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.695,72</VencimentosTotais>
+		<Descontos>R$ 869,24</Descontos>
+		<Liquido>R$ 4.826,48</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Carlos Antonio da Silva</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 5.695,72</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.695,72</VencimentosTotais>
+		<Descontos>R$ 869,24</Descontos>
+		<Liquido>R$ 4.826,48</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Celia Maria Rodrigues</NomServidor>
+		<SalarioBase>R$ 416,87</SalarioBase>
+		<Proventos>R$ 416,87</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 416,87</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 416,87</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Celia Maria Rodrigues</NomServidor>
+		<SalarioBase>R$ 416,87</SalarioBase>
+		<Proventos>R$ 438,22</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 438,22</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 438,22</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Celia Maria Rodrigues</NomServidor>
+		<SalarioBase>R$ 395,52</SalarioBase>
+		<Proventos>R$ 395,52</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 395,52</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 395,52</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Celia Maria Rodrigues</NomServidor>
+		<SalarioBase>R$ 416,87</SalarioBase>
+		<Proventos>R$ 416,87</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 416,87</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 416,87</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Celia Maria Rodrigues</NomServidor>
+		<SalarioBase>R$ 416,87</SalarioBase>
+		<Proventos>R$ 416,87</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 416,87</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 416,87</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Cleusa Goncalves dos Santos</NomServidor>
+		<SalarioBase>R$ 105,67</SalarioBase>
+		<Proventos>R$ 105,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 105,67</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 105,67</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Cleusa Goncalves dos Santos</NomServidor>
+		<SalarioBase>R$ 105,67</SalarioBase>
+		<Proventos>R$ 111,08</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 111,08</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 111,08</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Cleusa Goncalves dos Santos</NomServidor>
+		<SalarioBase>R$ 105,67</SalarioBase>
+		<Proventos>R$ 105,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 105,67</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 105,67</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Cleusa Goncalves dos Santos</NomServidor>
+		<SalarioBase>R$ 100,26</SalarioBase>
+		<Proventos>R$ 100,26</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 100,26</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 100,26</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Cleusa Goncalves dos Santos</NomServidor>
+		<SalarioBase>R$ 105,67</SalarioBase>
+		<Proventos>R$ 105,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 105,67</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 105,67</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Daniel Garcia de Faria</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 3.122,14</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.122,14</VencimentosTotais>
+		<Descontos>R$ 1.316,12</Descontos>
+		<Liquido>R$ 1.806,02</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Daniel Garcia de Faria</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 3.122,14</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.122,14</VencimentosTotais>
+		<Descontos>R$ 1.244,88</Descontos>
+		<Liquido>R$ 1.877,26</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Daniel Garcia de Faria</NomServidor>
+		<SalarioBase>R$ 1.657,88</SalarioBase>
+		<Proventos>R$ 4.475,71</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.475,71</VencimentosTotais>
+		<Descontos>R$ 1.412,22</Descontos>
+		<Liquido>R$ 3.063,49</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Daniel Garcia de Faria</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 3.379,72</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.379,72</VencimentosTotais>
+		<Descontos>R$ 1.287,95</Descontos>
+		<Liquido>R$ 2.091,77</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Daniel Garcia de Faria</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 3.122,14</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.122,14</VencimentosTotais>
+		<Descontos>R$ 1.260,94</Descontos>
+		<Liquido>R$ 1.861,20</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>David Vieira Rocha</NomServidor>
+		<SalarioBase>R$ 2.960,21</SalarioBase>
+		<Proventos>R$ 4.045,42</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.045,42</VencimentosTotais>
+		<Descontos>R$ 408,27</Descontos>
+		<Liquido>R$ 3.637,15</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>David Vieira Rocha</NomServidor>
+		<SalarioBase>R$ 2.960,21</SalarioBase>
+		<Proventos>R$ 3.848,27</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.848,27</VencimentosTotais>
+		<Descontos>R$ 384,62</Descontos>
+		<Liquido>R$ 3.463,65</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>David Vieira Rocha</NomServidor>
+		<SalarioBase>R$ 2.960,21</SalarioBase>
+		<Proventos>R$ 3.848,27</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.848,27</VencimentosTotais>
+		<Descontos>R$ 384,62</Descontos>
+		<Liquido>R$ 3.463,65</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>David Vieira Rocha</NomServidor>
+		<SalarioBase>R$ 2.808,55</SalarioBase>
+		<Proventos>R$ 3.651,11</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.651,11</VencimentosTotais>
+		<Descontos>R$ 360,96</Descontos>
+		<Liquido>R$ 3.290,15</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>David Vieira Rocha</NomServidor>
+		<SalarioBase>R$ 2.960,21</SalarioBase>
+		<Proventos>R$ 3.848,27</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.848,27</VencimentosTotais>
+		<Descontos>R$ 384,62</Descontos>
+		<Liquido>R$ 3.463,65</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Téc. Controle Interno</Cargo>
+		<NomServidor>Edna Aparecida da Silva</NomServidor>
+		<SalarioBase>R$ 6.157,55</SalarioBase>
+		<Proventos>R$ 12.315,09</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.315,09</VencimentosTotais>
+		<Descontos>R$ 3.194,27</Descontos>
+		<Liquido>R$ 9.120,82</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Téc. Controle Interno</Cargo>
+		<NomServidor>Edna Aparecida da Silva</NomServidor>
+		<SalarioBase>R$ 5.842,08</SalarioBase>
+		<Proventos>R$ 11.684,15</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.684,15</VencimentosTotais>
+		<Descontos>R$ 3.020,76</Descontos>
+		<Liquido>R$ 8.663,39</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Téc. Controle Interno</Cargo>
+		<NomServidor>Edna Aparecida da Silva</NomServidor>
+		<SalarioBase>R$ 6.157,55</SalarioBase>
+		<Proventos>R$ 12.946,03</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.946,03</VencimentosTotais>
+		<Descontos>R$ 3.367,77</Descontos>
+		<Liquido>R$ 9.578,26</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Téc. Controle Interno</Cargo>
+		<NomServidor>Edna Aparecida da Silva</NomServidor>
+		<SalarioBase>R$ 6.157,55</SalarioBase>
+		<Proventos>R$ 12.315,09</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.315,09</VencimentosTotais>
+		<Descontos>R$ 3.194,27</Descontos>
+		<Liquido>R$ 9.120,82</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Téc. Controle Interno</Cargo>
+		<NomServidor>Edna Aparecida da Silva</NomServidor>
+		<SalarioBase>R$ 6.157,55</SalarioBase>
+		<Proventos>R$ 12.315,09</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.315,09</VencimentosTotais>
+		<Descontos>R$ 3.194,27</Descontos>
+		<Liquido>R$ 9.120,82</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Eduardo Sanabio</NomServidor>
+		<SalarioBase>R$ 3.438,22</SalarioBase>
+		<Proventos>R$ 3.438,22</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.438,22</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.438,22</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Eduardo Sanabio</NomServidor>
+		<SalarioBase>R$ 3.438,22</SalarioBase>
+		<Proventos>R$ 3.438,22</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.438,22</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.438,22</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Eduardo Sanabio</NomServidor>
+		<SalarioBase>R$ 3.438,22</SalarioBase>
+		<Proventos>R$ 3.614,37</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.614,37</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.614,37</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Eduardo Sanabio</NomServidor>
+		<SalarioBase>R$ 3.262,07</SalarioBase>
+		<Proventos>R$ 3.262,07</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.262,07</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.262,07</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Eduardo Sanabio</NomServidor>
+		<SalarioBase>R$ 3.438,22</SalarioBase>
+		<Proventos>R$ 3.438,22</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.438,22</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.438,22</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Auxiliar de Laboratorio</Cargo>
+		<NomServidor>Elaine Aparecida Camargo Silva</NomServidor>
+		<SalarioBase>R$ 2.494,21</SalarioBase>
+		<Proventos>R$ 3.665,11</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.665,11</VencimentosTotais>
+		<Descontos>R$ 328,40</Descontos>
+		<Liquido>R$ 3.336,71</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Auxiliar de Laboratorio</Cargo>
+		<NomServidor>Elaine Aparecida Camargo Silva</NomServidor>
+		<SalarioBase>R$ 2.366,43</SalarioBase>
+		<Proventos>R$ 4.804,88</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.804,88</VencimentosTotais>
+		<Descontos>R$ 474,18</Descontos>
+		<Liquido>R$ 4.330,70</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Auxiliar de Laboratorio</Cargo>
+		<NomServidor>Elaine Aparecida Camargo Silva</NomServidor>
+		<SalarioBase>R$ 2.494,21</SalarioBase>
+		<Proventos>R$ 3.863,99</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.863,99</VencimentosTotais>
+		<Descontos>R$ 345,62</Descontos>
+		<Liquido>R$ 3.518,37</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Auxiliar de Laboratorio</Cargo>
+		<NomServidor>Elaine Aparecida Camargo Silva</NomServidor>
+		<SalarioBase>R$ 2.494,21</SalarioBase>
+		<Proventos>R$ 3.566,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.566,67</VencimentosTotais>
+		<Descontos>R$ 316,58</Descontos>
+		<Liquido>R$ 3.250,09</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Auxiliar de Laboratorio</Cargo>
+		<NomServidor>Elaine Aparecida Camargo Silva</NomServidor>
+		<SalarioBase>R$ 2.494,21</SalarioBase>
+		<Proventos>R$ 3.566,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.566,67</VencimentosTotais>
+		<Descontos>R$ 316,58</Descontos>
+		<Liquido>R$ 3.250,09</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Contabilidade</Cargo>
+		<NomServidor>Eliane de Fatima Silva</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 3.359,17</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.359,17</VencimentosTotais>
+		<Descontos>R$ 1.683,33</Descontos>
+		<Liquido>R$ 1.675,84</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Contabilidade</Cargo>
+		<NomServidor>Eliane de Fatima Silva</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 3.359,17</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.359,17</VencimentosTotais>
+		<Descontos>R$ 1.683,33</Descontos>
+		<Liquido>R$ 1.675,84</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Contabilidade</Cargo>
+		<NomServidor>Eliane de Fatima Silva</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 6.899,99</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.899,99</VencimentosTotais>
+		<Descontos>R$ 1.705,13</Descontos>
+		<Liquido>R$ 3.515,28</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Contabilidade</Cargo>
+		<NomServidor>Eliane de Fatima Silva</NomServidor>
+		<SalarioBase>R$ 2.451,59</SalarioBase>
+		<Proventos>R$ 3.364,11</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.364,11</VencimentosTotais>
+		<Descontos>R$ 1.683,93</Descontos>
+		<Liquido>R$ 1.680,18</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Contabilidade</Cargo>
+		<NomServidor>Eliane de Fatima Silva</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 3.359,17</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.359,17</VencimentosTotais>
+		<Descontos>R$ 1.683,33</Descontos>
+		<Liquido>R$ 1.675,84</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Elizete Aparecida Costa Santos</NomServidor>
+		<SalarioBase>R$ 225,41</SalarioBase>
+		<Proventos>R$ 225,41</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 225,41</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 225,41</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Elizete Aparecida Costa Santos</NomServidor>
+		<SalarioBase>R$ 213,87</SalarioBase>
+		<Proventos>R$ 213,87</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 213,87</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 213,87</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Elizete Aparecida Costa Santos</NomServidor>
+		<SalarioBase>R$ 225,41</SalarioBase>
+		<Proventos>R$ 236,95</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 236,95</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 236,95</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Elizete Aparecida Costa Santos</NomServidor>
+		<SalarioBase>R$ 225,41</SalarioBase>
+		<Proventos>R$ 225,41</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 225,41</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 225,41</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Elizete Aparecida Costa Santos</NomServidor>
+		<SalarioBase>R$ 225,41</SalarioBase>
+		<Proventos>R$ 225,41</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 225,41</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 225,41</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Coordenador de àrea</Cargo>
+		<NomServidor>Fabiana Simoes</NomServidor>
+		<SalarioBase>R$ 2.048,05</SalarioBase>
+		<Proventos>R$ 2.152,97</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.152,97</VencimentosTotais>
+		<Descontos>R$ 169,44</Descontos>
+		<Liquido>R$ 1.983,53</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Coordenador de àrea</Cargo>
+		<NomServidor>Fabiana Simoes</NomServidor>
+		<SalarioBase>R$ 1.943,12</SalarioBase>
+		<Proventos>R$ 1.943,12</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.943,12</VencimentosTotais>
+		<Descontos>R$ 150,56</Descontos>
+		<Liquido>R$ 1.792,56</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Fabiano Ferreira Cardoso Lopes</NomServidor>
+		<SalarioBase>R$ 6.610,42</SalarioBase>
+		<Proventos>R$ 13.831,04</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 13.831,04</VencimentosTotais>
+		<Descontos>R$ 3.559,01</Descontos>
+		<Liquido>R$ 10.272,03</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Fabiano Ferreira Cardoso Lopes</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 10.775,28</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.775,28</VencimentosTotais>
+		<Descontos>R$ 2.718,68</Descontos>
+		<Liquido>R$ 8.056,60</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Fabiano Ferreira Cardoso Lopes</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 22.134,21</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 22.134,21</VencimentosTotais>
+		<Descontos>R$ 2.968,34</Descontos>
+		<Liquido>R$ 13.940,33</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Fabiano Ferreira Cardoso Lopes</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 10.775,28</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.775,28</VencimentosTotais>
+		<Descontos>R$ 2.718,68</Descontos>
+		<Liquido>R$ 8.056,60</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Fabiano Ferreira Cardoso Lopes</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 10.775,28</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.775,28</VencimentosTotais>
+		<Descontos>R$ 2.718,68</Descontos>
+		<Liquido>R$ 8.056,60</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geralda Aparecida Rodrigues da Silva</NomServidor>
+		<SalarioBase>R$ 802,44</SalarioBase>
+		<Proventos>R$ 802,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 802,44</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 802,44</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geralda Aparecida Rodrigues da Silva</NomServidor>
+		<SalarioBase>R$ 802,44</SalarioBase>
+		<Proventos>R$ 802,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 802,44</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 802,44</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geralda Aparecida Rodrigues da Silva</NomServidor>
+		<SalarioBase>R$ 802,44</SalarioBase>
+		<Proventos>R$ 802,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 802,44</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 802,44</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geralda Aparecida Rodrigues da Silva</NomServidor>
+		<SalarioBase>R$ 761,33</SalarioBase>
+		<Proventos>R$ 761,33</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 761,33</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 761,33</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geralda Aparecida Rodrigues da Silva</NomServidor>
+		<SalarioBase>R$ 802,44</SalarioBase>
+		<Proventos>R$ 843,55</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 843,55</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 843,55</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Geraldo Aparecido de Moura</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 5.124,20</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.124,20</VencimentosTotais>
+		<Descontos>R$ 952,93</Descontos>
+		<Liquido>R$ 4.171,27</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Geraldo Aparecido de Moura</NomServidor>
+		<SalarioBase>R$ 1.657,88</SalarioBase>
+		<Proventos>R$ 6.352,23</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.352,23</VencimentosTotais>
+		<Descontos>R$ 1.595,68</Descontos>
+		<Liquido>R$ 4.756,55</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Geraldo Aparecido de Moura</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 4.798,69</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.798,69</VencimentosTotais>
+		<Descontos>R$ 862,88</Descontos>
+		<Liquido>R$ 3.935,81</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Geraldo Aparecido de Moura</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 4.798,69</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.798,69</VencimentosTotais>
+		<Descontos>R$ 862,88</Descontos>
+		<Liquido>R$ 3.935,81</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Geraldo Aparecido de Moura</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 4.798,69</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.798,69</VencimentosTotais>
+		<Descontos>R$ 862,88</Descontos>
+		<Liquido>R$ 3.935,81</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geraldo Moises de Oliveira</NomServidor>
+		<SalarioBase>R$ 1.676,32</SalarioBase>
+		<Proventos>R$ 1.676,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.676,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.676,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geraldo Moises de Oliveira</NomServidor>
+		<SalarioBase>R$ 1.676,32</SalarioBase>
+		<Proventos>R$ 1.676,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.676,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.676,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geraldo Moises de Oliveira</NomServidor>
+		<SalarioBase>R$ 1.676,32</SalarioBase>
+		<Proventos>R$ 1.676,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.676,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.676,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geraldo Moises de Oliveira</NomServidor>
+		<SalarioBase>R$ 1.590,44</SalarioBase>
+		<Proventos>R$ 1.590,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.590,44</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.590,44</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Geraldo Moises de Oliveira</NomServidor>
+		<SalarioBase>R$ 1.676,32</SalarioBase>
+		<Proventos>R$ 1.762,20</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.762,20</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.762,20</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Gilsea da Silva Gaspar</NomServidor>
+		<SalarioBase>R$ 2.973,32</SalarioBase>
+		<Proventos>R$ 3.125,65</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.125,65</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.125,65</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Gilsea da Silva Gaspar</NomServidor>
+		<SalarioBase>R$ 2.820,99</SalarioBase>
+		<Proventos>R$ 2.820,99</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.820,99</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.820,99</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Gilsea da Silva Gaspar</NomServidor>
+		<SalarioBase>R$ 2.973,32</SalarioBase>
+		<Proventos>R$ 2.973,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.973,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.973,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Gilsea da Silva Gaspar</NomServidor>
+		<SalarioBase>R$ 2.973,32</SalarioBase>
+		<Proventos>R$ 2.973,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.973,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.973,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Gilsea da Silva Gaspar</NomServidor>
+		<SalarioBase>R$ 2.973,32</SalarioBase>
+		<Proventos>R$ 2.973,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.973,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.973,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Giordano Junior Assuncao</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 8.842,03</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 8.842,03</VencimentosTotais>
+		<Descontos>R$ 2.332,50</Descontos>
+		<Liquido>R$ 6.509,53</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Giordano Junior Assuncao</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 8.084,64</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 8.084,64</VencimentosTotais>
+		<Descontos>R$ 2.084,55</Descontos>
+		<Liquido>R$ 6.000,09</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Giordano Junior Assuncao</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 7.686,13</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.686,13</VencimentosTotais>
+		<Descontos>R$ 2.114,51</Descontos>
+		<Liquido>R$ 5.571,62</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Giordano Junior Assuncao</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 11.826,86</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.826,86</VencimentosTotais>
+		<Descontos>R$ 3.399,90</Descontos>
+		<Liquido>R$ 8.426,96</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Giordano Junior Assuncao</NomServidor>
+		<SalarioBase>R$ 2.451,59</SalarioBase>
+		<Proventos>R$ 8.141,35</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 8.141,35</VencimentosTotais>
+		<Descontos>R$ 2.159,90</Descontos>
+		<Liquido>R$ 5.981,45</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>Giselle Tatiane Silva</NomServidor>
+		<SalarioBase>R$ 2.763,95</SalarioBase>
+		<Proventos>R$ 5.251,50</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.251,50</VencimentosTotais>
+		<Descontos>R$ 1.282,28</Descontos>
+		<Liquido>R$ 3.969,22</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>Giselle Tatiane Silva</NomServidor>
+		<SalarioBase>R$ 2.913,20</SalarioBase>
+		<Proventos>R$ 11.353,74</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.353,74</VencimentosTotais>
+		<Descontos>R$ 1.871,56</Descontos>
+		<Liquido>R$ 6.714,64</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>Giselle Tatiane Silva</NomServidor>
+		<SalarioBase>R$ 2.913,20</SalarioBase>
+		<Proventos>R$ 5.535,08</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.535,08</VencimentosTotais>
+		<Descontos>R$ 1.718,56</Descontos>
+		<Liquido>R$ 3.816,52</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>Giselle Tatiane Silva</NomServidor>
+		<SalarioBase>R$ 2.913,20</SalarioBase>
+		<Proventos>R$ 5.826,40</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.826,40</VencimentosTotais>
+		<Descontos>R$ 1.875,50</Descontos>
+		<Liquido>R$ 3.950,90</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Planejamento</Lotacao>
+		<Cargo>Agente de Produção</Cargo>
+		<NomServidor>Giselle Tatiane Silva</NomServidor>
+		<SalarioBase>R$ 2.913,20</SalarioBase>
+		<Proventos>R$ 5.535,08</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.535,08</VencimentosTotais>
+		<Descontos>R$ 1.718,56</Descontos>
+		<Liquido>R$ 3.816,52</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Helena Aparecida Lopes Souza</NomServidor>
+		<SalarioBase>R$ 97,43</SalarioBase>
+		<Proventos>R$ 97,43</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 97,43</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 97,43</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Helena Aparecida Lopes Souza</NomServidor>
+		<SalarioBase>R$ 97,43</SalarioBase>
+		<Proventos>R$ 102,42</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 102,42</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 102,42</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Helena Aparecida Lopes Souza</NomServidor>
+		<SalarioBase>R$ 97,43</SalarioBase>
+		<Proventos>R$ 97,43</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 97,43</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 97,43</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Helena Aparecida Lopes Souza</NomServidor>
+		<SalarioBase>R$ 97,43</SalarioBase>
+		<Proventos>R$ 97,43</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 97,43</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 97,43</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Helena Aparecida Lopes Souza</NomServidor>
+		<SalarioBase>R$ 92,44</SalarioBase>
+		<Proventos>R$ 92,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 92,44</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 92,44</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Henrique Alves Rodrigues</NomServidor>
+		<SalarioBase>R$ 3.448,09</SalarioBase>
+		<Proventos>R$ 3.772,29</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.772,29</VencimentosTotais>
+		<Descontos>R$ 341,26</Descontos>
+		<Liquido>R$ 3.431,03</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Henrique Alves Rodrigues</NomServidor>
+		<SalarioBase>R$ 3.634,28</SalarioBase>
+		<Proventos>R$ 4.144,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.144,67</VencimentosTotais>
+		<Descontos>R$ 385,94</Descontos>
+		<Liquido>R$ 3.758,73</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Henrique Alves Rodrigues</NomServidor>
+		<SalarioBase>R$ 3.634,28</SalarioBase>
+		<Proventos>R$ 3.958,48</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.958,48</VencimentosTotais>
+		<Descontos>R$ 363,60</Descontos>
+		<Liquido>R$ 3.594,88</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Henrique Alves Rodrigues</NomServidor>
+		<SalarioBase>R$ 3.634,28</SalarioBase>
+		<Proventos>R$ 3.958,48</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.958,48</VencimentosTotais>
+		<Descontos>R$ 363,60</Descontos>
+		<Liquido>R$ 3.594,88</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Henrique Alves Rodrigues</NomServidor>
+		<SalarioBase>R$ 3.634,28</SalarioBase>
+		<Proventos>R$ 3.958,48</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.958,48</VencimentosTotais>
+		<Descontos>R$ 363,60</Descontos>
+		<Liquido>R$ 3.594,88</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Ismeraldino Beirigo da Silva</NomServidor>
+		<SalarioBase>R$ 3.634,28</SalarioBase>
+		<Proventos>R$ 3.634,28</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.634,28</VencimentosTotais>
+		<Descontos>R$ 324,70</Descontos>
+		<Liquido>R$ 3.309,58</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Ismeraldino Beirigo da Silva</NomServidor>
+		<SalarioBase>R$ 3.634,28</SalarioBase>
+		<Proventos>R$ 3.634,28</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.634,28</VencimentosTotais>
+		<Descontos>R$ 324,70</Descontos>
+		<Liquido>R$ 3.309,58</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Ismeraldino Beirigo da Silva</NomServidor>
+		<SalarioBase>R$ 3.634,28</SalarioBase>
+		<Proventos>R$ 3.634,28</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.634,28</VencimentosTotais>
+		<Descontos>R$ 324,70</Descontos>
+		<Liquido>R$ 3.309,58</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Ismeraldino Beirigo da Silva</NomServidor>
+		<SalarioBase>R$ 3.634,28</SalarioBase>
+		<Proventos>R$ 7.516,81</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.516,81</VencimentosTotais>
+		<Descontos>R$ 354,49</Descontos>
+		<Liquido>R$ 5.345,18</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Supervisor</Cargo>
+		<NomServidor>Ismeraldino Beirigo da Silva</NomServidor>
+		<SalarioBase>R$ 3.448,09</SalarioBase>
+		<Proventos>R$ 4.022,77</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.022,77</VencimentosTotais>
+		<Descontos>R$ 371,32</Descontos>
+		<Liquido>R$ 3.651,45</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jair Aparecido Calacio</NomServidor>
+		<SalarioBase>R$ 76,03</SalarioBase>
+		<Proventos>R$ 76,03</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 76,03</VencimentosTotais>
+		<Descontos>R$ 1,52</Descontos>
+		<Liquido>R$ 74,51</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jair Aparecido Calacio</NomServidor>
+		<SalarioBase>R$ 80,13</SalarioBase>
+		<Proventos>R$ 84,23</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 84,23</VencimentosTotais>
+		<Descontos>R$ 1,60</Descontos>
+		<Liquido>R$ 82,63</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jair Aparecido Calacio</NomServidor>
+		<SalarioBase>R$ 80,13</SalarioBase>
+		<Proventos>R$ 80,13</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 80,13</VencimentosTotais>
+		<Descontos>R$ 1,60</Descontos>
+		<Liquido>R$ 78,53</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jair Aparecido Calacio</NomServidor>
+		<SalarioBase>R$ 80,13</SalarioBase>
+		<Proventos>R$ 80,13</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 80,13</VencimentosTotais>
+		<Descontos>R$ 1,60</Descontos>
+		<Liquido>R$ 78,53</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jair Aparecido Calacio</NomServidor>
+		<SalarioBase>R$ 80,13</SalarioBase>
+		<Proventos>R$ 80,13</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 80,13</VencimentosTotais>
+		<Descontos>R$ 1,60</Descontos>
+		<Liquido>R$ 78,53</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jaqueline Ribeiro Vilela Amarante</NomServidor>
+		<SalarioBase>R$ 2.547,17</SalarioBase>
+		<Proventos>R$ 2.547,17</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.547,17</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.547,17</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jaqueline Ribeiro Vilela Amarante</NomServidor>
+		<SalarioBase>R$ 2.547,17</SalarioBase>
+		<Proventos>R$ 2.547,17</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.547,17</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.547,17</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jaqueline Ribeiro Vilela Amarante</NomServidor>
+		<SalarioBase>R$ 2.547,17</SalarioBase>
+		<Proventos>R$ 2.547,17</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.547,17</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.547,17</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jaqueline Ribeiro Vilela Amarante</NomServidor>
+		<SalarioBase>R$ 2.547,17</SalarioBase>
+		<Proventos>R$ 2.677,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.677,67</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.677,67</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Jaqueline Ribeiro Vilela Amarante</NomServidor>
+		<SalarioBase>R$ 2.416,67</SalarioBase>
+		<Proventos>R$ 2.416,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.416,67</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.416,67</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Jeanete Rocha de Faria Maia</NomServidor>
+		<SalarioBase>R$ 11.660,63</SalarioBase>
+		<Proventos>R$ 11.660,63</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.660,63</VencimentosTotais>
+		<Descontos>R$ 5.141,05</Descontos>
+		<Liquido>R$ 6.519,58</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Jeanete Rocha de Faria Maia</NomServidor>
+		<SalarioBase>R$ 12.290,30</SalarioBase>
+		<Proventos>R$ 25.210,27</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 25.210,27</VencimentosTotais>
+		<Descontos>R$ 5.499,96</Descontos>
+		<Liquido>R$ 13.565,16</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Jeanete Rocha de Faria Maia</NomServidor>
+		<SalarioBase>R$ 12.290,30</SalarioBase>
+		<Proventos>R$ 12.290,30</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.290,30</VencimentosTotais>
+		<Descontos>R$ 5.326,81</Descontos>
+		<Liquido>R$ 6.963,49</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Jeanete Rocha de Faria Maia</NomServidor>
+		<SalarioBase>R$ 12.290,30</SalarioBase>
+		<Proventos>R$ 12.290,30</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.290,30</VencimentosTotais>
+		<Descontos>R$ 5.326,81</Descontos>
+		<Liquido>R$ 6.963,49</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Jeanete Rocha de Faria Maia</NomServidor>
+		<SalarioBase>R$ 12.290,30</SalarioBase>
+		<Proventos>R$ 12.290,30</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.290,30</VencimentosTotais>
+		<Descontos>R$ 5.326,81</Descontos>
+		<Liquido>R$ 6.963,49</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>José Marcal da Silveira</NomServidor>
+		<SalarioBase>R$ 65,15</SalarioBase>
+		<Proventos>R$ 65,15</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 65,15</VencimentosTotais>
+		<Descontos>R$ 1,30</Descontos>
+		<Liquido>R$ 63,85</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>José Marcal da Silveira</NomServidor>
+		<SalarioBase>R$ 65,15</SalarioBase>
+		<Proventos>R$ 65,15</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 65,15</VencimentosTotais>
+		<Descontos>R$ 1,30</Descontos>
+		<Liquido>R$ 63,85</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>José Marcal da Silveira</NomServidor>
+		<SalarioBase>R$ 65,15</SalarioBase>
+		<Proventos>R$ 68,48</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 68,48</VencimentosTotais>
+		<Descontos>R$ 1,31</Descontos>
+		<Liquido>R$ 67,17</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>José Marcal da Silveira</NomServidor>
+		<SalarioBase>R$ 65,15</SalarioBase>
+		<Proventos>R$ 65,15</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 65,15</VencimentosTotais>
+		<Descontos>R$ 1,30</Descontos>
+		<Liquido>R$ 63,85</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>José Marcal da Silveira</NomServidor>
+		<SalarioBase>R$ 61,82</SalarioBase>
+		<Proventos>R$ 61,82</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 61,82</VencimentosTotais>
+		<Descontos>R$ 1,24</Descontos>
+		<Liquido>R$ 60,58</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>PSF</Lotacao>
+		<Cargo>Nutricionista</Cargo>
+		<NomServidor>Jose Roberto Villela Carielo</NomServidor>
+		<SalarioBase>R$ 5.236,14</SalarioBase>
+		<Proventos>R$ 9.838,07</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.838,07</VencimentosTotais>
+		<Descontos>R$ 2.617,81</Descontos>
+		<Liquido>R$ 7.220,26</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>PSF</Lotacao>
+		<Cargo>Nutricionista</Cargo>
+		<NomServidor>Jose Roberto Villela Carielo</NomServidor>
+		<SalarioBase>R$ 5.518,89</SalarioBase>
+		<Proventos>R$ 10.940,31</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.940,31</VencimentosTotais>
+		<Descontos>R$ 2.926,57</Descontos>
+		<Liquido>R$ 8.013,74</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>PSF</Lotacao>
+		<Cargo>Nutricionista</Cargo>
+		<NomServidor>Jose Roberto Villela Carielo</NomServidor>
+		<SalarioBase>R$ 5.518,89</SalarioBase>
+		<Proventos>R$ 10.717,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.717,67</VencimentosTotais>
+		<Descontos>R$ 2.865,36</Descontos>
+		<Liquido>R$ 7.852,31</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>PSF</Lotacao>
+		<Cargo>Nutricionista</Cargo>
+		<NomServidor>Jose Roberto Villela Carielo</NomServidor>
+		<SalarioBase>R$ 5.518,89</SalarioBase>
+		<Proventos>R$ 9.093,36</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.093,36</VencimentosTotais>
+		<Descontos>R$ 2.418,67</Descontos>
+		<Liquido>R$ 6.674,69</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>PSF</Lotacao>
+		<Cargo>Nutricionista</Cargo>
+		<NomServidor>Jose Roberto Villela Carielo</NomServidor>
+		<SalarioBase>R$ 5.518,89</SalarioBase>
+		<Proventos>R$ 8.830,22</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 8.830,22</VencimentosTotais>
+		<Descontos>R$ 2.346,31</Descontos>
+		<Liquido>R$ 6.483,91</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Kele Cristina Leal Lopes</NomServidor>
+		<SalarioBase>R$ 4.679,37</SalarioBase>
+		<Proventos>R$ 6.598,60</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.598,60</VencimentosTotais>
+		<Descontos>R$ 2.987,68</Descontos>
+		<Liquido>R$ 3.610,92</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Kele Cristina Leal Lopes</NomServidor>
+		<SalarioBase>R$ 4.679,37</SalarioBase>
+		<Proventos>R$ 7.468,26</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.468,26</VencimentosTotais>
+		<Descontos>R$ 3.685,46</Descontos>
+		<Liquido>R$ 3.782,80</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Kele Cristina Leal Lopes</NomServidor>
+		<SalarioBase>R$ 4.679,37</SalarioBase>
+		<Proventos>R$ 6.249,08</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.249,08</VencimentosTotais>
+		<Descontos>R$ 3.079,85</Descontos>
+		<Liquido>R$ 3.169,23</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Kele Cristina Leal Lopes</NomServidor>
+		<SalarioBase>R$ 4.679,37</SalarioBase>
+		<Proventos>R$ 6.640,72</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.640,72</VencimentosTotais>
+		<Descontos>R$ 3.279,44</Descontos>
+		<Liquido>R$ 3.361,28</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Kele Cristina Leal Lopes</NomServidor>
+		<SalarioBase>R$ 4.439,63</SalarioBase>
+		<Proventos>R$ 11.737,80</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.737,80</VencimentosTotais>
+		<Descontos>R$ 4.022,09</Descontos>
+		<Liquido>R$ 7.715,71</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Hospital Municipal São José</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Kelly Christina de Sousa Zuquim</NomServidor>
+		<SalarioBase>R$ 4.439,63</SalarioBase>
+		<Proventos>R$ 9.423,00</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.423,00</VencimentosTotais>
+		<Descontos>R$ 2.398,94</Descontos>
+		<Liquido>R$ 7.024,06</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Hospital Municipal São José</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Kelly Christina de Sousa Zuquim</NomServidor>
+		<SalarioBase>R$ 4.679,37</SalarioBase>
+		<Proventos>R$ 7.677,94</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.677,94</VencimentosTotais>
+		<Descontos>R$ 1.838,10</Descontos>
+		<Liquido>R$ 5.839,84</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Hospital Municipal São José</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Kelly Christina de Sousa Zuquim</NomServidor>
+		<SalarioBase>R$ 4.679,37</SalarioBase>
+		<Proventos>R$ 10.592,81</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.592,81</VencimentosTotais>
+		<Descontos>R$ 2.720,64</Descontos>
+		<Liquido>R$ 7.872,17</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Hospital Municipal São José</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Kelly Christina de Sousa Zuquim</NomServidor>
+		<SalarioBase>R$ 4.679,37</SalarioBase>
+		<Proventos>R$ 10.462,06</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.462,06</VencimentosTotais>
+		<Descontos>R$ 2.684,68</Descontos>
+		<Liquido>R$ 7.777,38</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Hospital Municipal São José</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Kelly Christina de Sousa Zuquim</NomServidor>
+		<SalarioBase>R$ 4.679,37</SalarioBase>
+		<Proventos>R$ 9.443,27</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.443,27</VencimentosTotais>
+		<Descontos>R$ 2.404,52</Descontos>
+		<Liquido>R$ 7.038,75</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Kenia Caetano de Carvalho</NomServidor>
+		<SalarioBase>R$ 4.486,74</SalarioBase>
+		<Proventos>R$ 6.156,96</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.156,96</VencimentosTotais>
+		<Descontos>R$ 1.106,58</Descontos>
+		<Liquido>R$ 5.050,38</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Kenia Caetano de Carvalho</NomServidor>
+		<SalarioBase>R$ 4.486,74</SalarioBase>
+		<Proventos>R$ 7.325,58</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.325,58</VencimentosTotais>
+		<Descontos>R$ 1.702,17</Descontos>
+		<Liquido>R$ 5.623,41</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Kenia Caetano de Carvalho</NomServidor>
+		<SalarioBase>R$ 4.486,74</SalarioBase>
+		<Proventos>R$ 6.156,96</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.156,96</VencimentosTotais>
+		<Descontos>R$ 1.106,58</Descontos>
+		<Liquido>R$ 5.050,38</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Kenia Caetano de Carvalho</NomServidor>
+		<SalarioBase>R$ 4.486,74</SalarioBase>
+		<Proventos>R$ 6.455,79</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.455,79</VencimentosTotais>
+		<Descontos>R$ 1.258,89</Descontos>
+		<Liquido>R$ 5.196,90</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Kenia Caetano de Carvalho</NomServidor>
+		<SalarioBase>R$ 4.256,87</SalarioBase>
+		<Proventos>R$ 5.858,13</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.858,13</VencimentosTotais>
+		<Descontos>R$ 954,30</Descontos>
+		<Liquido>R$ 4.903,83</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Leila Jacinta Moreira</NomServidor>
+		<SalarioBase>R$ 1.657,88</SalarioBase>
+		<Proventos>R$ 2.803,64</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.803,64</VencimentosTotais>
+		<Descontos>R$ 228,00</Descontos>
+		<Liquido>R$ 2.575,64</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Leila Jacinta Moreira</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 5.358,86</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.358,86</VencimentosTotais>
+		<Descontos>R$ 256,00</Descontos>
+		<Liquido>R$ 3.954,34</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Leila Jacinta Moreira</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 2.945,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.945,44</VencimentosTotais>
+		<Descontos>R$ 242,04</Descontos>
+		<Liquido>R$ 2.703,40</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Leila Jacinta Moreira</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 2.945,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.945,44</VencimentosTotais>
+		<Descontos>R$ 242,04</Descontos>
+		<Liquido>R$ 2.703,40</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Leila Jacinta Moreira</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 2.945,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.945,44</VencimentosTotais>
+		<Descontos>R$ 242,04</Descontos>
+		<Liquido>R$ 2.703,40</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Vigilante Epidemiologico</Cargo>
+		<NomServidor>Liliane Aparecida Gonçalves</NomServidor>
+		<SalarioBase>R$ 2.494,21</SalarioBase>
+		<Proventos>R$ 4.908,71</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.908,71</VencimentosTotais>
+		<Descontos>R$ 322,17</Descontos>
+		<Liquido>R$ 4.586,54</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Vigilante Epidemiologico</Cargo>
+		<NomServidor>Liliane Aparecida Gonçalves</NomServidor>
+		<SalarioBase>R$ 2.494,21</SalarioBase>
+		<Proventos>R$ 1.533,22</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.533,22</VencimentosTotais>
+		<Descontos>R$ 28,53</Descontos>
+		<Liquido>R$ 1.504,69</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Vigilante Epidemiologico</Cargo>
+		<NomServidor>Liliane Aparecida Gonçalves</NomServidor>
+		<SalarioBase>R$ 2.494,21</SalarioBase>
+		<Proventos>R$ 1.533,22</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.533,22</VencimentosTotais>
+		<Descontos>R$ 28,53</Descontos>
+		<Liquido>R$ 1.504,69</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Vigilante Epidemiologico</Cargo>
+		<NomServidor>Liliane Aparecida Gonçalves</NomServidor>
+		<SalarioBase>R$ 2.494,21</SalarioBase>
+		<Proventos>R$ 1.611,77</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.611,77</VencimentosTotais>
+		<Descontos>R$ 35,96</Descontos>
+		<Liquido>R$ 1.575,81</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Vigilante Epidemiologico</Cargo>
+		<NomServidor>Liliane Aparecida Gonçalves</NomServidor>
+		<SalarioBase>R$ 2.366,43</SalarioBase>
+		<Proventos>R$ 1.454,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.454,67</VencimentosTotais>
+		<Descontos>R$ 28,53</Descontos>
+		<Liquido>R$ 1.426,14</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Lindalva Teixeira de Melo Ribeiro</NomServidor>
+		<SalarioBase>R$ 112,35</SalarioBase>
+		<Proventos>R$ 112,35</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 112,35</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 112,35</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Lindalva Teixeira de Melo Ribeiro</NomServidor>
+		<SalarioBase>R$ 118,41</SalarioBase>
+		<Proventos>R$ 124,47</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 124,47</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 124,47</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Lindalva Teixeira de Melo Ribeiro</NomServidor>
+		<SalarioBase>R$ 118,41</SalarioBase>
+		<Proventos>R$ 118,41</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 118,41</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 118,41</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Lindalva Teixeira de Melo Ribeiro</NomServidor>
+		<SalarioBase>R$ 118,41</SalarioBase>
+		<Proventos>R$ 118,41</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 118,41</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 118,41</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Pensionistas</Lotacao>
+		<Cargo>Pensionista</Cargo>
+		<NomServidor>Lindalva Teixeira de Melo Ribeiro</NomServidor>
+		<SalarioBase>R$ 118,41</SalarioBase>
+		<Proventos>R$ 118,41</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 118,41</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 118,41</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Luciane Ribeiro Fiorini Moreira</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 12.847,11</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.847,11</VencimentosTotais>
+		<Descontos>R$ 3.479,92</Descontos>
+		<Liquido>R$ 9.367,19</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Luciane Ribeiro Fiorini Moreira</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 14.222,21</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 14.222,21</VencimentosTotais>
+		<Descontos>R$ 3.858,07</Descontos>
+		<Liquido>R$ 10.364,14</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Luciane Ribeiro Fiorini Moreira</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 22.619,84</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 22.619,84</VencimentosTotais>
+		<Descontos>R$ 3.101,77</Descontos>
+		<Liquido>R$ 13.944,16</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Luciane Ribeiro Fiorini Moreira</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 12.043,16</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.043,16</VencimentosTotais>
+		<Descontos>R$ 3.258,83</Descontos>
+		<Liquido>R$ 8.784,33</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Luciane Ribeiro Fiorini Moreira</NomServidor>
+		<SalarioBase>R$ 6.610,42</SalarioBase>
+		<Proventos>R$ 10.900,87</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.900,87</VencimentosTotais>
+		<Descontos>R$ 2.937,57</Descontos>
+		<Liquido>R$ 7.963,30</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Luis Carlos Faria Campos</NomServidor>
+		<SalarioBase>R$ 5.306,97</SalarioBase>
+		<Proventos>R$ 5.306,97</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.306,97</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 5.306,97</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Luis Carlos Faria Campos</NomServidor>
+		<SalarioBase>R$ 5.593,54</SalarioBase>
+		<Proventos>R$ 5.880,11</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.880,11</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 5.880,11</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Luis Carlos Faria Campos</NomServidor>
+		<SalarioBase>R$ 5.593,54</SalarioBase>
+		<Proventos>R$ 5.593,54</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.593,54</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 5.593,54</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Luis Carlos Faria Campos</NomServidor>
+		<SalarioBase>R$ 5.593,54</SalarioBase>
+		<Proventos>R$ 5.593,54</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.593,54</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 5.593,54</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Luis Carlos Faria Campos</NomServidor>
+		<SalarioBase>R$ 5.593,54</SalarioBase>
+		<Proventos>R$ 5.593,54</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.593,54</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 5.593,54</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>F. P. Psicologo</Cargo>
+		<NomServidor>Luiza Malta Messias</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 3.963,51</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.963,51</VencimentosTotais>
+		<Descontos>R$ 364,21</Descontos>
+		<Liquido>R$ 3.599,30</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>F. P. Psicologo</Cargo>
+		<NomServidor>Luiza Malta Messias</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 3.963,51</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.963,51</VencimentosTotais>
+		<Descontos>R$ 364,21</Descontos>
+		<Liquido>R$ 3.599,30</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>F. P. Psicologo</Cargo>
+		<NomServidor>Luiza Malta Messias</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 3.963,51</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.963,51</VencimentosTotais>
+		<Descontos>R$ 364,21</Descontos>
+		<Liquido>R$ 3.599,30</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>F. P. Psicologo</Cargo>
+		<NomServidor>Luiza Malta Messias</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 2.906,57</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.906,57</VencimentosTotais>
+		<Descontos>R$ 237,37</Descontos>
+		<Liquido>R$ 2.669,20</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Pessoal</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Macmiller Silva Costa</NomServidor>
+		<SalarioBase>R$ 6.016,98</SalarioBase>
+		<Proventos>R$ 10.444,59</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.444,59</VencimentosTotais>
+		<Descontos>R$ 5.505,00</Descontos>
+		<Liquido>R$ 4.939,59</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Pessoal</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Macmiller Silva Costa</NomServidor>
+		<SalarioBase>R$ 5.708,71</SalarioBase>
+		<Proventos>R$ 9.458,13</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.458,13</VencimentosTotais>
+		<Descontos>R$ 5.782,29</Descontos>
+		<Liquido>R$ 3.675,84</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Pessoal</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Macmiller Silva Costa</NomServidor>
+		<SalarioBase>R$ 6.016,98</SalarioBase>
+		<Proventos>R$ 9.951,36</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.951,36</VencimentosTotais>
+		<Descontos>R$ 5.369,36</Descontos>
+		<Liquido>R$ 4.582,00</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Pessoal</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Macmiller Silva Costa</NomServidor>
+		<SalarioBase>R$ 6.016,98</SalarioBase>
+		<Proventos>R$ 9.951,36</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.951,36</VencimentosTotais>
+		<Descontos>R$ 5.369,36</Descontos>
+		<Liquido>R$ 4.582,00</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Pessoal</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Macmiller Silva Costa</NomServidor>
+		<SalarioBase>R$ 6.016,98</SalarioBase>
+		<Proventos>R$ 9.726,21</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.726,21</VencimentosTotais>
+		<Descontos>R$ 5.307,44</Descontos>
+		<Liquido>R$ 4.418,77</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcio Albanez Junior</NomServidor>
+		<SalarioBase>R$ 4.486,74</SalarioBase>
+		<Proventos>R$ 7.538,15</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.538,15</VencimentosTotais>
+		<Descontos>R$ 1.785,47</Descontos>
+		<Liquido>R$ 5.752,68</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcio Albanez Junior</NomServidor>
+		<SalarioBase>R$ 4.486,74</SalarioBase>
+		<Proventos>R$ 6.156,96</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.156,96</VencimentosTotais>
+		<Descontos>R$ 1.106,58</Descontos>
+		<Liquido>R$ 5.050,38</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcio Albanez Junior</NomServidor>
+		<SalarioBase>R$ 4.486,74</SalarioBase>
+		<Proventos>R$ 6.156,96</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.156,96</VencimentosTotais>
+		<Descontos>R$ 1.106,58</Descontos>
+		<Liquido>R$ 5.050,38</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcio Albanez Junior</NomServidor>
+		<SalarioBase>R$ 4.256,87</SalarioBase>
+		<Proventos>R$ 5.858,13</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.858,13</VencimentosTotais>
+		<Descontos>R$ 954,30</Descontos>
+		<Liquido>R$ 4.903,83</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcio Albanez Junior</NomServidor>
+		<SalarioBase>R$ 4.486,74</SalarioBase>
+		<Proventos>R$ 6.455,79</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.455,79</VencimentosTotais>
+		<Descontos>R$ 1.258,89</Descontos>
+		<Liquido>R$ 5.196,90</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcos Eduardo Terra</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 12.043,16</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.043,16</VencimentosTotais>
+		<Descontos>R$ 6.585,96</Descontos>
+		<Liquido>R$ 5.457,20</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcos Eduardo Terra</NomServidor>
+		<SalarioBase>R$ 6.610,42</SalarioBase>
+		<Proventos>R$ 10.900,87</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.900,87</VencimentosTotais>
+		<Descontos>R$ 6.271,84</Descontos>
+		<Liquido>R$ 4.629,03</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcos Eduardo Terra</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 12.159,56</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.159,56</VencimentosTotais>
+		<Descontos>R$ 6.617,97</Descontos>
+		<Liquido>R$ 5.541,59</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcos Eduardo Terra</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 11.472,02</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.472,02</VencimentosTotais>
+		<Descontos>R$ 6.428,90</Descontos>
+		<Liquido>R$ 5.043,12</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Odontologia</Lotacao>
+		<Cargo>Odontologo</Cargo>
+		<NomServidor>Marcos Eduardo Terra</NomServidor>
+		<SalarioBase>R$ 6.967,39</SalarioBase>
+		<Proventos>R$ 11.472,02</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.472,02</VencimentosTotais>
+		<Descontos>R$ 6.428,90</Descontos>
+		<Liquido>R$ 5.043,12</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Aparecida Teixeira</NomServidor>
+		<SalarioBase>R$ 3.708,63</SalarioBase>
+		<Proventos>R$ 3.708,63</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.708,63</VencimentosTotais>
+		<Descontos>R$ 496,28</Descontos>
+		<Liquido>R$ 3.212,35</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Aparecida Teixeira</NomServidor>
+		<SalarioBase>R$ 3.708,63</SalarioBase>
+		<Proventos>R$ 3.708,63</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.708,63</VencimentosTotais>
+		<Descontos>R$ 496,28</Descontos>
+		<Liquido>R$ 3.212,35</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Aparecida Teixeira</NomServidor>
+		<SalarioBase>R$ 3.708,63</SalarioBase>
+		<Proventos>R$ 3.708,63</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.708,63</VencimentosTotais>
+		<Descontos>R$ 496,28</Descontos>
+		<Liquido>R$ 3.212,35</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Aparecida Teixeira</NomServidor>
+		<SalarioBase>R$ 3.708,63</SalarioBase>
+		<Proventos>R$ 3.898,63</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.898,63</VencimentosTotais>
+		<Descontos>R$ 496,28</Descontos>
+		<Liquido>R$ 3.402,35</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Aparecida Teixeira</NomServidor>
+		<SalarioBase>R$ 3.518,63</SalarioBase>
+		<Proventos>R$ 3.518,63</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.518,63</VencimentosTotais>
+		<Descontos>R$ 496,28</Descontos>
+		<Liquido>R$ 3.022,35</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria das Gracas Nascimento de Abreu Teixeira</NomServidor>
+		<SalarioBase>R$ 3.545,39</SalarioBase>
+		<Proventos>R$ 3.545,39</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.545,39</VencimentosTotais>
+		<Descontos>R$ 70,91</Descontos>
+		<Liquido>R$ 3.474,48</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria das Gracas Nascimento de Abreu Teixeira</NomServidor>
+		<SalarioBase>R$ 3.736,84</SalarioBase>
+		<Proventos>R$ 3.928,29</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.928,29</VencimentosTotais>
+		<Descontos>R$ 74,74</Descontos>
+		<Liquido>R$ 3.853,55</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria das Gracas Nascimento de Abreu Teixeira</NomServidor>
+		<SalarioBase>R$ 3.736,84</SalarioBase>
+		<Proventos>R$ 3.736,84</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.736,84</VencimentosTotais>
+		<Descontos>R$ 74,74</Descontos>
+		<Liquido>R$ 3.662,10</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria das Gracas Nascimento de Abreu Teixeira</NomServidor>
+		<SalarioBase>R$ 3.736,84</SalarioBase>
+		<Proventos>R$ 7.473,68</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.473,68</VencimentosTotais>
+		<Descontos>R$ 74,74</Descontos>
+		<Liquido>R$ 5.530,52</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria das Gracas Nascimento de Abreu Teixeira</NomServidor>
+		<SalarioBase>R$ 3.736,84</SalarioBase>
+		<Proventos>R$ 3.736,84</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.736,84</VencimentosTotais>
+		<Descontos>R$ 74,74</Descontos>
+		<Liquido>R$ 3.662,10</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Geralda de Miranda</NomServidor>
+		<SalarioBase>R$ 762,31</SalarioBase>
+		<Proventos>R$ 762,31</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 762,31</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 762,31</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Geralda de Miranda</NomServidor>
+		<SalarioBase>R$ 762,31</SalarioBase>
+		<Proventos>R$ 762,31</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 762,31</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 762,31</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Geralda de Miranda</NomServidor>
+		<SalarioBase>R$ 762,31</SalarioBase>
+		<Proventos>R$ 762,31</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 762,31</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 762,31</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Geralda de Miranda</NomServidor>
+		<SalarioBase>R$ 723,26</SalarioBase>
+		<Proventos>R$ 723,26</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 723,26</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 723,26</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Geralda de Miranda</NomServidor>
+		<SalarioBase>R$ 762,31</SalarioBase>
+		<Proventos>R$ 801,36</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 801,36</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 801,36</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Helena Nogueira Veloso</NomServidor>
+		<SalarioBase>R$ 366,66</SalarioBase>
+		<Proventos>R$ 366,66</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 366,66</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 366,66</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Helena Nogueira Veloso</NomServidor>
+		<SalarioBase>R$ 386,45</SalarioBase>
+		<Proventos>R$ 406,24</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 406,24</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 406,24</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Helena Nogueira Veloso</NomServidor>
+		<SalarioBase>R$ 386,45</SalarioBase>
+		<Proventos>R$ 386,45</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 386,45</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 386,45</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Helena Nogueira Veloso</NomServidor>
+		<SalarioBase>R$ 386,45</SalarioBase>
+		<Proventos>R$ 386,45</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 386,45</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 386,45</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Helena Nogueira Veloso</NomServidor>
+		<SalarioBase>R$ 386,45</SalarioBase>
+		<Proventos>R$ 386,45</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 386,45</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 386,45</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Ines Ribeiro Roberto</NomServidor>
+		<SalarioBase>R$ 2.606,77</SalarioBase>
+		<Proventos>R$ 2.606,77</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.606,77</VencimentosTotais>
+		<Descontos>R$ 1.010,17</Descontos>
+		<Liquido>R$ 1.596,60</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Ines Ribeiro Roberto</NomServidor>
+		<SalarioBase>R$ 2.606,77</SalarioBase>
+		<Proventos>R$ 2.606,77</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.606,77</VencimentosTotais>
+		<Descontos>R$ 1.010,17</Descontos>
+		<Liquido>R$ 1.596,60</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Ines Ribeiro Roberto</NomServidor>
+		<SalarioBase>R$ 2.606,77</SalarioBase>
+		<Proventos>R$ 2.606,77</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.606,77</VencimentosTotais>
+		<Descontos>R$ 1.010,17</Descontos>
+		<Liquido>R$ 1.596,60</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Ines Ribeiro Roberto</NomServidor>
+		<SalarioBase>R$ 2.606,77</SalarioBase>
+		<Proventos>R$ 5.347,08</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.347,08</VencimentosTotais>
+		<Descontos>R$ 1.010,17</Descontos>
+		<Liquido>R$ 3.033,53</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Ines Ribeiro Roberto</NomServidor>
+		<SalarioBase>R$ 2.473,22</SalarioBase>
+		<Proventos>R$ 2.473,22</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.473,22</VencimentosTotais>
+		<Descontos>R$ 1.010,17</Descontos>
+		<Liquido>R$ 1.463,05</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Isabel Gomes Diniz Teixeira</NomServidor>
+		<SalarioBase>R$ 2.089,66</SalarioBase>
+		<Proventos>R$ 2.196,72</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.196,72</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.196,72</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Isabel Gomes Diniz Teixeira</NomServidor>
+		<SalarioBase>R$ 1.982,60</SalarioBase>
+		<Proventos>R$ 1.982,60</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.982,60</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.982,60</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Isabel Gomes Diniz Teixeira</NomServidor>
+		<SalarioBase>R$ 2.089,66</SalarioBase>
+		<Proventos>R$ 4.179,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.179,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 3.134,49</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Isabel Gomes Diniz Teixeira</NomServidor>
+		<SalarioBase>R$ 2.089,66</SalarioBase>
+		<Proventos>R$ 2.089,66</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.089,66</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.089,66</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Isabel Gomes Diniz Teixeira</NomServidor>
+		<SalarioBase>R$ 2.089,66</SalarioBase>
+		<Proventos>R$ 2.089,66</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.089,66</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 2.089,66</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Rita Gontijo</NomServidor>
+		<SalarioBase>R$ 76,32</SalarioBase>
+		<Proventos>R$ 76,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 76,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 76,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Rita Gontijo</NomServidor>
+		<SalarioBase>R$ 76,32</SalarioBase>
+		<Proventos>R$ 76,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 76,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 76,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Rita Gontijo</NomServidor>
+		<SalarioBase>R$ 76,32</SalarioBase>
+		<Proventos>R$ 76,32</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 76,32</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 76,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Rita Gontijo</NomServidor>
+		<SalarioBase>R$ 76,32</SalarioBase>
+		<Proventos>R$ 80,23</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 80,23</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 80,23</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Rita Gontijo</NomServidor>
+		<SalarioBase>R$ 72,41</SalarioBase>
+		<Proventos>R$ 72,41</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 72,41</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 72,41</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Zacarias Gomes</NomServidor>
+		<SalarioBase>R$ 62,80</SalarioBase>
+		<Proventos>R$ 62,80</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 62,80</VencimentosTotais>
+		<Descontos>R$ 1,26</Descontos>
+		<Liquido>R$ 61,54</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Zacarias Gomes</NomServidor>
+		<SalarioBase>R$ 66,19</SalarioBase>
+		<Proventos>R$ 69,58</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 69,58</VencimentosTotais>
+		<Descontos>R$ 1,33</Descontos>
+		<Liquido>R$ 68,25</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Zacarias Gomes</NomServidor>
+		<SalarioBase>R$ 66,19</SalarioBase>
+		<Proventos>R$ 66,19</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 66,19</VencimentosTotais>
+		<Descontos>R$ 1,32</Descontos>
+		<Liquido>R$ 64,87</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Zacarias Gomes</NomServidor>
+		<SalarioBase>R$ 66,19</SalarioBase>
+		<Proventos>R$ 66,19</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 66,19</VencimentosTotais>
+		<Descontos>R$ 1,32</Descontos>
+		<Liquido>R$ 64,87</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Maria Zacarias Gomes</NomServidor>
+		<SalarioBase>R$ 66,19</SalarioBase>
+		<Proventos>R$ 66,19</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 66,19</VencimentosTotais>
+		<Descontos>R$ 1,32</Descontos>
+		<Liquido>R$ 64,87</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Marilane Peixoto Nogueira</NomServidor>
+		<SalarioBase>R$ 2.407,46</SalarioBase>
+		<Proventos>R$ 3.453,89</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.453,89</VencimentosTotais>
+		<Descontos>R$ 303,05</Descontos>
+		<Liquido>R$ 3.150,84</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Marilane Peixoto Nogueira</NomServidor>
+		<SalarioBase>R$ 2.407,46</SalarioBase>
+		<Proventos>R$ 3.453,89</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.453,89</VencimentosTotais>
+		<Descontos>R$ 303,05</Descontos>
+		<Liquido>R$ 3.150,84</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Marilane Peixoto Nogueira</NomServidor>
+		<SalarioBase>R$ 2.407,46</SalarioBase>
+		<Proventos>R$ 3.453,89</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.453,89</VencimentosTotais>
+		<Descontos>R$ 303,05</Descontos>
+		<Liquido>R$ 3.150,84</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Marilane Peixoto Nogueira</NomServidor>
+		<SalarioBase>R$ 2.407,46</SalarioBase>
+		<Proventos>R$ 4.576,43</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.576,43</VencimentosTotais>
+		<Descontos>R$ 479,54</Descontos>
+		<Liquido>R$ 4.096,89</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Marilane Peixoto Nogueira</NomServidor>
+		<SalarioBase>R$ 2.284,12</SalarioBase>
+		<Proventos>R$ 3.293,55</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.293,55</VencimentosTotais>
+		<Descontos>R$ 283,81</Descontos>
+		<Liquido>R$ 3.009,74</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Auxiliar de Secretaria</Cargo>
+		<NomServidor>Marli Perpetua de Sousa Silva</NomServidor>
+		<SalarioBase>R$ 2.677,06</SalarioBase>
+		<Proventos>R$ 803,12</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 803,12</VencimentosTotais>
+		<Descontos>R$ 60,23</Descontos>
+		<Liquido>R$ 742,89</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Auxiliar de Secretaria</Cargo>
+		<NomServidor>Marli Perpetua de Sousa Silva</NomServidor>
+		<SalarioBase>R$ 2.677,06</SalarioBase>
+		<Proventos>R$ 4.015,59</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.015,59</VencimentosTotais>
+		<Descontos>R$ 370,46</Descontos>
+		<Liquido>R$ 3.645,13</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Auxiliar de Secretaria</Cargo>
+		<NomServidor>Marli Perpetua de Sousa Silva</NomServidor>
+		<SalarioBase>R$ 2.677,06</SalarioBase>
+		<Proventos>R$ 4.015,59</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.015,59</VencimentosTotais>
+		<Descontos>R$ 370,46</Descontos>
+		<Liquido>R$ 3.645,13</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Auxiliar de Secretaria</Cargo>
+		<NomServidor>Marli Perpetua de Sousa Silva</NomServidor>
+		<SalarioBase>R$ 2.677,06</SalarioBase>
+		<Proventos>R$ 4.015,59</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.015,59</VencimentosTotais>
+		<Descontos>R$ 370,46</Descontos>
+		<Liquido>R$ 3.645,13</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Telefonista</Cargo>
+		<NomServidor>Marta Aparecida de Morais</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 4.070,64</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.070,64</VencimentosTotais>
+		<Descontos>R$ 1.853,90</Descontos>
+		<Liquido>R$ 2.216,74</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Telefonista</Cargo>
+		<NomServidor>Marta Aparecida de Morais</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 4.184,85</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.184,85</VencimentosTotais>
+		<Descontos>R$ 1.853,43</Descontos>
+		<Liquido>R$ 2.331,42</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Telefonista</Cargo>
+		<NomServidor>Marta Aparecida de Morais</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 4.479,94</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.479,94</VencimentosTotais>
+		<Descontos>R$ 1.708,09</Descontos>
+		<Liquido>R$ 2.771,85</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Telefonista</Cargo>
+		<NomServidor>Marta Aparecida de Morais</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 4.496,07</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.496,07</VencimentosTotais>
+		<Descontos>R$ 1.849,43</Descontos>
+		<Liquido>R$ 2.646,64</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Telefonista</Cargo>
+		<NomServidor>Marta Aparecida de Morais</NomServidor>
+		<SalarioBase>R$ 2.451,59</SalarioBase>
+		<Proventos>R$ 4.226,99</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.226,99</VencimentosTotais>
+		<Descontos>R$ 790,04</Descontos>
+		<Liquido>R$ 3.436,95</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Paulo Cesar Rangel</NomServidor>
+		<SalarioBase>R$ 5.048,64</SalarioBase>
+		<Proventos>R$ 5.048,64</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.048,64</VencimentosTotais>
+		<Descontos>R$ 100,97</Descontos>
+		<Liquido>R$ 4.947,67</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Paulo Cesar Rangel</NomServidor>
+		<SalarioBase>R$ 5.321,26</SalarioBase>
+		<Proventos>R$ 5.593,88</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.593,88</VencimentosTotais>
+		<Descontos>R$ 106,42</Descontos>
+		<Liquido>R$ 5.487,46</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Paulo Cesar Rangel</NomServidor>
+		<SalarioBase>R$ 5.321,26</SalarioBase>
+		<Proventos>R$ 5.321,26</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.321,26</VencimentosTotais>
+		<Descontos>R$ 106,43</Descontos>
+		<Liquido>R$ 5.214,83</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Paulo Cesar Rangel</NomServidor>
+		<SalarioBase>R$ 5.321,26</SalarioBase>
+		<Proventos>R$ 5.321,26</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.321,26</VencimentosTotais>
+		<Descontos>R$ 106,43</Descontos>
+		<Liquido>R$ 5.214,83</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Paulo Cesar Rangel</NomServidor>
+		<SalarioBase>R$ 5.321,26</SalarioBase>
+		<Proventos>R$ 5.321,26</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.321,26</VencimentosTotais>
+		<Descontos>R$ 106,43</Descontos>
+		<Liquido>R$ 5.214,83</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Raissa Rodrigues Vieira</NomServidor>
+		<SalarioBase>R$ 5.518,89</SalarioBase>
+		<Proventos>R$ 13.143,46</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 13.143,46</VencimentosTotais>
+		<Descontos>R$ 3.422,07</Descontos>
+		<Liquido>R$ 9.721,39</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Raissa Rodrigues Vieira</NomServidor>
+		<SalarioBase>R$ 5.518,89</SalarioBase>
+		<Proventos>R$ 14.882,43</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 14.882,43</VencimentosTotais>
+		<Descontos>R$ 3.900,28</Descontos>
+		<Liquido>R$ 10.982,15</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Raissa Rodrigues Vieira</NomServidor>
+		<SalarioBase>R$ 5.518,89</SalarioBase>
+		<Proventos>R$ 13.159,94</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 13.159,94</VencimentosTotais>
+		<Descontos>R$ 3.426,60</Descontos>
+		<Liquido>R$ 9.733,34</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Raissa Rodrigues Vieira</NomServidor>
+		<SalarioBase>R$ 5.518,89</SalarioBase>
+		<Proventos>R$ 12.995,64</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.995,64</VencimentosTotais>
+		<Descontos>R$ 3.381,42</Descontos>
+		<Liquido>R$ 9.614,22</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Laboratorio</Lotacao>
+		<Cargo>Bioquimico</Cargo>
+		<NomServidor>Raissa Rodrigues Vieira</NomServidor>
+		<SalarioBase>R$ 5.236,14</SalarioBase>
+		<Proventos>R$ 11.679,13</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.679,13</VencimentosTotais>
+		<Descontos>R$ 3.019,38</Descontos>
+		<Liquido>R$ 8.659,75</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Raquel Cristina Rodrigues</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 10.916,78</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.916,78</VencimentosTotais>
+		<Descontos>R$ 819,38</Descontos>
+		<Liquido>R$ 7.486,87</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Raquel Cristina Rodrigues</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 3.987,00</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.987,00</VencimentosTotais>
+		<Descontos>R$ 367,02</Descontos>
+		<Liquido>R$ 3.619,98</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Raquel Cristina Rodrigues</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 5.695,72</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.695,72</VencimentosTotais>
+		<Descontos>R$ 819,38</Descontos>
+		<Liquido>R$ 4.876,34</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Raquel Cristina Rodrigues</NomServidor>
+		<SalarioBase>R$ 5.695,72</SalarioBase>
+		<Proventos>R$ 5.695,72</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.695,72</VencimentosTotais>
+		<Descontos>R$ 819,38</Descontos>
+		<Liquido>R$ 4.876,34</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Reginaldo Antonio Ferreira</NomServidor>
+		<SalarioBase>R$ 3.104,54</SalarioBase>
+		<Proventos>R$ 5.790,11</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.790,11</VencimentosTotais>
+		<Descontos>R$ 919,63</Descontos>
+		<Liquido>R$ 4.870,48</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Reginaldo Antonio Ferreira</NomServidor>
+		<SalarioBase>R$ 3.104,54</SalarioBase>
+		<Proventos>R$ 5.295,25</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.295,25</VencimentosTotais>
+		<Descontos>R$ 649,72</Descontos>
+		<Liquido>R$ 4.645,53</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Reginaldo Antonio Ferreira</NomServidor>
+		<SalarioBase>R$ 3.104,54</SalarioBase>
+		<Proventos>R$ 4.656,81</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.656,81</VencimentosTotais>
+		<Descontos>R$ 453,45</Descontos>
+		<Liquido>R$ 4.203,36</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Reginaldo Antonio Ferreira</NomServidor>
+		<SalarioBase>R$ 3.104,54</SalarioBase>
+		<Proventos>R$ 4.895,39</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.895,39</VencimentosTotais>
+		<Descontos>R$ 486,85</Descontos>
+		<Liquido>R$ 4.408,54</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Reginaldo Antonio Ferreira</NomServidor>
+		<SalarioBase>R$ 2.945,49</SalarioBase>
+		<Proventos>R$ 4.418,23</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.418,23</VencimentosTotais>
+		<Descontos>R$ 420,05</Descontos>
+		<Liquido>R$ 3.998,18</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Roberto Alves da Silva</NomServidor>
+		<SalarioBase>R$ 6.016,98</SalarioBase>
+		<Proventos>R$ 10.444,59</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.444,59</VencimentosTotais>
+		<Descontos>R$ 4.387,58</Descontos>
+		<Liquido>R$ 6.057,01</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Roberto Alves da Silva</NomServidor>
+		<SalarioBase>R$ 5.708,71</SalarioBase>
+		<Proventos>R$ 9.458,13</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.458,13</VencimentosTotais>
+		<Descontos>R$ 4.116,30</Descontos>
+		<Liquido>R$ 5.341,83</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Roberto Alves da Silva</NomServidor>
+		<SalarioBase>R$ 6.016,98</SalarioBase>
+		<Proventos>R$ 9.951,36</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.951,36</VencimentosTotais>
+		<Descontos>R$ 4.251,94</Descontos>
+		<Liquido>R$ 5.699,42</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Roberto Alves da Silva</NomServidor>
+		<SalarioBase>R$ 6.016,98</SalarioBase>
+		<Proventos>R$ 12.336,29</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.336,29</VencimentosTotais>
+		<Descontos>R$ 4.907,80</Descontos>
+		<Liquido>R$ 7.428,49</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Medico</Cargo>
+		<NomServidor>Roberto Alves da Silva</NomServidor>
+		<SalarioBase>R$ 6.016,98</SalarioBase>
+		<Proventos>R$ 19.578,52</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 19.578,52</VencimentosTotais>
+		<Descontos>R$ 4.251,94</Descontos>
+		<Liquido>R$ 10.513,00</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Administração</Cargo>
+		<NomServidor>Rodrigo Andre da Silva</NomServidor>
+		<SalarioBase>R$ 2.773,46</SalarioBase>
+		<Proventos>R$ 5.533,05</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.533,05</VencimentosTotais>
+		<Descontos>R$ 736,47</Descontos>
+		<Liquido>R$ 4.796,58</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Administração</Cargo>
+		<NomServidor>Rodrigo Andre da Silva</NomServidor>
+		<SalarioBase>R$ 2.773,46</SalarioBase>
+		<Proventos>R$ 5.533,05</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.533,05</VencimentosTotais>
+		<Descontos>R$ 736,47</Descontos>
+		<Liquido>R$ 4.796,58</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Administração</Cargo>
+		<NomServidor>Rodrigo Andre da Silva</NomServidor>
+		<SalarioBase>R$ 2.773,46</SalarioBase>
+		<Proventos>R$ 7.010,98</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.010,98</VencimentosTotais>
+		<Descontos>R$ 926,99</Descontos>
+		<Liquido>R$ 6.083,99</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Administração</Cargo>
+		<NomServidor>Rodrigo Andre da Silva</NomServidor>
+		<SalarioBase>R$ 2.773,46</SalarioBase>
+		<Proventos>R$ 9.693,23</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.693,23</VencimentosTotais>
+		<Descontos>R$ 736,47</Descontos>
+		<Liquido>R$ 6.876,67</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Auxiliar de Administração</Cargo>
+		<NomServidor>Rodrigo Andre da Silva</NomServidor>
+		<SalarioBase>R$ 2.631,36</SalarioBase>
+		<Proventos>R$ 6.433,59</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.433,59</VencimentosTotais>
+		<Descontos>R$ 1.195,44</Descontos>
+		<Liquido>R$ 5.238,15</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Rogerio Junio Rodrigues</NomServidor>
+		<SalarioBase>R$ 2.451,59</SalarioBase>
+		<Proventos>R$ 7.283,46</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.283,46</VencimentosTotais>
+		<Descontos>R$ 1.897,89</Descontos>
+		<Liquido>R$ 5.385,57</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Rogerio Junio Rodrigues</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 11.727,10</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 11.727,10</VencimentosTotais>
+		<Descontos>R$ 3.249,76</Descontos>
+		<Liquido>R$ 8.477,34</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Rogerio Junio Rodrigues</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 9.691,17</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 9.691,17</VencimentosTotais>
+		<Descontos>R$ 2.718,61</Descontos>
+		<Liquido>R$ 6.972,56</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Rogerio Junio Rodrigues</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 10.266,04</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.266,04</VencimentosTotais>
+		<Descontos>R$ 2.876,70</Descontos>
+		<Liquido>R$ 7.389,34</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Rogerio Junio Rodrigues</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 10.383,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.383,44</VencimentosTotais>
+		<Descontos>R$ 2.908,98</Descontos>
+		<Liquido>R$ 7.474,46</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Rosangela Alves Rezende</NomServidor>
+		<SalarioBase>R$ 104,92</SalarioBase>
+		<Proventos>R$ 104,92</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 104,92</VencimentosTotais>
+		<Descontos>R$ 32,07</Descontos>
+		<Liquido>R$ 72,85</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Rosangela Alves Rezende</NomServidor>
+		<SalarioBase>R$ 104,92</SalarioBase>
+		<Proventos>R$ 104,92</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 104,92</VencimentosTotais>
+		<Descontos>R$ 32,07</Descontos>
+		<Liquido>R$ 72,85</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Rosangela Alves Rezende</NomServidor>
+		<SalarioBase>R$ 104,92</SalarioBase>
+		<Proventos>R$ 104,92</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 104,92</VencimentosTotais>
+		<Descontos>R$ 32,07</Descontos>
+		<Liquido>R$ 72,85</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Rosangela Alves Rezende</NomServidor>
+		<SalarioBase>R$ 104,92</SalarioBase>
+		<Proventos>R$ 110,29</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 110,29</VencimentosTotais>
+		<Descontos>R$ 32,07</Descontos>
+		<Liquido>R$ 78,22</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Rosangela Alves Rezende</NomServidor>
+		<SalarioBase>R$ 99,55</SalarioBase>
+		<Proventos>R$ 99,55</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 99,55</VencimentosTotais>
+		<Descontos>R$ 31,96</Descontos>
+		<Liquido>R$ 67,59</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Rosilene Maria da Silva Ribeiro</NomServidor>
+		<SalarioBase>R$ 1.657,88</SalarioBase>
+		<Proventos>R$ 2.803,64</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.803,64</VencimentosTotais>
+		<Descontos>R$ 228,00</Descontos>
+		<Liquido>R$ 2.575,64</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Rosilene Maria da Silva Ribeiro</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 3.061,82</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.061,82</VencimentosTotais>
+		<Descontos>R$ 256,00</Descontos>
+		<Liquido>R$ 2.805,82</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Rosilene Maria da Silva Ribeiro</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 3.185,78</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.185,78</VencimentosTotais>
+		<Descontos>R$ 270,88</Descontos>
+		<Liquido>R$ 2.914,90</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Rosilene Maria da Silva Ribeiro</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 3.262,95</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.262,95</VencimentosTotais>
+		<Descontos>R$ 280,14</Descontos>
+		<Liquido>R$ 2.982,81</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Rosilene Maria da Silva Ribeiro</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 2.945,44</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.945,44</VencimentosTotais>
+		<Descontos>R$ 242,04</Descontos>
+		<Liquido>R$ 2.703,40</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Pessoal</Lotacao>
+		<Cargo>F. P. Médico</Cargo>
+		<NomServidor>Sergio da Conceicao Santos De Lima</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 4.287,71</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.287,71</VencimentosTotais>
+		<Descontos>R$ 403,11</Descontos>
+		<Liquido>R$ 3.884,60</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Pessoal</Lotacao>
+		<Cargo>F. P. Médico</Cargo>
+		<NomServidor>Sergio da Conceicao Santos De Lima</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 4.287,71</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.287,71</VencimentosTotais>
+		<Descontos>R$ 403,11</Descontos>
+		<Liquido>R$ 3.884,60</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Pessoal</Lotacao>
+		<Cargo>F. P. Médico</Cargo>
+		<NomServidor>Sergio da Conceicao Santos De Lima</NomServidor>
+		<SalarioBase>R$ 3.963,51</SalarioBase>
+		<Proventos>R$ 4.287,71</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.287,71</VencimentosTotais>
+		<Descontos>R$ 546,03</Descontos>
+		<Liquido>R$ 3.741,68</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Pessoal</Lotacao>
+		<Cargo>F. P. Médico</Cargo>
+		<NomServidor>Sergio da Conceicao Santos De Lima</NomServidor>
+		<SalarioBase>R$ 3.963,56</SalarioBase>
+		<Proventos>R$ 4.144,83</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.144,83</VencimentosTotais>
+		<Descontos>R$ 385,96</Descontos>
+		<Liquido>R$ 3.758,87</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Vigilancia Sanitaria</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Sergio Jose Veloso</NomServidor>
+		<SalarioBase>R$ 2.751,97</SalarioBase>
+		<Proventos>R$ 5.779,12</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.779,12</VencimentosTotais>
+		<Descontos>R$ 914,03</Descontos>
+		<Liquido>R$ 4.865,09</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Vigilancia Sanitaria</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Sergio Jose Veloso</NomServidor>
+		<SalarioBase>R$ 2.900,58</SalarioBase>
+		<Proventos>R$ 6.091,20</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.091,20</VencimentosTotais>
+		<Descontos>R$ 1.073,08</Descontos>
+		<Liquido>R$ 5.018,12</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Vigilancia Sanitaria</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Sergio Jose Veloso</NomServidor>
+		<SalarioBase>R$ 2.900,58</SalarioBase>
+		<Proventos>R$ 15.201,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 15.201,67</VencimentosTotais>
+		<Descontos>R$ 1.232,13</Descontos>
+		<Liquido>R$ 10.923,94</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Vigilancia Sanitaria</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Sergio Jose Veloso</NomServidor>
+		<SalarioBase>R$ 2.900,58</SalarioBase>
+		<Proventos>R$ 6.091,20</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.091,20</VencimentosTotais>
+		<Descontos>R$ 1.073,08</Descontos>
+		<Liquido>R$ 5.018,12</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Vigilancia Sanitaria</Lotacao>
+		<Cargo>Vigilante Sanitario</Cargo>
+		<NomServidor>Sergio Jose Veloso</NomServidor>
+		<SalarioBase>R$ 2.900,58</SalarioBase>
+		<Proventos>R$ 6.091,20</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.091,20</VencimentosTotais>
+		<Descontos>R$ 1.073,08</Descontos>
+		<Liquido>R$ 5.018,12</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Técnica de Enfermagem</Cargo>
+		<NomServidor>Sheila Cristina Ramos</NomServidor>
+		<SalarioBase>R$ 2.494,21</SalarioBase>
+		<Proventos>R$ 237,77</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 237,77</VencimentosTotais>
+		<Descontos>R$ 17,83</Descontos>
+		<Liquido>R$ 219,94</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Sheiler da Cunha Sant Ana</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 7.955,10</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.955,10</VencimentosTotais>
+		<Descontos>R$ 2.563,87</Descontos>
+		<Liquido>R$ 5.391,23</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Sheiler da Cunha Sant Ana</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 12.786,82</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.786,82</VencimentosTotais>
+		<Descontos>R$ 2.743,00</Descontos>
+		<Liquido>R$ 10.043,82</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Sheiler da Cunha Sant Ana</NomServidor>
+		<SalarioBase>R$ 2.204,81</SalarioBase>
+		<Proventos>R$ 7.175,68</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.175,68</VencimentosTotais>
+		<Descontos>R$ 2.215,36</Descontos>
+		<Liquido>R$ 4.960,32</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Sheiler da Cunha Sant Ana</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 8.886,42</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 8.886,42</VencimentosTotais>
+		<Descontos>R$ 2.865,67</Descontos>
+		<Liquido>R$ 6.020,75</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Motorista</Cargo>
+		<NomServidor>Sheiler da Cunha Sant Ana</NomServidor>
+		<SalarioBase>R$ 2.583,98</SalarioBase>
+		<Proventos>R$ 12.094,74</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 12.094,74</VencimentosTotais>
+		<Descontos>R$ 3.073,18</Descontos>
+		<Liquido>R$ 9.021,56</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Soraya de Melo Nogueira</NomServidor>
+		<SalarioBase>R$ 150,19</SalarioBase>
+		<Proventos>R$ 150,19</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 150,19</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 150,19</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Soraya de Melo Nogueira</NomServidor>
+		<SalarioBase>R$ 150,19</SalarioBase>
+		<Proventos>R$ 157,88</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 157,88</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 157,88</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Soraya de Melo Nogueira</NomServidor>
+		<SalarioBase>R$ 142,50</SalarioBase>
+		<Proventos>R$ 142,50</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 142,50</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 142,50</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Soraya de Melo Nogueira</NomServidor>
+		<SalarioBase>R$ 150,19</SalarioBase>
+		<Proventos>R$ 150,19</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 150,19</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 150,19</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Soraya de Melo Nogueira</NomServidor>
+		<SalarioBase>R$ 150,19</SalarioBase>
+		<Proventos>R$ 150,19</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 150,19</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 150,19</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Diretor de Departamento</Cargo>
+		<NomServidor>Tania Maria Alves Carvalho</NomServidor>
+		<SalarioBase>R$ 5.403,91</SalarioBase>
+		<Proventos>R$ 5.884,25</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 5.884,25</VencimentosTotais>
+		<Descontos>R$ 967,60</Descontos>
+		<Liquido>R$ 4.916,65</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>F. P. Agente de Saude</Cargo>
+		<NomServidor>Tatiane de Fatima Vieira Alves</NomServidor>
+		<SalarioBase>R$ 1.914,01</SalarioBase>
+		<Proventos>R$ 1.914,01</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.914,01</VencimentosTotais>
+		<Descontos>R$ 147,94</Descontos>
+		<Liquido>R$ 1.766,07</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>F. P. Agente de Saude</Cargo>
+		<NomServidor>Tatiane de Fatima Vieira Alves</NomServidor>
+		<SalarioBase>R$ 2.017,36</SalarioBase>
+		<Proventos>R$ 4.491,05</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.491,05</VencimentosTotais>
+		<Descontos>R$ 198,31</Descontos>
+		<Liquido>R$ 3.284,06</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>F. P. Agente de Saude</Cargo>
+		<NomServidor>Tatiane de Fatima Vieira Alves</NomServidor>
+		<SalarioBase>R$ 2.017,36</SalarioBase>
+		<Proventos>R$ 2.186,06</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.186,06</VencimentosTotais>
+		<Descontos>R$ 172,42</Descontos>
+		<Liquido>R$ 2.013,64</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>F. P. Agente de Saude</Cargo>
+		<NomServidor>Tatiane de Fatima Vieira Alves</NomServidor>
+		<SalarioBase>R$ 2.017,36</SalarioBase>
+		<Proventos>R$ 2.082,87</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.082,87</VencimentosTotais>
+		<Descontos>R$ 163,13</Descontos>
+		<Liquido>R$ 1.919,74</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>F. P. Agente de Saude</Cargo>
+		<NomServidor>Tatiane de Fatima Vieira Alves</NomServidor>
+		<SalarioBase>R$ 2.017,36</SalarioBase>
+		<Proventos>R$ 2.017,36</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.017,36</VencimentosTotais>
+		<Descontos>R$ 157,24</Descontos>
+		<Liquido>R$ 1.860,12</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Thamiris Nayara Liduario de Sousa</NomServidor>
+		<SalarioBase>R$ 2.407,46</SalarioBase>
+		<Proventos>R$ 7.463,11</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.463,11</VencimentosTotais>
+		<Descontos>R$ 1.757,21</Descontos>
+		<Liquido>R$ 5.705,90</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Thamiris Nayara Liduario de Sousa</NomServidor>
+		<SalarioBase>R$ 2.407,46</SalarioBase>
+		<Proventos>R$ 4.333,42</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.333,42</VencimentosTotais>
+		<Descontos>R$ 408,59</Descontos>
+		<Liquido>R$ 3.924,83</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Thamiris Nayara Liduario de Sousa</NomServidor>
+		<SalarioBase>R$ 2.407,46</SalarioBase>
+		<Proventos>R$ 1.203,73</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.203,73</VencimentosTotais>
+		<Descontos>R$ 90,27</Descontos>
+		<Liquido>R$ 1.113,46</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Thamiris Nayara Liduario de Sousa</NomServidor>
+		<SalarioBase>R$ 2.407,46</SalarioBase>
+		<Proventos>R$ 4.555,43</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.555,43</VencimentosTotais>
+		<Descontos>R$ 439,26</Descontos>
+		<Liquido>R$ 4.116,17</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Regulação</Lotacao>
+		<Cargo>Atendente</Cargo>
+		<NomServidor>Thamiris Nayara Liduario de Sousa</NomServidor>
+		<SalarioBase>R$ 2.284,12</SalarioBase>
+		<Proventos>R$ 4.111,41</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 4.111,41</VencimentosTotais>
+		<Descontos>R$ 381,95</Descontos>
+		<Liquido>R$ 3.729,46</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Valdete de Castro Espin Moreno</NomServidor>
+		<SalarioBase>R$ 768,69</SalarioBase>
+		<Proventos>R$ 768,69</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 768,69</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 768,69</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Valdete de Castro Espin Moreno</NomServidor>
+		<SalarioBase>R$ 810,19</SalarioBase>
+		<Proventos>R$ 851,69</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 851,69</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 851,69</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Valdete de Castro Espin Moreno</NomServidor>
+		<SalarioBase>R$ 810,19</SalarioBase>
+		<Proventos>R$ 810,19</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 810,19</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 810,19</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Valdete de Castro Espin Moreno</NomServidor>
+		<SalarioBase>R$ 810,19</SalarioBase>
+		<Proventos>R$ 810,19</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 810,19</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 810,19</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Valdete de Castro Espin Moreno</NomServidor>
+		<SalarioBase>R$ 810,19</SalarioBase>
+		<Proventos>R$ 810,19</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 810,19</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 810,19</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Valdirene Borges da Silva</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 2.974,64</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.974,64</VencimentosTotais>
+		<Descontos>R$ 642,39</Descontos>
+		<Liquido>R$ 2.332,25</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Valdirene Borges da Silva</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 2.974,64</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.974,64</VencimentosTotais>
+		<Descontos>R$ 666,39</Descontos>
+		<Liquido>R$ 2.308,25</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Valdirene Borges da Silva</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 2.974,64</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.974,64</VencimentosTotais>
+		<Descontos>R$ 539,12</Descontos>
+		<Liquido>R$ 2.435,52</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Valdirene Borges da Silva</NomServidor>
+		<SalarioBase>R$ 1.766,96</SalarioBase>
+		<Proventos>R$ 3.108,92</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 3.108,92</VencimentosTotais>
+		<Descontos>R$ 554,84</Descontos>
+		<Liquido>R$ 2.554,08</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao> Administração Geral</Lotacao>
+		<Cargo>Aj Serv. Administrat</Cargo>
+		<NomServidor>Valdirene Borges da Silva</NomServidor>
+		<SalarioBase>R$ 1.657,88</SalarioBase>
+		<Proventos>R$ 2.811,02</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 2.811,02</VencimentosTotais>
+		<Descontos>R$ 520,07</Descontos>
+		<Liquido>R$ 2.290,95</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Valeria Aparecida Bernardes Teixeira</NomServidor>
+		<SalarioBase>R$ 4.818,64</SalarioBase>
+		<Proventos>R$ 6.588,43</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.588,43</VencimentosTotais>
+		<Descontos>R$ 1.422,86</Descontos>
+		<Liquido>R$ 5.165,57</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Valeria Aparecida Bernardes Teixeira</NomServidor>
+		<SalarioBase>R$ 5.078,85</SalarioBase>
+		<Proventos>R$ 7.264,96</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.264,96</VencimentosTotais>
+		<Descontos>R$ 1.772,85</Descontos>
+		<Liquido>R$ 5.492,11</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Valeria Aparecida Bernardes Teixeira</NomServidor>
+		<SalarioBase>R$ 5.078,85</SalarioBase>
+		<Proventos>R$ 7.984,05</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.984,05</VencimentosTotais>
+		<Descontos>R$ 2.054,92</Descontos>
+		<Liquido>R$ 5.929,13</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Valeria Aparecida Bernardes Teixeira</NomServidor>
+		<SalarioBase>R$ 5.078,85</SalarioBase>
+		<Proventos>R$ 6.926,70</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.926,70</VencimentosTotais>
+		<Descontos>R$ 1.600,47</Descontos>
+		<Liquido>R$ 5.326,23</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Valeria Aparecida Bernardes Teixeira</NomServidor>
+		<SalarioBase>R$ 5.078,85</SalarioBase>
+		<Proventos>R$ 6.926,70</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.926,70</VencimentosTotais>
+		<Descontos>R$ 1.600,47</Descontos>
+		<Liquido>R$ 5.326,23</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Walquíria Resende de Oliveira Teixeira</NomServidor>
+		<SalarioBase>R$ 5.078,85</SalarioBase>
+		<Proventos>R$ 10.256,21</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 10.256,21</VencimentosTotais>
+		<Descontos>R$ 1.852,13</Descontos>
+		<Liquido>R$ 8.404,08</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Walquíria Resende de Oliveira Teixeira</NomServidor>
+		<SalarioBase>R$ 5.078,85</SalarioBase>
+		<Proventos>R$ 7.434,59</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.434,59</VencimentosTotais>
+		<Descontos>R$ 1.746,47</Descontos>
+		<Liquido>R$ 5.688,12</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Walquíria Resende de Oliveira Teixeira</NomServidor>
+		<SalarioBase>R$ 5.078,85</SalarioBase>
+		<Proventos>R$ 7.434,59</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.434,59</VencimentosTotais>
+		<Descontos>R$ 1.746,47</Descontos>
+		<Liquido>R$ 5.688,12</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Walquíria Resende de Oliveira Teixeira</NomServidor>
+		<SalarioBase>R$ 4.873,22</SalarioBase>
+		<Proventos>R$ 7.496,24</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 7.496,24</VencimentosTotais>
+		<Descontos>R$ 1.769,68</Descontos>
+		<Liquido>R$ 5.726,56</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>CAPS</Lotacao>
+		<Cargo>Psicologo</Cargo>
+		<NomServidor>Walquíria Resende de Oliveira Teixeira</NomServidor>
+		<SalarioBase>R$ 4.623,55</SalarioBase>
+		<Proventos>R$ 6.797,17</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 6.797,17</VencimentosTotais>
+		<Descontos>R$ 1.432,86</Descontos>
+		<Liquido>R$ 5.364,31</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>01/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Welser Minucci Guimaraes</NomServidor>
+		<SalarioBase>R$ 910,51</SalarioBase>
+		<Proventos>R$ 910,51</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 910,51</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 910,51</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>02/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Welser Minucci Guimaraes</NomServidor>
+		<SalarioBase>R$ 959,67</SalarioBase>
+		<Proventos>R$ 1.008,83</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 1.008,83</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 1.008,83</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>03/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Welser Minucci Guimaraes</NomServidor>
+		<SalarioBase>R$ 959,67</SalarioBase>
+		<Proventos>R$ 959,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 959,67</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 959,67</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>04/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Welser Minucci Guimaraes</NomServidor>
+		<SalarioBase>R$ 959,67</SalarioBase>
+		<Proventos>R$ 959,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 959,67</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 959,67</Liquido>
+	</FolhaPagamento>
+	<FolhaPagamento>
+		<Competencia>05/2026</Competencia>
+		<Lotacao>Inativos</Lotacao>
+		<Cargo>Inativos</Cargo>
+		<NomServidor>Welser Minucci Guimaraes</NomServidor>
+		<SalarioBase>R$ 959,67</SalarioBase>
+		<Proventos>R$ 959,67</Proventos>
+		<Vantagens> </Vantagens>
+		<VencimentosTotais>R$ 959,67</VencimentosTotais>
+		<Descontos> </Descontos>
+		<Liquido>R$ 959,67</Liquido>
+	</FolhaPagamento>
+</FolhasPagamento>
