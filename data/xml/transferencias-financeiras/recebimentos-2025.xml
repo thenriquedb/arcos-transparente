@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<TransferenciasFinanceiras>
+	<TransferenciaFinanceira>
+		<Identificacao>26</Identificacao>
+		<UnidadeGestoraConcessora>PREFEITURA MUNICIPAL</UnidadeGestoraConcessora>
+		<UnidadeGestoraRecebedora>CAMARA MUNICIPAL</UnidadeGestoraRecebedora>
+		<Finalidade>Transferência para Câmara</Finalidade>
+		<FonteRecurso>Recursos não Vinculados de Impostos</FonteRecurso>
+		<DetalhamentoFonte>Não se aplica</DetalhamentoFonte>
+		<ProgramacaoInicial>R$ 134.706,26</ProgramacaoInicial>
+		<DataMovimento>19/12/2025</DataMovimento>
+		<TipoMovimento>Devolução Recebimento</TipoMovimento>
+		<ValorMovimento>R$ 134.706,26</ValorMovimento>
+	</TransferenciaFinanceira>
+	<TransferenciaFinanceira>
+		<Identificacao>26</Identificacao>
+		<UnidadeGestoraConcessora>PREFEITURA MUNICIPAL</UnidadeGestoraConcessora>
+		<UnidadeGestoraRecebedora>CAMARA MUNICIPAL</UnidadeGestoraRecebedora>
+		<Finalidade>Transferência para Câmara</Finalidade>
+		<FonteRecurso>Recursos não Vinculados de Impostos</FonteRecurso>
+		<DetalhamentoFonte>Não se aplica</DetalhamentoFonte>
+		<ProgramacaoInicial>R$ 541.666,63</ProgramacaoInicial>
+		<DataMovimento>11/12/2025</DataMovimento>
+		<TipoMovimento>Recebimento</TipoMovimento>
+		<ValorMovimento>R$ 541.666,63</ValorMovimento>
+	</TransferenciaFinanceira>
+	<TransferenciaFinanceira>
+		<Identificacao>26</Identificacao>
+		<UnidadeGestoraConcessora>PREFEITURA MUNICIPAL</UnidadeGestoraConcessora>
+		<UnidadeGestoraRecebedora>CAMARA MUNICIPAL</UnidadeGestoraRecebedora>
+		<Finalidade>Transferência para Câmara</Finalidade>
+		<FonteRecurso>Recursos não Vinculados de Impostos</FonteRecurso>
+		<DetalhamentoFonte>Não se aplica</DetalhamentoFonte>
+		<ProgramacaoInicial>R$ 1.977.043,34</ProgramacaoInicial>
+		<DataMovimento>19/12/2025</DataMovimento>
+		<TipoMovimento>Devolução Recebimento</TipoMovimento>
+		<ValorMovimento>R$ 1.977.043,34</ValorMovimento>
+	</TransferenciaFinanceira>
+	<TransferenciaFinanceira>
+		<Identificacao>26</Identificacao>
+		<UnidadeGestoraConcessora>PREFEITURA MUNICIPAL</UnidadeGestoraConcessora>
+		<UnidadeGestoraRecebedora>CAMARA MUNICIPAL</UnidadeGestoraRecebedora>
+		<Finalidade>Transferência para Câmara</Finalidade>
+		<FonteRecurso>Recursos não Vinculados de Impostos</FonteRecurso>
+		<DetalhamentoFonte>Não se aplica</DetalhamentoFonte>
+		<ProgramacaoInicial>R$ 1.977.043,34</ProgramacaoInicial>
+		<DataMovimento>19/12/2025</DataMovimento>
+		<TipoMovimento>Estorno Devolução Recebimento</TipoMovimento>
+		<ValorMovimento>R$ 1.977.043,34</ValorMovimento>
+	</TransferenciaFinanceira>
+	<TransferenciaFinanceira>
+		<Identificacao>26</Identificacao>
+		<UnidadeGestoraConcessora>PREFEITURA MUNICIPAL</UnidadeGestoraConcessora>
+		<UnidadeGestoraRecebedora>CAMARA MUNICIPAL</UnidadeGestoraRecebedora>
+		<Finalidade>Transferência para Câmara</Finalidade>
+		<FonteRecurso>Recursos não Vinculados de Impostos</FonteRecurso>
+		<DetalhamentoFonte>Não se aplica</DetalhamentoFonte>
+		<ProgramacaoInicial>R$ 1.977.043,34</ProgramacaoInicial>
+		<DataMovimento>19/12/2025</DataMovimento>
+		<TipoMovimento>Devolução Recebimento</TipoMovimento>
+		<ValorMovimento>R$ 1.977.043,34</ValorMovimento>
+	</TransferenciaFinanceira>
+</TransferenciasFinanceiras>
