@@ -200,8 +200,8 @@ def main() -> None:
     render_header()
     render_history()
 
-    if not st.session_state.messages:
-        render_question_suggestions()
+    # if not st.session_state.messages:
+    #     render_question_suggestions()
 
     prompt = st.chat_input(
         INPUT_PLACEHOLDER,

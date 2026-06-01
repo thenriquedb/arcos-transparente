@@ -8,10 +8,12 @@ from decimal import Decimal
 from typing import Any, Optional
 
 from loguru import logger
-from sqlalchemy import Date, Numeric, and_, select
+from sqlalchemy import Date, Numeric, String, Text, and_, select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.schema import UniqueConstraint
+
+from ingestion.parsers.xml.shared import sanitize_xml_payload
 
 
 @dataclass
@@ -112,6 +114,7 @@ class SQLLoader:
         self, registro: dict[str, Any], modelo: type
     ) -> dict[str, Any]:
         """Normaliza e valida tipos de acordo com colunas do modelo."""
+        registro = sanitize_xml_payload(registro)
         payload: dict[str, Any] = {}
         for coluna in modelo.__table__.columns:
             if coluna.name in {"id", "criado_em", "atualizado_em"}:
@@ -146,6 +149,12 @@ class SQLLoader:
                     payload[coluna.name] = valor
                 else:
                     raise TypeError(f"Campo data invalido: {coluna.name}")
+                continue
+
+            if isinstance(coluna.type, (String, Text)):
+                if not isinstance(valor, str):
+                    raise TypeError(f"Campo textual invalido: {coluna.name}")
+                payload[coluna.name] = valor
                 continue
 
             payload[coluna.name] = valor

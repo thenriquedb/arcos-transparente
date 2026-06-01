@@ -92,10 +92,14 @@ python cli.py importar --force
 - Cada batch roda dentro de transação explícita.
 - Em falha, ocorre rollback do batch.
 - Erros são registrados com log detalhado via `loguru`.
+- Todos os XMLs são lidos pela camada compartilhada respeitando primeiro BOM e `encoding` declarado no cabeçalho XML.
+- Quando o XML não traz BOM nem declaração de `encoding`, a importação usa `ISO-8859-1` como fallback explícito de compatibilidade.
+- Se o XML declarar um `encoding` inválido, não suportado ou incompatível com os bytes do arquivo, a importação falha com erro descritivo em vez de tentar outro codec silenciosamente.
+- Caracteres de controle inválidos são removidos antes do parse e antes da persistência no banco.
 
 ## Como adicionar novo tipo de arquivo
 
-1. Criar parser em `ingestion/parsers/xml/novo_tipo_parser.py` retornando `list[dict]`.
+1. Criar parser em `ingestion/parsers/xml/novo_tipo_parser.py` retornando `list[dict]` e reutilizando `ingestion/parsers/xml/shared.py` para leitura, resolução de encoding e sanitização.
 2. Criar modelo SQLAlchemy correspondente em `database/models.py`.
 3. Criar migration Alembic para nova tabela/índices.
 4. Registrar parser + modelo no mapeamento de `ingestion/pipeline.py`.

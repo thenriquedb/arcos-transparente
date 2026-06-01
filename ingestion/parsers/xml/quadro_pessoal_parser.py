@@ -9,6 +9,7 @@ from typing import Any
 from loguru import logger
 from pydantic import ValidationError
 
+from ingestion.parsers.xml.shared import read_xml_text
 from ingestion.schemas.quadro_pessoal import QuadroPessoalInSchema
 
 
@@ -18,7 +19,7 @@ class QuadroPessoalParser:
     def parse(self, filepath: str) -> list[dict[str, Any]]:
         # Um dos arquivos de origem vem com alguns fechamentos ausentes. Como os
         # registros sao planos, a leitura por blocos preserva os dados aproveitaveis.
-        text = Path(filepath).read_text(encoding="ISO-8859-1")
+        text = read_xml_text(filepath)
         origem = self._infer_origem(filepath)
         registros: list[dict[str, Any]] = []
         invalidos = 0

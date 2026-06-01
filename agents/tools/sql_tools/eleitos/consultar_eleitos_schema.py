@@ -4,9 +4,14 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import Field, field_validator
 
-from shared.utils.validation import clean_text, normalize_limit
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
+from agents.tools.sql_tools.shared.normalization import (
+    normalize_model_input,
+    normalize_selected_fields,
+)
+from shared.utils.validation import clean_text, normalize_limit, parse_int
 
 
 ALLOWED_ELEITO_FIELDS = {
@@ -39,8 +44,8 @@ ALLOWED_ORDER_VALUES = {"asc", "desc"}
 ALLOWED_TIPO_POLITICO = {"vereador", "prefeito", "vice-prefeito"}
 
 
-class EleitoToolBaseSchema(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+class EleitoToolBaseSchema(SqlToolBaseSchema):
+    pass
 
 
 class EleitoFiltroSchema(EleitoToolBaseSchema):
@@ -83,10 +88,7 @@ class EleitoFiltroSchema(EleitoToolBaseSchema):
     @field_validator("ano", mode="before")
     @classmethod
     def _normalize_ano(cls, value: Any) -> int | None:
-        text = clean_text(value)
-        if text is None:
-            return None
-        return int(text)
+        return parse_int(value)
 
     @field_validator("em_exercicio", mode="before")
     @classmethod
@@ -102,9 +104,6 @@ class EleitoFiltroSchema(EleitoToolBaseSchema):
             return False
         raise ValueError("em_exercicio deve ser booleano")
 
-    def to_metadata_dict(self) -> dict[str, Any]:
-        return self.model_dump(mode="json", exclude_none=True)
-
 
 class ConsultarEleitosParams(EleitoToolBaseSchema):
     filtros: EleitoFiltroSchema = Field(default_factory=EleitoFiltroSchema)
@@ -117,13 +116,11 @@ class ConsultarEleitosParams(EleitoToolBaseSchema):
     @field_validator("filtros", mode="before")
     @classmethod
     def _normalize_filtros(cls, value: Any) -> EleitoFiltroSchema:
-        if value is None:
-            return EleitoFiltroSchema()
-        if isinstance(value, EleitoFiltroSchema):
-            return value
-        if not isinstance(value, dict):
-            raise ValueError("filtros deve ser um objeto")
-        return EleitoFiltroSchema.model_validate(value)
+        return normalize_model_input(
+            value,
+            schema_type=EleitoFiltroSchema,
+            field_name="filtros",
+        )
 
     @field_validator("ordenar_por", mode="before")
     @classmethod
@@ -156,15 +153,12 @@ class ConsultarEleitosParams(EleitoToolBaseSchema):
     @field_validator("campos", mode="before")
     @classmethod
     def _normalize_campos(cls, value: Any) -> list[str]:
-        if value is None:
-            return []
-        if not isinstance(value, list):
-            raise ValueError("campos deve ser uma lista")
-        campos = [clean_text(item) for item in value]
-        invalidos = [item for item in campos if item not in ALLOWED_ELEITO_FIELDS]
-        if invalidos:
-            raise ValueError(f"campos nao suportados: {invalidos}")
-        return [item for item in campos if item is not None]
+        return normalize_selected_fields(
+            value,
+            allowed_fields=ALLOWED_ELEITO_FIELDS,
+            require_list=True,
+            error_style="campos",
+        )
 
 
 class ConsultarEleitosMetadata(EleitoToolBaseSchema):

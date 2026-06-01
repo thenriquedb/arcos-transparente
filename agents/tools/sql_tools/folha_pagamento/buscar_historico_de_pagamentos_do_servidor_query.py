@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from pydantic import ValidationError
@@ -11,7 +12,8 @@ from sqlalchemy.orm import joinedload
 from agents.tools.registry import PUBLIC_SCOPE, register
 from database import session as session_manager
 from database.session import _normalizar_texto
-from database.models import FolhaPagamentoRegistro, FolhaServidor
+from database.models import Eleito, FolhaPagamentoRegistro, FolhaServidor
+from shared.utils.text import matches_text_query, normalize_search_text
 
 from .shared.params import BuscarHistoricoPagamentosServidorParams
 from .shared.responses import HistoricoPagamentosServidorResponse
@@ -20,6 +22,20 @@ from .shared.runtime import (
     serializar_candidato_servidor,
     serializar_servidor,
 )
+
+_CARGO_POLITICO_ALIASES = {
+    "prefeito": "prefeito",
+    "prefeita": "prefeito",
+    "vice": "vice-prefeito",
+    "vice prefeito": "vice-prefeito",
+    "vice-prefeito": "vice-prefeito",
+    "viceprefeito": "vice-prefeito",
+    "vice prefeita": "vice-prefeito",
+    "vice-prefeita": "vice-prefeito",
+    "viceprefeita": "vice-prefeito",
+    "vereador": "vereador",
+    "vereadora": "vereador",
+}
 
 
 @register(
@@ -42,9 +58,14 @@ def buscar_historico_de_pagamentos_do_servidor(
     "qual o salario dele?", "quanto ele recebe?" ou "qual o salario do prefeito?",
     resolvendo o nome completo a partir do historico da conversa antes de chamar
     esta tool.
+    Esta tool tambem aceita `nome="prefeito"`, `nome="vice"` ou
+    `nome="vereador"` como atalho: nesses casos, resolve automaticamente o
+    nome completo na base de eleitos antes de consultar a folha.
     Se a pergunta mencionar apenas cargo politico, como "prefeito", "vice" ou
-    "vereador", primeiro use `consultar_eleitos` para descobrir o `nome_completo`
-    em exercicio; em seguida chame esta tool com esse nome completo.
+    "vereador", primeiro use `consultar_eleitos` para descobrir o
+    `nome_completo` em exercicio e em seguida chame esta tool com esse nome.
+    Se preferir, tambem pode usar o atalho automatico com `nome="prefeito"`,
+    `nome="vice"` ou `nome="vereador"` e a tool fara essa resolucao sozinha.
     Para "qual o salario do prefeito?", use o `nome_completo` do prefeito em
     exercicio retornado por `consultar_eleitos`, nao solicite o nome ao usuario.
     NAO use para listar varios servidores, ordenar por salario ou contar pessoas;
@@ -95,16 +116,6 @@ def buscar_historico_de_pagamentos_do_servidor(
             ),
         )
 
-    if params.folha_servidor_id is None and len(params.nome.split()) < 2:
-        return resposta_sem_resultados(
-            query=params.nome,
-            mensagem=(
-                "Informação insuficiente para consultar salário individual. "
-                "Informe o nome completo ou pelo menos primeiro nome e outro "
-                "sobrenome do servidor."
-            ),
-        )
-
     with session_manager.get_session() as session:
         if params.folha_servidor_id is not None:
             stmt = (
@@ -140,9 +151,32 @@ def buscar_historico_de_pagamentos_do_servidor(
                 resultados=resultados,
             ).model_dump(mode="json")
 
+        nome_resolvido = params.nome or ""
+        cargo_politico = _resolve_cargo_politico_alias(nome_resolvido)
+        if cargo_politico is not None:
+            nome_resolvido, mensagem_erro = _resolve_nome_por_cargo_politico(
+                session,
+                cargo_politico,
+            )
+            if mensagem_erro is not None:
+                return resposta_sem_resultados(
+                    query=params.nome,
+                    mensagem=mensagem_erro,
+                )
+
+        if len(nome_resolvido.split()) < 2:
+            return resposta_sem_resultados(
+                query=params.nome,
+                mensagem=(
+                    "Informação insuficiente para consultar salário individual. "
+                    "Informe o nome completo ou pelo menos primeiro nome e outro "
+                    "sobrenome do servidor."
+                ),
+            )
+
         termos = [
             t
-            for t in _normalizar_texto(params.nome).split()
+            for t in _normalizar_texto(nome_resolvido).split()
             if len(t) > 2  # ignora artigos: "de", "da", "do", "e"
         ]
         candidatos_stmt = (
@@ -171,10 +205,20 @@ def buscar_historico_de_pagamentos_do_servidor(
                     ),
                 )
 
+            if cargo_politico is not None:
+                return resposta_sem_resultados(
+                    query=params.nome,
+                    mensagem=(
+                        f"Identifiquei o {cargo_politico} em exercício como "
+                        f"'{nome_resolvido}', mas não encontrei esse nome na base "
+                        "local de folha de pagamento."
+                    ),
+                )
+
             return resposta_sem_resultados(
                 query=params.nome,
                 sugestao=(
-                    f"Nenhum servidor encontrado com '{params.nome}'. "
+                    f"Nenhum servidor encontrado com '{nome_resolvido}'. "
                     "Confira a grafia ou tente uma combinação menos ambígua do nome, "
                     "como primeiro nome e outro sobrenome."
                 ),
@@ -221,3 +265,57 @@ def buscar_historico_de_pagamentos_do_servidor(
         total=len(resultados),
         resultados=resultados,
     ).model_dump(mode="json")
+
+
+def _resolve_cargo_politico_alias(value: str | None) -> str | None:
+    if value is None:
+        return None
+    normalized = normalize_search_text(value).strip()
+    normalized = re.sub(r"^(?:o|a|do|da|de)\s+", "", normalized).strip()
+    if resolved := _CARGO_POLITICO_ALIASES.get(normalized):
+        return resolved
+
+    for alias, resolved in sorted(
+        _CARGO_POLITICO_ALIASES.items(),
+        key=lambda item: len(item[0]),
+        reverse=True,
+    ):
+        if normalized.startswith(f"{alias} "):
+            return resolved
+
+    return None
+
+
+def _resolve_nome_por_cargo_politico(
+    session,
+    cargo_politico: str,
+) -> tuple[str, str | None]:
+    eleitos = (
+        session.execute(
+            select(Eleito)
+            .where(Eleito.tipo_politico == cargo_politico)
+            .order_by(Eleito.mandato_inicio.desc(), Eleito.nome_completo.asc())
+        )
+        .scalars()
+        .all()
+    )
+    em_exercicio = [
+        eleito
+        for eleito in eleitos
+        if matches_text_query(eleito.mandato_status, "em exercicio")
+    ]
+
+    if not em_exercicio:
+        return (
+            "",
+            f"Não encontrei o {cargo_politico} em exercício nos dados disponíveis da base local até o momento.",
+        )
+
+    if len(em_exercicio) > 1:
+        nomes = ", ".join(eleito.nome_completo for eleito in em_exercicio[:5])
+        return (
+            "",
+            f"Encontrei mais de um {cargo_politico} em exercício: {nomes}. Informe o nome para consultar o salário individual.",
+        )
+
+    return em_exercicio[0].nome_completo, None

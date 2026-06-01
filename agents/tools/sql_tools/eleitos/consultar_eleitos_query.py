@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from pydantic import ValidationError
@@ -9,7 +10,7 @@ from pydantic import ValidationError
 from agents.tools.registry import PUBLIC_SCOPE, register
 from database import session as session_manager
 from database.models import Eleito
-from shared.utils.text import matches_text_query
+from shared.utils.text import matches_text_query, normalize_search_text
 
 from .consultar_eleitos_schema import (
     ALLOWED_ELEITO_FIELDS,
@@ -18,6 +19,41 @@ from .consultar_eleitos_schema import (
     ConsultarEleitosResponse,
     EleitoFiltroSchema,
 )
+
+_TIPO_POLITICO_ALIASES = {
+    "prefeito": "prefeito",
+    "prefeita": "prefeito",
+    "vice": "vice-prefeito",
+    "vice prefeito": "vice-prefeito",
+    "vice-prefeito": "vice-prefeito",
+    "viceprefeito": "vice-prefeito",
+    "vice prefeita": "vice-prefeito",
+    "vice-prefeita": "vice-prefeito",
+    "viceprefeita": "vice-prefeito",
+    "vereador": "vereador",
+    "vereadora": "vereador",
+}
+
+
+def _resolve_tipo_politico_alias(value: str | None) -> str | None:
+    if value is None:
+        return None
+
+    normalized = normalize_search_text(value).strip()
+    normalized = re.sub(r"^(?:o|a|do|da|de)\s+", "", normalized).strip()
+
+    if resolved := _TIPO_POLITICO_ALIASES.get(normalized):
+        return resolved
+
+    for alias, resolved in sorted(
+        _TIPO_POLITICO_ALIASES.items(),
+        key=lambda item: len(item[0]),
+        reverse=True,
+    ):
+        if normalized.startswith(f"{alias} "):
+            return resolved
+
+    return None
 
 
 def _row_to_public_dict(registro: Eleito) -> dict[str, Any]:
@@ -44,12 +80,15 @@ def _row_to_public_dict(registro: Eleito) -> dict[str, Any]:
 
 def _load_filtered_eleitos(session, filtros: EleitoFiltroSchema) -> list[Eleito]:
     registros = session.query(Eleito).all()
+    tipo_politico_resolvido = filtros.tipo_politico or _resolve_tipo_politico_alias(
+        filtros.cargo
+    )
 
-    if filtros.tipo_politico:
+    if tipo_politico_resolvido:
         registros = [
             r
             for r in registros
-            if matches_text_query(r.tipo_politico, filtros.tipo_politico)
+            if normalize_search_text(r.tipo_politico) == tipo_politico_resolvido
         ]
     if filtros.nome:
         registros = [
@@ -65,7 +104,7 @@ def _load_filtered_eleitos(session, filtros: EleitoFiltroSchema) -> list[Eleito]
         registros = [
             r for r in registros if matches_text_query(r.partido, filtros.partido)
         ]
-    if filtros.cargo:
+    if filtros.cargo and _resolve_tipo_politico_alias(filtros.cargo) is None:
         registros = [r for r in registros if matches_text_query(r.cargo, filtros.cargo)]
     if filtros.status_mandato:
         registros = [
@@ -154,6 +193,13 @@ def consultar_eleitos(
     quais mandatos uma pessoa teve, partido de um eleito ou status do mandato.
     Para cargo politico atual, use `em_exercicio=True` e o `tipo_politico`
     correspondente, por exemplo `tipo_politico="prefeito"`.
+    Se a chamada vier com `cargo="prefeito"`, `cargo="vice"` ou
+    `cargo="vereador"`, a tool tambem interpreta isso como filtro por
+    `tipo_politico` para tornar o roteamento mais tolerante.
+    Se a pergunta for "qual o salario do prefeito?", "quanto o vice recebe?"
+    ou salario de vereador sem nome explicito, use esta tool apenas para
+    descobrir o `nome_completo` em exercicio e depois chame
+    `buscar_historico_de_pagamentos_do_servidor`.
     NAO use esta tool para perguntas sobre politicos que NAO sejam sobre mandatos de vereadores, prefeitos ou vice-prefeitos,
     NAO use como fonte final para responder valores de despesas, salarios,
     receitas, licitacoes, contratos, servidores ou folha. Para esses temas,

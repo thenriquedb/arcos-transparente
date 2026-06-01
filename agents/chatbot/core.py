@@ -13,6 +13,8 @@ from typing import Any, Protocol
 from uuid import uuid4
 
 from agents.chatbot.agent import criar_agente_chatbot
+from agents.guardrails import evaluate_public_query_guardrails
+from agents.router import route_user_query
 
 
 @dataclass(frozen=True)
@@ -116,9 +118,14 @@ class ChatbotApplication:
         self.session = session or ChatSession()
 
     def ask(self, question: str) -> ChatResponse:
-        normalized_question = _validate_question(question)
+        normalized_question = _normalize_question(question)
+        prior_user_queries = _collect_prior_user_queries(self.session.history)
 
-        response = _build_local_response(normalized_question)
+        response = _build_pre_agent_response(
+            normalized_question,
+            has_history=bool(self.session.history),
+            prior_user_queries=prior_user_queries,
+        )
         if response is None:
             response = self.backend.answer(
                 normalized_question,
@@ -132,8 +139,13 @@ class ChatbotApplication:
     def stream(self, question: str) -> Iterator[str]:
         """Responde uma pergunta em streaming, preservando o contrato de historico."""
 
-        normalized_question = _validate_question(question)
-        response = _build_local_response(normalized_question)
+        normalized_question = _normalize_question(question)
+        prior_user_queries = _collect_prior_user_queries(self.session.history)
+        response = _build_pre_agent_response(
+            normalized_question,
+            has_history=bool(self.session.history),
+            prior_user_queries=prior_user_queries,
+        )
         if response is not None:
             self._record_exchange(normalized_question, response.content)
             return iter([response.content])
@@ -289,11 +301,27 @@ def _content_to_text(content: Any) -> str:
     return ""
 
 
-def _validate_question(question: str) -> str:
-    normalized_question = question.strip()
-    if not normalized_question:
-        raise ValueError("A pergunta nao pode ser vazia.")
-    return normalized_question
+def _normalize_question(question: str) -> str:
+    return question.strip()
+
+
+def _build_pre_agent_response(
+    question: str,
+    *,
+    has_history: bool,
+    prior_user_queries: tuple[str, ...] = (),
+) -> ChatResponse | None:
+    """Mantem respostas locais e guardrails na fronteira pre-modelo."""
+
+    response = _build_local_response(question)
+    if response is not None:
+        return response
+
+    return _build_guardrail_response(
+        question,
+        has_history=has_history,
+        prior_user_queries=prior_user_queries,
+    )
 
 
 def _build_local_response(question: str) -> ChatResponse | None:
@@ -311,6 +339,29 @@ def _build_local_response(question: str) -> ChatResponse | None:
     return None
 
 
+def _build_guardrail_response(
+    question: str,
+    *,
+    has_history: bool,
+    prior_user_queries: tuple[str, ...] = (),
+) -> ChatResponse | None:
+    route = route_user_query(question)
+    decision = evaluate_public_query_guardrails(
+        question,
+        compatibility_route=route,
+        has_history=has_history,
+        prior_user_queries=prior_user_queries,
+    )
+    if decision.allowed:
+        return None
+
+    return ChatResponse(
+        content=decision.message or "",
+        guardrail_triggered=True,
+        metadata={"guardrail_category": decision.category},
+    )
+
+
 def _normalize_text(text: str) -> str:
     import unicodedata
 
@@ -319,3 +370,7 @@ def _normalize_text(text: str) -> str:
         char for char in normalized if unicodedata.category(char) != "Mn"
     )
     return " ".join(without_accents.lower().strip().split())
+
+
+def _collect_prior_user_queries(history: list[ChatMessage]) -> tuple[str, ...]:
+    return tuple(message.content for message in history if message.role == "user")

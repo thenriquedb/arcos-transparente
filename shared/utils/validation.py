@@ -6,6 +6,24 @@ from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
+from .text import normalize_search_text
+
+
+MONTH_NAME_TO_NUMBER = {
+    "janeiro": 1,
+    "fevereiro": 2,
+    "marco": 3,
+    "abril": 4,
+    "maio": 5,
+    "junho": 6,
+    "julho": 7,
+    "agosto": 8,
+    "setembro": 9,
+    "outubro": 10,
+    "novembro": 11,
+    "dezembro": 12,
+}
+
 
 def clean_text(value: Any) -> str | None:
     """Normaliza valores textuais, removendo espacos e vazios."""
@@ -100,6 +118,15 @@ def parse_date(value: Any) -> date | None:
             raise ValueError("data invalida") from exc
 
 
+def parse_int(value: Any) -> int | None:
+    """Converte texto saneado em inteiro, preservando vazio como `None`."""
+
+    text = clean_text(value)
+    if text is None:
+        return None
+    return int(text)
+
+
 def parse_competencia_as_date(value: Any) -> date | None:
     """Converte competencia `mm/yyyy` para o primeiro dia do mes."""
 
@@ -125,6 +152,22 @@ def parse_competencia_as_date(value: Any) -> date | None:
         return date.fromisoformat(text)
     except ValueError as exc:
         raise ValueError("data invalida") from exc
+
+
+def parse_month(value: Any) -> int | None:
+    """Converte numeros ou nomes de mes para o indice `1-12`."""
+
+    if value is None:
+        return None
+    if isinstance(value, int):
+        return value
+
+    text = clean_text(value)
+    if text is None:
+        return None
+    if text.isdigit():
+        return int(text)
+    return MONTH_NAME_TO_NUMBER.get(normalize_search_text(text))
 
 
 def normalize_limit(value: Any, minimum: int = 1, maximum: int = 50) -> int:

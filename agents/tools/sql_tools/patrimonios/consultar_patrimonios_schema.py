@@ -5,8 +5,13 @@ from __future__ import annotations
 from datetime import date
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import Field, field_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
+from agents.tools.sql_tools.shared.normalization import (
+    normalize_model_input,
+    normalize_selected_fields,
+)
 from shared.utils.validation import clean_text, normalize_limit, parse_date
 
 
@@ -35,8 +40,8 @@ ALLOWED_PATRIMONIO_SORT_FIELDS = {
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
-class PatrimonioToolBaseSchema(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+class PatrimonioToolBaseSchema(SqlToolBaseSchema):
+    pass
 
 
 class PatrimonioFiltroSchema(PatrimonioToolBaseSchema):
@@ -71,9 +76,6 @@ class PatrimonioFiltroSchema(PatrimonioToolBaseSchema):
     def _normalize_dates(cls, value: Any) -> date | None:
         return parse_date(value)
 
-    def to_metadata_dict(self) -> dict[str, Any]:
-        return self.model_dump(mode="json", exclude_none=True)
-
 
 class ConsultarPatrimoniosParams(PatrimonioToolBaseSchema):
     filtros: PatrimonioFiltroSchema = Field(default_factory=PatrimonioFiltroSchema)
@@ -86,13 +88,11 @@ class ConsultarPatrimoniosParams(PatrimonioToolBaseSchema):
     @field_validator("filtros", mode="before")
     @classmethod
     def _normalize_filtros(cls, value: Any) -> PatrimonioFiltroSchema:
-        if value is None:
-            return PatrimonioFiltroSchema()
-        if isinstance(value, PatrimonioFiltroSchema):
-            return value
-        if not isinstance(value, dict):
-            raise ValueError("filtros deve ser um objeto")
-        return PatrimonioFiltroSchema.model_validate(value)
+        return normalize_model_input(
+            value,
+            schema_type=PatrimonioFiltroSchema,
+            field_name="filtros",
+        )
 
     @field_validator("ordenar_por", mode="before")
     @classmethod
@@ -125,13 +125,12 @@ class ConsultarPatrimoniosParams(PatrimonioToolBaseSchema):
     @field_validator("campos", mode="before")
     @classmethod
     def _normalize_campos(cls, value: Any) -> list[str]:
-        if value is None:
-            return []
-        campos = [clean_text(item) for item in value]
-        invalidos = [item for item in campos if item not in ALLOWED_PATRIMONIO_FIELDS]
-        if invalidos:
-            raise ValueError(f"campos nao suportados: {invalidos}")
-        return [item for item in campos if item is not None]
+        return normalize_selected_fields(
+            value,
+            allowed_fields=ALLOWED_PATRIMONIO_FIELDS,
+            require_list=False,
+            error_style="campos",
+        )
 
 
 class ConsultarPatrimoniosMetadata(PatrimonioToolBaseSchema):

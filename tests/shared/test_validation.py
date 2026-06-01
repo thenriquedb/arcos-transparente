@@ -11,6 +11,8 @@ from shared.utils.validation import (
     parse_competencia_as_date,
     parse_date,
     parse_decimal,
+    parse_int,
+    parse_month,
     validate_date_period,
 )
 
@@ -49,6 +51,17 @@ def test_parse_date_suporta_formatos_comuns() -> None:
 def test_parse_date_rejeita_valor_invalido() -> None:
     with pytest.raises(ValueError, match="data invalida"):
         parse_date("99/99/2025")
+
+
+def test_parse_int_suporta_texto_limpo_e_vazio() -> None:
+    assert parse_int(" 42 ") == 42
+    assert parse_int(None) is None
+
+
+def test_parse_month_suporta_nome_numero_e_invalido() -> None:
+    assert parse_month("MARÇO") == 3
+    assert parse_month("11") == 11
+    assert parse_month("mes inexistente") is None
 
 
 def test_parse_competencia_as_date_suporta_competencia_e_iso() -> None:

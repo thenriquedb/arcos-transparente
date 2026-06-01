@@ -5,8 +5,13 @@ from __future__ import annotations
 from datetime import date
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import Field, field_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
+from agents.tools.sql_tools.shared.normalization import (
+    normalize_model_input,
+    normalize_selected_fields,
+)
 from shared.utils.validation import clean_text, normalize_limit, parse_date
 
 
@@ -43,8 +48,8 @@ ALLOWED_FROTA_SORT_FIELDS = {
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
-class FrotaToolBaseSchema(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+class FrotaToolBaseSchema(SqlToolBaseSchema):
+    pass
 
 
 class FrotaFiltroSchema(FrotaToolBaseSchema):
@@ -79,9 +84,6 @@ class FrotaFiltroSchema(FrotaToolBaseSchema):
     def _normalize_dates(cls, value: Any) -> date | None:
         return parse_date(value)
 
-    def to_metadata_dict(self) -> dict[str, Any]:
-        return self.model_dump(mode="json", exclude_none=True)
-
 
 class ConsultarFrotaParams(FrotaToolBaseSchema):
     filtros: FrotaFiltroSchema = Field(default_factory=FrotaFiltroSchema)
@@ -94,13 +96,11 @@ class ConsultarFrotaParams(FrotaToolBaseSchema):
     @field_validator("filtros", mode="before")
     @classmethod
     def _normalize_filtros(cls, value: Any) -> FrotaFiltroSchema:
-        if value is None:
-            return FrotaFiltroSchema()
-        if isinstance(value, FrotaFiltroSchema):
-            return value
-        if not isinstance(value, dict):
-            raise ValueError("filtros deve ser um objeto")
-        return FrotaFiltroSchema.model_validate(value)
+        return normalize_model_input(
+            value,
+            schema_type=FrotaFiltroSchema,
+            field_name="filtros",
+        )
 
     @field_validator("ordenar_por", mode="before")
     @classmethod
@@ -133,13 +133,12 @@ class ConsultarFrotaParams(FrotaToolBaseSchema):
     @field_validator("campos", mode="before")
     @classmethod
     def _normalize_campos(cls, value: Any) -> list[str]:
-        if value is None:
-            return []
-        campos = [clean_text(item) for item in value]
-        invalidos = [item for item in campos if item not in ALLOWED_FROTA_FIELDS]
-        if invalidos:
-            raise ValueError(f"campos nao suportados: {invalidos}")
-        return [item for item in campos if item is not None]
+        return normalize_selected_fields(
+            value,
+            allowed_fields=ALLOWED_FROTA_FIELDS,
+            require_list=False,
+            error_style="campos",
+        )
 
 
 class ConsultarFrotaMetadata(FrotaToolBaseSchema):

@@ -64,7 +64,7 @@ def test_pipeline_importa_despesas_patrimonios_e_quadro_pessoal(
         encoding="ISO-8859-1",
     )
     (eleitos_dir / "eleitos.xml").write_text(
-        """<?xml version="1.0" encoding="UTF-8"?>
+        """<?xml version="1.0" encoding="ISO-8859-1"?>
 <transparencia>
 <vereadores municipio="Arcos" estado="MG"><vereador id="1">
 <nomeCompleto>Maria Silva</nomeCompleto><partido>PL</partido>
@@ -72,7 +72,7 @@ def test_pipeline_importa_despesas_patrimonios_e_quadro_pessoal(
 </vereador></vereadores>
 </transparencia>
 """,
-        encoding="utf-8",
+        encoding="ISO-8859-1",
     )
 
     session = _build_session()

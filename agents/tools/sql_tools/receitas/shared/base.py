@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 
 
-class ReceitasToolBaseSchema(BaseModel):
+class ReceitasToolBaseSchema(SqlToolBaseSchema):
     """Config comum dos schemas das tools de receitas."""
-
-    model_config = ConfigDict(extra="ignore")

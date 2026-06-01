@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 
 
-class ContratosToolBaseSchema(BaseModel):
+class ContratosToolBaseSchema(SqlToolBaseSchema):
     """Base de saneamento para entrada e saida das tools de contratos."""
-
-    model_config = ConfigDict(extra="ignore")

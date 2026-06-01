@@ -4,7 +4,7 @@ from ingestion.parsers.xml.eleitos_parser import EleitosParser
 
 
 def test_eleitos_parser_parseia_vereadores_e_prefeitos_por_mandato(tmp_path) -> None:
-    xml = """<?xml version="1.0" encoding="UTF-8"?>
+    xml = """<?xml version="1.0" encoding="ISO-8859-1"?>
 <transparencia>
     <vereadores municipio="Arcos" estado="MG">
         <vereador id="1">
@@ -39,7 +39,7 @@ def test_eleitos_parser_parseia_vereadores_e_prefeitos_por_mandato(tmp_path) -> 
 </transparencia>
 """
     arquivo = tmp_path / "eleitos.xml"
-    arquivo.write_text(xml, encoding="utf-8")
+    arquivo.write_text(xml, encoding="ISO-8859-1")
 
     registros = EleitosParser().parse(str(arquivo))
 

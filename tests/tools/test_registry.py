@@ -107,3 +107,18 @@ def test_descricao_de_contratos_orienta_confirmar_siglas_ambiguas() -> None:
     assert "sigla curta ou termo ambiguo" in descricao
     assert "UPA" in descricao
     assert "primeiro confirme o significado" in descricao
+
+
+def test_descricoes_de_contratos_e_licitacoes_orientam_encadeamento() -> None:
+    tools = {_tool_name(tool_obj): tool_obj for tool_obj in get_public_tools()}
+
+    descricao_contratos = tools["consultar_contratos"].description
+    descricao_licitacoes = tools["consultar_licitacoes"].description
+
+    assert "R$ 0,00" in descricao_contratos
+    assert "consultar_licitacoes" in descricao_contratos
+    assert "consultar_despesas" in descricao_contratos
+    assert "resultado vazio" in descricao_contratos
+    assert "resultado vazio" in descricao_licitacoes
+    assert "consultar_contratos" in descricao_licitacoes
+    assert "valor estimado R$ 0,00" in descricao_licitacoes

@@ -7,6 +7,8 @@ from .validation import (
     parse_competencia_as_date,
     parse_date,
     parse_decimal,
+    parse_int,
+    parse_month,
     validate_date_period,
 )
 
@@ -15,6 +17,8 @@ __all__ = [
     "clean_text",
     "parse_decimal",
     "parse_date",
+    "parse_int",
+    "parse_month",
     "parse_competencia_as_date",
     "normalize_limit",
     "validate_date_period",

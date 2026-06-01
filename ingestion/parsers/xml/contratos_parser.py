@@ -8,6 +8,7 @@ from typing import Any
 from loguru import logger
 from pydantic import ValidationError
 
+from ingestion.parsers.xml.shared import parse_xml_root, serialize_xml_node
 from ingestion.schemas.contratos import ContratoInSchema
 
 
@@ -16,8 +17,7 @@ class ContratosParser:
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
         """Lê arquivo XML e retorna registros normalizados com Pydantic."""
-        tree = ET.parse(filepath)
-        root = tree.getroot()
+        root = parse_xml_root(filepath)
         registros: list[dict[str, Any]] = []
         invalidos = 0
 
@@ -44,7 +44,7 @@ class ContratosParser:
                         ".//DespesasOrcamentarias/DespesaOrcamentaria/DescricaoDespesa"
                     )
                 ),
-                "xml_original": ET.tostring(node, encoding="unicode"),
+                "xml_original": serialize_xml_node(node),
                 "despesas_orcamentarias": self._parse_despesas_orcamentarias(node),
                 "itens_adquiridos": self._parse_itens_adquiridos(node),
             }

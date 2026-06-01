@@ -9,6 +9,7 @@ from typing import Any
 from loguru import logger
 from pydantic import ValidationError
 
+from ingestion.parsers.xml.shared import parse_xml_root
 from ingestion.schemas.despesas import (
     DespesaDocumentoComprobatorioInSchema,
     DespesaDocumentoInSchema,
@@ -20,8 +21,7 @@ class DespesasParser:
     """Converte empenhos, restos a pagar e documentos extras em registros."""
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
-        tree = ET.parse(filepath)
-        root = tree.getroot()
+        root = parse_xml_root(filepath)
         tipo_origem = self._infer_tipo_origem(root.tag, filepath)
         origem_arquivo = self._infer_origem(filepath)
         registros: list[dict[str, Any]] = []

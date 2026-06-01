@@ -4,9 +4,14 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import Field, field_validator
 
-from shared.utils.validation import clean_text, normalize_limit
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
+from agents.tools.sql_tools.shared.normalization import (
+    normalize_model_input,
+    normalize_selected_fields,
+)
+from shared.utils.validation import clean_text, normalize_limit, parse_int
 
 
 ALLOWED_QUADRO_FIELDS = {
@@ -28,8 +33,8 @@ ALLOWED_QUADRO_SORT_FIELDS = {
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
-class QuadroPessoalToolBaseSchema(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+class QuadroPessoalToolBaseSchema(SqlToolBaseSchema):
+    pass
 
 
 class QuadroPessoalFiltroSchema(QuadroPessoalToolBaseSchema):
@@ -46,13 +51,7 @@ class QuadroPessoalFiltroSchema(QuadroPessoalToolBaseSchema):
     @field_validator("ano", "mes", mode="before")
     @classmethod
     def _normalize_int(cls, value: Any) -> int | None:
-        if value is None:
-            return None
-        text = clean_text(value)
-        return int(text) if text is not None else None
-
-    def to_metadata_dict(self) -> dict[str, Any]:
-        return self.model_dump(mode="json", exclude_none=True)
+        return parse_int(value)
 
 
 class ConsultarQuadroPessoalParams(QuadroPessoalToolBaseSchema):
@@ -68,13 +67,11 @@ class ConsultarQuadroPessoalParams(QuadroPessoalToolBaseSchema):
     @field_validator("filtros", mode="before")
     @classmethod
     def _normalize_filtros(cls, value: Any) -> QuadroPessoalFiltroSchema:
-        if value is None:
-            return QuadroPessoalFiltroSchema()
-        if isinstance(value, QuadroPessoalFiltroSchema):
-            return value
-        if not isinstance(value, dict):
-            raise ValueError("filtros deve ser um objeto")
-        return QuadroPessoalFiltroSchema.model_validate(value)
+        return normalize_model_input(
+            value,
+            schema_type=QuadroPessoalFiltroSchema,
+            field_name="filtros",
+        )
 
     @field_validator("ordenar_por", mode="before")
     @classmethod
@@ -107,13 +104,12 @@ class ConsultarQuadroPessoalParams(QuadroPessoalToolBaseSchema):
     @field_validator("campos", mode="before")
     @classmethod
     def _normalize_campos(cls, value: Any) -> list[str]:
-        if value is None:
-            return []
-        campos = [clean_text(item) for item in value]
-        invalidos = [item for item in campos if item not in ALLOWED_QUADRO_FIELDS]
-        if invalidos:
-            raise ValueError(f"campos nao suportados: {invalidos}")
-        return [item for item in campos if item is not None]
+        return normalize_selected_fields(
+            value,
+            allowed_fields=ALLOWED_QUADRO_FIELDS,
+            require_list=False,
+            error_style="campos",
+        )
 
 
 class ConsultarQuadroPessoalMetadata(QuadroPessoalToolBaseSchema):

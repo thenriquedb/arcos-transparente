@@ -7,24 +7,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
-from shared.utils.text import normalize_search_text
-from shared.utils.validation import clean_text, parse_decimal
-
-
-MESES_NUMERO = {
-    "janeiro": 1,
-    "fevereiro": 2,
-    "marco": 3,
-    "abril": 4,
-    "maio": 5,
-    "junho": 6,
-    "julho": 7,
-    "agosto": 8,
-    "setembro": 9,
-    "outubro": 10,
-    "novembro": 11,
-    "dezembro": 12,
-}
+from shared.utils.validation import clean_text, parse_decimal, parse_month
 
 
 class _PlanejamentoBaseSchema(BaseModel):
@@ -132,8 +115,7 @@ class PlanejamentoDespesaInSchema(_PlanejamentoBaseSchema):
         if not self.origem:
             self.origem = "saude"
         if self.mes_num is None:
-            mes_normalizado = normalize_search_text(self.mes)
-            self.mes_num = MESES_NUMERO.get(mes_normalizado)
+            self.mes_num = parse_month(self.mes)
         if self.mes_num is None:
             raise ValueError("mes invalido")
         self.mes = self.mes.upper()

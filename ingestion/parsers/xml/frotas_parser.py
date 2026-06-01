@@ -6,19 +6,16 @@ import xml.etree.ElementTree as ET
 from decimal import Decimal
 from typing import Any
 
+from ingestion.parsers.xml.shared import parse_xml_root
+
 
 class FrotasParser:
     """Converte XML de frotas em lista de dicionários normalizados."""
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
         """Lê XML e retorna veículos com despesas aninhadas."""
-        tree = ET.parse(filepath)
-        root = tree.getroot()
+        root = parse_xml_root(filepath)
         registros: list[dict[str, Any]] = []
-
-        with open(filepath, mode="r", encoding="cp1252", errors="replace") as f:
-            xml_data = f.read()
-            root = ET.fromstring(xml_data)
 
         for node in root.findall("./Frotas"):
             codigo_veiculo = self._txt(node, "CodigoVeiculo")

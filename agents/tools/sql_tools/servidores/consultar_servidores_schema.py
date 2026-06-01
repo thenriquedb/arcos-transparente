@@ -7,6 +7,7 @@ from typing import Any
 
 from pydantic import Field, field_validator
 
+from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
 from .shared.base import ServidoresToolBaseSchema
@@ -30,13 +31,11 @@ class ConsultarServidoresParams(ServidoresToolBaseSchema):
     @field_validator("filtros", mode="before")
     @classmethod
     def _normalize_filtros(cls, value: Any) -> ServidoresFiltroSchema:
-        if value is None:
-            return ServidoresFiltroSchema()
-        if isinstance(value, ServidoresFiltroSchema):
-            return value
-        if not isinstance(value, dict):
-            raise ValueError("filtros deve ser um objeto")
-        return ServidoresFiltroSchema.model_validate(value)
+        return normalize_model_input(
+            value,
+            schema_type=ServidoresFiltroSchema,
+            field_name="filtros",
+        )
 
     @field_validator("ordenar_por", mode="before")
     @classmethod

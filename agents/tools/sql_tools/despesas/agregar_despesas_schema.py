@@ -6,6 +6,7 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
 from .consultar_despesas_schema import (
@@ -45,13 +46,11 @@ class AgregarDespesasParams(DespesaToolBaseSchema):
     @field_validator("filtros", mode="before")
     @classmethod
     def _normalize_filtros(cls, value: Any) -> DespesaFiltroSchema:
-        if value is None:
-            return DespesaFiltroSchema()
-        if isinstance(value, DespesaFiltroSchema):
-            return value
-        if not isinstance(value, dict):
-            raise ValueError("filtros deve ser um objeto")
-        return DespesaFiltroSchema.model_validate(value)
+        return normalize_model_input(
+            value,
+            schema_type=DespesaFiltroSchema,
+            field_name="filtros",
+        )
 
     @field_validator("agrupar_por", mode="before")
     @classmethod

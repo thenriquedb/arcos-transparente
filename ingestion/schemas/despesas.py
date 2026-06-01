@@ -8,14 +8,13 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from shared.utils.validation import clean_text, parse_date, parse_decimal, parse_number
-
-
-def _parse_int(value: Any) -> int | None:
-    text = clean_text(value)
-    if text is None:
-        return None
-    return int(text)
+from shared.utils.validation import (
+    clean_text,
+    parse_date,
+    parse_decimal,
+    parse_int,
+    parse_number,
+)
 
 
 class DespesaDocumentoItemInSchema(BaseModel):
@@ -33,7 +32,7 @@ class DespesaDocumentoItemInSchema(BaseModel):
     @field_validator("ordem", mode="before")
     @classmethod
     def _normalize_ordem(cls, value: Any) -> int:
-        parsed = _parse_int(value)
+        parsed = parse_int(value)
         if parsed is None:
             raise ValueError("ordem obrigatoria")
         return parsed
@@ -76,7 +75,7 @@ class DespesaDocumentoComprobatorioInSchema(BaseModel):
     @field_validator("ordem", mode="before")
     @classmethod
     def _normalize_ordem(cls, value: Any) -> int:
-        parsed = _parse_int(value)
+        parsed = parse_int(value)
         if parsed is None:
             raise ValueError("ordem obrigatoria")
         return parsed
@@ -179,7 +178,7 @@ class DespesaDocumentoInSchema(BaseModel):
     @field_validator("exercicio", "sequencia_origem", mode="before")
     @classmethod
     def _normalize_required_int(cls, value: Any) -> int:
-        parsed = _parse_int(value)
+        parsed = parse_int(value)
         if parsed is None:
             raise ValueError("inteiro obrigatorio")
         return parsed
@@ -187,7 +186,7 @@ class DespesaDocumentoInSchema(BaseModel):
     @field_validator("ano_licitacao", mode="before")
     @classmethod
     def _normalize_optional_int(cls, value: Any) -> int | None:
-        return _parse_int(value)
+        return parse_int(value)
 
     @field_validator(
         "tipo_origem",
