@@ -5,9 +5,14 @@ from __future__ import annotations
 from datetime import date
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import Field, field_validator
 
-from shared.utils.validation import clean_text, normalize_limit, parse_date
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
+from agents.tools.sql_tools.shared.normalization import (
+    normalize_model_input,
+    normalize_selected_fields,
+)
+from shared.utils.validation import clean_text, normalize_limit, parse_date, parse_int
 
 
 ALLOWED_DESPESA_FIELDS = {
@@ -39,8 +44,8 @@ ALLOWED_ORDER_VALUES = {"asc", "desc"}
 ALLOWED_TIPOS = {"empenho", "restos_a_pagar", "documento_extra"}
 
 
-class DespesaToolBaseSchema(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+class DespesaToolBaseSchema(SqlToolBaseSchema):
+    pass
 
 
 class DespesaFiltroSchema(DespesaToolBaseSchema):
@@ -85,18 +90,12 @@ class DespesaFiltroSchema(DespesaToolBaseSchema):
     @field_validator("ano", mode="before")
     @classmethod
     def _normalize_ano(cls, value: Any) -> int | None:
-        if value is None:
-            return None
-        text = clean_text(value)
-        return int(text) if text is not None else None
+        return parse_int(value)
 
     @field_validator("data_inicio", "data_fim", mode="before")
     @classmethod
     def _normalize_dates(cls, value: Any) -> date | None:
         return parse_date(value)
-
-    def to_metadata_dict(self) -> dict[str, Any]:
-        return self.model_dump(mode="json", exclude_none=True)
 
 
 class ConsultarDespesasParams(DespesaToolBaseSchema):
@@ -110,13 +109,11 @@ class ConsultarDespesasParams(DespesaToolBaseSchema):
     @field_validator("filtros", mode="before")
     @classmethod
     def _normalize_filtros(cls, value: Any) -> DespesaFiltroSchema:
-        if value is None:
-            return DespesaFiltroSchema()
-        if isinstance(value, DespesaFiltroSchema):
-            return value
-        if not isinstance(value, dict):
-            raise ValueError("filtros deve ser um objeto")
-        return DespesaFiltroSchema.model_validate(value)
+        return normalize_model_input(
+            value,
+            schema_type=DespesaFiltroSchema,
+            field_name="filtros",
+        )
 
     @field_validator("ordenar_por", mode="before")
     @classmethod
@@ -149,13 +146,12 @@ class ConsultarDespesasParams(DespesaToolBaseSchema):
     @field_validator("campos", mode="before")
     @classmethod
     def _normalize_campos(cls, value: Any) -> list[str]:
-        if value is None:
-            return []
-        campos = [clean_text(item) for item in value]
-        invalidos = [item for item in campos if item not in ALLOWED_DESPESA_FIELDS]
-        if invalidos:
-            raise ValueError(f"campos nao suportados: {invalidos}")
-        return [item for item in campos if item is not None]
+        return normalize_selected_fields(
+            value,
+            allowed_fields=ALLOWED_DESPESA_FIELDS,
+            require_list=False,
+            error_style="campos",
+        )
 
 
 class ConsultarDespesasMetadata(DespesaToolBaseSchema):

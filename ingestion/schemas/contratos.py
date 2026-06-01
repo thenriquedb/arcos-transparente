@@ -10,12 +10,18 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    ValidationError,
     field_validator,
     model_validator,
 )
 
-from shared.utils.validation import clean_text, parse_date, parse_decimal, parse_number
+from ingestion.schemas.shared import normalize_validated_list
+from shared.utils.validation import (
+    clean_text,
+    parse_date,
+    parse_decimal,
+    parse_int,
+    parse_number,
+)
 
 
 class _ContratosBaseSchema(BaseModel):
@@ -50,11 +56,10 @@ class ContratoDespesaOrcamentariaInSchema(_ContratosBaseSchema):
     @field_validator("exercicio", mode="before")
     @classmethod
     def _normalize_exercicio(cls, value: Any) -> int | None:
-        cleaned = clean_text(value)
-        if cleaned is None:
+        if value is None:
             return None
         try:
-            return int(cleaned)
+            return parse_int(value)
         except ValueError as exc:
             raise ValueError("exercicio invalido") from exc
 
@@ -151,20 +156,11 @@ class ContratoInSchema(_ContratosBaseSchema):
         cls,
         value: Any,
     ) -> list[ContratoDespesaOrcamentariaInSchema]:
-        if value is None:
-            return []
-        if not isinstance(value, list):
-            raise ValueError("despesas_orcamentarias deve ser uma lista")
-
-        despesas_validas: list[ContratoDespesaOrcamentariaInSchema] = []
-        for item in value:
-            try:
-                despesas_validas.append(
-                    ContratoDespesaOrcamentariaInSchema.model_validate(item)
-                )
-            except ValidationError:
-                continue
-        return despesas_validas
+        return normalize_validated_list(
+            value,
+            schema_type=ContratoDespesaOrcamentariaInSchema,
+            field_name="despesas_orcamentarias",
+        )
 
     @field_validator("itens_adquiridos", mode="before")
     @classmethod
@@ -172,18 +168,11 @@ class ContratoInSchema(_ContratosBaseSchema):
         cls,
         value: Any,
     ) -> list[ContratoItemAdquiridoInSchema]:
-        if value is None:
-            return []
-        if not isinstance(value, list):
-            raise ValueError("itens_adquiridos deve ser uma lista")
-
-        itens_validos: list[ContratoItemAdquiridoInSchema] = []
-        for item in value:
-            try:
-                itens_validos.append(ContratoItemAdquiridoInSchema.model_validate(item))
-            except ValidationError:
-                continue
-        return itens_validos
+        return normalize_validated_list(
+            value,
+            schema_type=ContratoItemAdquiridoInSchema,
+            field_name="itens_adquiridos",
+        )
 
     @model_validator(mode="after")
     def _apply_defaults_and_validate(self) -> "ContratoInSchema":

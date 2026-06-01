@@ -10,11 +10,11 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    ValidationError,
     field_validator,
     model_validator,
 )
 
+from ingestion.schemas.shared import normalize_validated_list
 from shared.utils.validation import clean_text, parse_date, parse_decimal
 
 
@@ -111,18 +111,11 @@ class InstrumentoContratualInSchema(_LicitacoesBaseSchema):
     @field_validator("materias", mode="before")
     @classmethod
     def _normalize_materias(cls, value: Any) -> list[MateriaInstrumentoInSchema]:
-        if value is None:
-            return []
-        if not isinstance(value, list):
-            raise ValueError("materias deve ser uma lista")
-
-        materias_validas: list[MateriaInstrumentoInSchema] = []
-        for item in value:
-            try:
-                materias_validas.append(MateriaInstrumentoInSchema.model_validate(item))
-            except ValidationError:
-                continue
-        return materias_validas
+        return normalize_validated_list(
+            value,
+            schema_type=MateriaInstrumentoInSchema,
+            field_name="materias",
+        )
 
 
 class LicitacaoInSchema(_LicitacoesBaseSchema):
@@ -160,36 +153,20 @@ class LicitacaoInSchema(_LicitacoesBaseSchema):
     @field_validator("vencedores", mode="before")
     @classmethod
     def _normalize_vencedores(cls, value: Any) -> list[VencedorInSchema]:
-        if value is None:
-            return []
-        if not isinstance(value, list):
-            raise ValueError("vencedores deve ser uma lista")
-
-        vencedores_validos: list[VencedorInSchema] = []
-        for item in value:
-            try:
-                vencedores_validos.append(VencedorInSchema.model_validate(item))
-            except ValidationError:
-                continue
-        return vencedores_validos
+        return normalize_validated_list(
+            value,
+            schema_type=VencedorInSchema,
+            field_name="vencedores",
+        )
 
     @field_validator("instrumentos_contratuais", mode="before")
     @classmethod
     def _normalize_instrumentos(cls, value: Any) -> list[InstrumentoContratualInSchema]:
-        if value is None:
-            return []
-        if not isinstance(value, list):
-            raise ValueError("instrumentos_contratuais deve ser uma lista")
-
-        instrumentos_validos: list[InstrumentoContratualInSchema] = []
-        for item in value:
-            try:
-                instrumentos_validos.append(
-                    InstrumentoContratualInSchema.model_validate(item)
-                )
-            except ValidationError:
-                continue
-        return instrumentos_validos
+        return normalize_validated_list(
+            value,
+            schema_type=InstrumentoContratualInSchema,
+            field_name="instrumentos_contratuais",
+        )
 
     @model_validator(mode="after")
     def _apply_defaults(self) -> LicitacaoInSchema:

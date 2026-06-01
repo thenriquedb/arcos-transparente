@@ -7,8 +7,8 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
-from shared.utils.text import normalize_search_text
-from shared.utils.validation import clean_text, parse_decimal
+from agents.tools.sql_tools.shared.normalization import normalize_selected_fields
+from shared.utils.validation import clean_text, parse_decimal, parse_month
 
 from .base import ReceitasToolBaseSchema
 
@@ -73,37 +73,6 @@ ALLOWED_METRICS = (
 ALLOWED_ORDER_VALUES = ("asc", "desc")
 ALLOWED_RECEITA_TYPES = ("arrecadacao", "lancamento")
 
-MESES_NUMERO = {
-    "janeiro": 1,
-    "fevereiro": 2,
-    "marco": 3,
-    "abril": 4,
-    "maio": 5,
-    "junho": 6,
-    "julho": 7,
-    "agosto": 8,
-    "setembro": 9,
-    "outubro": 10,
-    "novembro": 11,
-    "dezembro": 12,
-}
-
-
-def parse_mes(value: Any) -> int | None:
-    """Converte números ou nomes de mês para o índice 1-12."""
-
-    if value is None:
-        return None
-    if isinstance(value, int):
-        return value
-
-    text = clean_text(value)
-    if text is None:
-        return None
-    if text.isdigit():
-        return int(text)
-    return MESES_NUMERO.get(normalize_search_text(text))
-
 
 class ReceitaFiltroSchema(ReceitasToolBaseSchema):
     tipo_de_dado: str = "arrecadacao"
@@ -154,7 +123,7 @@ class ReceitaFiltroSchema(ReceitasToolBaseSchema):
     @field_validator("mes", "mes_inicio", "mes_fim", mode="before")
     @classmethod
     def _normalize_mes(cls, value: Any) -> int | None:
-        month = parse_mes(value)
+        month = parse_month(value)
         if month is not None and not 1 <= month <= 12:
             raise ValueError("mes deve estar entre 1 e 12")
         return month
@@ -183,9 +152,6 @@ class ReceitaFiltroSchema(ReceitasToolBaseSchema):
             raise ValueError("valor_min deve ser menor ou igual a valor_max")
         return self
 
-    def to_metadata_dict(self) -> dict[str, Any]:
-        return self.model_dump(mode="json", exclude_none=True)
-
 
 class CamposReceitaSchema(ReceitasToolBaseSchema):
     campos: list[str] = Field(default_factory=list)
@@ -193,17 +159,9 @@ class CamposReceitaSchema(ReceitasToolBaseSchema):
     @field_validator("campos", mode="before")
     @classmethod
     def _normalize_campos(cls, value: Any) -> list[str]:
-        if value is None:
-            return []
-        if not isinstance(value, list):
-            raise ValueError("campos deve ser uma lista")
-
-        normalized_fields: list[str] = []
-        for item in value:
-            field_name = clean_text(item)
-            if field_name is None:
-                continue
-            if field_name not in ALLOWED_RECEITA_FIELDS:
-                raise ValueError(f"campo nao suportado: {field_name}")
-            normalized_fields.append(field_name)
-        return normalized_fields
+        return normalize_selected_fields(
+            value,
+            allowed_fields=ALLOWED_RECEITA_FIELDS,
+            require_list=True,
+            error_style="campo",
+        )

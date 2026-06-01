@@ -8,6 +8,7 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.normalization import normalize_selected_fields
 from shared.utils.validation import (
     clean_text,
     parse_date,
@@ -105,9 +106,6 @@ class ServidoresFiltroSchema(ServidoresToolBaseSchema):
             raise ValueError("salario_min deve ser menor ou igual a salario_max")
         return self
 
-    def to_metadata_dict(self) -> dict[str, Any]:
-        return self.model_dump(mode="json", exclude_none=True)
-
 
 class CamposServidorSchema(ServidoresToolBaseSchema):
     campos: list[str] = Field(default_factory=list)
@@ -115,17 +113,9 @@ class CamposServidorSchema(ServidoresToolBaseSchema):
     @field_validator("campos", mode="before")
     @classmethod
     def _normalize_campos(cls, value: Any) -> list[str]:
-        if value is None:
-            return []
-        if not isinstance(value, list):
-            raise ValueError("campos deve ser uma lista")
-
-        normalized_fields: list[str] = []
-        for item in value:
-            field_name = clean_text(item)
-            if field_name is None:
-                continue
-            if field_name not in ALLOWED_SERVER_FIELDS:
-                raise ValueError(f"campo nao suportado: {field_name}")
-            normalized_fields.append(field_name)
-        return normalized_fields
+        return normalize_selected_fields(
+            value,
+            allowed_fields=ALLOWED_SERVER_FIELDS,
+            require_list=True,
+            error_style="campo",
+        )

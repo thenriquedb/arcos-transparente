@@ -78,7 +78,9 @@ def _aplicar_aviso_valor_estimado_zero(
     Orienta o LLM a consultar contratos para verificar o valor real contratado.
     """
     for licitacao in resultados:
-        if _valor_estimado_e_zero(licitacao.get("valor_estimado")):
+        if "valor_estimado" in licitacao and _valor_estimado_e_zero(
+            licitacao.get("valor_estimado")
+        ):
             licitacao["aviso"] = _AVISO_VALOR_ESTIMADO_ZERO
     return resultados
 

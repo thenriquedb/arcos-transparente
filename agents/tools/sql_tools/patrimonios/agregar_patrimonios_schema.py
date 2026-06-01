@@ -6,6 +6,7 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
 from .consultar_patrimonios_schema import (
@@ -41,13 +42,11 @@ class AgregarPatrimoniosParams(PatrimonioToolBaseSchema):
     @field_validator("filtros", mode="before")
     @classmethod
     def _normalize_filtros(cls, value: Any) -> PatrimonioFiltroSchema:
-        if value is None:
-            return PatrimonioFiltroSchema()
-        if isinstance(value, PatrimonioFiltroSchema):
-            return value
-        if not isinstance(value, dict):
-            raise ValueError("filtros deve ser um objeto")
-        return PatrimonioFiltroSchema.model_validate(value)
+        return normalize_model_input(
+            value,
+            schema_type=PatrimonioFiltroSchema,
+            field_name="filtros",
+        )
 
     @field_validator("agrupar_por", mode="before")
     @classmethod

@@ -85,3 +85,43 @@ def test_schema_contrato_rejeita_data_invalida() -> None:
 
     with pytest.raises(ValidationError):
         ContratoInSchema.model_validate(payload)
+
+
+def test_schema_contrato_descarta_filhos_invalidos_e_mantem_pai() -> None:
+    payload = _payload_base()
+    payload["despesas_orcamentarias"] = [
+        {
+            "unidade_gestora": "Secretaria de Saude",
+            "exercicio": "2025",
+            "descricao_despesa": "Valida",
+            "valor_despesa": "R$ 7.500,00",
+        },
+        {
+            "unidade_gestora": "Secretaria de Saude",
+            "exercicio": "abc",
+            "descricao_despesa": "Invalida",
+            "valor_despesa": "R$ 1,00",
+        },
+    ]
+    payload["itens_adquiridos"] = [
+        {
+            "numero_lote": "1",
+            "identificacao": "Item valido",
+            "quantidade": "2",
+            "valor_total": "R$ 10,00",
+        },
+        {
+            "numero_lote": "2",
+            "identificacao": "Item invalido",
+            "quantidade": "abc",
+            "valor_total": "R$ 5,00",
+        },
+    ]
+
+    schema = ContratoInSchema.model_validate(payload)
+    data = schema.model_dump(mode="python")
+
+    assert len(data["despesas_orcamentarias"]) == 1
+    assert data["despesas_orcamentarias"][0]["exercicio"] == 2025
+    assert len(data["itens_adquiridos"]) == 1
+    assert data["itens_adquiridos"][0]["identificacao"] == "Item valido"

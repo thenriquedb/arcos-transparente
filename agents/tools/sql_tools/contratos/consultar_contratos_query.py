@@ -275,7 +275,7 @@ def _aplicar_aviso_valor_zero(
     que nao houve gasto efetivo associado ao contrato.
     """
     for contrato in resultados:
-        if _valor_e_zero(contrato.get("valor")):
+        if "valor" in contrato and _valor_e_zero(contrato.get("valor")):
             contrato["aviso"] = _SUGESTAO_VALOR_ZERO
     return resultados
 

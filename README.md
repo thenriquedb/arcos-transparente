@@ -45,6 +45,7 @@ LLM_PROVIDER=openai
 - [Guia curto para novas regras do router](./docs/router-regras.md): como evoluir o roteamento sem quebrar prioridade nem espalhar lógica
 - [Modelagem de banco](./docs/database.md): visão das tabelas, relacionamentos e decisões de persistência
 - [Fluxo de importação](./docs/importacao.md): pipeline de ingestão, validação e carga dos dados
+- [Helpers compartilhados](./docs/shared-helpers.md): regra de colocação para helpers globais versus helpers locais por subsistema
 - [Perguntas de teste do agente](./docs/perguntas-teste-agente.md): conjunto de perguntas para validação manual do comportamento do agente
 
 ## Dados Cobertos

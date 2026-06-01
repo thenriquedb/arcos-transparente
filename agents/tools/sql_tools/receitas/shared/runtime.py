@@ -6,8 +6,7 @@ from typing import Any
 
 from database.models import ReceitaArrecadacao, ReceitaLancamento
 from shared.utils.decimal_to_float import decimal_to_float
-
-from .filters import parse_mes
+from shared.utils.validation import parse_month
 
 
 def serializar_receita_arrecadacao(registro: ReceitaArrecadacao) -> dict[str, Any]:
@@ -16,7 +15,7 @@ def serializar_receita_arrecadacao(registro: ReceitaArrecadacao) -> dict[str, An
         "tipo_de_dado": "arrecadacao",
         "ano": registro.exercicio,
         "mes": registro.mes,
-        "mes_num": parse_mes(registro.mes),
+        "mes_num": parse_month(registro.mes),
         "data": registro.data_arrecadacao,
         "unidade_responsavel": registro.unidade_gestora,
         "categoria_codigo": registro.natureza.identificacao
@@ -44,7 +43,7 @@ def serializar_receita_lancamento(registro: ReceitaLancamento) -> dict[str, Any]
         "tipo_de_dado": "lancamento",
         "ano": registro.exercicio,
         "mes": registro.mes,
-        "mes_num": parse_mes(registro.mes),
+        "mes_num": parse_month(registro.mes),
         "data": registro.data_lancamento,
         "unidade_responsavel": None,
         "categoria_codigo": None,
