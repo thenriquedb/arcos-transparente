@@ -2,7 +2,8 @@
 
 ## Objetivo
 
-Este guia existe para ajudar a adicionar novas regras no router sem bagunçar a ordem de prioridade nem espalhar lógica em lugares errados.
+Este guia existe para ajudar a manter heurísticas de compatibilidade no router
+sem transformá-lo novamente na autoridade principal de comportamento do agente.
 
 ## Estrutura Atual
 
@@ -22,9 +23,12 @@ Regras por domínio:
 
 Antes de criar uma regra nova, decida em qual camada ela pertence:
 
+- Se for guardrail hard-coded de bloqueio, mantenha na camada compartilhada de guardrails
+- Se for interpretação conversacional geral, prefira o system prompt e o runtime do chatbot
+- Se for regra local de um domínio específico, prefira a descrição/contrato da tool correspondente
 - Se for palavra-chave compartilhada ou pattern global, coloque em `constants.py`
 - Se for extração de nome, ano, entidade, secretaria ou filtros, coloque em `extractors.py`
-- Se for decisão de negócio de um domínio, coloque no arquivo de `routes/` desse domínio
+- Se for heurística de compatibilidade de um domínio, coloque no arquivo de `routes/` desse domínio
 - Se for apenas ordem de precedência entre regras, ajuste `ROUTE_PRIORITY_CHAIN` em `agents/router.py`
 
 ## Como Adicionar Uma Nova Regra
@@ -64,6 +68,7 @@ Exemplos:
 
 Evite criar regra nova quando o caso puder ser absorvido por:
 
+- uma regra já documentada no prompt ou no contrato da tool
 - um filtro extra na tool pública
 - um extractor mais genérico
 - um alias novo em entidade, secretaria ou objeto

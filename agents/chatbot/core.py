@@ -13,6 +13,8 @@ from typing import Any, Protocol
 from uuid import uuid4
 
 from agents.chatbot.agent import criar_agente_chatbot
+from agents.guardrails import evaluate_public_query_guardrails
+from agents.router import route_user_query
 
 
 @dataclass(frozen=True)
@@ -120,6 +122,11 @@ class ChatbotApplication:
 
         response = _build_local_response(normalized_question)
         if response is None:
+            response = _build_guardrail_response(
+                normalized_question,
+                has_history=bool(self.session.history),
+            )
+        if response is None:
             response = self.backend.answer(
                 normalized_question,
                 session_id=self.session.id,
@@ -134,6 +141,14 @@ class ChatbotApplication:
 
         normalized_question = _validate_question(question)
         response = _build_local_response(normalized_question)
+        if response is not None:
+            self._record_exchange(normalized_question, response.content)
+            return iter([response.content])
+
+        response = _build_guardrail_response(
+            normalized_question,
+            has_history=bool(self.session.history),
+        )
         if response is not None:
             self._record_exchange(normalized_question, response.content)
             return iter([response.content])
@@ -309,6 +324,27 @@ def _build_local_response(question: str) -> ChatResponse | None:
             metadata={"local_response": "identity"},
         )
     return None
+
+
+def _build_guardrail_response(
+    question: str,
+    *,
+    has_history: bool,
+) -> ChatResponse | None:
+    route = route_user_query(question)
+    decision = evaluate_public_query_guardrails(
+        question,
+        compatibility_route=route,
+        has_history=has_history,
+    )
+    if decision.allowed:
+        return None
+
+    return ChatResponse(
+        content=decision.message or "",
+        guardrail_triggered=True,
+        metadata={"guardrail_category": decision.category},
+    )
 
 
 def _normalize_text(text: str) -> str:

@@ -120,11 +120,10 @@ Arquivos:
 
 Responsabilidades:
 
-- classificar intenção com regras determinísticas
-- inferir domínio
-- inferir tipo de operação
-- aplicar guardrails antes da execução
-- reduzir o conjunto de tools expostas ao agente para a pergunta atual
+- oferecer heurísticas de compatibilidade para classificação determinística
+- inferir domínio e tipo de operação quando uma integração legada ainda pedir isso
+- compartilhar os guardrails hard-coded sem se tornar a camada autoritativa de interpretação
+- sugerir subconjuntos de tools apenas para fluxos legados que ainda dependem desse atalho
 
 Organização interna atual:
 
@@ -146,9 +145,21 @@ Hoje o router trabalha com estas classes:
 Se a rota for clara, o agente recebe um subconjunto pequeno de tools.
 Se a rota não for clara, o fallback é expor todas as tools públicas.
 
-### Guardrails no router
+### Precedência final de regras
 
-Os guardrails rodam antes da criação do agente e bloqueiam:
+O comportamento público do assistente segue esta ordem:
+
+1. guardrails hard-coded pré-modelo
+2. política conversacional do runtime e do system prompt
+3. contratos e descrições locais das tools
+4. heurísticas de compatibilidade do router
+
+Isso significa que o router não é mais a autoridade principal para definir
+como perguntas permitidas devem ser interpretadas.
+
+### Guardrails compartilhados
+
+Os guardrails hard-coded rodam antes da execução do modelo e bloqueiam:
 
 - perguntas vazias
 - perguntas fora do escopo do sistema
@@ -171,9 +182,9 @@ Arquivo: `main.py`
 
 Responsabilidades:
 
-- pedir ao router quais tools públicas usar para a pergunta
-- montar o `system_prompt`
-- criar o agente LangChain com esse subconjunto de tools
+- carregar o `system_prompt`
+- criar o agente LangChain com a superfície pública completa de tools
+- deixar a orquestração de consultas permitidas a cargo do prompt e dos contratos das tools
 - carregar o provider e o modelo do ambiente, com OpenAI como caminho oficial desta fase
 
 Configuração atual do agente:
@@ -182,7 +193,7 @@ Configuração atual do agente:
 - `OPENAI_MODEL=gpt-4o-mini` por padrão
 - `OPENAI_API_KEY` obrigatória para criar o agente
 
-Com isso, o agente quase nunca precisa escolher entre tools muito semelhantes.
+Com isso, o runtime cidadão deixa de depender do router para decidir o fluxo de perguntas permitidas.
 
 ### 4. Tools públicas amplas
 

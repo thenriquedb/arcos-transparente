@@ -151,14 +151,18 @@ Exemplo forte:
 
 ### 5. Router deterministico antes do LLM
 
-O agente nao recebe todas as tools sem filtro por padrao. O router:
+O router deterministico ainda existe, mas hoje ele deve ser tratado como
+compatibilidade e apoio a testes legados. Ele:
 
 - normaliza o texto
-- detecta dominio e tipo de operacao
-- bloqueia prompt injection, pergunta vazia e fora de escopo
-- restringe o conjunto de tools antes da criacao do agente
+- detecta dominio e tipo de operacao quando algum fluxo ainda pede isso
+- compartilha as mesmas regras hard-coded de bloqueio para prompt injection,
+  pergunta vazia e fora de escopo
+- nao e a camada autoritativa para interpretar perguntas permitidas no chatbot atual
 
-Quando a heuristica esta confiante, o LLM recebe poucas tools. Quando nao esta, cai no fallback e expoe todas as tools publicas.
+No chatbot atual, perguntas permitidas seguem o system prompt e os contratos das
+tools. O router nao deve substituir essas camadas nem impor comportamento
+conversacional concorrente.
 
 ### 6. OpenAI e o caminho oficial desta fase
 
@@ -172,7 +176,8 @@ Hoje o provider real implementado no bootstrap principal e `ChatOpenAI`.
 
 ### 7. Prompt versionado em arquivo
 
-`main.py` carrega o prompt de sistema a partir de `docs/agent-system-prompt.md`.
+`agents/chatbot/agent.py` carrega o prompt de sistema a partir de
+`docs/agent-system-prompt.md`.
 
 Isso e uma boa decisao de manutencao porque separa o comportamento do agente do codigo Python e deixa o prompt versionado e revisavel.
 

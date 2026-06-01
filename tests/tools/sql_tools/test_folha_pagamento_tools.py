@@ -11,6 +11,7 @@ from database import session as session_manager
 from database.session import _normalizar_texto
 from database.models import (
     Base,
+    Eleito,
     FolhaCargo,
     FolhaLotacao,
     FolhaPagamentoRegistro,
@@ -242,6 +243,68 @@ def test_busca_historico_de_pagamentos_ignora_diferenca_de_acentos(
         "Wellington Francelli Estevão Rodrigues Roque"
     )
 
+    assert resultado["total"] == 1
+    assert resultado["resultados"][0]["nome"] == (
+        "Wellington Francelli Estevao Rodrigues Roque"
+    )
+    assert resultado["resultados"][0]["cargo_atual"] == "Prefeito Municipal"
+    assert resultado["resultados"][0]["pagamentos"][0]["salario_base"] == 22614.44
+
+    session.close()
+
+
+def test_busca_historico_de_pagamentos_resolve_cargo_politico_automaticamente(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+
+    session.add(
+        Eleito(
+            tipo_politico="prefeito",
+            municipio="Arcos",
+            estado="MG",
+            nome_completo="Wellington Francelli Estevão Rodrigues Roque",
+            mandato_inicio=2025,
+            mandato_fim=2028,
+            mandato_status="em exercício",
+        )
+    )
+
+    folha_servidor = FolhaServidor(nome="Wellington Francelli Estevao Rodrigues Roque")
+    cargo = FolhaCargo(nome="Prefeito Municipal")
+    lotacao = FolhaLotacao(nome="Gabinete do Prefeito")
+
+    session.add_all([folha_servidor, cargo, lotacao])
+    session.flush()
+    session.add(
+        FolhaPagamentoRegistro(
+            competencia_ano=2025,
+            competencia_mes_num=12,
+            competencia_mes_nome="Dezembro",
+            servidor=folha_servidor,
+            cargo=cargo,
+            lotacao=lotacao,
+            salario_base=22614.44,
+            proventos=22614.44,
+            vantagens=0,
+            vencimentos_totais=22614.44,
+            descontos=4500,
+            liquido=18114.44,
+        )
+    )
+    session.commit()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
+        "do prefeito"
+    )
+
+    assert resultado["query"] == "do prefeito"
     assert resultado["total"] == 1
     assert resultado["resultados"][0]["nome"] == (
         "Wellington Francelli Estevao Rodrigues Roque"

@@ -125,6 +125,53 @@ def test_consultar_eleitos_filtra_por_ano(monkeypatch) -> None:
     session.close()
 
 
+def test_consultar_eleitos_interpreta_cargo_politico_como_tipo_em_exercicio(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            Eleito(
+                tipo_politico="prefeito",
+                municipio="Arcos",
+                estado="MG",
+                nome_completo="Wellington Roque",
+                cargo="Prefeito Municipal",
+                mandato_inicio=2025,
+                mandato_fim=2028,
+                mandato_status="em exercício",
+            ),
+            Eleito(
+                tipo_politico="vice-prefeito",
+                municipio="Arcos",
+                estado="MG",
+                nome_completo="Vice Exemplo",
+                cargo="Vice-Prefeito",
+                mandato_inicio=2025,
+                mandato_fim=2028,
+                mandato_status="em exercício",
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = eleitos_tools.consultar_eleitos(
+        filtros={"cargo": "o prefeito", "em_exercicio": True},
+        campos=["nome_completo", "tipo_politico"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "nome_completo": "Wellington Roque",
+            "tipo_politico": "prefeito",
+        }
+    ]
+
+    session.close()
+
+
 def test_consultar_eleitos_retorna_erro_para_tipo_invalido() -> None:
     resultado = eleitos_tools.consultar_eleitos(filtros={"tipo_politico": "deputado"})
 

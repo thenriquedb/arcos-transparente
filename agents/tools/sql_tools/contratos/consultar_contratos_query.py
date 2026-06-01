@@ -319,9 +319,9 @@ def consultar_contratos(
     formalizado ou com valor ainda nao registrado na base.
 
     Se o filtro textual vier apenas de uma sigla curta ou termo ambiguo,
-    como 'UPA', 'UBS', 'PSF', 'CRAS' ou 'CREAS', primeiro confirme o
-    significado com o usuario e sugira a expansao provavel. So use a
-    tool depois dessa confirmacao.
+    como 'UPA', 'UBS', 'PSF', 'CRAS' ou 'CREAS', primeiro confirme o significado
+    com o usuario e sugira a expansao provavel. So use a tool depois dessa
+    confirmacao.
 
     NAO use para totais, medias ou rankings agregados; para isso use
     `agregar_contratos`.
