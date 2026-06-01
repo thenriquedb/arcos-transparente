@@ -789,6 +789,20 @@ def test_evaluate_query_guardrails_permitem_consulta_de_custo_evento_publico() -
     assert decision.category == "allowed"
 
 
+def test_evaluate_query_guardrails_permitem_telefone_do_acervo_markdown() -> None:
+    decision = evaluate_query_guardrails("Qual o telefone da ouvidoria?")
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
+def test_evaluate_query_guardrails_permitem_horario_de_onibus_do_acervo() -> None:
+    decision = evaluate_query_guardrails("Qual o horario do onibus para Formiga?")
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
 def test_evaluate_query_guardrails_permitem_followup_eliptico_com_contexto_publico() -> (
     None
 ):
@@ -827,6 +841,16 @@ def test_evaluate_query_guardrails_permitem_followup_de_entidade_em_planejamento
     decision = evaluate_query_guardrails(
         "E no FUMUSA?",
         prior_user_queries=("Quanto foi pago na saude em 2025?",),
+    )
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
+def test_evaluate_query_guardrails_permitem_followup_curto_do_acervo_markdown() -> None:
+    decision = evaluate_query_guardrails(
+        "e do procon?",
+        prior_user_queries=("qual o telefone da zoonose?",),
     )
 
     assert decision.allowed is True

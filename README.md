@@ -36,12 +36,25 @@ LLM_PROVIDER=openai
 
 `OPENAI_MODEL` e opcional. Se nao for informado, o projeto usa `gpt-4o-mini`.
 
+### 5. Gerar o índice RAG local do acervo markdown
+
+```bash
+uv run python cli.py rag index
+```
+
+Para verificar se o indice esta pronto:
+
+```bash
+uv run python cli.py rag status
+```
+
 ## Sumário Da Documentação
 
 - [INSTRUCTIONS.md](./INSTRUCTIONS.md): guia geral do projeto, ambiente, comandos, modelagem e operação
 - [Contexto para Codex CLI](./docs/codex-cli-contexto.md): resumo atual do projeto, decisoes tecnicas e pontos de atencao para novas sessoes
 - [Arquitetura de agent e tools](./docs/arquitetura-agent-tools.md): visão da arquitetura híbrida com router, registry e tools públicas
 - [Prompt do agente](./docs/agent-system-prompt.md): instruções de sistema usadas pelo assistente em produção
+- [Acervo markdown local](./data/rag): conteúdo curado usado pelo RAG markdown-first do chatbot
 - [Guia curto para novas regras do router](./docs/router-regras.md): como evoluir o roteamento sem quebrar prioridade nem espalhar lógica
 - [Modelagem de banco](./docs/database.md): visão das tabelas, relacionamentos e decisões de persistência
 - [Fluxo de importação](./docs/importacao.md): pipeline de ingestão, validação e carga dos dados

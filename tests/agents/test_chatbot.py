@@ -66,6 +66,7 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     assert capturado["checkpointer"] is chatbot_agent.CHECKPOINTER
     assert "buscar_historico_de_pagamentos_do_servidor" in nomes
     assert "consultar_contratos" in nomes
+    assert "consultar_conhecimento_municipal" in nomes
 
 
 def test_system_prompt_orienta_salario_de_cargo_eleito_sem_pedir_nome() -> None:
@@ -101,6 +102,15 @@ def test_system_prompt_documenta_excecoes_sem_recorte_temporal() -> None:
     assert "Busca de servidor por nome" in prompt
     assert "Contagens simples" in prompt
     assert "lista completa" in prompt
+
+
+def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "Fronteira SQL vs RAG" in prompt
+    assert "`consultar_conhecimento_municipal`" in prompt
+    assert "arquivo_fonte" in prompt
+    assert "ônibus da frota" in prompt
 
 
 def test_chatbot_application_mantem_estado_da_sessao() -> None:
@@ -143,9 +153,10 @@ def test_chatbot_application_stream_bloqueia_pergunta_vazia_sem_chamar_backend()
     assert chunks == [
         (
             "Envie uma pergunta sobre os dados públicos municipais disponíveis "
-            "no sistema, como servidores, secretarias, salários-base ou "
-            "licitações, despesas, patrimônio, planejamento, receitas "
-            "ou políticos eleitos."
+            "no sistema ou sobre o acervo municipal curado, como servidores, "
+            "secretarias, salários-base, licitações, despesas, patrimônio, "
+            "planejamento, receitas, políticos eleitos, telefones úteis ou "
+            "horários de ônibus."
         )
     ]
     assert backend.calls == []
@@ -213,6 +224,19 @@ def test_chatbot_application_permite_consulta_no_escopo_sem_rota_confiante(
     assert backend.calls == [("Quais contratos da educacao?", "sessao-sem-rota")]
 
 
+def test_chatbot_application_permite_pergunta_documental_do_acervo_markdown() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-rag-ouvidoria"),
+    )
+
+    response = app.ask("Qual o telefone da ouvidoria?")
+
+    assert response.content == "resposta para: Qual o telefone da ouvidoria?"
+    assert backend.calls == [("Qual o telefone da ouvidoria?", "sessao-rag-ouvidoria")]
+
+
 def test_chatbot_application_permite_consulta_de_custo_de_evento_publico() -> None:
     backend = FakeBackend()
     app = ChatbotApplication(
@@ -270,6 +294,24 @@ def test_chatbot_application_permite_followup_temporal_em_outro_escopo() -> None
     assert backend.calls == [
         ("Quais contratos da saude?", "sessao-followup-contratos"),
         ("E em 2024?", "sessao-followup-contratos"),
+    ]
+
+
+def test_chatbot_application_permite_followup_curto_do_acervo_markdown() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-acervo"),
+    )
+
+    primeira_resposta = app.ask("qual o telefone da zoonose?")
+    segunda_resposta = app.ask("e do procon?")
+
+    assert primeira_resposta.content == "resposta para: qual o telefone da zoonose?"
+    assert segunda_resposta.content == "resposta para: e do procon?"
+    assert backend.calls == [
+        ("qual o telefone da zoonose?", "sessao-followup-acervo"),
+        ("e do procon?", "sessao-followup-acervo"),
     ]
 
 
@@ -369,10 +411,11 @@ def test_chatbot_application_stream_bloqueia_followup_apos_turno_bloqueado() -> 
     assert chunks == [
         (
             "Posso ajudar apenas com consultas aos dados públicos municipais "
-            "disponíveis neste sistema, especialmente sobre servidores, "
-            "secretarias, salários-base, histórico de pagamentos, licitações, "
-            "despesas, patrimônio, quadro de pessoal, planejamento, receitas "
-            "e políticos eleitos."
+            "disponíveis neste sistema e com o acervo municipal curado local, "
+            "especialmente sobre servidores, secretarias, salários-base, "
+            "histórico de pagamentos, licitações, despesas, patrimônio, quadro "
+            "de pessoal, planejamento, receitas, políticos eleitos, telefones "
+            "úteis, estrutura organizacional e horários de ônibus."
         )
     ]
     assert backend.calls == [

@@ -30,6 +30,7 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
         "consultar_eleitos",
         "consultar_frota",
         "buscar_historico_de_pagamentos_do_servidor",
+        "consultar_conhecimento_municipal",
     }
 
 
@@ -56,6 +57,7 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
         "consultar_eleitos",
         "consultar_frota",
         "buscar_historico_de_pagamentos_do_servidor",
+        "consultar_conhecimento_municipal",
     }
 
 
@@ -97,6 +99,18 @@ def test_descricoes_orientam_salario_de_cargo_eleito_para_folha() -> None:
     assert "NAO use para responder salario individual" in consultar_servidores
     assert "use antes `consultar_eleitos`" in consultar_servidores
     assert "primeiro use `consultar_eleitos`" in buscar_historico
+
+
+def test_descricao_de_conhecimento_municipal_exige_citacao_e_limites() -> None:
+    tools = {_tool_name(tool_obj): tool_obj for tool_obj in get_public_tools()}
+
+    descricao = tools["consultar_conhecimento_municipal"].description
+    descricao_frota = tools["consultar_frota"].description
+
+    assert "telefones úteis" in descricao
+    assert "arquivo_fonte" in descricao
+    assert "NAO use esta tool como fonte final para salarios" in descricao
+    assert "NAO use para horarios de onibus" in descricao_frota
 
 
 def test_descricao_de_contratos_orienta_confirmar_siglas_ambiguas() -> None:

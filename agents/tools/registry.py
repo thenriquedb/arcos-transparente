@@ -4,7 +4,10 @@ from collections.abc import Callable
 
 from langchain.tools import tool as build_tool
 
-TOOLS_PACKAGE = "agents.tools.sql_tools"
+TOOLS_PACKAGES = (
+    "agents.tools.sql_tools",
+    "agents.tools.rag_tools",
+)
 PUBLIC_SCOPE = "public"
 INTERNAL_SCOPE = "internal"
 
@@ -46,12 +49,13 @@ def _discover_tool_modules() -> None:
     if _DISCOVERED:
         return
 
-    package = importlib.import_module(TOOLS_PACKAGE)
-    for module_info in pkgutil.walk_packages(
-        package.__path__,
-        prefix=f"{TOOLS_PACKAGE}.",
-    ):
-        importlib.import_module(module_info.name)
+    for package_name in TOOLS_PACKAGES:
+        package = importlib.import_module(package_name)
+        for module_info in pkgutil.walk_packages(
+            package.__path__,
+            prefix=f"{package_name}.",
+        ):
+            importlib.import_module(module_info.name)
 
     _DISCOVERED = True
 

@@ -51,7 +51,7 @@ Exemplos:
 
 ## Superfície Pública Atual
 
-Atualmente o chatbot cidadão enxerga 19 tools públicas:
+Atualmente o chatbot cidadão enxerga 20 tools públicas:
 
 1. `consultar_servidores`
 2. `agregar_servidores`
@@ -72,6 +72,7 @@ Atualmente o chatbot cidadão enxerga 19 tools públicas:
 17. `consultar_eleitos`
 18. `consultar_frota`
 19. `buscar_historico_de_pagamentos_do_servidor`
+20. `consultar_conhecimento_municipal`
 
 Isso vale tanto para:
 
@@ -108,9 +109,11 @@ Conceitos importantes:
 - `domain:patrimonios`
 - `domain:quadro_pessoal`
 - `domain:folha`
+- `domain:conhecimento_municipal`
 - `shape:lookup`
 - `shape:aggregate`
 - `shape:history`
+- `shape:retrieval`
 
 Mesmo com suporte a `scope:internal`, a decisão atual foi remover os wrappers antigos de `servidores` em vez de mantê-los escondidos.
 
@@ -208,6 +211,21 @@ Configuração atual do agente:
 Com isso, o runtime cidadão deixa de depender do router para decidir o fluxo de perguntas permitidas.
 
 ### 4. Tools públicas amplas
+
+#### `consultar_conhecimento_municipal`
+
+Arquivo: `agents/tools/rag_tools/consultar_conhecimento_municipal.py`
+
+Serve para:
+
+- recuperar trechos do acervo markdown local em `data/rag/**/*.md`
+- responder perguntas sobre telefones úteis, horários de ônibus, estrutura organizacional e FAQ municipal
+- citar a origem textual usada na resposta final
+- complementar respostas híbridas quando o cidadão mistura contexto documental com dados estruturados
+
+Limite importante:
+
+- NAO substitui as tools SQL para salários, totais, rankings, contratos, licitações, despesas, receitas, patrimônio, planejamento ou quadro de pessoal
 
 #### `consultar_servidores`
 

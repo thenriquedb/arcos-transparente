@@ -177,6 +177,9 @@ def consultar_frota(
     Use esta tool quando a pergunta mencionar veiculos, carros, caminhoes,
     maquinas, ambulancias, onibus, placas, frota da prefeitura ou frota da
     camara. Ela responde quais veiculos existem e seus dados cadastrais.
+    NAO use para horarios de onibus, linhas intermunicipais, contatos
+    institucionais, estrutura organizacional ou outras perguntas documentais do
+    acervo markdown local; para isso use `consultar_conhecimento_municipal`.
     NAO use para bens patrimoniais em geral; para isso use
     `consultar_patrimonios`.
 

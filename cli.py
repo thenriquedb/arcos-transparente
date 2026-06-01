@@ -14,6 +14,8 @@ from rich.progress import Progress
 from rich.table import Table as RichTable
 from sqlalchemy import MetaData, Table as SQLATable
 
+from agents.rag.indexing import KnowledgeIndexError, build_knowledge_index
+from agents.rag.indexing import get_knowledge_index_status
 from database.models import (
     Contrato,
     DespesaDocumento,
@@ -44,7 +46,9 @@ from ingestion.pipeline import IngestionPipeline
 
 app = typer.Typer()
 db_app = typer.Typer()
+rag_app = typer.Typer()
 app.add_typer(db_app, name="db")
+app.add_typer(rag_app, name="rag")
 console = Console()
 
 
@@ -230,6 +234,57 @@ def importar(
         f"Total -> inseridos={total_i}, atualizados={total_a}, ignorados={total_ig}, erros={total_e}",
         style="bold green" if total_e == 0 else "bold red",
     )
+
+
+@rag_app.command("index")
+def rag_index(
+    rebuild: bool = typer.Option(
+        default=False,
+        help="Recria o indice vetorial do zero, substituindo o persistido atual.",
+    ),
+) -> None:
+    """Gera ou reconstrói o indice local de conhecimento markdown."""
+
+    try:
+        status = build_knowledge_index(rebuild=rebuild)
+    except KnowledgeIndexError as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=1) from exc
+
+    color = "green" if status.state == "ready" else "yellow"
+    console.print(f"[{color}]{status.message}[/{color}]")
+    console.print(
+        f"Chunks indexados: {status.total_chunks} | documentos: {status.document_count}"
+    )
+    console.print(f"Persistido em: [bold]{status.persist_directory}[/bold]")
+
+
+@rag_app.command("status")
+def rag_status() -> None:
+    """Exibe o estado do indice local de conhecimento."""
+
+    status = get_knowledge_index_status()
+    color = {
+        "ready": "green",
+        "stale": "yellow",
+        "missing": "yellow",
+        "empty": "yellow",
+        "unavailable": "red",
+    }.get(status.state, "white")
+
+    console.print(f"[{color}]Estado do indice RAG: {status.state}[/{color}]")
+    console.print(status.message)
+    console.print(f"Collection: [bold]{status.collection_name}[/bold]")
+    console.print(f"Manifesto: [bold]{status.manifest_path}[/bold]")
+    console.print(f"Persistência: [bold]{status.persist_directory}[/bold]")
+    console.print(
+        f"Chunks indexados: {status.total_chunks} | documentos: {status.document_count}"
+    )
+
+    if status.changed_files:
+        console.print(f"Arquivos alterados: {', '.join(status.changed_files)}")
+    if status.missing_files:
+        console.print(f"Arquivos ausentes: {', '.join(status.missing_files)}")
 
 
 if __name__ == "__main__":

@@ -9,6 +9,10 @@ from agents.routing.constants import (
     SUPPORTED_SCOPE_STRONG_KEYWORDS,
     SUPPORTED_SCOPE_WEAK_KEYWORDS,
 )
+from agents.rag.scope import (
+    is_supported_knowledge_follow_up_fragment,
+    is_supported_knowledge_query,
+)
 from agents.routing.extractors import (
     _contains_prompt_injection,
     _count_keyword_hits,
@@ -131,9 +135,10 @@ def evaluate_public_query_guardrails(
             category="empty_query",
             message=(
                 "Envie uma pergunta sobre os dados públicos municipais disponíveis "
-                "no sistema, como servidores, secretarias, salários-base ou "
-                "licitações, despesas, patrimônio, planejamento, receitas "
-                "ou políticos eleitos."
+                "no sistema ou sobre o acervo municipal curado, como servidores, "
+                "secretarias, salários-base, licitações, despesas, patrimônio, "
+                "planejamento, receitas, políticos eleitos, telefones úteis ou "
+                "horários de ônibus."
             ),
         )
 
@@ -178,15 +183,19 @@ def evaluate_public_query_guardrails(
     if _looks_like_public_spend_query(normalized_text):
         return GuardrailDecision(allowed=True, category="allowed")
 
+    if is_supported_knowledge_query(query):
+        return GuardrailDecision(allowed=True, category="allowed")
+
     return GuardrailDecision(
         allowed=False,
         category="out_of_scope",
         message=(
             "Posso ajudar apenas com consultas aos dados públicos municipais "
-            "disponíveis neste sistema, especialmente sobre servidores, "
-            "secretarias, salários-base, histórico de pagamentos, licitações, "
-            "despesas, patrimônio, quadro de pessoal, planejamento, receitas "
-            "e políticos eleitos."
+            "disponíveis neste sistema e com o acervo municipal curado local, "
+            "especialmente sobre servidores, secretarias, salários-base, "
+            "histórico de pagamentos, licitações, despesas, patrimônio, quadro "
+            "de pessoal, planejamento, receitas, políticos eleitos, telefones "
+            "úteis, estrutura organizacional e horários de ônibus."
         ),
     )
 
@@ -249,6 +258,8 @@ def _query_establishes_public_context(normalized_text: str) -> bool:
         return True
     if _extract_nome_para_historico(normalized_text) is not None:
         return True
+    if is_supported_knowledge_query(normalized_text):
+        return True
     return _looks_like_public_spend_query(normalized_text)
 
 
@@ -310,6 +321,8 @@ def _has_public_filter_hint(normalized_text: str) -> bool:
     if _extract_contratos_descricao(normalized_text) is not None:
         return True
     if _extract_contrato_fornecedor(normalized_text) is not None:
+        return True
+    if is_supported_knowledge_follow_up_fragment(normalized_text):
         return True
     return any(term in normalized_text for term in ("prefeitura", "camara"))
 

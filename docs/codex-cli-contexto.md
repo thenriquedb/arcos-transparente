@@ -4,18 +4,19 @@ Atualizado com base no codigo do repositorio em 2026-06-01.
 
 ## Objetivo
 
-`arcos-transparente` e uma base Python para importar dados publicos do portal da transparencia de Arcos (MG), normalizar esses dados em SQLite e expor consultas em linguagem natural por meio de um agente com tools SQL.
+`arcos-transparente` e uma base Python para importar dados publicos do portal da transparencia de Arcos (MG), normalizar esses dados em SQLite e expor consultas em linguagem natural por meio de um agente com tools SQL e um RAG markdown-first para conhecimento municipal curado.
 
 O foco atual do projeto e:
 
 - ingestao confiavel de XMLs publicos
 - modelagem relacional auditavel
 - consulta estruturada via tools publicas amplas
+- recuperacao semantica sobre o acervo markdown local em `data/rag`
 - orquestracao guiada pelo LLM com guardrails determinísticos antes do modelo
 
 ## Resumo Executivo
 
-Hoje o projeto funciona mais como uma pilha de **XML -> parser -> schema -> SQLite -> tools SQL -> agente LangChain** do que como uma aplicacao web completa.
+Hoje o projeto funciona mais como uma pilha de **XML -> parser -> schema -> SQLite -> tools SQL + markdown -> Chroma -> agente LangChain** do que como uma aplicacao web completa.
 
 O estado real do codigo neste momento e:
 
@@ -26,9 +27,10 @@ O estado real do codigo neste momento e:
 - chatbot em `agents/chatbot/`, com CLI e interface web local em Streamlit
 - router de compatibilidade em `agents/router.py` e `agents/routing/`
 - tools SQL publicas em `agents/tools/sql_tools/`
+- indexacao e retrieval markdown-first em `agents/rag/`
 - bootstrap principal do agente em `agents/chatbot/agent.py`
 
-Nao ha, no codigo ativo, uma API web de producao pronta nem uma integracao RAG/Chroma em uso pelo agente principal.
+Nao ha, no codigo ativo, uma API web de producao pronta, mas agora existe uma integracao local de RAG/Chroma para o corpus markdown curado em `data/rag/**/*.md`.
 
 ## Stack Atual
 
@@ -38,6 +40,7 @@ Nao ha, no codigo ativo, uma API web de producao pronta nem uma integracao RAG/C
 - SQLAlchemy 2 + Alembic para banco e migrations
 - Pydantic 2 para validacao de schemas
 - LangChain + LangGraph + OpenAI para o agente
+- Chroma local para o indice vetorial markdown
 - SQLite local como banco principal
 
 ## Dominios Cobertos
@@ -69,10 +72,11 @@ As consultas do agente hoje se concentram nestes dominios publicos:
 - quadro de pessoal
 - eleitos
 - frota
+- conhecimento municipal curado via markdown
 
 ## Superficie Publica do Agente
 
-O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools estreitas. A superficie publica atual tem 19 tools:
+O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools estreitas. A superficie publica atual tem 20 tools:
 
 - `consultar_servidores`
 - `agregar_servidores`
@@ -93,6 +97,7 @@ O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools e
 - `consultar_eleitos`
 - `consultar_frota`
 - `buscar_historico_de_pagamentos_do_servidor`
+- `consultar_conhecimento_municipal`
 
 Decisao importante: a variacao da pergunta deve ser absorvida por filtros, ordenacao, agregacao e projecao de campos, nao pela criacao de novas tools por caso de uso.
 
@@ -105,7 +110,7 @@ Decisao importante: a variacao da pergunta deve ser absorvida por filtros, orden
 5. Loaders persistem no SQLite com upsert e relacionamentos.
 6. O agente recebe uma pergunta.
 7. O runtime do chatbot aplica respostas locais e guardrails hard-coded antes de invocar o modelo.
-8. Para consultas permitidas, o agente LangChain recebe a superficie publica ampla de tools e orquestra a execucao via prompt e contratos das tools.
+8. Para consultas permitidas, o agente LangChain recebe a superficie publica ampla de tools, incluindo SQL e RAG markdown-first, e orquestra a execucao via prompt e contratos das tools.
 
 ## Decisoes Tecnicas Ja Tomadas
 
@@ -201,9 +206,15 @@ Se algum documento mencionar `main.py`, `tests/test_main.py` ou subconjunto de
 tools como runtime principal, trate isso como contexto historico e prefira os
 modulos de chatbot e seus testes atuais.
 
-### 3. Pasta `data/rag/` nao significa RAG ativo
+### 3. O RAG atual e markdown-first e local
 
-Ha arquivos de apoio em `data/rag/`, mas nao existe hoje uma pipeline ativa de embeddings, Chroma ou `rag_tool` integrada ao agente principal.
+O projeto agora indexa apenas `data/rag/**/*.md` em um Chroma local.
+
+Implicacoes praticas:
+
+- PDFs e CSVs presentes em `data/rag` ainda nao entram no indice v1
+- o indice precisa ser gerado explicitamente por CLI
+- perguntas documentais podem usar `consultar_conhecimento_municipal`, mas dados estruturados continuam tendo a base SQL como fonte de verdade
 
 ## Arquivos para Ler Primeiro
 
@@ -227,6 +238,8 @@ uv sync
 uv run python cli.py db init
 uv run python cli.py importar
 uv run python cli.py db status
+uv run python cli.py rag index
+uv run python cli.py rag status
 uv run pytest -q
 uv run python chat_playground.py
 ```
@@ -240,7 +253,7 @@ uv run python cli.py importar --tipo contratos --ano 2025
 ## O Que Nao Assumir Sem Conferir
 
 - nao assumir que existe API web pronta
-- nao assumir que existe RAG em producao
+- nao assumir que todo arquivo de `data/rag` ja e indexado; no v1 apenas markdown entra no indice
 - nao assumir que a importacao e incremental
 - nao assumir que o router define o comportamento principal do chatbot
 - nao assumir que docs antigos da raiz descrevem o estado atual

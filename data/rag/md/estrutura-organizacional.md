@@ -239,3 +239,25 @@
 - **E-mail:** secretariadegoverno@arcos.mg.gov.br
 
 ---
+
+# Poupa Tempo - Ouvidoria
+
+## Contato
+
+- **Endereço:** Praça Floriano Peixoto, 130, Centro
+- **Horário de Atendimento:** 8h às 18h
+- **Telefone:** (37) 3352-2583
+- **E-mail:** ouvidoria@arcos.mg.gov.br
+
+---
+
+# Procon
+
+## Responsável
+**Nome:** Dr. Fernando Amorim Alves Teixeira
+
+## Contato
+
+- **Endereço:** Praça Floriano Peixoto (POUPATEMPO)
+- **Horário de Atendimento:** 10:30 as 15:30
+- **E-mail:**  famorim@arcos.mg.gov.br

@@ -3,7 +3,9 @@ from __future__ import annotations
 import sys
 
 import cli
+from agents.rag.indexing import KnowledgeIndexError, KnowledgeIndexStatus
 from ingestion.loaders.sql_loader import LoadResult
+import pytest
 
 
 def test_configure_import_logging_usa_erro_por_padrao(monkeypatch) -> None:
@@ -104,3 +106,82 @@ def test_importar_configura_logging_verbose_e_emite_resumo(monkeypatch) -> None:
     assert configuracoes == [True]
     assert any("Base recriada com sucesso" in texto for texto in impressoes)
     assert any("Total -> inseridos=2" in texto for texto in impressoes)
+
+
+def test_rag_index_emite_resumo(monkeypatch) -> None:
+    impressoes: list[str] = []
+
+    monkeypatch.setattr(
+        cli,
+        "build_knowledge_index",
+        lambda *, rebuild: KnowledgeIndexStatus(
+            state="ready",
+            message="Indice pronto",
+            manifest_path="vector_store/knowledge_markdown/manifest.json",
+            persist_directory="vector_store/knowledge_markdown",
+            collection_name="municipal_knowledge_markdown",
+            total_chunks=7,
+            document_count=3,
+        ),
+    )
+    monkeypatch.setattr(
+        cli.console,
+        "print",
+        lambda *args, **kwargs: impressoes.append(str(args[0])),
+    )
+
+    cli.rag_index(rebuild=True)
+
+    assert any("Indice pronto" in texto for texto in impressoes)
+    assert any("Chunks indexados: 7 | documentos: 3" in texto for texto in impressoes)
+
+
+def test_rag_index_mostra_erro_claro(monkeypatch) -> None:
+    impressoes: list[str] = []
+
+    def _raise(*, rebuild: bool):
+        raise KnowledgeIndexError("OPENAI_API_KEY nao configurada.")
+
+    monkeypatch.setattr(cli, "build_knowledge_index", _raise)
+    monkeypatch.setattr(
+        cli.console,
+        "print",
+        lambda *args, **kwargs: impressoes.append(str(args[0])),
+    )
+
+    with pytest.raises(cli.typer.Exit) as exc_info:
+        cli.rag_index(rebuild=False)
+
+    assert exc_info.value.exit_code == 1
+    assert any("OPENAI_API_KEY nao configurada." in texto for texto in impressoes)
+
+
+def test_rag_status_exibe_estado_do_indice(monkeypatch) -> None:
+    impressoes: list[str] = []
+
+    monkeypatch.setattr(
+        cli,
+        "get_knowledge_index_status",
+        lambda: KnowledgeIndexStatus(
+            state="stale",
+            message="Indice desatualizado",
+            manifest_path="vector_store/knowledge_markdown/manifest.json",
+            persist_directory="vector_store/knowledge_markdown",
+            collection_name="municipal_knowledge_markdown",
+            total_chunks=9,
+            document_count=4,
+            stale=True,
+            changed_files=("telefones-uteis.md",),
+        ),
+    )
+    monkeypatch.setattr(
+        cli.console,
+        "print",
+        lambda *args, **kwargs: impressoes.append(str(args[0])),
+    )
+
+    cli.rag_status()
+
+    assert any("Estado do indice RAG: stale" in texto for texto in impressoes)
+    assert any("Indice desatualizado" in texto for texto in impressoes)
+    assert any("telefones-uteis.md" in texto for texto in impressoes)
