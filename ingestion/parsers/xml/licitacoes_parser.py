@@ -16,9 +16,11 @@ class LicitacoesParser:
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
         """Lê arquivo XML e retorna registros normalizados com Pydantic."""
-        tree = ET.parse(filepath)
-        root = tree.getroot()
-        registros: list[dict[str, Any]] = []
+        with open(filepath, "r", encoding="iso-8859-1") as file:
+            content = file.read()
+            tree = ET.ElementTree(ET.fromstring(content))
+            root = tree.getroot()
+            registros: list[dict[str, Any]] = []
 
         for node in root.findall(".//ProcessoLicitatorio"):
             payload_raw = {

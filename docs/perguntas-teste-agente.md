@@ -11,6 +11,10 @@ Use esta lista para validar:
 - perguntas ambíguas
 - bloqueios por guardrails
 - respostas cuidadosas quando a base não permite concluir algo com certeza
+- encadeamento automático de tools
+- memória e contexto entre mensagens
+- tolerância a erros ortográficos e ausência de acentos
+- confirmação de siglas ambíguas antes de consultar
 
 ---
 
@@ -60,7 +64,110 @@ Comportamento esperado:
 - usar `agregar_contratos` para contagens, agrupamentos, somas e médias
 - diferenciar valor contratado de pagamento efetivamente realizado quando a base não trouxer execução
 - permitir busca por fornecedor, secretaria, categoria, descricao, periodo e faixa de valor
-- considerar tambem a classificacao da despesa quando a pergunta usar termos como `Festividades e Homenagens`
+- considerar também a classificacao da despesa quando a pergunta usar termos como `Festividades e Homenagens`
+
+---
+
+## Encadeamento de Tools
+
+Perguntas que obrigatoriamente exigem mais de uma tool para responder corretamente.
+O agente deve consultar todas as fontes necessárias antes de responder — nunca responder parcialmente.
+
+- Qual o total gasto com o fornecedor Sigma 6 e quantas licitações ele ganhou?
+- O Natal Fest teve licitação e contrato? Qual o valor de cada um?
+- Qual o salário do prefeito?
+- Quanto o vice-prefeito recebe?
+- Qual o salário do vereador João Silva?
+- Quanto foi gasto com o festival gastronômico considerando contratos e despesas?
+
+Comportamento esperado:
+
+- `"Qual o total gasto com o fornecedor Sigma 6 e quantas licitações ele ganhou?"` → chamar `consultar_contratos` e `consultar_licitacoes`
+- `"O Natal Fest teve licitação e contrato?"` → chamar `consultar_licitacoes` e `consultar_contratos`
+- `"Qual o salário do prefeito?"` → chamar `consultar_eleitos` primeiro para obter o nome, depois `buscar_historico_de_pagamentos_do_servidor`
+- nunca responder com dados parciais de apenas uma fonte quando a pergunta exigir duas
+
+---
+
+## Memória e Contexto Entre Mensagens
+
+Sequências de perguntas para validar se o agente mantém contexto ao longo da conversa.
+Cada sequência deve ser testada em uma sessão contínua — não reinicie o chat entre as perguntas.
+
+**Sequência 1 — Referência anafórica a servidor**
+1. "Qual o salário de João Silva?"
+2. "E quando ele foi admitido?"
+3. "Qual a secretaria dele?"
+
+Comportamento esperado: o agente deve resolver "ele" e "dele" como João Silva sem pedir o nome novamente.
+
+---
+
+**Sequência 2 — Referência anafórica a secretaria**
+1. "Liste as licitações da secretaria de saúde."
+2. "E os contratos dessa secretaria?"
+3. "Qual o total gasto nessa área em 2024?"
+
+Comportamento esperado: o agente deve entender "dessa secretaria" e "nessa área" como saúde.
+
+---
+
+**Sequência 3 — Refinamento de lista**
+1. "Liste os 10 maiores contratos de 2025."
+2. "Qual desses é da secretaria de obras?"
+3. "E qual tem o menor valor entre eles?"
+
+Comportamento esperado: o agente deve filtrar a partir da lista já apresentada sem reiniciar a busca do zero.
+
+---
+
+**Sequência 4 — Sigla confirmada não deve ser perguntada de novo**
+1. "Quais contratos da UPA?"
+2. [Agente pergunta: "Você quer dizer UPA como Unidade de Pronto Atendimento?"]
+3. "Sim."
+4. "E as licitações da UPA?"
+
+Comportamento esperado: na pergunta 4, o agente não deve perguntar sobre a sigla novamente — usar diretamente "Unidade de Pronto Atendimento".
+
+---
+
+## Erros Ortográficos e Ausência de Acentos
+
+Perguntas com erros de digitação ou sem acentos para validar tolerância do agente.
+O agente deve encontrar os dados mesmo com grafia incorreta.
+
+- "Qual o salario de joao silva?" *(sem acento)*
+- "licitacoes da saude em 2025" *(sem acento)*
+- "contratos do forncedor Sigma 6" *(erro de digitação)*
+- "quais licitaçoes do festivl gastrnomico?" *(múltiplos erros)*
+- "servidores da educaçao" *(acento incorreto)*
+- "Quanto joao cilva recebeu?" *(sobrenome errado)*
+
+Comportamento esperado:
+
+- encontrar resultados mesmo com ausência de acentos
+- encontrar resultados com erros leves de digitação
+- quando não encontrar por erro grave, sugerir variações do nome antes de informar que não há dados
+- nunca retornar "não encontrei" sem antes tentar pelo menos uma variação
+
+---
+
+## Siglas Ambíguas
+
+Perguntas com siglas que o agente não deve usar como filtro sem confirmar o significado.
+
+- "Quais contratos da UPA?"
+- "Licitações do CRAS em 2025."
+- "Servidores da UBS central."
+- "Contratos do PSF em 2024."
+- "Quanto foi gasto com o CREAS?"
+
+Comportamento esperado:
+
+- identificar a sigla antes de executar a busca
+- perguntar ao usuário e sugerir a expansão mais provável (ex: "Você quer dizer UPA como Unidade de Pronto Atendimento?")
+- só executar a busca após confirmação
+- após confirmada uma vez na conversa, não perguntar novamente para a mesma sigla
 
 ---
 
@@ -149,6 +256,8 @@ Comportamento esperado:
 - não inventar dados
 - informar que nenhum resultado foi encontrado
 - sugerir filtros mais amplos quando fizer sentido
+- para contratos sem resultado, sugerir também consultar licitações com os mesmos termos
+- para licitações sem resultado, sugerir também consultar contratos com os mesmos termos
 
 ---
 
@@ -210,3 +319,21 @@ Comportamento esperado:
 - diferenciar valor estimado, valor contratado e valor efetivamente pago
 - não afirmar fraude, crime ou superfaturamento sem evidência específica na base
 - responder de forma factual e cautelosa
+
+---
+
+## Contrato com Valor Zero
+
+Perguntas para validar o comportamento quando um contrato retorna valor R$ 0,00.
+
+- Quanto custou o Natal Fest?
+- Quais contratos do Natal Fest e qual o valor de cada um?
+- O trenzinho natalino foi contratado? Quanto custou?
+
+Comportamento esperado:
+
+- informar que o contrato existe mas o valor registrado é R$ 0,00
+- automaticamente consultar `consultar_licitacoes` com os mesmos termos
+- automaticamente consultar `consultar_despesas` com o mesmo período e fornecedor
+- apresentar os resultados consolidados das três fontes em uma única resposta
+- nunca encerrar a resposta apenas com "valor R$ 0,00 — pode ser erro de cadastro"
