@@ -26,3 +26,4 @@ build/
 .uv-cache
 
 .env
+vector_store/
