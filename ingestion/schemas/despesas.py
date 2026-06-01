@@ -144,6 +144,8 @@ class DespesaDocumentoInSchema(BaseModel):
 
     numero_documento: str
     data_documento: date
+    periodo_referencia_inicio: date | None = None
+    periodo_referencia_fim: date | None = None
     categoria_documento: str | None = None
     credor: str | None = None
     cpf_cnpj: str | None = None
@@ -237,6 +239,8 @@ class DespesaDocumentoInSchema(BaseModel):
 
     @field_validator(
         "data_documento",
+        "periodo_referencia_inicio",
+        "periodo_referencia_fim",
         "data_homologacao",
         "data_inicial_viagem",
         "data_final_viagem",

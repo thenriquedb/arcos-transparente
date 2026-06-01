@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+from decimal import Decimal
+from pathlib import Path
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -8,6 +10,9 @@ from sqlalchemy.orm import sessionmaker
 import ingestion.pipeline as pipeline_module
 from database.models import Base, DespesaDocumento, Eleito, Patrimonio, QuadroPessoal
 from ingestion.pipeline import IngestionPipeline
+
+
+FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures"
 
 
 def _build_session():
@@ -96,5 +101,72 @@ def test_pipeline_importa_despesas_patrimonios_e_quadro_pessoal(
     assert session.query(Patrimonio).count() == 1
     assert session.query(QuadroPessoal).count() == 1
     assert session.query(Eleito).count() == 1
+
+    session.close()
+
+
+def test_pipeline_importa_e_reimporta_diarias_csv_sem_duplicar(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    diarias_dir = tmp_path / "despesas" / "diarias"
+    diarias_dir.mkdir(parents=True)
+    arquivo = diarias_dir / "diarias-camara-2025.csv"
+    arquivo.write_text(
+        (FIXTURES_DIR / "diarias_camara_sample.csv").read_text(encoding="utf-8"),
+        encoding="ISO-8859-1",
+    )
+
+    session = _build_session()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(pipeline_module, "get_session", fake_get_session)
+
+    pipeline = IngestionPipeline(data_dir=str(tmp_path))
+    resultado_inicial = pipeline.run(tipos=["despesas"], ano=2025)
+
+    assert resultado_inicial["despesas"].inseridos == 2
+    assert session.query(DespesaDocumento).count() == 2
+
+    primeiro = (
+        session.query(DespesaDocumento)
+        .filter(DespesaDocumento.tipo_origem == "diaria")
+        .order_by(DespesaDocumento.sequencia_origem.asc())
+        .first()
+    )
+    assert primeiro is not None
+    assert primeiro.periodo_referencia_inicio.isoformat() == "2025-01-01"
+    assert primeiro.periodo_referencia_fim.isoformat() == "2025-12-31"
+    session.rollback()
+
+    atualizado = (
+        (FIXTURES_DIR / "diarias_camara_sample.csv")
+        .read_text(encoding="utf-8")
+        .replace('="R$ 4.128,00"', '="R$ 5.000,00"', 1)
+        .replace('="R$ 4.128,00"', '="R$ 5.000,00"', 1)
+        .replace('="R$ 4.128,00"', '="R$ 5.000,00"', 1)
+    )
+    arquivo.write_text(atualizado, encoding="ISO-8859-1")
+
+    resultado_reimportado = pipeline.run(tipos=["despesas"], ano=2025)
+
+    assert resultado_reimportado["despesas"].atualizados == 1
+    assert resultado_reimportado["despesas"].ignorados == 1
+    assert session.query(DespesaDocumento).count() == 2
+
+    atualizado_primeiro = (
+        session.query(DespesaDocumento)
+        .filter(
+            DespesaDocumento.tipo_origem == "diaria",
+            DespesaDocumento.sequencia_origem == 1,
+        )
+        .one()
+    )
+    assert atualizado_primeiro.valor_empenhado == Decimal("5000.00")
+    assert atualizado_primeiro.valor_liquidado == Decimal("5000.00")
+    assert atualizado_primeiro.valor_pago == Decimal("5000.00")
 
     session.close()

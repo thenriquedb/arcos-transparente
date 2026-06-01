@@ -14,6 +14,7 @@ Domain = Literal[
     "planejamento",
     "receitas",
     "despesas",
+    "diarias",
     "patrimonios",
     "quadro_pessoal",
     "eleitos",

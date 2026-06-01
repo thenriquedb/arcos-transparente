@@ -1,4 +1,4 @@
-"""Pipeline de ingestão XML -> SQL."""
+"""Pipeline de ingestao de arquivos estruturados -> SQL."""
 
 from __future__ import annotations
 
@@ -37,6 +37,7 @@ from database.models import (
 )
 from database.session import get_session
 from ingestion.loaders.sql_loader import LoadResult, SQLLoader
+from ingestion.parsers.csv.diarias_parser import DiariasCsvParser
 from ingestion.parsers.xml.shared import sanitize_xml_payload
 from ingestion.parsers.xml.contratos_parser import ContratosParser
 from ingestion.parsers.xml.despesas_parser import DespesasParser
@@ -71,6 +72,7 @@ class IngestionPipeline:
             "quadro_pessoal": (QuadroPessoalParser(), QuadroPessoal),
             "eleitos": (EleitosParser(), Eleito),
         }
+        self.diarias_csv_parser = DiariasCsvParser()
 
     def run(
         self,
@@ -128,7 +130,11 @@ class IngestionPipeline:
                     continue
 
                 for arquivo in arquivos:
-                    registros: list[dict[str, Any]] = parser.parse(str(arquivo))
+                    registros: list[dict[str, Any]]
+                    if tipo == "despesas" and arquivo.suffix.lower() == ".csv":
+                        registros = self.diarias_csv_parser.parse(str(arquivo))
+                    else:
+                        registros = parser.parse(str(arquivo))
                     if tipo == "licitacoes":
                         resultado = self._load_licitacoes(
                             session=session, registros=registros
@@ -286,6 +292,12 @@ class IngestionPipeline:
                         )
                     ).scalar_one_or_none()
                     payload["data_documento"] = self._to_date(payload["data_documento"])
+                    payload["periodo_referencia_inicio"] = self._to_date(
+                        payload.get("periodo_referencia_inicio")
+                    )
+                    payload["periodo_referencia_fim"] = self._to_date(
+                        payload.get("periodo_referencia_fim")
+                    )
                     payload["data_homologacao"] = self._to_date(
                         payload.get("data_homologacao")
                     )
@@ -890,6 +902,7 @@ class IngestionPipeline:
                 sorted(despesas_path.rglob("*empenhos*.xml"))
                 + sorted(despesas_path.rglob("*documentos-extras*.xml"))
                 + sorted(despesas_path.rglob("*restos-a-pagar*.xml"))
+                + sorted(despesas_path.rglob("*diarias*.csv"))
             )
         elif tipo == "patrimonios":
             arquivos = sorted(administracao_path.rglob("*patrimonio*.xml"))

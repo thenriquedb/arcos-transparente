@@ -111,6 +111,10 @@ class DespesaDocumento(Base):
         String(50), nullable=False, index=True
     )
     data_documento: Mapped[date] = mapped_column(Date, nullable=False, index=True)
+    periodo_referencia_inicio: Mapped[Optional[date]] = mapped_column(
+        Date, nullable=True
+    )
+    periodo_referencia_fim: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     categoria_documento: Mapped[Optional[str]] = mapped_column(
         String(80), nullable=True
     )

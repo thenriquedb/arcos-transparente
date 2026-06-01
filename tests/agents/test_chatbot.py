@@ -66,6 +66,7 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     assert capturado["checkpointer"] is chatbot_agent.CHECKPOINTER
     assert "buscar_historico_de_pagamentos_do_servidor" in nomes
     assert "consultar_contratos" in nomes
+    assert "consultar_diarias" in nomes
     assert "consultar_conhecimento_municipal" in nomes
 
 
@@ -109,6 +110,7 @@ def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
 
     assert "Fronteira SQL vs RAG" in prompt
     assert "`consultar_conhecimento_municipal`" in prompt
+    assert "`consultar_diarias`" in prompt
     assert "arquivo_fonte" in prompt
     assert "ônibus da frota" in prompt
 

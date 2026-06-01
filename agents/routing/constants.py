@@ -158,10 +158,15 @@ DESPESAS_DOMAIN_KEYWORDS = (
     "resto a pagar",
     "documento extra",
     "documentos extras",
-    "diaria",
-    "diarias",
     "credor",
     "credores",
+)
+
+DIARIAS_DOMAIN_KEYWORDS = (
+    "diaria",
+    "diarias",
+    "adiantamento de viagem",
+    "adiantamentos de viagem",
 )
 
 PATRIMONIOS_DOMAIN_KEYWORDS = (

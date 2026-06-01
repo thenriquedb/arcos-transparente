@@ -16,6 +16,7 @@ from agents.router import (
     _normalize,
     _try_route_agregacao,
     _try_route_contratos_agregacao,
+    _try_route_diarias_agregacao,
     _try_route_despesas_agregacao,
     _try_route_historico,
     _try_route_lista,
@@ -316,11 +317,11 @@ from agents.router import (
         ),
         (
             "Quanto foi pago em diarias em 2025?",
-            "despesas",
+            "diarias",
             "agregacao_ranking",
-            "agregar_despesas",
+            "agregar_diarias",
             {
-                "filtros": {"ano": 2025, "descricao": "diaria"},
+                "filtros": {"ano": 2025},
                 "agrupar_por": None,
                 "metrica": "soma_valor_pago",
                 "ordenar_por": "metrica",
@@ -669,14 +670,14 @@ def test_try_route_receitas_agregacao_isolado_para_iptu() -> None:
     }
 
 
-def test_try_route_despesas_agregacao_isolado_para_diarias() -> None:
-    decision = _try_route_despesas_agregacao(
+def test_try_route_diarias_agregacao_isolado_para_total_pago() -> None:
+    decision = _try_route_diarias_agregacao(
         _normalize("Quanto foi pago em diarias em 2025?")
     )
 
     assert decision is not None
-    assert decision.tool_name == "agregar_despesas"
-    assert decision.tool_kwargs["filtros"] == {"ano": 2025, "descricao": "diaria"}
+    assert decision.tool_name == "agregar_diarias"
+    assert decision.tool_kwargs["filtros"] == {"ano": 2025}
 
 
 def test_try_route_patrimonios_agregacao_isolado_para_valor_total() -> None:
@@ -756,7 +757,7 @@ def test_route_user_query_restringe_despesas_por_tags() -> None:
     tools = select_public_tools_for_query("Quanto foi pago em diarias em 2025?")
     tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
 
-    assert tool_names == ["agregar_despesas"]
+    assert tool_names == ["agregar_diarias"]
 
 
 def test_route_user_query_restringe_eleitos_por_tags() -> None:
