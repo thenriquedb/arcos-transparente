@@ -7,7 +7,8 @@ Esta arquitetura existe para evitar que o agente receba dezenas ou centenas de t
 Em vez de criar uma tool para cada pergunta possível, o projeto passou a usar:
 
 - poucas tools públicas por domínio
-- um router leve antes da execução
+- orquestração principal pelo LLM, com guardrails hard-coded antes do modelo
+- um router leve só para compatibilidade e integrações legadas
 - helpers internos compartilhados para concentrar a lógica de filtro, agregação e serialização
 
 O objetivo prático é melhorar:
@@ -50,7 +51,7 @@ Exemplos:
 
 ## Superfície Pública Atual
 
-Atualmente o agente principal enxerga apenas 17 tools:
+Atualmente o chatbot cidadão enxerga 19 tools públicas:
 
 1. `consultar_servidores`
 2. `agregar_servidores`
@@ -68,7 +69,9 @@ Atualmente o agente principal enxerga apenas 17 tools:
 14. `agregar_patrimonios`
 15. `consultar_quadro_pessoal`
 16. `agregar_quadro_pessoal`
-17. `buscar_historico_de_pagamentos_do_servidor`
+17. `consultar_eleitos`
+18. `consultar_frota`
+19. `buscar_historico_de_pagamentos_do_servidor`
 
 Isso vale tanto para:
 
@@ -142,8 +145,10 @@ Hoje o router trabalha com estas classes:
 - `agregacao_ranking`
 - `historico_detalhado`
 
-Se a rota for clara, o agente recebe um subconjunto pequeno de tools.
-Se a rota não for clara, o fallback é expor todas as tools públicas.
+Nos fluxos legados, uma rota clara ainda pode sugerir um subconjunto pequeno de
+tools.
+No chatbot cidadão, o padrão é expor toda a superfície pública permitida e
+deixar a orquestração com o prompt e os contratos das tools.
 
 ### Precedência final de regras
 
@@ -178,7 +183,7 @@ O comportamento esperado é:
 
 ### 3. Bootstrap do agente
 
-Arquivo: `main.py`
+Arquivo: `agents/chatbot/agent.py`
 
 Responsabilidades:
 
@@ -190,7 +195,7 @@ Responsabilidades:
 Configuração atual do agente:
 
 - `LLM_PROVIDER=openai`
-- `OPENAI_MODEL=gpt-4o-mini` por padrão
+- `OPENAI_MODEL=gpt-4.1` por padrão
 - `OPENAI_API_KEY` obrigatória para criar o agente
 
 Com isso, o runtime cidadão deixa de depender do router para decidir o fluxo de perguntas permitidas.
@@ -590,21 +595,21 @@ Exemplos:
 - `tags=["domain:licitacoes", "shape:lookup"]`
 - `tags=["domain:licitacoes", "shape:aggregate"]`
 
-### Passo 4. Ensinar o router
+### Passo 4. Ensinar o router, se a integração legada realmente precisar
 
 Adicionar regras determinísticas em `agents/router.py` para:
 
-- reconhecer o domínio
-- distinguir listagem, agregação e histórico
-- reduzir o subconjunto de tools expostas
+- reconhecer o domínio em fluxos de compatibilidade
+- distinguir listagem, agregação e histórico quando esse atalho ainda trouxer valor
+- nunca substituir o prompt e os contratos das tools como autoridade do chatbot cidadão
 
 ### Passo 5. Cobrir com testes
 
 Os testes mínimos esperados são:
 
 - registry
-- router
-- bootstrap do agente
+- chatbot/runtime
+- router de compatibilidade, quando aplicável
 - schemas
 - tool pública
 
@@ -616,10 +621,10 @@ A arquitetura depende muito de contrato e roteamento, então os testes mais impo
 
 - `tests/tools/test_registry.py`
   valida quais tools realmente existem
+- `tests/agents/test_chatbot.py`
+  valida o boundary pre-modelo, o bootstrap do agente e o contrato conversacional principal
 - `tests/agents/test_router.py`
-  valida como perguntas viram decisões de roteamento
-- `tests/test_main.py`
-  valida quais tools o agente recebe
+  valida apenas as heurísticas de compatibilidade ainda preservadas
 - `tests/tools/sql_tools/test_servidores_public_tools.py`
   valida comportamento funcional das tools amplas
 - `tests/tools/sql_tools/test_contratos_public_tools.py`
@@ -636,7 +641,8 @@ Para testes manuais de ponta a ponta, use também:
 
 Isso é importante porque uma arquitetura com poucas tools só funciona bem se:
 
-- o roteamento estiver correto
+- os guardrails e o contrato conversacional estiverem corretos
+- o roteamento legado ainda fizer sentido onde permanecer
 - os schemas rejeitarem combinações inválidas
 - a surface pública continuar pequena
 

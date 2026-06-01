@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 
+import agents.chatbot.core as chatbot_core
 import agents.chatbot.agent as chatbot_agent
 from agents.chatbot.cli import run_interactive, run_once
 from agents.chatbot.core import (
@@ -11,6 +12,7 @@ from agents.chatbot.core import (
     ChatSession,
     ChatbotApplication,
 )
+from agents.routing.models import RouteDecision
 
 
 class FakeBackend:
@@ -82,6 +84,25 @@ def test_system_prompt_pede_confirmacao_para_siglas_ambiguas() -> None:
     assert "Você quer dizer UPA como Unidade de Pronto Atendimento?" in prompt
 
 
+def test_system_prompt_orienta_followups_de_contratos_e_licitacoes() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "Contrato com valor R$ 0,00 ou campo de valor vazio" in prompt
+    assert "`consultar_licitacoes`" in prompt
+    assert "`consultar_despesas`" in prompt
+    assert "Busca em contratos sem resultado" in prompt
+    assert "Busca em licitações sem resultado" in prompt
+
+
+def test_system_prompt_documenta_excecoes_sem_recorte_temporal() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "Exceções — consulte sem pedir recorte temporal" in prompt
+    assert "Busca de servidor por nome" in prompt
+    assert "Contagens simples" in prompt
+    assert "lista completa" in prompt
+
+
 def test_chatbot_application_mantem_estado_da_sessao() -> None:
     backend = FakeBackend()
     app = ChatbotApplication(
@@ -99,13 +120,35 @@ def test_chatbot_application_mantem_estado_da_sessao() -> None:
     ]
 
 
-def test_chatbot_application_rejeita_pergunta_vazia() -> None:
-    app = ChatbotApplication(backend=FakeBackend())
+def test_chatbot_application_bloqueia_pergunta_vazia_sem_chamar_backend() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(backend=backend)
 
-    with pytest.raises(ValueError) as exc_info:
-        app.ask("   ")
+    response = app.ask("   ")
 
-    assert "pergunta nao pode ser vazia" in str(exc_info.value)
+    assert response.guardrail_triggered is True
+    assert response.metadata == {"guardrail_category": "empty_query"}
+    assert "Envie uma pergunta" in response.content
+    assert backend.calls == []
+
+
+def test_chatbot_application_stream_bloqueia_pergunta_vazia_sem_chamar_backend() -> (
+    None
+):
+    backend = FakeStreamingBackend()
+    app = ChatbotApplication(backend=backend)
+
+    chunks = list(app.stream("   "))
+
+    assert chunks == [
+        (
+            "Envie uma pergunta sobre os dados públicos municipais disponíveis "
+            "no sistema, como servidores, secretarias, salários-base ou "
+            "licitações, despesas, patrimônio, planejamento, receitas "
+            "ou políticos eleitos."
+        )
+    ]
+    assert backend.calls == []
 
 
 def test_chatbot_application_responde_identidade_sem_chamar_backend() -> None:
@@ -142,6 +185,88 @@ def test_chatbot_application_bloqueia_prompt_injection_sem_chamar_backend() -> N
     assert response.guardrail_triggered is True
     assert response.metadata == {"guardrail_category": "prompt_injection"}
     assert "ignorar instruções" in response.content
+    assert backend.calls == []
+
+
+def test_chatbot_application_permite_consulta_no_escopo_sem_rota_confiante(
+    monkeypatch,
+) -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-sem-rota"),
+    )
+
+    monkeypatch.setattr(
+        chatbot_core,
+        "route_user_query",
+        lambda _query: RouteDecision(
+            domain="desconhecido",
+            operation_type="desconhecido",
+            confident=False,
+        ),
+    )
+
+    response = app.ask("Quais contratos da educacao?")
+
+    assert response.content == "resposta para: Quais contratos da educacao?"
+    assert backend.calls == [("Quais contratos da educacao?", "sessao-sem-rota")]
+
+
+def test_chatbot_application_permite_consulta_de_custo_de_evento_publico() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-custo-evento"),
+    )
+
+    response = app.ask("qual foi o custo do festival gastronomico de 2026?")
+
+    assert (
+        response.content
+        == "resposta para: qual foi o custo do festival gastronomico de 2026?"
+    )
+    assert backend.calls == [
+        ("qual foi o custo do festival gastronomico de 2026?", "sessao-custo-evento")
+    ]
+
+
+def test_chatbot_application_permite_followup_eliptico_com_contexto_publico() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-evento"),
+    )
+
+    primeira_resposta = app.ask("qual foi o custo do festival gastronomico de 2026?")
+    segunda_resposta = app.ask("E o de 2025?")
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: qual foi o custo do festival gastronomico de 2026?"
+    )
+    assert segunda_resposta.content == "resposta para: E o de 2025?"
+    assert backend.calls == [
+        ("qual foi o custo do festival gastronomico de 2026?", "sessao-followup-evento"),
+        ("E o de 2025?", "sessao-followup-evento"),
+    ]
+
+
+def test_chatbot_application_bloqueia_followup_eliptico_apos_contexto_fora_do_escopo() -> (
+    None
+):
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-bloqueado"),
+    )
+
+    primeira_resposta = app.ask("Como implementar uma lista encadeada em Python?")
+    segunda_resposta = app.ask("E o de 2025?")
+
+    assert primeira_resposta.guardrail_triggered is True
+    assert segunda_resposta.guardrail_triggered is True
+    assert segunda_resposta.metadata == {"guardrail_category": "out_of_scope"}
     assert backend.calls == []
 
 

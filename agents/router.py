@@ -1,4 +1,4 @@
-"""Fachada do router determinístico usada pelo agente principal."""
+"""Fachada de compatibilidade para heurísticas determinísticas legadas."""
 
 from __future__ import annotations
 
@@ -86,7 +86,7 @@ def _build_fallback_route() -> RouteDecision:
 
 
 def route_user_query(query: str) -> RouteDecision:
-    """Aplica as heurísticas do router na ordem de prioridade definida acima."""
+    """Aplica heurísticas legadas de compatibilidade na ordem definida acima."""
 
     normalized_text = _normalize(query)
 
@@ -102,6 +102,7 @@ def route_user_query(query: str) -> RouteDecision:
 def evaluate_query_guardrails(
     query: str,
     route: RouteDecision | None = None,
+    prior_user_queries: tuple[str, ...] = (),
 ) -> GuardrailDecision:
     """Valida escopo e tentativas de manipular o comportamento do agente."""
 
@@ -109,11 +110,13 @@ def evaluate_query_guardrails(
     return evaluate_public_query_guardrails(
         query,
         compatibility_route=route,
+        has_history=bool(prior_user_queries),
+        prior_user_queries=prior_user_queries,
     )
 
 
 def select_public_tools_for_query(query: str | None = None) -> list[object]:
-    """Seleciona apenas as tools públicas relevantes para a pergunta."""
+    """Sugere subconjuntos de tools apenas para fluxos legados/compatíveis."""
 
     if not query:
         return get_public_tools()

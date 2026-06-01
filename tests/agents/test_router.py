@@ -1,3 +1,10 @@
+"""Cobertura de compatibilidade do router legado.
+
+Esses testes continuam valiosos para integrações que ainda dependem de
+classificação determinística, mas não representam a principal superfície
+comportamental do chatbot cidadão.
+"""
+
 from __future__ import annotations
 
 import pytest
@@ -771,6 +778,39 @@ def test_evaluate_query_guardrails_permitem_quanto_nome_recebe() -> None:
 
     assert decision.allowed is True
     assert decision.category == "allowed"
+
+
+def test_evaluate_query_guardrails_permitem_consulta_de_custo_evento_publico() -> None:
+    decision = evaluate_query_guardrails(
+        "qual foi o custo do festival gastronomico de 2026?"
+    )
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
+def test_evaluate_query_guardrails_permitem_followup_eliptico_com_contexto_publico() -> (
+    None
+):
+    decision = evaluate_query_guardrails(
+        "E o de 2025?",
+        prior_user_queries=("qual foi o custo do festival gastronomico de 2026?",),
+    )
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
+def test_evaluate_query_guardrails_bloqueia_followup_eliptico_sem_contexto_publico() -> (
+    None
+):
+    decision = evaluate_query_guardrails(
+        "E o de 2025?",
+        prior_user_queries=("Como implementar uma lista encadeada em Python?",),
+    )
+
+    assert decision.allowed is False
+    assert decision.category == "out_of_scope"
 
 
 def test_evaluate_query_guardrails_bloqueia_pergunta_fora_do_escopo() -> None:

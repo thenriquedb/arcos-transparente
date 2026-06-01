@@ -1,6 +1,6 @@
 # Contexto Atual do Projeto para Codex CLI
 
-Atualizado com base no codigo do repositorio em 2026-05-27.
+Atualizado com base no codigo do repositorio em 2026-06-01.
 
 ## Objetivo
 
@@ -11,7 +11,7 @@ O foco atual do projeto e:
 - ingestao confiavel de XMLs publicos
 - modelagem relacional auditavel
 - consulta estruturada via tools publicas amplas
-- roteamento deterministico antes do LLM
+- orquestracao guiada pelo LLM com guardrails determinísticos antes do modelo
 
 ## Resumo Executivo
 
@@ -23,11 +23,12 @@ O estado real do codigo neste momento e:
 - pipeline de ingestao em `ingestion/pipeline.py`
 - modelos SQLAlchemy em `database/models/`
 - migrations Alembic em `database/migrations/versions/`
-- router deterministico em `agents/router.py` e `agents/routing/`
+- chatbot em `agents/chatbot/`, com CLI e interface web local em Streamlit
+- router de compatibilidade em `agents/router.py` e `agents/routing/`
 - tools SQL publicas em `agents/tools/sql_tools/`
-- bootstrap principal do agente em `main.py`
+- bootstrap principal do agente em `agents/chatbot/agent.py`
 
-Nao ha, no codigo ativo, uma camada FastAPI/Streamlit pronta nem uma integracao RAG/Chroma em uso pelo agente principal.
+Nao ha, no codigo ativo, uma API web de producao pronta nem uma integracao RAG/Chroma em uso pelo agente principal.
 
 ## Stack Atual
 
@@ -67,10 +68,11 @@ As consultas do agente hoje se concentram nestes dominios publicos:
 - patrimonios
 - quadro de pessoal
 - eleitos
+- frota
 
 ## Superficie Publica do Agente
 
-O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools estreitas. A superficie publica atual tem 18 tools:
+O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools estreitas. A superficie publica atual tem 19 tools:
 
 - `consultar_servidores`
 - `agregar_servidores`
@@ -89,6 +91,7 @@ O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools e
 - `consultar_quadro_pessoal`
 - `agregar_quadro_pessoal`
 - `consultar_eleitos`
+- `consultar_frota`
 - `buscar_historico_de_pagamentos_do_servidor`
 
 Decisao importante: a variacao da pergunta deve ser absorvida por filtros, ordenacao, agregacao e projecao de campos, nao pela criacao de novas tools por caso de uso.
@@ -101,8 +104,8 @@ Decisao importante: a variacao da pergunta deve ser absorvida por filtros, orden
 4. Schemas em `ingestion/schemas/` validam e normalizam os dados.
 5. Loaders persistem no SQLite com upsert e relacionamentos.
 6. O agente recebe uma pergunta.
-7. O router classifica dominio, operacao e guardrails antes de criar o agente.
-8. O agente LangChain recebe apenas o subconjunto de tools publicas relevante para aquela pergunta.
+7. O runtime do chatbot aplica respostas locais e guardrails hard-coded antes de invocar o modelo.
+8. Para consultas permitidas, o agente LangChain recebe a superficie publica ampla de tools e orquestra a execucao via prompt e contratos das tools.
 
 ## Decisoes Tecnicas Ja Tomadas
 
@@ -166,10 +169,10 @@ conversacional concorrente.
 
 ### 6. OpenAI e o caminho oficial desta fase
 
-O bootstrap principal em `main.py` usa:
+O bootstrap principal em `agents/chatbot/agent.py` usa:
 
 - `LLM_PROVIDER` ou `MODEL_PROVIDER`
-- `OPENAI_MODEL`, com padrao `gpt-4o-mini`
+- `OPENAI_MODEL`, com padrao `gpt-4.1`
 - `OPENAI_API_KEY`
 
 Hoje o provider real implementado no bootstrap principal e `ChatOpenAI`.
@@ -187,18 +190,16 @@ Isso e uma boa decisao de manutencao porque separa o comportamento do agente do 
 
 O arquivo `observatorio-arcos-contexto.md` na raiz descreve uma arquitetura antiga com RAG, Chroma, FastAPI e Ollama. Isso nao reflete o codigo principal atual e nao deve ser tratado como fonte de verdade do estado presente.
 
-### 2. Ha duplicacao de bootstrap do agente
+### 2. Parte da documentacao antiga ainda fala em `main.py`
 
-Existem implementacoes parecidas em:
+O bootstrap canonico do agente cidadao hoje esta em:
 
-- `main.py`
-- `agents/agent.py`
+- `agents/chatbot/agent.py`
+- `agents/chatbot/core.py`
 
-Para contexto atual, `main.py` parece ser a referencia mais confiavel porque:
-
-- le o prompt de `docs/agent-system-prompt.md`
-- e o modulo coberto por `tests/test_main.py`
-- e usado por `chat_playground.py`
+Se algum documento mencionar `main.py`, `tests/test_main.py` ou subconjunto de
+tools como runtime principal, trate isso como contexto historico e prefira os
+modulos de chatbot e seus testes atuais.
 
 ### 3. Pasta `data/rag/` nao significa RAG ativo
 
@@ -214,10 +215,10 @@ Se o objetivo for entender o projeto rapido no Codex CLI, esta ordem funciona be
 4. `ingestion/pipeline.py`
 5. `database/models/__init__.py`
 6. `docs/database.md`
-7. `agents/router.py`
-8. `docs/arquitetura-agent-tools.md`
-9. `agents/tools/registry.py`
-10. `tests/test_main.py`
+7. `agents/chatbot/agent.py`
+8. `agents/chatbot/core.py`
+9. `docs/arquitetura-agent-tools.md`
+10. `tests/agents/test_chatbot.py`
 
 ## Comandos Uteis
 
@@ -241,7 +242,7 @@ uv run python cli.py importar --tipo contratos --ano 2025
 - nao assumir que existe API web pronta
 - nao assumir que existe RAG em producao
 - nao assumir que a importacao e incremental
-- nao assumir que `agents/agent.py` e a unica entrada do agente
+- nao assumir que o router define o comportamento principal do chatbot
 - nao assumir que docs antigos da raiz descrevem o estado atual
 
 ## Sinais de Qualidade do Projeto
