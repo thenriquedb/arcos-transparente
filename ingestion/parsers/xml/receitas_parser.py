@@ -6,13 +6,14 @@ import xml.etree.ElementTree as ET
 from decimal import Decimal
 from typing import Any
 
+from ingestion.parsers.xml.shared import parse_xml_root
+
 
 class ReceitasParser:
     """Converte XMLs de receita em dicionários normalizados."""
 
     def parse_arrecadacoes(self, filepath: str) -> list[dict[str, Any]]:
-        tree = ET.parse(filepath)
-        root = tree.getroot()
+        root = parse_xml_root(filepath)
         registros: list[dict[str, Any]] = []
         for node in root.findall("./Arrecadacao"):
             exercicio = self._int(node, "Exercicio")
@@ -63,8 +64,7 @@ class ReceitasParser:
         return registros
 
     def parse_lancamentos(self, filepath: str) -> list[dict[str, Any]]:
-        tree = ET.parse(filepath)
-        root = tree.getroot()
+        root = parse_xml_root(filepath)
         registros: list[dict[str, Any]] = []
         for node in root.findall("./Lancamento"):
             exercicio = self._int(node, "Exercicio")

@@ -37,6 +37,7 @@ from database.models import (
 )
 from database.session import get_session
 from ingestion.loaders.sql_loader import LoadResult, SQLLoader
+from ingestion.parsers.xml.shared import sanitize_xml_payload
 from ingestion.parsers.xml.contratos_parser import ContratosParser
 from ingestion.parsers.xml.despesas_parser import DespesasParser
 from ingestion.parsers.xml.licitacoes_parser import LicitacoesParser
@@ -159,6 +160,7 @@ class IngestionPipeline:
         """Carrega contratos e vincula fornecedor canonico quando possivel."""
         resultado = LoadResult()
         for registro in registros:
+            registro = sanitize_xml_payload(registro)
             try:
                 with session.begin():
                     fornecedor = self._get_or_create_fornecedor(
@@ -265,6 +267,7 @@ class IngestionPipeline:
         """Carrega documentos de despesa e entidades filhas relacionadas."""
         resultado = LoadResult()
         for registro in registros:
+            registro = sanitize_xml_payload(registro)
             try:
                 with session.begin():
                     payload = dict(registro)
@@ -369,6 +372,7 @@ class IngestionPipeline:
         """Carrega licitações e entidades filhas relacionadas."""
         resultado = LoadResult()
         for registro in registros:
+            registro = sanitize_xml_payload(registro)
             try:
                 with session.begin():
                     registro_base = {
@@ -502,6 +506,7 @@ class IngestionPipeline:
 
         for arq in arquivos_arrec:
             for reg in parser.parse_arrecadacoes(str(arq)):
+                reg = sanitize_xml_payload(reg)
                 try:
                     with session.begin():
                         natureza = self._get_or_create_natureza(
@@ -573,6 +578,7 @@ class IngestionPipeline:
         """Carrega veículos de frota e despesas relacionadas."""
         resultado = LoadResult()
         for registro in registros:
+            registro = sanitize_xml_payload(registro)
             try:
                 with session.begin():
                     placa_veiculo = registro.get("placa_veiculo")
@@ -643,6 +649,7 @@ class IngestionPipeline:
         for arq in arquivos:
             registros = parser.parse(str(arq))
             for reg in registros:
+                reg = sanitize_xml_payload(reg)
                 try:
                     with session.begin():
                         servidor = self._get_or_create_folha_servidor(
@@ -707,6 +714,8 @@ class IngestionPipeline:
     @staticmethod
     def _get_or_create_fornecedor(session, cnpj_cpf: str, nome: str) -> Fornecedor:
         """Busca fornecedor existente ou cria novo registro."""
+        cnpj_cpf = sanitize_xml_payload(cnpj_cpf)
+        nome = sanitize_xml_payload(nome)
         fornecedor = session.execute(
             select(Fornecedor).where(
                 and_(Fornecedor.cnpj_cpf == cnpj_cpf, Fornecedor.nome == nome)
@@ -738,6 +747,7 @@ class IngestionPipeline:
         session, natureza: dict[str, Any]
     ) -> Optional[ReceitaNatureza]:
         """Busca ou cria natureza de receita por identificação."""
+        natureza = sanitize_xml_payload(natureza)
         ident = natureza.get("identificacao")
         if not ident:
             return None
@@ -759,6 +769,7 @@ class IngestionPipeline:
     @staticmethod
     def _get_or_create_folha_dim(session, model, nome: Optional[str]):
         """Busca ou cria dimensão textual da folha."""
+        nome = sanitize_xml_payload(nome)
         if not nome:
             return None
         existente = session.execute(
@@ -779,6 +790,9 @@ class IngestionPipeline:
         lotacao: Optional[str],
     ) -> FolhaServidor:
         """Busca/cria dimensão de folha e tenta vincular ao servidor canônico."""
+        nome = sanitize_xml_payload(nome)
+        cargo = sanitize_xml_payload(cargo)
+        lotacao = sanitize_xml_payload(lotacao)
         existente = session.execute(
             select(FolhaServidor).where(FolhaServidor.nome == nome)
         ).scalar_one_or_none()
@@ -810,6 +824,9 @@ class IngestionPipeline:
         secretaria: Optional[str],
     ) -> Optional[Servidor]:
         """Resolve o melhor servidor canônico para um nome da folha."""
+        nome = sanitize_xml_payload(nome)
+        cargo = sanitize_xml_payload(cargo)
+        secretaria = sanitize_xml_payload(secretaria)
         filtros = [Servidor.nome == nome]
         if cargo:
             filtros.append(Servidor.cargo == cargo)

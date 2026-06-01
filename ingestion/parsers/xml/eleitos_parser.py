@@ -8,6 +8,7 @@ from typing import Any
 from loguru import logger
 from pydantic import ValidationError
 
+from ingestion.parsers.xml.shared import parse_xml_root
 from ingestion.schemas.eleitos import EleitoInSchema
 
 
@@ -16,8 +17,7 @@ class EleitosParser:
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
         """Lê arquivo XML e retorna registros normalizados com Pydantic."""
-        tree = ET.parse(filepath)
-        root = tree.getroot()
+        root = parse_xml_root(filepath)
         registros: list[dict[str, Any]] = []
         invalidos = 0
 

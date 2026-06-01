@@ -51,3 +51,39 @@ def test_parser_contratos_filtra_invalidos_sem_quebrar_lote() -> None:
     assert segundo["data_inicio"] == date(2025, 2, 15)
     assert segundo["descricao_despesa"] == "Outros Materiais de Consumo"
     assert segundo["itens_adquiridos"][0]["numero_lote"] == "3"
+
+
+def test_parser_contratos_sanitiza_xml_original_e_campos_textuais(tmp_path) -> None:
+    xml = """<?xml version="1.0" encoding="ISO-8859-1"?>
+<Root>
+    <InstrumentoContratual>
+        <NumeroLicitatorio>321/2025</NumeroLicitatorio>
+        <NumeroInstrumentoContratual>009/2025</NumeroInstrumentoContratual>
+        <TipoInstrumentoContratual>Contrato</TipoInstrumentoContratual>
+        <NomeFornecedor>Fornecedor\x00 Limpo</NomeFornecedor>
+        <CNPJFornecedor>12.345.678/0001-99</CNPJFornecedor>
+        <ValorInstrumentoContratual>R$ 1.200,00</ValorInstrumentoContratual>
+        <DataEmissao>10/01/2025</DataEmissao>
+        <TipoContrato>Prestação\x1f de Serviço</TipoContrato>
+        <UnidadeGestora>Secretaria de Saúde</UnidadeGestora>
+        <Objeto>Locação\x00 de palco</Objeto>
+        <DespesasOrcamentarias>
+            <DespesaOrcamentaria>
+                <DescricaoDespesa>Eventos\x1f Oficiais</DescricaoDespesa>
+            </DespesaOrcamentaria>
+        </DespesasOrcamentarias>
+    </InstrumentoContratual>
+</Root>
+"""
+    arquivo = tmp_path / "contratos-2025.xml"
+    arquivo.write_text(xml, encoding="ISO-8859-1")
+
+    registros = ContratosParser().parse(str(arquivo))
+
+    assert len(registros) == 1
+    assert registros[0]["fornecedor"] == "Fornecedor Limpo"
+    assert registros[0]["categoria"] == "Prestação de Serviço"
+    assert registros[0]["descricao"] == "Locação de palco"
+    assert registros[0]["descricao_despesa"] == "Eventos Oficiais"
+    assert "\x00" not in registros[0]["xml_original"]
+    assert "\x1f" not in registros[0]["xml_original"]

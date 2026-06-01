@@ -8,6 +8,7 @@ from typing import Any
 from loguru import logger
 from pydantic import ValidationError
 
+from ingestion.parsers.xml.shared import parse_xml_root
 from ingestion.schemas.licitacoes import LicitacaoInSchema
 
 
@@ -16,11 +17,8 @@ class LicitacoesParser:
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
         """Lê arquivo XML e retorna registros normalizados com Pydantic."""
-        with open(filepath, "r", encoding="iso-8859-1") as file:
-            content = file.read()
-            tree = ET.ElementTree(ET.fromstring(content))
-            root = tree.getroot()
-            registros: list[dict[str, Any]] = []
+        root = parse_xml_root(filepath)
+        registros: list[dict[str, Any]] = []
 
         for node in root.findall(".//ProcessoLicitatorio"):
             payload_raw = {
