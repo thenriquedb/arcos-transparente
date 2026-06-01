@@ -195,8 +195,8 @@ def consultar_despesas(
         filtros: Objeto com filtros opcionais. Campos aceitos: `tipo`, `origem`,
             `ano`, `data_inicio`, `data_fim`, `numero`, `credor`, `cpf_cnpj`,
             `unidade_responsavel`, `area`, `conta_extra`, `contrato` e
-            `descricao`. `tipo` aceita `empenho`, `restos_a_pagar` ou
-            `documento_extra`. Datas em `YYYY-MM-DD`.
+            `descricao`. `tipo` aceita `empenho`, `restos_a_pagar`,
+            `documento_extra`, `diaria` ou `passagem`. Datas em `YYYY-MM-DD`.
         ordenar_por: Campo de ordenacao. Aceita `data`, `valor_documento`,
             `valor_empenhado`, `valor_pago`, `credor` ou `numero`.
         ordem: Direcao da ordenacao: `asc` ou `desc`.

@@ -38,6 +38,7 @@ from database.models import (
 from database.session import get_session
 from ingestion.loaders.sql_loader import LoadResult, SQLLoader
 from ingestion.parsers.csv.diarias_parser import DiariasCsvParser
+from ingestion.parsers.csv.passagens_parser import PassagensCsvParser
 from ingestion.parsers.xml.shared import sanitize_xml_payload
 from ingestion.parsers.xml.contratos_parser import ContratosParser
 from ingestion.parsers.xml.despesas_parser import DespesasParser
@@ -50,6 +51,7 @@ from ingestion.parsers.xml.folha_pagamento_parser import FolhaPagamentoParser
 from ingestion.parsers.xml.planejamentos_parser import PlanejamentosParser
 from ingestion.parsers.xml.quadro_pessoal_parser import QuadroPessoalParser
 from ingestion.parsers.xml.eleitos_parser import EleitosParser
+from shared.utils.text import normalize_search_text
 
 
 class IngestionPipeline:
@@ -73,6 +75,7 @@ class IngestionPipeline:
             "eleitos": (EleitosParser(), Eleito),
         }
         self.diarias_csv_parser = DiariasCsvParser()
+        self.passagens_csv_parser = PassagensCsvParser()
 
     def run(
         self,
@@ -132,7 +135,7 @@ class IngestionPipeline:
                 for arquivo in arquivos:
                     registros: list[dict[str, Any]]
                     if tipo == "despesas" and arquivo.suffix.lower() == ".csv":
-                        registros = self.diarias_csv_parser.parse(str(arquivo))
+                        registros = self._parse_despesas_csv(arquivo)
                     else:
                         registros = parser.parse(str(arquivo))
                     if tipo == "licitacoes":
@@ -878,6 +881,16 @@ class IngestionPipeline:
 
         return None
 
+    def _parse_despesas_csv(self, arquivo: Path) -> list[dict[str, Any]]:
+        """Despacha CSVs de despesas para o parser dedicado correto."""
+
+        nome = normalize_search_text(arquivo.name)
+        if "diarias" in nome:
+            return self.diarias_csv_parser.parse(str(arquivo))
+        if "passagens" in nome:
+            return self.passagens_csv_parser.parse(str(arquivo))
+        raise ValueError(f"CSV de despesas sem parser suportado: {arquivo}")
+
     def _arquivos_por_tipo(self, tipo: str, ano: Optional[int]) -> list[Path]:
         """Descobre arquivos de entrada por tipo e ano."""
 
@@ -903,6 +916,7 @@ class IngestionPipeline:
                 + sorted(despesas_path.rglob("*documentos-extras*.xml"))
                 + sorted(despesas_path.rglob("*restos-a-pagar*.xml"))
                 + sorted(despesas_path.rglob("*diarias*.csv"))
+                + sorted(despesas_path.rglob("*passagens*.csv"))
             )
         elif tipo == "patrimonios":
             arquivos = sorted(administracao_path.rglob("*patrimonio*.xml"))

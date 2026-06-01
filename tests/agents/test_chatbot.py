@@ -67,6 +67,7 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     assert "buscar_historico_de_pagamentos_do_servidor" in nomes
     assert "consultar_contratos" in nomes
     assert "consultar_diarias" in nomes
+    assert "consultar_passagens" in nomes
     assert "consultar_conhecimento_municipal" in nomes
 
 
@@ -111,6 +112,7 @@ def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
     assert "Fronteira SQL vs RAG" in prompt
     assert "`consultar_conhecimento_municipal`" in prompt
     assert "`consultar_diarias`" in prompt
+    assert "`consultar_passagens`" in prompt
     assert "arquivo_fonte" in prompt
     assert "ônibus da frota" in prompt
 
@@ -296,6 +298,32 @@ def test_chatbot_application_permite_followup_temporal_em_outro_escopo() -> None
     assert backend.calls == [
         ("Quais contratos da saude?", "sessao-followup-contratos"),
         ("E em 2024?", "sessao-followup-contratos"),
+    ]
+
+
+def test_chatbot_application_permite_followup_de_ano_apos_clarificacao_de_diarias() -> (
+    None
+):
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-diarias"),
+    )
+
+    primeira_resposta = app.ask("quais os colaboradores que masi gastaram com diarias?")
+    segunda_resposta = app.ask("em 2025")
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: quais os colaboradores que masi gastaram com diarias?"
+    )
+    assert segunda_resposta.content == "resposta para: em 2025"
+    assert backend.calls == [
+        (
+            "quais os colaboradores que masi gastaram com diarias?",
+            "sessao-followup-diarias",
+        ),
+        ("em 2025", "sessao-followup-diarias"),
     ]
 
 

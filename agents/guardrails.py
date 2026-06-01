@@ -124,6 +124,7 @@ def evaluate_public_query_guardrails(
     compatibility_route: RouteDecision | None = None,
     has_history: bool = False,
     prior_user_queries: Sequence[str] = (),
+    prior_messages: Sequence[tuple[str, str, bool]] = (),
 ) -> GuardrailDecision:
     """Aplica bloqueios hard-coded antes da execução do modelo."""
 
@@ -156,7 +157,11 @@ def evaluate_public_query_guardrails(
     strong_hits = _count_keyword_hits(normalized_text, SUPPORTED_SCOPE_STRONG_KEYWORDS)
     weak_hits = _count_keyword_hits(normalized_text, SUPPORTED_SCOPE_WEAK_KEYWORDS)
 
-    has_public_context_anchor = _has_public_context_anchor(prior_user_queries)
+    has_public_context_anchor = (
+        _has_public_context_anchor_from_messages(prior_messages)
+        if prior_messages
+        else _has_public_context_anchor(prior_user_queries)
+    )
     contextual_follow_up = _looks_like_contextual_follow_up(normalized_text)
     explicit_context_reference = _has_explicit_context_reference(normalized_text)
 
@@ -243,6 +248,28 @@ def _has_public_context_anchor(prior_user_queries: Sequence[str]) -> bool:
         if _looks_like_contextual_follow_up(normalized_prior_query):
             continue
         return False
+    return False
+
+
+def _has_public_context_anchor_from_messages(
+    prior_messages: Sequence[tuple[str, str, bool]],
+) -> bool:
+    """Usa o historico completo para preservar follow-ups apos clarificacoes."""
+
+    for role, content, guardrail_triggered in reversed(prior_messages):
+        normalized_content = _normalize(content)
+        if not normalized_content:
+            continue
+        if guardrail_triggered:
+            return False
+        if role == "user":
+            if _query_establishes_public_context(normalized_content):
+                return True
+            if _looks_like_contextual_follow_up(normalized_content):
+                continue
+            return False
+        if _query_establishes_public_context(normalized_content):
+            return True
     return False
 
 

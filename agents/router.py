@@ -21,6 +21,10 @@ from agents.routing.routes.diarias import (
     _try_route_diarias_agregacao,
     _try_route_diarias_lista,
 )
+from agents.routing.routes.passagens import (
+    _try_route_passagens_agregacao,
+    _try_route_passagens_lista,
+)
 from agents.routing.routes.despesas import (
     _try_route_despesas_agregacao,
     _try_route_despesas_lista,
@@ -62,21 +66,23 @@ ROUTE_PRIORITY_CHAIN = (
     _try_route_contratos_lista,  # 3. Listas e detalhes de contratos
     _try_route_licitacoes_agregacao,  # 4. Rankings e contagens de licitações
     _try_route_diarias_agregacao,  # 5. Totais e rankings de diarias
-    _try_route_despesas_agregacao,  # 6. Totais e rankings de despesas
-    _try_route_patrimonios_agregacao,  # 7. Totais e rankings de patrimônio
-    _try_route_quadro_pessoal_agregacao,  # 8. Totais de quadro de pessoal
-    _try_route_planejamento_agregacao,  # 9. Totais e rankings de planejamento
-    _try_route_receitas_agregacao,  # 10. Totais e rankings de receitas
-    _try_route_agregacao,  # 11. Rankings e contagens de servidores
-    _try_route_licitacoes_lista,  # 12. Listas e detalhes de licitações
-    _try_route_diarias_lista,  # 13. Listas de diarias
-    _try_route_despesas_lista,  # 14. Listas de despesas
-    _try_route_patrimonios_lista,  # 15. Listas de patrimônio
-    _try_route_eleitos_lista,  # 16. Listas de eleitos
-    _try_route_quadro_pessoal_lista,  # 17. Listas de quadro de pessoal
-    _try_route_planejamento_saude_lista,  # 18. Listas de planejamento
-    _try_route_receitas_lista,  # 19. Listas de receitas
-    _try_route_lista,  # 20. Listas de servidores
+    _try_route_passagens_agregacao,  # 6. Totais e rankings de passagens
+    _try_route_despesas_agregacao,  # 7. Totais e rankings de despesas
+    _try_route_patrimonios_agregacao,  # 8. Totais e rankings de patrimônio
+    _try_route_quadro_pessoal_agregacao,  # 9. Totais de quadro de pessoal
+    _try_route_planejamento_agregacao,  # 10. Totais e rankings de planejamento
+    _try_route_receitas_agregacao,  # 11. Totais e rankings de receitas
+    _try_route_agregacao,  # 12. Rankings e contagens de servidores
+    _try_route_licitacoes_lista,  # 13. Listas e detalhes de licitações
+    _try_route_diarias_lista,  # 14. Listas de diarias
+    _try_route_passagens_lista,  # 15. Listas de passagens
+    _try_route_despesas_lista,  # 16. Listas de despesas
+    _try_route_patrimonios_lista,  # 17. Listas de patrimônio
+    _try_route_eleitos_lista,  # 18. Listas de eleitos
+    _try_route_quadro_pessoal_lista,  # 19. Listas de quadro de pessoal
+    _try_route_planejamento_saude_lista,  # 20. Listas de planejamento
+    _try_route_receitas_lista,  # 21. Listas de receitas
+    _try_route_lista,  # 22. Listas de servidores
 )
 
 
@@ -109,15 +115,23 @@ def evaluate_query_guardrails(
     query: str,
     route: RouteDecision | None = None,
     prior_user_queries: tuple[str, ...] = (),
+    has_history: bool | None = None,
+    prior_messages: tuple[tuple[str, str, bool], ...] = (),
 ) -> GuardrailDecision:
     """Valida escopo e tentativas de manipular o comportamento do agente."""
 
     route = route or route_user_query(query)
+    history_present = (
+        has_history
+        if has_history is not None
+        else bool(prior_user_queries or prior_messages)
+    )
     return evaluate_public_query_guardrails(
         query,
         compatibility_route=route,
-        has_history=bool(prior_user_queries),
+        has_history=history_present,
         prior_user_queries=prior_user_queries,
+        prior_messages=prior_messages,
     )
 
 
@@ -156,6 +170,7 @@ __all__ = [
     "_try_route_agregacao",
     "_try_route_contratos_agregacao",
     "_try_route_diarias_agregacao",
+    "_try_route_passagens_agregacao",
     "_try_route_despesas_agregacao",
     "_try_route_historico",
     "_try_route_lista",

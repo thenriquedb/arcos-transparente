@@ -170,3 +170,69 @@ def test_pipeline_importa_e_reimporta_diarias_csv_sem_duplicar(
     assert atualizado_primeiro.valor_pago == Decimal("5000.00")
 
     session.close()
+
+
+def test_pipeline_importa_e_reimporta_passagens_csv_sem_duplicar(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    passagens_dir = tmp_path / "despesas" / "passagens"
+    passagens_dir.mkdir(parents=True)
+    arquivo = passagens_dir / "passagens-2026.csv"
+    arquivo.write_text(
+        (FIXTURES_DIR / "passagens_camara_sample.csv").read_text(encoding="utf-8"),
+        encoding="ISO-8859-1",
+    )
+
+    session = _build_session()
+
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(pipeline_module, "get_session", fake_get_session)
+
+    pipeline = IngestionPipeline(data_dir=str(tmp_path))
+    resultado_inicial = pipeline.run(tipos=["despesas"], ano=2026)
+
+    assert resultado_inicial["despesas"].inseridos == 2
+    assert session.query(DespesaDocumento).count() == 2
+
+    primeiro = (
+        session.query(DespesaDocumento)
+        .filter(DespesaDocumento.tipo_origem == "passagem")
+        .order_by(DespesaDocumento.sequencia_origem.asc())
+        .first()
+    )
+    assert primeiro is not None
+    assert primeiro.periodo_referencia_inicio.isoformat() == "2026-01-01"
+    assert primeiro.periodo_referencia_fim.isoformat() == "2026-06-30"
+    assert primeiro.categoria_documento == "PASSAGENS E DESPESAS COM LOCOMOCAO"
+    session.rollback()
+
+    atualizado = (
+        (FIXTURES_DIR / "passagens_camara_sample.csv")
+        .read_text(encoding="utf-8")
+        .replace('="R$ 1.500,09"', '="R$ 1.900,09"', 1)
+        .replace('="R$ 1.500,09"', '="R$ 1.900,09"', 1)
+    )
+    arquivo.write_text(atualizado, encoding="ISO-8859-1")
+
+    resultado_reimportado = pipeline.run(tipos=["despesas"], ano=2026)
+
+    assert resultado_reimportado["despesas"].atualizados == 1
+    assert resultado_reimportado["despesas"].ignorados == 1
+    assert session.query(DespesaDocumento).count() == 2
+
+    atualizado_primeiro = (
+        session.query(DespesaDocumento)
+        .filter(
+            DespesaDocumento.tipo_origem == "passagem",
+            DespesaDocumento.sequencia_origem == 1,
+        )
+        .one()
+    )
+    assert atualizado_primeiro.valor_liquidado == Decimal("1900.09")
+    assert atualizado_primeiro.valor_pago == Decimal("1900.09")
+
+    session.close()

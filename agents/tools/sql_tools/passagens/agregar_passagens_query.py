@@ -1,4 +1,4 @@
-"""Tool publica para agregacoes de despesas."""
+"""Tool publica para agregacoes de passagens."""
 
 from __future__ import annotations
 
@@ -11,12 +11,12 @@ from agents.tools.registry import PUBLIC_SCOPE, register
 from database import session as session_manager
 from database.models import DespesaDocumento
 
-from .agregar_despesas_schema import (
-    AgregarDespesasMetadata,
-    AgregarDespesasParams,
-    AgregarDespesasResponse,
+from .agregar_passagens_schema import (
+    AgregarPassagensMetadata,
+    AgregarPassagensParams,
+    AgregarPassagensResponse,
 )
-from .consultar_despesas_query import load_filtered_despesas
+from .consultar_passagens_query import load_filtered_passagens
 
 
 def _decimal_to_json(value: Decimal) -> float:
@@ -27,8 +27,8 @@ def _metric(registros: list[DespesaDocumento], metrica: str) -> Decimal | int:
     if metrica == "contagem":
         return len(registros)
     field_by_metric = {
-        "soma_valor_documento": "valor_documento",
         "soma_valor_empenhado": "valor_empenhado",
+        "soma_valor_liquidado": "valor_liquidado",
         "soma_valor_pago": "valor_pago",
         "soma_valor_anulado": "valor_anulado",
     }
@@ -44,24 +44,21 @@ def _metric_to_json(value: Decimal | int) -> float | int:
 
 def _group_value(registro: DespesaDocumento, group: str) -> str | int | None:
     mapping = {
-        "tipo": registro.tipo_origem,
         "origem": registro.origem,
         "ano": registro.exercicio,
-        "mes": registro.data_documento.month,
-        "unidade_responsavel": registro.unidade_gestora,
-        "area": registro.funcao,
-        "credor": registro.credor,
-        "conta_extra": registro.conta_extra_descricao,
+        "beneficiario": registro.credor,
+        "unidade_gestora": registro.unidade_gestora,
+        "categoria": registro.categoria_documento,
     }
     return mapping[group]
 
 
 @register(
-    name="agregar_despesas",
+    name="agregar_passagens",
     scope=PUBLIC_SCOPE,
-    tags=["domain:despesas", "shape:aggregate"],
+    tags=["domain:passagens", "shape:aggregate"],
 )
-def agregar_despesas(
+def agregar_passagens(
     filtros: dict[str, Any] | None = None,
     agrupar_por: str | None = None,
     metrica: str = "soma_valor_pago",
@@ -70,43 +67,16 @@ def agregar_despesas(
     limite: int = 10,
 ) -> dict[str, Any]:
     """
-    Calcula totais, contagens e rankings sobre documentos de despesa.
+    Calcula totais, contagens e rankings sobre registros consolidados de passagens.
 
-    Use esta tool quando a pergunta pedir total pago, total empenhado, total
-    anulado, maiores credores ou comparacoes por area, origem, unidade ou tipo
-    de documento.
-    NAO use para listar documentos individuais; para isso use
-    `consultar_despesas`.
-    NAO use para planejamento orcamentario; para isso use
-    `agregar_planejamento`.
-
-    Args:
-        filtros: Objeto com filtros opcionais. Campos aceitos: `tipo`, `origem`,
-            `ano`, `data_inicio`, `data_fim`, `numero`, `credor`, `cpf_cnpj`,
-            `unidade_responsavel`, `area`, `conta_extra`, `contrato` e
-            `descricao`. `tipo` aceita `empenho`, `restos_a_pagar`,
-            `documento_extra`, `diaria` ou `passagem`. Datas em `YYYY-MM-DD`.
-        agrupar_por: Campo opcional de agrupamento. Aceita `tipo`, `origem`,
-            `ano`, `mes`, `unidade_responsavel`, `area`, `credor` ou
-            `conta_extra`. Se nao for informado, a tool retorna um `valor_total`.
-        metrica: Metrica calculada. Aceita `contagem`, `soma_valor_documento`,
-            `soma_valor_empenhado`, `soma_valor_pago` ou `soma_valor_anulado`.
-        ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.
-        ordem: Direcao da ordenacao: `asc` ou `desc`.
-        limite: Quantidade maxima de grupos retornados. Inteiro de 1 a 100.
-
-    Returns:
-        dict com:
-        - `total_grupos`: total de grupos encontrados.
-        - `resultados`: lista de grupos; cada item traz o campo de agrupamento e a
-          metrica calculada.
-        - `metadata`: filtros aplicados e configuracao da agregacao.
-        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
-        - `mensagem`: aviso quando so parte dos grupos for exibida.
-        - `sugestao`: dica quando nenhuma despesa corresponder aos filtros.
+    Use esta tool quando a pergunta pedir total pago, total empenhado,
+    quantidade de beneficiarios ou rankings de passagens por beneficiario,
+    origem, unidade gestora ou categoria.
+    NAO use para listar registros individuais; para isso use
+    `consultar_passagens`.
     """
     try:
-        params = AgregarDespesasParams.model_validate(
+        params = AgregarPassagensParams.model_validate(
             {
                 "filtros": filtros,
                 "agrupar_por": agrupar_por,
@@ -117,13 +87,13 @@ def agregar_despesas(
             }
         )
     except ValidationError as exc:
-        fallback_metadata = AgregarDespesasMetadata(
+        fallback_metadata = AgregarPassagensMetadata(
             metrica="soma_valor_pago",
             ordenar_por="metrica",
             ordem="desc",
             limite=10,
         )
-        return AgregarDespesasResponse(
+        return AgregarPassagensResponse(
             total_grupos=0,
             resultados=[],
             metadata=fallback_metadata,
@@ -131,9 +101,9 @@ def agregar_despesas(
         ).model_dump(mode="json")
 
     with session_manager.get_session() as session:
-        registros = load_filtered_despesas(session, params.filtros)
+        registros = load_filtered_passagens(session, params.filtros)
 
-    metadata = AgregarDespesasMetadata(
+    metadata = AgregarPassagensMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
         agrupar_por=params.agrupar_por,
         metrica=params.metrica,
@@ -144,13 +114,13 @@ def agregar_despesas(
 
     if params.agrupar_por is None:
         valor_total = _metric_to_json(_metric(registros, params.metrica))
-        return AgregarDespesasResponse(
+        return AgregarPassagensResponse(
             total_grupos=0,
             resultados=[],
             metadata=metadata,
             valor_total=valor_total,
             sugestao=(
-                "Nenhuma despesa encontrada com os filtros."
+                "Nenhuma passagem encontrada com os filtros."
                 if not valor_total
                 else None
             ),
@@ -182,12 +152,12 @@ def agregar_despesas(
     if total_grupos > len(resultados):
         mensagem = f"Mostrando {len(resultados)} de {total_grupos} grupos encontrados."
 
-    return AgregarDespesasResponse(
+    return AgregarPassagensResponse(
         total_grupos=total_grupos,
         resultados=resultados,
         metadata=metadata,
         mensagem=mensagem,
         sugestao=(
-            "Nenhuma despesa encontrada com os filtros." if not resultados else None
+            "Nenhuma passagem encontrada com os filtros." if not resultados else None
         ),
     ).model_dump(mode="json")

@@ -12,7 +12,7 @@ from loguru import logger
 from rich.console import Console
 from rich.progress import Progress
 from rich.table import Table as RichTable
-from sqlalchemy import MetaData, Table as SQLATable
+from sqlalchemy import MetaData, Table as SQLATable, func
 
 from agents.rag.indexing import KnowledgeIndexError, build_knowledge_index
 from agents.rag.indexing import get_knowledge_index_status
@@ -78,6 +78,20 @@ def _recriar_base_importacao() -> None:
     subprocess.run(["alembic", "upgrade", "head"], check=True)
 
 
+def _contagem_despesas_por_tipo(session) -> dict[str, int]:
+    """Retorna subtotal de documentos de despesa agrupado por `tipo_origem`."""
+
+    return {
+        tipo: quantidade
+        for tipo, quantidade in session.query(
+            DespesaDocumento.tipo_origem,
+            func.count(DespesaDocumento.id),
+        )
+        .group_by(DespesaDocumento.tipo_origem)
+        .all()
+    }
+
+
 @db_app.command("init")
 def db_init() -> None:
     """Executa migrations do Alembic."""
@@ -131,6 +145,8 @@ def db_status() -> None:
         tabela.add_row(
             "despesa_documentos", str(session.query(DespesaDocumento).count())
         )
+        for tipo, quantidade in sorted(_contagem_despesas_por_tipo(session).items()):
+            tabela.add_row(f"despesa_documentos:{tipo}", str(quantidade))
         tabela.add_row(
             "despesa_documento_itens",
             str(session.query(DespesaDocumentoItem).count()),
@@ -234,6 +250,15 @@ def importar(
         f"Total -> inseridos={total_i}, atualizados={total_a}, ignorados={total_ig}, erros={total_e}",
         style="bold green" if total_e == 0 else "bold red",
     )
+
+    if "despesas" in relatorio:
+        with get_session() as session:
+            subtotal = _contagem_despesas_por_tipo(session)
+        if subtotal:
+            detalhes = ", ".join(
+                f"{tipo}={quantidade}" for tipo, quantidade in sorted(subtotal.items())
+            )
+            console.print(f"Despesas por tipo -> {detalhes}")
 
 
 @rag_app.command("index")

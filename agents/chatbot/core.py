@@ -21,6 +21,7 @@ from agents.router import route_user_query
 class ChatMessage:
     role: str
     content: str
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -120,11 +121,13 @@ class ChatbotApplication:
     def ask(self, question: str) -> ChatResponse:
         normalized_question = _normalize_question(question)
         prior_user_queries = _collect_prior_user_queries(self.session.history)
+        prior_messages = _collect_prior_messages(self.session.history)
 
         response = _build_pre_agent_response(
             normalized_question,
             has_history=bool(self.session.history),
             prior_user_queries=prior_user_queries,
+            prior_messages=prior_messages,
         )
         if response is None:
             response = self.backend.answer(
@@ -132,7 +135,12 @@ class ChatbotApplication:
                 session_id=self.session.id,
             )
 
-        self._record_exchange(normalized_question, response.content)
+        self._record_exchange(
+            normalized_question,
+            response.content,
+            metadata=response.metadata,
+            guardrail_triggered=response.guardrail_triggered,
+        )
 
         return response
 
@@ -141,13 +149,20 @@ class ChatbotApplication:
 
         normalized_question = _normalize_question(question)
         prior_user_queries = _collect_prior_user_queries(self.session.history)
+        prior_messages = _collect_prior_messages(self.session.history)
         response = _build_pre_agent_response(
             normalized_question,
             has_history=bool(self.session.history),
             prior_user_queries=prior_user_queries,
+            prior_messages=prior_messages,
         )
         if response is not None:
-            self._record_exchange(normalized_question, response.content)
+            self._record_exchange(
+                normalized_question,
+                response.content,
+                metadata=response.metadata,
+                guardrail_triggered=response.guardrail_triggered,
+            )
             return iter([response.content])
 
         stream_answer = getattr(self.backend, "stream_answer", None)
@@ -169,9 +184,25 @@ class ChatbotApplication:
         self.session = ChatSession(id=session_id or str(uuid4()))
         return self.session
 
-    def _record_exchange(self, question: str, answer: str) -> None:
+    def _record_exchange(
+        self,
+        question: str,
+        answer: str,
+        *,
+        metadata: dict[str, Any] | None = None,
+        guardrail_triggered: bool = False,
+    ) -> None:
         self.session.history.append(ChatMessage(role="user", content=question))
-        self.session.history.append(ChatMessage(role="assistant", content=answer))
+        assistant_metadata = dict(metadata or {})
+        if guardrail_triggered:
+            assistant_metadata["guardrail_triggered"] = True
+        self.session.history.append(
+            ChatMessage(
+                role="assistant",
+                content=answer,
+                metadata=assistant_metadata,
+            )
+        )
 
     def _stream_backend_response(
         self,
@@ -310,6 +341,7 @@ def _build_pre_agent_response(
     *,
     has_history: bool,
     prior_user_queries: tuple[str, ...] = (),
+    prior_messages: tuple[tuple[str, str, bool], ...] = (),
 ) -> ChatResponse | None:
     """Mantem respostas locais e guardrails na fronteira pre-modelo."""
 
@@ -321,6 +353,7 @@ def _build_pre_agent_response(
         question,
         has_history=has_history,
         prior_user_queries=prior_user_queries,
+        prior_messages=prior_messages,
     )
 
 
@@ -344,6 +377,7 @@ def _build_guardrail_response(
     *,
     has_history: bool,
     prior_user_queries: tuple[str, ...] = (),
+    prior_messages: tuple[tuple[str, str, bool], ...] = (),
 ) -> ChatResponse | None:
     route = route_user_query(question)
     decision = evaluate_public_query_guardrails(
@@ -351,6 +385,7 @@ def _build_guardrail_response(
         compatibility_route=route,
         has_history=has_history,
         prior_user_queries=prior_user_queries,
+        prior_messages=prior_messages,
     )
     if decision.allowed:
         return None
@@ -374,3 +409,16 @@ def _normalize_text(text: str) -> str:
 
 def _collect_prior_user_queries(history: list[ChatMessage]) -> tuple[str, ...]:
     return tuple(message.content for message in history if message.role == "user")
+
+
+def _collect_prior_messages(
+    history: list[ChatMessage],
+) -> tuple[tuple[str, str, bool], ...]:
+    return tuple(
+        (
+            message.role,
+            message.content,
+            bool(message.metadata.get("guardrail_triggered")),
+        )
+        for message in history
+    )

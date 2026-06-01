@@ -97,6 +97,10 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "documentos extras",
     "diaria",
     "diarias",
+    "passagem",
+    "passagens",
+    "locomocao",
+    "despesas com locomocao",
     "credor",
     "credores",
     "patrimonio",
@@ -167,6 +171,13 @@ DIARIAS_DOMAIN_KEYWORDS = (
     "diarias",
     "adiantamento de viagem",
     "adiantamentos de viagem",
+)
+
+PASSAGENS_DOMAIN_KEYWORDS = (
+    "passagem",
+    "passagens",
+    "locomocao",
+    "despesas com locomocao",
 )
 
 PATRIMONIOS_DOMAIN_KEYWORDS = (
