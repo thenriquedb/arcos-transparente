@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 XML_FALLBACK_ENCODING = "ISO-8859-1"
 _ALLOWED_CONTROL_CODES = {9, 10, 13}
 _XML_DECLARATION_ENCODING_PATTERN = re.compile(
-    br"""<\?xml[^>]*encoding\s*=\s*['"]([A-Za-z][A-Za-z0-9._-]*)['"]""",
+    rb"""<\?xml[^>]*encoding\s*=\s*['"]([A-Za-z][A-Za-z0-9._-]*)['"]""",
     re.IGNORECASE,
 )
 _BYTE_ORDER_MARK_ENCODINGS = (

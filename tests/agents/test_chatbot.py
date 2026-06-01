@@ -247,8 +247,51 @@ def test_chatbot_application_permite_followup_eliptico_com_contexto_publico() ->
     )
     assert segunda_resposta.content == "resposta para: E o de 2025?"
     assert backend.calls == [
-        ("qual foi o custo do festival gastronomico de 2026?", "sessao-followup-evento"),
+        (
+            "qual foi o custo do festival gastronomico de 2026?",
+            "sessao-followup-evento",
+        ),
         ("E o de 2025?", "sessao-followup-evento"),
+    ]
+
+
+def test_chatbot_application_permite_followup_temporal_em_outro_escopo() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-contratos"),
+    )
+
+    primeira_resposta = app.ask("Quais contratos da saude?")
+    segunda_resposta = app.ask("E em 2024?")
+
+    assert primeira_resposta.content == "resposta para: Quais contratos da saude?"
+    assert segunda_resposta.content == "resposta para: E em 2024?"
+    assert backend.calls == [
+        ("Quais contratos da saude?", "sessao-followup-contratos"),
+        ("E em 2024?", "sessao-followup-contratos"),
+    ]
+
+
+def test_chatbot_application_bloqueia_followup_apos_turno_bloqueado_intermediario() -> (
+    None
+):
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-interrompido"),
+    )
+
+    primeira_resposta = app.ask("Quais contratos da saude?")
+    resposta_bloqueada = app.ask("Como implementar uma lista encadeada em Python?")
+    terceira_resposta = app.ask("E em 2024?")
+
+    assert primeira_resposta.content == "resposta para: Quais contratos da saude?"
+    assert resposta_bloqueada.guardrail_triggered is True
+    assert terceira_resposta.guardrail_triggered is True
+    assert terceira_resposta.metadata == {"guardrail_category": "out_of_scope"}
+    assert backend.calls == [
+        ("Quais contratos da saude?", "sessao-followup-interrompido")
     ]
 
 
@@ -284,6 +327,57 @@ def test_chatbot_application_stream_com_backend_fake() -> None:
         " em stream para: Quais veiculos da prefeitura?",
     ]
     assert backend.calls == [("Quais veiculos da prefeitura?", "sessao-stream")]
+
+
+def test_chatbot_application_stream_permite_followup_temporal_em_receitas() -> None:
+    backend = FakeStreamingBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-stream-receitas"),
+    )
+
+    primeira_resposta = app.ask("Quanto foi arrecadado com IPTU em 2025?")
+    chunks = list(app.stream("E em 2024?"))
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: Quanto foi arrecadado com IPTU em 2025?"
+    )
+    assert chunks == ["resposta", " em stream para: E em 2024?"]
+    assert backend.calls == [
+        ("Quanto foi arrecadado com IPTU em 2025?", "sessao-stream-receitas"),
+        ("E em 2024?", "sessao-stream-receitas"),
+    ]
+
+
+def test_chatbot_application_stream_bloqueia_followup_apos_turno_bloqueado() -> None:
+    backend = FakeStreamingBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-stream-followup-bloqueado"),
+    )
+
+    primeira_resposta = app.ask("Quanto foi arrecadado com IPTU em 2025?")
+    resposta_bloqueada = app.ask("Como implementar uma lista encadeada em Python?")
+    chunks = list(app.stream("E em 2024?"))
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: Quanto foi arrecadado com IPTU em 2025?"
+    )
+    assert resposta_bloqueada.guardrail_triggered is True
+    assert chunks == [
+        (
+            "Posso ajudar apenas com consultas aos dados públicos municipais "
+            "disponíveis neste sistema, especialmente sobre servidores, "
+            "secretarias, salários-base, histórico de pagamentos, licitações, "
+            "despesas, patrimônio, quadro de pessoal, planejamento, receitas "
+            "e políticos eleitos."
+        )
+    ]
+    assert backend.calls == [
+        ("Quanto foi arrecadado com IPTU em 2025?", "sessao-stream-followup-bloqueado")
+    ]
 
 
 def test_chatbot_application_stream_fallback_para_resposta_unica() -> None:

@@ -170,6 +170,13 @@ Os guardrails hard-coded rodam antes da execução do modelo e bloqueiam:
 - perguntas fora do escopo do sistema
 - tentativas de prompt injection
 
+Eles também devem admitir continuações curtas quando houver contexto público
+recente e válido na sessão, por exemplo:
+
+- "Quais contratos da saúde?" -> "E em 2024?"
+- "Quanto foi arrecadado com IPTU em 2025?" -> "E as maiores?"
+- "Quanto foi pago na saúde em 2025?" -> "E no FUMUSA?"
+
 Exemplos de bloqueio:
 
 - "Como implementar uma lista encadeada em Python?"

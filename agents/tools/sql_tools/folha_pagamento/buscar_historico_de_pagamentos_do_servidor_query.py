@@ -306,7 +306,10 @@ def _resolve_nome_por_cargo_politico(
     ]
 
     if not em_exercicio:
-        return "", f"Não encontrei o {cargo_politico} em exercício nos dados disponíveis da base local até o momento."
+        return (
+            "",
+            f"Não encontrei o {cargo_politico} em exercício nos dados disponíveis da base local até o momento.",
+        )
 
     if len(em_exercicio) > 1:
         nomes = ", ".join(eleito.nome_completo for eleito in em_exercicio[:5])
