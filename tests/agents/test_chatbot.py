@@ -228,6 +228,21 @@ def test_chatbot_application_permite_consulta_no_escopo_sem_rota_confiante(
     assert backend.calls == [("Quais contratos da educacao?", "sessao-sem-rota")]
 
 
+def test_chatbot_application_permite_consulta_de_investimento_em_saude() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-investimento-saude"),
+    )
+
+    response = app.ask("Quanto foi investido na saude em 2026?")
+
+    assert response.content == "resposta para: Quanto foi investido na saude em 2026?"
+    assert backend.calls == [
+        ("Quanto foi investido na saude em 2026?", "sessao-investimento-saude")
+    ]
+
+
 def test_chatbot_application_permite_pergunta_documental_do_acervo_markdown() -> None:
     backend = FakeBackend()
     app = ChatbotApplication(

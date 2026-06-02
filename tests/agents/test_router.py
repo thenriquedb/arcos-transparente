@@ -416,6 +416,20 @@ from agents.router import (
             },
         ),
         (
+            "Quanto foi investido na saude em 2026?",
+            "planejamento",
+            "agregacao_ranking",
+            "agregar_planejamento",
+            {
+                "filtros": {"origem": "saude", "ano": 2026, "area": "saude"},
+                "agrupar_por": None,
+                "metrica": "soma_valor_pago",
+                "ordenar_por": "metrica",
+                "ordem": "desc",
+                "limite": 10,
+            },
+        ),
+        (
             "Foi planejado algum recurso para a fumusa?",
             "planejamento",
             "agregacao_ranking",
@@ -840,6 +854,13 @@ def test_evaluate_query_guardrails_permitem_consulta_de_frota_sem_ancora_extra()
     None
 ):
     decision = evaluate_query_guardrails("Quais sao todos os veiculos da frota?")
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
+def test_evaluate_query_guardrails_permitem_investimento_em_saude() -> None:
+    decision = evaluate_query_guardrails("Quanto foi investido na saude em 2026?")
 
     assert decision.allowed is True
     assert decision.category == "allowed"

@@ -409,7 +409,10 @@ def _extract_planejamento_metric(normalized_text: str) -> str:
         return "soma_valor_comprometido"
     if "liquidado" in normalized_text or "confirmado" in normalized_text:
         return "soma_valor_confirmado"
-    if _contains_any(normalized_text, ("pago", "pagos", "gasto")):
+    if _contains_any(
+        normalized_text,
+        ("pago", "pagos", "gasto", "investido", "investida", "investimento"),
+    ):
         return "soma_valor_pago"
     return "soma_orcamento_atualizado"
 

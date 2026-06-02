@@ -281,6 +281,8 @@ PLANEJAMENTO_DIRECT_KEYWORDS = (
     "dotacao",
     "empenhado",
     "liquidado",
+    "investimento",
+    "investimentos",
 )
 
 PLANEJAMENTO_ENTITY_HINT_KEYWORDS = (
@@ -297,4 +299,8 @@ PLANEJAMENTO_ENTITY_HINT_KEYWORDS = (
     "gastos",
     "pago",
     "pagos",
+    "investido",
+    "investida",
+    "investimento",
+    "investimentos",
 )
