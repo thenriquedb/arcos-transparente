@@ -836,6 +836,15 @@ def test_evaluate_query_guardrails_permitem_horario_de_onibus_do_acervo() -> Non
     assert decision.category == "allowed"
 
 
+def test_evaluate_query_guardrails_permitem_consulta_de_frota_sem_ancora_extra() -> (
+    None
+):
+    decision = evaluate_query_guardrails("Quais sao todos os veiculos da frota?")
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
 def test_evaluate_query_guardrails_permitem_followup_eliptico_com_contexto_publico() -> (
     None
 ):

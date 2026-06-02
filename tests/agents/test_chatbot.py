@@ -158,9 +158,9 @@ def test_chatbot_application_stream_bloqueia_pergunta_vazia_sem_chamar_backend()
         (
             "Envie uma pergunta sobre os dados públicos municipais disponíveis "
             "no sistema ou sobre o acervo municipal curado, como servidores, "
-            "secretarias, salários-base, licitações, despesas, patrimônio, "
-            "planejamento, receitas, políticos eleitos, telefones úteis ou "
-            "horários de ônibus."
+            "secretarias, salários-base, licitações, despesas, diárias, "
+            "passagens, frota e veículos, patrimônio, planejamento, receitas, "
+            "políticos eleitos, telefones úteis ou horários de ônibus."
         )
     ]
     assert backend.calls == []
@@ -401,6 +401,23 @@ def test_chatbot_application_stream_com_backend_fake() -> None:
     assert backend.calls == [("Quais veiculos da prefeitura?", "sessao-stream")]
 
 
+def test_chatbot_application_permite_consulta_de_frota_sem_prefeitura_no_texto() -> (
+    None
+):
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-frota-sem-ancora"),
+    )
+
+    response = app.ask("Quais sao todos os veiculos da frota?")
+
+    assert response.content == "resposta para: Quais sao todos os veiculos da frota?"
+    assert backend.calls == [
+        ("Quais sao todos os veiculos da frota?", "sessao-frota-sem-ancora")
+    ]
+
+
 def test_chatbot_application_stream_permite_followup_temporal_em_receitas() -> None:
     backend = FakeStreamingBackend()
     app = ChatbotApplication(
@@ -443,9 +460,10 @@ def test_chatbot_application_stream_bloqueia_followup_apos_turno_bloqueado() -> 
             "Posso ajudar apenas com consultas aos dados públicos municipais "
             "disponíveis neste sistema e com o acervo municipal curado local, "
             "especialmente sobre servidores, secretarias, salários-base, "
-            "histórico de pagamentos, licitações, despesas, patrimônio, quadro "
-            "de pessoal, planejamento, receitas, políticos eleitos, telefones "
-            "úteis, estrutura organizacional e horários de ônibus."
+            "histórico de pagamentos, licitações, despesas, diárias, "
+            "passagens, frota, veículos, patrimônio, quadro de pessoal, "
+            "planejamento, receitas, políticos eleitos, telefones úteis, "
+            "estrutura organizacional e horários de ônibus."
         )
     ]
     assert backend.calls == [
