@@ -137,9 +137,10 @@ def evaluate_public_query_guardrails(
             message=(
                 "Envie uma pergunta sobre os dados públicos municipais disponíveis "
                 "no sistema ou sobre o acervo municipal curado, como servidores, "
-                "secretarias, salários-base, licitações, despesas, patrimônio, "
-                "planejamento, receitas, políticos eleitos, telefones úteis ou "
-                "horários de ônibus."
+                "secretarias, salários-base, licitações, despesas, diárias, "
+                "passagens, frota e veículos, patrimônio, planejamento, "
+                "receitas, políticos eleitos, telefones úteis ou horários de "
+                "ônibus."
             ),
         )
 
@@ -198,9 +199,10 @@ def evaluate_public_query_guardrails(
             "Posso ajudar apenas com consultas aos dados públicos municipais "
             "disponíveis neste sistema e com o acervo municipal curado local, "
             "especialmente sobre servidores, secretarias, salários-base, "
-            "histórico de pagamentos, licitações, despesas, patrimônio, quadro "
-            "de pessoal, planejamento, receitas, políticos eleitos, telefones "
-            "úteis, estrutura organizacional e horários de ônibus."
+            "histórico de pagamentos, licitações, despesas, diárias, "
+            "passagens, frota, veículos, patrimônio, quadro de pessoal, "
+            "planejamento, receitas, políticos eleitos, telefones úteis, "
+            "estrutura organizacional e horários de ônibus."
         ),
     )
 

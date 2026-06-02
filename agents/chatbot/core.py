@@ -365,7 +365,8 @@ def _build_local_response(question: str) -> ChatResponse | None:
                 "Sou o assistente do projeto Arcos Transparente. Ajudo a consultar "
                 "os dados públicos municipais disponíveis na base local, como "
                 "servidores, folha de pagamento, contratos, licitações, despesas, "
-                "receitas, patrimônio, planejamento, quadro de pessoal e eleitos."
+                "diárias, passagens, frota e veículos, receitas, patrimônio, "
+                "planejamento, quadro de pessoal e eleitos."
             ),
             metadata={"local_response": "identity"},
         )
