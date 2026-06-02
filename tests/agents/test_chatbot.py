@@ -360,6 +360,44 @@ def test_chatbot_application_permite_followup_de_ano_apos_clarificacao_de_diaria
     ]
 
 
+def test_chatbot_application_permite_confirmacao_curta_apos_clarificacao_publica() -> (
+    None
+):
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-confirmacao"),
+    )
+
+    primeira_resposta = app.ask(
+        "quanto a prefeitura recebeu de emendas parlamentares em 2026?"
+    )
+    app.session.history.append(
+        ChatMessage(
+            role="assistant",
+            content=(
+                "Você poderia confirmar se quer informações apenas para o ano "
+                "de 2026 sobre emendas parlamentares recebidas pela "
+                "prefeitura de Arcos?"
+            ),
+        )
+    )
+    segunda_resposta = app.ask("sim")
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: quanto a prefeitura recebeu de emendas parlamentares em 2026?"
+    )
+    assert segunda_resposta.content == "resposta para: sim"
+    assert backend.calls == [
+        (
+            "quanto a prefeitura recebeu de emendas parlamentares em 2026?",
+            "sessao-followup-confirmacao",
+        ),
+        ("sim", "sessao-followup-confirmacao"),
+    ]
+
+
 def test_chatbot_application_permite_followup_curto_do_acervo_markdown() -> None:
     backend = FakeBackend()
     app = ChatbotApplication(

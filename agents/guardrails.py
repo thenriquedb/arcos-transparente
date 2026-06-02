@@ -116,6 +116,18 @@ _SHORT_RANKING_STOPWORDS = frozenset(
         "delas",
     }
 )
+_CONFIRMATION_TOKENS = frozenset(
+    {
+        "sim",
+        "isso",
+        "exato",
+        "correto",
+        "confirmo",
+        "confirmado",
+        "pode ser",
+        "pode",
+    }
+)
 
 
 def evaluate_public_query_guardrails(
@@ -178,6 +190,13 @@ def evaluate_public_query_guardrails(
         return GuardrailDecision(allowed=True, category="allowed")
 
     if has_history and contextual_follow_up and has_public_context_anchor:
+        return GuardrailDecision(allowed=True, category="allowed")
+
+    if (
+        has_history
+        and has_public_context_anchor
+        and _looks_like_confirmation_reply(normalized_text, prior_messages)
+    ):
         return GuardrailDecision(allowed=True, category="allowed")
 
     if compatibility_route is not None and compatibility_route.confident:
@@ -331,6 +350,41 @@ def _looks_like_short_ranking_follow_up(normalized_text: str) -> bool:
         token in _SHORT_RANKING_TOKENS or token in _SHORT_RANKING_STOPWORDS
         for token in tokens
     )
+
+
+def _looks_like_confirmation_reply(
+    normalized_text: str,
+    prior_messages: Sequence[tuple[str, str, bool]],
+) -> bool:
+    if normalized_text not in _CONFIRMATION_TOKENS:
+        return False
+
+    for role, content, guardrail_triggered in reversed(prior_messages):
+        if guardrail_triggered:
+            return False
+        if role != "assistant":
+            continue
+
+        normalized_content = _normalize(content)
+        if not normalized_content:
+            return False
+        if "?" in content:
+            return True
+        return any(
+            hint in normalized_content
+            for hint in (
+                "voce quer",
+                "voce gostaria",
+                "pode ser",
+                "confirma",
+                "confirmar",
+                "ano especifico",
+                "qual periodo",
+                "qual ano",
+            )
+        )
+
+    return False
 
 
 def _has_public_filter_hint(normalized_text: str) -> bool:

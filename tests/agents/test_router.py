@@ -962,6 +962,35 @@ def test_evaluate_query_guardrails_permitem_followup_apos_clarificacao_publica()
     assert decision.category == "allowed"
 
 
+def test_evaluate_query_guardrails_permitem_confirmacao_curta_apos_clarificacao_publica() -> (
+    None
+):
+    decision = evaluate_query_guardrails(
+        "sim",
+        has_history=True,
+        prior_user_queries=("quanto a prefeitura recebeu de emendas parlamentares em 2026?",),
+        prior_messages=(
+            (
+                "user",
+                "quanto a prefeitura recebeu de emendas parlamentares em 2026?",
+                False,
+            ),
+            (
+                "assistant",
+                (
+                    "Você poderia confirmar se quer informações apenas para o "
+                    "ano de 2026 sobre emendas parlamentares recebidas pela "
+                    "prefeitura de Arcos?"
+                ),
+                False,
+            ),
+        ),
+    )
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
 def test_evaluate_query_guardrails_permitem_refinamento_curto_com_anchor_publico() -> (
     None
 ):
