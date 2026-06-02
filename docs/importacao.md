@@ -1,10 +1,10 @@
-# Importação de XML para SQLite
+# Importação de Arquivos Estruturados para SQLite
 
 ## Pré-requisitos
 
 - Python 3.12+
 - Dependências do projeto instaladas (`sqlalchemy`, `alembic`, `typer`, `rich`, `loguru`, `python-dotenv`)
-- Arquivos XML disponíveis em `data/xml/`
+- Arquivos XML e CSV suportados disponíveis em `data/xml/`
 
 ## Configuração do `.env`
 
@@ -64,6 +64,7 @@ python cli.py importar --tipo planejamentos
 python cli.py importar --tipo despesas
 python cli.py importar --tipo patrimonios
 python cli.py importar --tipo quadro_pessoal
+python cli.py importar --tipo transferencias_financeiras
 ```
 
 ### Importar por ano
@@ -93,14 +94,23 @@ python cli.py importar --force
 - Em falha, ocorre rollback do batch.
 - Erros são registrados com log detalhado via `loguru`.
 - Todos os XMLs são lidos pela camada compartilhada respeitando primeiro BOM e `encoding` declarado no cabeçalho XML.
+- CSVs suportados do projeto usam leitura dedicada com `ISO-8859-1` como compatibilidade padrão para exports do portal.
 - Quando o XML não traz BOM nem declaração de `encoding`, a importação usa `ISO-8859-1` como fallback explícito de compatibilidade.
 - Se o XML declarar um `encoding` inválido, não suportado ou incompatível com os bytes do arquivo, a importação falha com erro descritivo em vez de tentar outro codec silenciosamente.
 - Caracteres de controle inválidos são removidos antes do parse e antes da persistência no banco.
 
+## Fontes atualmente suportadas
+
+- XMLs administrativos e de transparência já consolidados do projeto
+- CSVs dedicados de `diarias`
+- CSVs dedicados de `passagens`
+- XMLs `recebimentos-YYYY.xml` de `transferencias-financeiras`
+- CSVs `emendas-parlamentares-YYYY.csv` de `transferencias-financeiras`
+
 ## Como adicionar novo tipo de arquivo
 
-1. Criar parser em `ingestion/parsers/xml/novo_tipo_parser.py` retornando `list[dict]` e reutilizando `ingestion/parsers/xml/shared.py` para leitura, resolução de encoding e sanitização.
-2. Criar modelo SQLAlchemy correspondente em `database/models.py`.
+1. Criar parser em `ingestion/parsers/xml/` ou `ingestion/parsers/csv/`, conforme a fonte, retornando `list[dict]` e reutilizando as camadas compartilhadas de leitura, resolução de encoding e sanitização.
+2. Criar modelo SQLAlchemy correspondente em `database/models/`.
 3. Criar migration Alembic para nova tabela/índices.
 4. Registrar parser + modelo no mapeamento de `ingestion/pipeline.py`.
 5. Opcional: expandir opção `--tipo` no CLI para incluir o novo tipo.

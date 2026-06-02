@@ -25,6 +25,10 @@ from agents.routing.routes.passagens import (
     _try_route_passagens_agregacao,
     _try_route_passagens_lista,
 )
+from agents.routing.routes.transferencias_financeiras import (
+    _try_route_transferencias_financeiras_agregacao,
+    _try_route_transferencias_financeiras_lista,
+)
 from agents.routing.routes.despesas import (
     _try_route_despesas_agregacao,
     _try_route_despesas_lista,
@@ -67,22 +71,24 @@ ROUTE_PRIORITY_CHAIN = (
     _try_route_licitacoes_agregacao,  # 4. Rankings e contagens de licitações
     _try_route_diarias_agregacao,  # 5. Totais e rankings de diarias
     _try_route_passagens_agregacao,  # 6. Totais e rankings de passagens
-    _try_route_despesas_agregacao,  # 7. Totais e rankings de despesas
-    _try_route_patrimonios_agregacao,  # 8. Totais e rankings de patrimônio
-    _try_route_quadro_pessoal_agregacao,  # 9. Totais de quadro de pessoal
-    _try_route_planejamento_agregacao,  # 10. Totais e rankings de planejamento
-    _try_route_receitas_agregacao,  # 11. Totais e rankings de receitas
-    _try_route_agregacao,  # 12. Rankings e contagens de servidores
-    _try_route_licitacoes_lista,  # 13. Listas e detalhes de licitações
-    _try_route_diarias_lista,  # 14. Listas de diarias
-    _try_route_passagens_lista,  # 15. Listas de passagens
-    _try_route_despesas_lista,  # 16. Listas de despesas
-    _try_route_patrimonios_lista,  # 17. Listas de patrimônio
-    _try_route_eleitos_lista,  # 18. Listas de eleitos
-    _try_route_quadro_pessoal_lista,  # 19. Listas de quadro de pessoal
-    _try_route_planejamento_saude_lista,  # 20. Listas de planejamento
-    _try_route_receitas_lista,  # 21. Listas de receitas
-    _try_route_lista,  # 22. Listas de servidores
+    _try_route_transferencias_financeiras_agregacao,  # 7. Totais e rankings de transferencias
+    _try_route_despesas_agregacao,  # 8. Totais e rankings de despesas
+    _try_route_patrimonios_agregacao,  # 9. Totais e rankings de patrimônio
+    _try_route_quadro_pessoal_agregacao,  # 10. Totais de quadro de pessoal
+    _try_route_planejamento_agregacao,  # 11. Totais e rankings de planejamento
+    _try_route_receitas_agregacao,  # 12. Totais e rankings de receitas
+    _try_route_agregacao,  # 13. Rankings e contagens de servidores
+    _try_route_licitacoes_lista,  # 14. Listas e detalhes de licitações
+    _try_route_diarias_lista,  # 15. Listas de diarias
+    _try_route_passagens_lista,  # 16. Listas de passagens
+    _try_route_transferencias_financeiras_lista,  # 17. Listas de transferencias
+    _try_route_despesas_lista,  # 18. Listas de despesas
+    _try_route_patrimonios_lista,  # 19. Listas de patrimônio
+    _try_route_eleitos_lista,  # 20. Listas de eleitos
+    _try_route_quadro_pessoal_lista,  # 21. Listas de quadro de pessoal
+    _try_route_planejamento_saude_lista,  # 22. Listas de planejamento
+    _try_route_receitas_lista,  # 23. Listas de receitas
+    _try_route_lista,  # 24. Listas de servidores
 )
 
 

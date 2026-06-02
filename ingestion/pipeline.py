@@ -15,6 +15,7 @@ from database.models import (
     DespesaDocumento,
     DespesaDocumentoComprobatorio,
     DespesaDocumentoItem,
+    EmendaParlamentar,
     Eleito,
     FolhaCargo,
     FolhaLotacao,
@@ -33,11 +34,15 @@ from database.models import (
     ReceitaLancamento,
     ReceitaNatureza,
     Servidor,
+    TransferenciaFinanceiraMovimento,
     VencedorLicitacao,
 )
 from database.session import get_session
 from ingestion.loaders.sql_loader import LoadResult, SQLLoader
 from ingestion.parsers.csv.diarias_parser import DiariasCsvParser
+from ingestion.parsers.csv.emendas_parlamentares_parser import (
+    EmendasParlamentaresCsvParser,
+)
 from ingestion.parsers.csv.passagens_parser import PassagensCsvParser
 from ingestion.parsers.xml.shared import sanitize_xml_payload
 from ingestion.parsers.xml.contratos_parser import ContratosParser
@@ -51,6 +56,9 @@ from ingestion.parsers.xml.folha_pagamento_parser import FolhaPagamentoParser
 from ingestion.parsers.xml.planejamentos_parser import PlanejamentosParser
 from ingestion.parsers.xml.quadro_pessoal_parser import QuadroPessoalParser
 from ingestion.parsers.xml.eleitos_parser import EleitosParser
+from ingestion.parsers.xml.transferencias_financeiras_parser import (
+    TransferenciasFinanceirasParser,
+)
 from shared.utils.text import normalize_search_text
 
 
@@ -73,9 +81,14 @@ class IngestionPipeline:
             "patrimonios": (PatrimoniosParser(), Patrimonio),
             "quadro_pessoal": (QuadroPessoalParser(), QuadroPessoal),
             "eleitos": (EleitosParser(), Eleito),
+            "transferencias_financeiras": (
+                TransferenciasFinanceirasParser(),
+                TransferenciaFinanceiraMovimento,
+            ),
         }
         self.diarias_csv_parser = DiariasCsvParser()
         self.passagens_csv_parser = PassagensCsvParser()
+        self.emendas_parlamentares_csv_parser = EmendasParlamentaresCsvParser()
 
     def run(
         self,
@@ -122,6 +135,20 @@ class IngestionPipeline:
                     continue
                 if tipo == "folha_pagamento":
                     resultado = self._load_folha_pagamento(session=session, ano=ano)
+                    agregado.inseridos += resultado.inseridos
+                    agregado.atualizados += resultado.atualizados
+                    agregado.ignorados += resultado.ignorados
+                    agregado.erros += resultado.erros
+                    if on_file_processed is not None:
+                        for arquivo in arquivos:
+                            on_file_processed(tipo, arquivo)
+                    relatorio[tipo] = agregado
+                    continue
+                if tipo == "transferencias_financeiras":
+                    resultado = self._load_transferencias_financeiras(
+                        session=session,
+                        ano=ano,
+                    )
                     agregado.inseridos += resultado.inseridos
                     agregado.atualizados += resultado.atualizados
                     agregado.ignorados += resultado.ignorados
@@ -652,6 +679,39 @@ class IngestionPipeline:
                 resultado.erros += 1
         return resultado
 
+    def _load_transferencias_financeiras(
+        self,
+        session,
+        ano: Optional[int],
+    ) -> LoadResult:
+        """Carrega movimentos de transferencias e emendas parlamentares."""
+
+        resultado = LoadResult()
+        arquivos = self._arquivos_por_tipo("transferencias_financeiras", ano)
+        loader = SQLLoader(session=session, batch_size=self.batch_size)
+        parser_xml = TransferenciasFinanceirasParser()
+
+        for arquivo in arquivos:
+            if arquivo.suffix.lower() == ".xml":
+                parcial = loader.load(
+                    parser_xml.parse(str(arquivo)),
+                    TransferenciaFinanceiraMovimento,
+                )
+            elif arquivo.suffix.lower() == ".csv":
+                parcial = loader.load(
+                    self.emendas_parlamentares_csv_parser.parse(str(arquivo)),
+                    EmendaParlamentar,
+                )
+            else:
+                continue
+
+            resultado.inseridos += parcial.inseridos
+            resultado.atualizados += parcial.atualizados
+            resultado.ignorados += parcial.ignorados
+            resultado.erros += parcial.erros
+
+        return resultado
+
     def _load_folha_pagamento(self, session, ano: Optional[int]) -> LoadResult:
         """Carrega folha de pagamento em modelo dimensional."""
         resultado = LoadResult()
@@ -899,6 +959,7 @@ class IngestionPipeline:
         receitas_path = self.data_dir / "receitas"
         servidores_path = self.data_dir / "servidores"
         camara_path = self.data_dir / "camara"
+        transferencias_path = self.data_dir / "transferencias-financeiras"
 
         if tipo == "receitas":
             arquivos = sorted(receitas_path.rglob("*arrecadacao*.xml")) + sorted(
@@ -924,6 +985,10 @@ class IngestionPipeline:
             arquivos = sorted(servidores_path.rglob("*quadro-pessoal*.xml"))
         elif tipo == "eleitos":
             arquivos = sorted(camara_path.rglob("*eleitos*.xml"))
+        elif tipo == "transferencias_financeiras":
+            arquivos = sorted(transferencias_path.rglob("recebimentos-*.xml")) + sorted(
+                transferencias_path.rglob("emendas-parlamentares-*.csv")
+            )
         elif tipo == "servidores":
             arquivos = sorted(servidores_path.rglob("*servidores*.xml"))
             if not arquivos:

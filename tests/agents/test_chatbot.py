@@ -68,6 +68,7 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     assert "consultar_contratos" in nomes
     assert "consultar_diarias" in nomes
     assert "consultar_passagens" in nomes
+    assert "consultar_transferencias_financeiras" in nomes
     assert "consultar_conhecimento_municipal" in nomes
 
 
@@ -113,6 +114,7 @@ def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
     assert "`consultar_conhecimento_municipal`" in prompt
     assert "`consultar_diarias`" in prompt
     assert "`consultar_passagens`" in prompt
+    assert "`consultar_transferencias_financeiras`" in prompt
     assert "arquivo_fonte" in prompt
     assert "ônibus da frota" in prompt
 
@@ -160,7 +162,8 @@ def test_chatbot_application_stream_bloqueia_pergunta_vazia_sem_chamar_backend()
             "no sistema ou sobre o acervo municipal curado, como servidores, "
             "secretarias, salários-base, licitações, despesas, diárias, "
             "passagens, frota e veículos, patrimônio, planejamento, receitas, "
-            "políticos eleitos, telefones úteis ou horários de ônibus."
+            "transferências financeiras, emendas parlamentares, políticos "
+            "eleitos, telefones úteis ou horários de ônibus."
         )
     ]
     assert backend.calls == []
@@ -240,6 +243,21 @@ def test_chatbot_application_permite_consulta_de_investimento_em_saude() -> None
     assert response.content == "resposta para: Quanto foi investido na saude em 2026?"
     assert backend.calls == [
         ("Quanto foi investido na saude em 2026?", "sessao-investimento-saude")
+    ]
+
+
+def test_chatbot_application_permite_consulta_de_transferencias_para_camara() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-transferencias-camara"),
+    )
+
+    response = app.ask("Quanto foi transferido para a camara em 2026?")
+
+    assert response.content == "resposta para: Quanto foi transferido para a camara em 2026?"
+    assert backend.calls == [
+        ("Quanto foi transferido para a camara em 2026?", "sessao-transferencias-camara")
     ]
 
 
@@ -477,8 +495,9 @@ def test_chatbot_application_stream_bloqueia_followup_apos_turno_bloqueado() -> 
             "especialmente sobre servidores, secretarias, salários-base, "
             "histórico de pagamentos, licitações, despesas, diárias, "
             "passagens, frota, veículos, patrimônio, quadro de pessoal, "
-            "planejamento, receitas, políticos eleitos, telefones úteis, "
-            "estrutura organizacional e horários de ônibus."
+            "planejamento, receitas, transferências financeiras, emendas "
+            "parlamentares, políticos eleitos, telefones úteis, estrutura "
+            "organizacional e horários de ônibus."
         )
     ]
     assert backend.calls == [

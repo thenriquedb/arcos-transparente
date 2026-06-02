@@ -139,8 +139,8 @@ def evaluate_public_query_guardrails(
                 "no sistema ou sobre o acervo municipal curado, como servidores, "
                 "secretarias, salários-base, licitações, despesas, diárias, "
                 "passagens, frota e veículos, patrimônio, planejamento, "
-                "receitas, políticos eleitos, telefones úteis ou horários de "
-                "ônibus."
+                "receitas, transferências financeiras, emendas parlamentares, "
+                "políticos eleitos, telefones úteis ou horários de ônibus."
             ),
         )
 
@@ -201,8 +201,9 @@ def evaluate_public_query_guardrails(
             "especialmente sobre servidores, secretarias, salários-base, "
             "histórico de pagamentos, licitações, despesas, diárias, "
             "passagens, frota, veículos, patrimônio, quadro de pessoal, "
-            "planejamento, receitas, políticos eleitos, telefones úteis, "
-            "estrutura organizacional e horários de ônibus."
+            "planejamento, receitas, transferências financeiras, emendas "
+            "parlamentares, políticos eleitos, telefones úteis, estrutura "
+            "organizacional e horários de ônibus."
         ),
     )
 

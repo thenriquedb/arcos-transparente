@@ -1,6 +1,6 @@
 # Contexto Atual do Projeto para Codex CLI
 
-Atualizado com base no codigo do repositorio em 2026-06-01.
+Atualizado com base no codigo do repositorio em 2026-06-02.
 
 ## Objetivo
 
@@ -58,6 +58,7 @@ O pipeline cobre estes tipos de importacao:
 - `patrimonios`
 - `quadro_pessoal`
 - `eleitos`
+- `transferencias_financeiras`
 
 As consultas do agente hoje se concentram nestes dominios publicos:
 
@@ -68,15 +69,18 @@ As consultas do agente hoje se concentram nestes dominios publicos:
 - receitas
 - planejamento
 - despesas
+- diarias
+- passagens
 - patrimonios
 - quadro de pessoal
 - eleitos
 - frota
+- transferencias_financeiras
 - conhecimento municipal curado via markdown
 
 ## Superficie Publica do Agente
 
-O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools estreitas. A superficie publica atual tem 20 tools:
+O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools estreitas. A superficie publica atual tem 26 tools:
 
 - `consultar_servidores`
 - `agregar_servidores`
@@ -90,12 +94,18 @@ O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools e
 - `agregar_planejamento`
 - `consultar_despesas`
 - `agregar_despesas`
+- `consultar_diarias`
+- `agregar_diarias`
+- `consultar_passagens`
+- `agregar_passagens`
 - `consultar_patrimonios`
 - `agregar_patrimonios`
 - `consultar_quadro_pessoal`
 - `agregar_quadro_pessoal`
 - `consultar_eleitos`
 - `consultar_frota`
+- `consultar_transferencias_financeiras`
+- `agregar_transferencias_financeiras`
 - `buscar_historico_de_pagamentos_do_servidor`
 - `consultar_conhecimento_municipal`
 
@@ -145,6 +155,7 @@ Mas alguns dominios usam carga especializada em `ingestion/pipeline.py` porque p
 - receitas
 - frotas
 - folha de pagamento
+- transferencias financeiras
 
 ### 4. Rastreabilidade acima de simplificacao excessiva
 

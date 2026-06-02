@@ -806,6 +806,13 @@ def test_route_user_query_restringe_passagens_por_tags() -> None:
     assert tool_names == ["agregar_passagens"]
 
 
+def test_route_user_query_restringe_transferencias_financeiras_por_tags() -> None:
+    tools = select_public_tools_for_query("Quanto foi transferido para a camara em 2026?")
+    tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
+
+    assert tool_names == ["agregar_transferencias_financeiras"]
+
+
 def test_route_user_query_restringe_eleitos_por_tags() -> None:
     tools = select_public_tools_for_query("Quem sao os vereadores em exercicio?")
     tool_names = [getattr(tool_obj, "name", "") for tool_obj in tools]
@@ -861,6 +868,17 @@ def test_evaluate_query_guardrails_permitem_consulta_de_frota_sem_ancora_extra()
 
 def test_evaluate_query_guardrails_permitem_investimento_em_saude() -> None:
     decision = evaluate_query_guardrails("Quanto foi investido na saude em 2026?")
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
+def test_evaluate_query_guardrails_permitem_consulta_de_emendas_parlamentares() -> (
+    None
+):
+    decision = evaluate_query_guardrails(
+        "Quais emendas parlamentares foram recebidas na saude em 2026?"
+    )
 
     assert decision.allowed is True
     assert decision.category == "allowed"
