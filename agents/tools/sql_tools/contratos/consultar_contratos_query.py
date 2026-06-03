@@ -338,6 +338,13 @@ def consultar_contratos(
     nao ha dados — pode existir processo licitatorio sem contrato
     formalizado ou com valor ainda nao registrado na base.
 
+    Quando a pergunta for sobre "gasto" ou "custo" de um evento, servico,
+    fornecedor ou outro objeto contratual, apresente os contratos como lista
+    detalhada de valores contratados e deixe claro que contrato nao e a mesma
+    coisa que licitacao nem pagamento efetivo. Nesses casos, cruze a resposta
+    com `consultar_licitacoes` e `consultar_despesas` quando essas fontes
+    tambem forem relevantes.
+
     Se o filtro textual vier apenas de uma sigla curta ou termo ambiguo,
     como 'UPA', 'UBS', 'PSF', 'CRAS' ou 'CREAS', primeiro confirme o significado
     com o usuario e sugira a expansao provavel. So use a tool depois dessa

@@ -182,3 +182,96 @@ def test_hybrid_selector_prioriza_emendas_por_autor() -> None:
     assert selection.used_fallback is False
     assert selection.reason_code == "heuristic_emenda_query"
     assert selection.candidate_tool_names == ("agregar_transferencias_financeiras",)
+
+
+def test_hybrid_selector_prioriza_candidates_de_custo_de_evento() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver custo de evento")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Qual foi o valor gasto com o festival gastronomico de 2026?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_event_spend_query"
+    assert selection.candidate_tool_names == (
+        "consultar_licitacoes",
+        "consultar_contratos",
+        "consultar_despesas",
+    )
+
+
+def test_hybrid_selector_prioriza_lista_detalhada_de_diarias_em_gasto_amplo() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria priorizar consulta detalhada")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quanto a prefeitura gastou com diarias em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_broad_spend_query"
+    assert selection.candidate_tool_names == ("consultar_diarias",)
+
+
+def test_hybrid_selector_prioriza_lista_detalhada_de_passagens_em_gasto_amplo() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria priorizar consulta detalhada")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quais foram os gastos com passagens em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_broad_spend_query"
+    assert selection.candidate_tool_names == ("consultar_passagens",)
+
+
+def test_hybrid_selector_prioriza_lista_detalhada_de_despesas_em_gasto_amplo() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria priorizar consulta detalhada")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quanto a prefeitura gastou na saude em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_broad_spend_query"
+    assert selection.candidate_tool_names == ("consultar_despesas",)
+
+
+def test_hybrid_selector_respeita_pedido_expresso_de_total_em_gasto() -> None:
+    selector = HybridToolSelector(
+        runner=lambda *_args: {
+            "action": "allow",
+            "candidate_tool_names": ["agregar_diarias"],
+            "confidence": "high",
+            "reason_code": "explicit_total_request",
+        }
+    )
+
+    selection = selector.select(
+        "Qual foi o total gasto com diarias em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "explicit_total_request"
+    assert selection.candidate_tool_names == ("agregar_diarias",)

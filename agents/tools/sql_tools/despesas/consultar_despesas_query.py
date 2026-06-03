@@ -199,6 +199,14 @@ def consultar_despesas(
     Use esta tool quando a pergunta pedir empenhos, restos a pagar ou documentos
     extras individuais, inclusive buscas por credor, area, contrato ou texto da
     despesa.
+    Quando a pergunta vier em linguagem ampla de gasto, como "gastos da saude"
+    ou "quanto a prefeitura gastou", esta deve ser a resposta padrao para
+    mostrar os documentos detalhados antes de qualquer agregado.
+    Quando o filtro textual for apenas o nome de um evento, interprete os
+    resultados com cuidado: a descricao textual pode mencionar o evento de
+    forma indireta, como em divulgacao, viagem, diaria, pedagio ou reunioes
+    preparatorias. Nao use so esta tool para afirmar o custo consolidado do
+    evento sem cruzar com `consultar_licitacoes` e `consultar_contratos`.
     NAO use para planejamento orcamentario; para isso use
     `consultar_planejamento`.
     NAO use para totais, comparacoes ou rankings agregados; para isso use

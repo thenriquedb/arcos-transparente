@@ -84,6 +84,10 @@ def agregar_diarias(
     Use esta tool quando a pergunta pedir total pago, total empenhado,
     quantidade de beneficiarios ou rankings de diarias por beneficiario, origem
     ou unidade gestora.
+    Se a pergunta usar linguagem ampla de gasto e houver interesse em ver os
+    registros que compoem o valor, consulte primeiro `consultar_diarias` e use
+    esta tool apenas como resumo complementar ou quando o usuario pedir
+    explicitamente total, ranking, contagem ou comparacao.
     NAO use para listar registros individuais; para isso use
     `consultar_diarias`.
     """

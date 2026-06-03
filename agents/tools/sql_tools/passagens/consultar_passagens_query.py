@@ -163,6 +163,9 @@ def consultar_passagens(
 
     Use esta tool quando a pergunta pedir quem recebeu passagens, valores pagos,
     empenhados ou liquidados por beneficiario, origem ou periodo.
+    Quando a pergunta vier em linguagem ampla de gasto, como "gastos com
+    passagens" ou "quanto a prefeitura gastou com passagens", esta deve ser a
+    resposta padrao para mostrar a lista detalhada que sustenta o valor.
     NAO use para totais, rankings ou contagens agregadas; para isso use
     `agregar_passagens`.
     """

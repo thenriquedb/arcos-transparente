@@ -149,7 +149,35 @@ def test_system_prompt_documenta_excecoes_sem_recorte_temporal() -> None:
     assert "Exceções — consulte sem pedir recorte temporal" in prompt
     assert "Busca de servidor por nome" in prompt
     assert "Contagens simples" in prompt
+
+
+def test_system_prompt_orienta_custo_de_evento_com_licitacoes_e_contratos() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "Custo de eventos e festivais" in prompt
+    assert "lista auditável" in prompt
+    assert "todas as fontes estruturadas relevantes" in prompt
+    assert "consulte primeiro `consultar_licitacoes` e `consultar_contratos`" in prompt
+    assert "consulte a base de contratos também" in prompt
+    assert "licitação` é o processo de compra" in prompt
+    assert "`contrato` é o instrumento assinado" in prompt
+    assert "não afirme um total do evento" in prompt.lower()
     assert "lista completa" in prompt
+
+
+def test_system_prompt_orienta_gastos_amplos_com_lista_detalhada() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "perguntas amplas sobre gastos ou custos" in prompt
+    assert "priorize `consultar_despesas`" in prompt
+    assert (
+        "priorize respectivamente `consultar_despesas`, `consultar_diarias` e `consultar_passagens`"
+        in prompt
+    )
+    assert (
+        "Só puxe `agregar_*` quando o usuário pedir explicitamente apenas total, ranking, contagem ou comparação"
+        in prompt
+    )
 
 
 def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
@@ -454,6 +482,63 @@ def test_chatbot_application_permite_conjunto_multidominio_de_candidatas() -> No
     ]
 
 
+def test_chatbot_application_prioriza_lista_detalhada_de_diarias_em_gasto_amplo() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver gasto amplo de diarias")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-amplo-diarias"),
+        selector=selector,
+    )
+
+    response = app.ask("Quanto a prefeitura gastou com diarias em 2025?")
+
+    assert (
+        response.content
+        == "resposta para: Quanto a prefeitura gastou com diarias em 2025?"
+    )
+    assert backend.selection_calls == [
+        (("consultar_diarias",), "sessao-gasto-amplo-diarias")
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
+
+
+def test_chatbot_application_prioriza_fontes_multifonte_em_gasto_de_evento() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver gasto multi-fonte")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-amplo-evento"),
+        selector=selector,
+    )
+
+    response = app.ask("Qual foi o valor gasto com o festival gastronomico de 2026?")
+
+    assert (
+        response.content
+        == "resposta para: Qual foi o valor gasto com o festival gastronomico de 2026?"
+    )
+    assert backend.selection_calls == [
+        (
+            (
+                "consultar_licitacoes",
+                "consultar_contratos",
+                "consultar_despesas",
+            ),
+            "sessao-gasto-amplo-evento",
+        )
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_event_spend_query"
+
+
 def test_chatbot_application_permite_followup_eliptico_com_contexto_publico() -> None:
     backend = FakeBackend()
     app = ChatbotApplication(
@@ -576,18 +661,118 @@ def test_chatbot_application_permite_confirmacao_curta_apos_clarificacao_publica
         )
     )
     segunda_resposta = app.ask("sim")
+    pergunta_resolvida = (
+        "quanto a prefeitura recebeu de emendas parlamentares em 2026?\n\n"
+        "Considere a seguinte clarificacao ja confirmada pelo usuario para a "
+        "mesma pergunta: Você poderia confirmar se quer informações apenas "
+        "para o ano de 2026 sobre emendas parlamentares recebidas pela "
+        "prefeitura de Arcos?"
+    )
 
     assert (
         primeira_resposta.content
         == "resposta para: quanto a prefeitura recebeu de emendas parlamentares em 2026?"
     )
-    assert segunda_resposta.content == "resposta para: sim"
+    assert segunda_resposta.content == f"resposta para: {pergunta_resolvida}"
     assert backend.calls == [
         (
             "quanto a prefeitura recebeu de emendas parlamentares em 2026?",
             "sessao-followup-confirmacao",
         ),
-        ("sim", "sessao-followup-confirmacao"),
+        (pergunta_resolvida, "sessao-followup-confirmacao"),
+    ]
+
+
+def test_chatbot_application_reaproveita_isso_apos_clarificacao_publica() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-isso"),
+    )
+
+    primeira_resposta = app.ask("Quanto foi gasto no festival gastronomico de 2026?")
+    app.session.history.append(
+        ChatMessage(
+            role="assistant",
+            content=(
+                "Você pode me confirmar se está se referindo ao festival "
+                "gastronômico de Arcos em 2026? Quero ter certeza para buscar "
+                "os dados corretos para você."
+            ),
+        )
+    )
+
+    segunda_resposta = app.ask("isso")
+    pergunta_resolvida = (
+        "Quanto foi gasto no festival gastronomico de 2026?\n\n"
+        "Considere a seguinte clarificacao ja confirmada pelo usuario para a "
+        "mesma pergunta: Você pode me confirmar se está se referindo ao "
+        "festival gastronômico de Arcos em 2026? Quero ter certeza para "
+        "buscar os dados corretos para você."
+    )
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: Quanto foi gasto no festival gastronomico de 2026?"
+    )
+    assert segunda_resposta.content == f"resposta para: {pergunta_resolvida}"
+    assert backend.calls == [
+        (
+            "Quanto foi gasto no festival gastronomico de 2026?",
+            "sessao-followup-isso",
+        ),
+        (pergunta_resolvida, "sessao-followup-isso"),
+    ]
+    assert [(msg.role, msg.content) for msg in app.session.history[-2:]] == [
+        ("user", "isso"),
+        ("assistant", segunda_resposta.content),
+    ]
+
+
+def test_chatbot_application_reaproveita_pode_confirmar_apos_clarificacao_publica() -> (
+    None
+):
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-pode-confirmar"),
+    )
+
+    primeira_resposta = app.ask(
+        "Quanto a prefeitura gastou com o festival gastronomico de 2026?"
+    )
+    app.session.history.append(
+        ChatMessage(
+            role="assistant",
+            content=(
+                "Para informar o gasto da prefeitura com o festival "
+                "gastronômico de 2026, preciso confirmar se você está se "
+                "referindo ao festival gastronômico oficial de Arcos em 2026. "
+                "Pode confirmar?"
+            ),
+        )
+    )
+
+    segunda_resposta = app.ask("Pode confirmar")
+    pergunta_resolvida = (
+        "Quanto a prefeitura gastou com o festival gastronomico de 2026?\n\n"
+        "Considere a seguinte clarificacao ja confirmada pelo usuario para a "
+        "mesma pergunta: Para informar o gasto da prefeitura com o festival "
+        "gastronômico de 2026, preciso confirmar se você está se referindo "
+        "ao festival gastronômico oficial de Arcos em 2026. Pode confirmar?"
+    )
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: Quanto a prefeitura gastou com o festival gastronomico de 2026?"
+    )
+    assert segunda_resposta.content == f"resposta para: {pergunta_resolvida}"
+    assert backend.calls == [
+        (
+            "Quanto a prefeitura gastou com o festival gastronomico de 2026?",
+            "sessao-followup-pode-confirmar",
+        ),
+        (pergunta_resolvida, "sessao-followup-pode-confirmar"),
     ]
 
 

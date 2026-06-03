@@ -138,6 +138,13 @@ def consultar_licitacoes(
     `consultar_contratos` com o mesmo objeto ou fornecedor para verificar
     o valor efetivamente contratado.
 
+    Quando a pergunta for sobre "gasto" ou "custo" de um evento, servico,
+    fornecedor ou outro objeto contratual, apresente as licitacoes como lista
+    detalhada de valores estimados e deixe claro que licitacao nao e a mesma
+    coisa que contrato nem pagamento efetivo. Nesses casos, cruze a resposta
+    com `consultar_contratos` e `consultar_despesas` quando essas fontes
+    tambem forem relevantes.
+
     O retorno inclui `valor_total_estimado`, que soma todas as licitacoes
     encontradas pelos filtros, mesmo quando a lista exibida estiver paginada.
     Trate esse valor como estimado — nao representa gasto efetivo realizado.

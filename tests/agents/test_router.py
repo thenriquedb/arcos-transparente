@@ -171,6 +171,33 @@ def test_evaluate_query_guardrails_permitem_followup_curto_por_autor_em_emendas(
     assert decision.category == "allowed"
 
 
+def test_evaluate_query_guardrails_permitem_pode_confirmar_apos_clarificacao() -> None:
+    decision = evaluate_query_guardrails(
+        "Pode confirmar",
+        has_history=True,
+        prior_messages=(
+            (
+                "user",
+                "Quanto a prefeitura gastou com o festival gastronomico de 2026?",
+                False,
+            ),
+            (
+                "assistant",
+                (
+                    "Para informar o gasto da prefeitura com o festival "
+                    "gastronômico de 2026, preciso confirmar se você está se "
+                    "referindo ao festival gastronômico oficial de Arcos em "
+                    "2026. Pode confirmar?"
+                ),
+                False,
+            ),
+        ),
+    )
+
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
 def test_evaluate_query_guardrails_bloqueiam_fora_do_escopo() -> None:
     decision = evaluate_query_guardrails(
         "Como implementar uma lista encadeada em Python?"

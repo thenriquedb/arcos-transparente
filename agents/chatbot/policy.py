@@ -7,7 +7,10 @@ from dataclasses import dataclass, field
 import re
 from typing import Any, Literal, Protocol
 
-from agents.guardrails import evaluate_public_query_guardrails
+from agents.guardrails import (
+    _looks_like_confirmation_text,
+    evaluate_public_query_guardrails,
+)
 from agents.routing.extractors import _normalize
 
 PolicyAction = Literal["allow", "block", "clarify"]
@@ -31,6 +34,26 @@ _CONFIRMATION_TOKENS = frozenset(
         "pode ser",
         "pode",
     }
+)
+_PUBLIC_CLARIFICATION_HINTS = (
+    "confirma",
+    "confirmar",
+    "voce quer dizer",
+    "quer dizer",
+    "voce quis dizer",
+    "quis dizer",
+    "esta se referindo",
+    "esta falando de",
+    "se refere",
+    "so para confirmar",
+    "apenas para confirmar",
+)
+_PUBLIC_CLARIFICATION_EXCLUSION_HINTS = (
+    "quer que eu faca isso",
+    "quer que eu mostre",
+    "quer que eu liste",
+    "quer ver a lista completa",
+    "deseja ver a lista completa",
 )
 
 
@@ -85,6 +108,12 @@ def evaluate_deterministic_policy(
         )
 
     if reply_resolution := _resolve_pending_protected_acronym_reply(
+        question,
+        history=history,
+    ):
+        return reply_resolution
+
+    if reply_resolution := _resolve_pending_public_clarification_reply(
         question,
         history=history,
     ):
@@ -167,6 +196,42 @@ def _resolve_pending_protected_acronym_reply(
     )
 
 
+def _resolve_pending_public_clarification_reply(
+    question: str,
+    *,
+    history: Sequence[HistoryMessage],
+) -> DeterministicPolicyDecision | None:
+    pending = _latest_pending_public_clarification(history)
+    if pending is None:
+        return None
+
+    normalized_reply = _normalize(question)
+    if not _looks_like_confirmation_text(normalized_reply):
+        return None
+
+    resolved_question = _build_public_clarification_resolution(
+        original_question=pending["original_question"],
+        assistant_clarification=pending["assistant_clarification"],
+    )
+    return DeterministicPolicyDecision(
+        action="allow",
+        category="allowed",
+        resolved_question=resolved_question,
+        user_metadata={
+            "resolved_public_clarification": {
+                "original_question": pending["original_question"],
+            }
+        },
+        assistant_metadata={
+            "policy_action": "allow",
+            "policy_category": "public_clarification_confirmation",
+            "resolved_from_clarification": {
+                "assistant_prompt": pending["assistant_clarification"],
+            },
+        },
+    )
+
+
 def _latest_pending_protected_acronym(
     history: Sequence[HistoryMessage],
 ) -> dict[str, str] | None:
@@ -194,13 +259,45 @@ def _latest_pending_protected_acronym(
     return None
 
 
+def _latest_pending_public_clarification(
+    history: Sequence[HistoryMessage],
+) -> dict[str, str] | None:
+    if not history:
+        return None
+
+    latest_message = history[-1]
+    if latest_message.role != "assistant":
+        return None
+    if bool(latest_message.metadata.get("guardrail_triggered")):
+        return None
+    if latest_message.metadata.get("policy_category") == "protected_acronym":
+        return None
+
+    assistant_clarification = str(latest_message.content).strip()
+    if not _looks_like_public_clarification_prompt(assistant_clarification):
+        return None
+
+    for message in reversed(history[:-1]):
+        if message.role != "user":
+            continue
+        original_question = str(message.content).strip()
+        if not original_question:
+            return None
+        return {
+            "assistant_clarification": assistant_clarification,
+            "original_question": original_question,
+        }
+
+    return None
+
+
 def _reply_confirms_protected_acronym(
     normalized_reply: str,
     *,
     acronym: str,
     expansion: str,
 ) -> bool:
-    if normalized_reply in _CONFIRMATION_TOKENS:
+    if _looks_like_confirmation_text(normalized_reply):
         return True
     if not normalized_reply:
         return False
@@ -209,6 +306,37 @@ def _reply_confirms_protected_acronym(
     acronym_pattern = re.compile(rf"\b{re.escape(acronym.lower())}\b")
     return normalized_expansion in normalized_reply or (
         acronym_pattern.search(normalized_reply) is not None
+    )
+
+
+def _looks_like_public_clarification_prompt(content: str) -> bool:
+    if "?" not in content:
+        return False
+
+    normalized_content = _normalize(content)
+    if not normalized_content:
+        return False
+    if any(
+        exclusion_hint in normalized_content
+        for exclusion_hint in _PUBLIC_CLARIFICATION_EXCLUSION_HINTS
+    ):
+        return False
+    return any(
+        clarification_hint in normalized_content
+        for clarification_hint in _PUBLIC_CLARIFICATION_HINTS
+    )
+
+
+def _build_public_clarification_resolution(
+    *,
+    original_question: str,
+    assistant_clarification: str,
+) -> str:
+    normalized_clarification = " ".join(assistant_clarification.split())
+    return (
+        f"{original_question}\n\n"
+        "Considere a seguinte clarificacao ja confirmada pelo usuario para a "
+        f"mesma pergunta: {normalized_clarification}"
     )
 
 

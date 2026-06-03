@@ -12,6 +12,12 @@ from pydantic import BaseModel, Field, ValidationError
 
 from agents.chatbot.agent import criar_modelo_llm
 from agents.router import route_user_query
+from agents.routing.constants import (
+    DESPESAS_DOMAIN_KEYWORDS,
+    DIARIAS_DOMAIN_KEYWORDS,
+    PASSAGENS_DOMAIN_KEYWORDS,
+)
+from agents.routing.extractors import _extract_licitacoes_objeto, _normalize
 from agents.tools.registry import (
     PublicToolCatalogEntry,
     get_public_tool_catalog,
@@ -61,6 +67,46 @@ _ELECTED_QUERY_TERMS = (
     "viceprefeito",
     "eleito",
     "eleitos",
+)
+_EVENT_SPEND_SIGNAL_TERMS = (
+    "gasto",
+    "gastos",
+    "gastou",
+    "custo",
+    "custou",
+    "valor gasto",
+)
+_SPEND_AGGREGATION_TERMS = (
+    "total",
+    "somatorio",
+    "soma",
+    "ranking",
+    "rankings",
+    "comparacao",
+    "comparacoes",
+    "comparativo",
+    "comparativos",
+    "media",
+    "medias",
+    "top ",
+    "maior",
+    "maiores",
+    "menor",
+    "menores",
+    "quantas",
+    "quantos",
+)
+_SPEND_GROUPING_TERMS = (
+    "por beneficiario",
+    "por origem",
+    "por unidade",
+    "por unidade gestora",
+    "por categoria",
+    "por credor",
+    "por mes",
+    "por area",
+    "por funcao",
+    "por tipo",
 )
 
 
@@ -232,6 +278,9 @@ def _select_with_heuristics(
     history: Sequence[HistoryMessage],
 ) -> HybridToolSelection | None:
     if not _is_elected_contact_query(question, history=history):
+        spend_selection = _select_broad_spend_query(question)
+        if spend_selection is not None:
+            return spend_selection
         emenda_selection = _select_emenda_query_with_router(question)
         if emenda_selection is not None:
             return emenda_selection
@@ -259,6 +308,105 @@ def _select_with_heuristics(
         confidence="high",
         reason_code="heuristic_elected_contacts",
     )
+
+
+def _select_event_spend_query(
+    question: str,
+) -> HybridToolSelection | None:
+    normalized_question = _normalize(question)
+    if not normalized_question:
+        return None
+    if not any(signal in normalized_question for signal in _EVENT_SPEND_SIGNAL_TERMS):
+        return None
+    if _extract_licitacoes_objeto(normalized_question) is None:
+        return None
+
+    candidate_names = _normalize_candidate_names(
+        [
+            "consultar_licitacoes",
+            "consultar_contratos",
+            "consultar_despesas",
+        ]
+    )
+    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
+    if len(candidate_tools) != len(candidate_names):
+        return None
+
+    return HybridToolSelection(
+        action="allow",
+        candidate_tools=candidate_tools,
+        candidate_tool_names=tuple(candidate_names),
+        confidence="high",
+        reason_code="heuristic_event_spend_query",
+    )
+
+
+def _select_broad_spend_query(
+    question: str,
+) -> HybridToolSelection | None:
+    event_spend_selection = _select_event_spend_query(question)
+    if event_spend_selection is not None:
+        return event_spend_selection
+
+    normalized_question = _normalize(question)
+    if not normalized_question:
+        return None
+    if not any(signal in normalized_question for signal in _EVENT_SPEND_SIGNAL_TERMS):
+        return None
+    if _is_explicit_aggregate_spend_request(normalized_question):
+        return None
+
+    route = route_user_query(question)
+    direct_domain_candidate_names = _select_direct_spend_candidate_names(
+        normalized_question,
+        route_tool_name=route.tool_name if route.confident else None,
+    )
+    if direct_domain_candidate_names is None:
+        return None
+
+    candidate_names = _normalize_candidate_names(direct_domain_candidate_names)
+    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
+    if len(candidate_tools) != len(candidate_names):
+        return None
+
+    return HybridToolSelection(
+        action="allow",
+        candidate_tools=candidate_tools,
+        candidate_tool_names=tuple(candidate_names),
+        confidence="high",
+        reason_code="heuristic_broad_spend_query",
+    )
+
+
+def _is_explicit_aggregate_spend_request(normalized_question: str) -> bool:
+    if any(term in normalized_question for term in _SPEND_GROUPING_TERMS):
+        return True
+    return any(term in normalized_question for term in _SPEND_AGGREGATION_TERMS)
+
+
+def _select_direct_spend_candidate_names(
+    normalized_question: str,
+    *,
+    route_tool_name: str | None,
+) -> list[str] | None:
+    if _has_any_term(normalized_question, DIARIAS_DOMAIN_KEYWORDS):
+        return ["consultar_diarias"]
+    if _has_any_term(normalized_question, PASSAGENS_DOMAIN_KEYWORDS):
+        return ["consultar_passagens"]
+    if _has_any_term(normalized_question, DESPESAS_DOMAIN_KEYWORDS):
+        return ["consultar_despesas"]
+    if route_tool_name == "agregar_diarias":
+        return ["consultar_diarias"]
+    if route_tool_name == "agregar_passagens":
+        return ["consultar_passagens"]
+    if route_tool_name == "agregar_despesas":
+        return ["consultar_despesas"]
+    if (
+        "prefeitura gastou" in normalized_question
+        or "valor gasto" in normalized_question
+    ):
+        return ["consultar_despesas"]
+    return None
 
 
 def _select_emenda_query_with_router(

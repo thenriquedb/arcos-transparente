@@ -156,6 +156,9 @@ def consultar_diarias(
 
     Use esta tool quando a pergunta pedir quem recebeu diarias, valores pagos,
     empenhados ou liquidados por beneficiario, origem ou periodo.
+    Quando a pergunta vier em linguagem ampla de gasto, como "gastos com
+    diarias" ou "quanto a prefeitura gastou com diarias", esta deve ser a
+    resposta padrao para mostrar a lista detalhada que sustenta o valor.
     NAO use para totais, rankings ou contagens agregadas; para isso use
     `agregar_diarias`.
 

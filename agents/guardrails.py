@@ -131,6 +131,16 @@ _CONFIRMATION_TOKENS = frozenset(
         "pode",
     }
 )
+_CONFIRMATION_REPLY_PATTERN = re.compile(
+    r"^(?:"
+    r"sim|"
+    r"isso(?:\s+mesmo)?|"
+    r"exato|"
+    r"correto|"
+    r"confirm(?:o|ado|a|ar)?|"
+    r"pode(?:\s+ser|\s+confirmar)?"
+    r")$"
+)
 
 
 def evaluate_public_query_guardrails(
@@ -359,7 +369,7 @@ def _looks_like_confirmation_reply(
     normalized_text: str,
     prior_messages: Sequence[tuple[str, str, bool]],
 ) -> bool:
-    if normalized_text not in _CONFIRMATION_TOKENS:
+    if not _looks_like_confirmation_text(normalized_text):
         return False
 
     for role, content, guardrail_triggered in reversed(prior_messages):
@@ -388,6 +398,12 @@ def _looks_like_confirmation_reply(
         )
 
     return False
+
+
+def _looks_like_confirmation_text(normalized_text: str) -> bool:
+    if normalized_text in _CONFIRMATION_TOKENS:
+        return True
+    return _CONFIRMATION_REPLY_PATTERN.fullmatch(normalized_text) is not None
 
 
 def _has_public_filter_hint(normalized_text: str) -> bool:

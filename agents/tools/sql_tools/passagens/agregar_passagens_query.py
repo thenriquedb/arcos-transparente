@@ -85,6 +85,10 @@ def agregar_passagens(
     Use esta tool quando a pergunta pedir total pago, total empenhado,
     quantidade de beneficiarios ou rankings de passagens por beneficiario,
     origem, unidade gestora ou categoria.
+    Se a pergunta usar linguagem ampla de gasto e houver interesse em ver os
+    registros que compoem o valor, consulte primeiro `consultar_passagens` e
+    use esta tool apenas como resumo complementar ou quando o usuario pedir
+    explicitamente total, ranking, contagem ou comparacao.
     NAO use para listar registros individuais; para isso use
     `consultar_passagens`.
     """
