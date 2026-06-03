@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import Eleito
 from shared.utils.text import matches_text_query, normalize_search_text
@@ -177,6 +177,25 @@ def _project_eleitos(
     name="consultar_eleitos",
     scope=PUBLIC_SCOPE,
     tags=["domain:eleitos", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quem sao os vereadores em exercicio?",
+            "Qual partido do prefeito?",
+            "Como posso entrar em contato com os vereadores?",
+            "Qual o email do vereador Joaozinho?",
+        ],
+        hints=[
+            "eleito",
+            "prefeito",
+            "vereador",
+            "mandato",
+            "partido",
+            "contato",
+            "email institucional",
+            "telefone institucional",
+            "homepage oficial",
+        ],
+    ),
 )
 def consultar_eleitos(
     filtros: dict[str, Any] | None = None,
@@ -187,10 +206,12 @@ def consultar_eleitos(
     campos: list[str] | None = None,
 ) -> dict[str, Any]:
     """
-    Lista vereadores,prefeitos e vice-prefeitos eleitos, com partido e periodo de mandato.
+    Lista vereadores,prefeitos e vice-prefeitos eleitos, com partido, mandato e contatos publicos.
 
     Use esta tool quando a pergunta pedir quem foram/quem são os eleitos,
-    quais mandatos uma pessoa teve, partido de um eleito ou status do mandato.
+    quais mandatos uma pessoa teve, partido de um eleito, status do mandato
+    ou contatos institucionais publicos, como email funcional, telefone da
+    Camara e homepage oficial.
     Para cargo politico atual, use `em_exercicio=True` e o `tipo_politico`
     correspondente, por exemplo `tipo_politico="prefeito"`.
     Se a chamada vier com `cargo="prefeito"`, `cargo="vice"` ou

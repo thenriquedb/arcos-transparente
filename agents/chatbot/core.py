@@ -13,8 +13,9 @@ from typing import Any, Protocol
 from uuid import uuid4
 
 from agents.chatbot.agent import criar_agente_chatbot
-from agents.guardrails import evaluate_public_query_guardrails
-from agents.router import route_user_query
+from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
+from agents.chatbot.policy import evaluate_deterministic_policy
+from agents.tools.registry import get_public_tools
 
 
 @dataclass(frozen=True)
@@ -38,6 +39,14 @@ class ChatSession:
     history: list[ChatMessage] = field(default_factory=list)
 
 
+@dataclass(frozen=True)
+class PreparedRuntimeRequest:
+    immediate_response: ChatResponse | None = None
+    backend_question: str | None = None
+    user_metadata: dict[str, Any] = field(default_factory=dict)
+    selection: HybridToolSelection | None = None
+
+
 class AgentBackend(Protocol):
     def answer(self, question: str, session_id: str) -> ChatResponse:
         """Responde uma pergunta usando a sessao informada."""
@@ -48,18 +57,46 @@ class ChatbotAgentBackend:
 
     def __init__(
         self,
-        agent_factory: Callable[[], Any] = criar_agente_chatbot,
+        agent_factory: Callable[..., Any] = criar_agente_chatbot,
     ) -> None:
         self._agent_factory = agent_factory
-        self._agent = None
+        self._agents: dict[tuple[str, ...], Any] = {}
 
-    def _get_agent(self):
-        if self._agent is None:
-            self._agent = self._agent_factory()
-        return self._agent
+    def _get_agent(self, candidate_tools: tuple[object, ...] | None = None):
+        normalized_tools = self._normalize_candidate_tools(candidate_tools)
+        cache_key = tuple(_tool_name(tool_obj) for tool_obj in normalized_tools)
+        cached_agent = self._agents.get(cache_key)
+        if cached_agent is not None:
+            return cached_agent
+
+        try:
+            agent = self._agent_factory(tools=normalized_tools)
+        except TypeError:
+            agent = self._agent_factory()
+        self._agents[cache_key] = agent
+        return agent
+
+    def _normalize_candidate_tools(
+        self,
+        candidate_tools: tuple[object, ...] | None,
+    ) -> list[object]:
+        if candidate_tools is None:
+            return list(get_public_tools())
+        return list(candidate_tools)
 
     def answer(self, question: str, session_id: str) -> ChatResponse:
-        agent = self._get_agent()
+        return self.answer_with_selection(question, session_id=session_id)
+
+    def answer_with_selection(
+        self,
+        question: str,
+        *,
+        session_id: str,
+        selection: HybridToolSelection | None = None,
+    ) -> ChatResponse:
+        agent = self._get_agent(
+            selection.candidate_tools if selection is not None else None
+        )
 
         result = agent.invoke(
             {"messages": [question]},
@@ -77,12 +114,27 @@ class ChatbotAgentBackend:
         )
 
     def stream_answer(self, question: str, session_id: str) -> Iterator[str]:
+        return self.stream_answer_with_selection(question, session_id=session_id)
+
+    def stream_answer_with_selection(
+        self,
+        question: str,
+        *,
+        session_id: str,
+        selection: HybridToolSelection | None = None,
+    ) -> Iterator[str]:
         """Responde em chunks quando o agente LangGraph suportar streaming."""
 
-        agent = self._get_agent()
+        agent = self._get_agent(
+            selection.candidate_tools if selection is not None else None
+        )
         stream = getattr(agent, "stream", None)
         if stream is None:
-            yield self.answer(question, session_id=session_id).content
+            yield self.answer_with_selection(
+                question,
+                session_id=session_id,
+                selection=selection,
+            ).content
             return
 
         try:
@@ -92,7 +144,11 @@ class ChatbotAgentBackend:
                 stream_mode="messages",
             )
         except TypeError:
-            yield self.answer(question, session_id=session_id).content
+            yield self.answer_with_selection(
+                question,
+                session_id=session_id,
+                selection=selection,
+            ).content
             return
 
         yielded = False
@@ -104,7 +160,11 @@ class ChatbotAgentBackend:
             yield content
 
         if not yielded:
-            yield self.answer(question, session_id=session_id).content
+            yield self.answer_with_selection(
+                question,
+                session_id=session_id,
+                selection=selection,
+            ).content
 
 
 class ChatbotApplication:
@@ -114,30 +174,37 @@ class ChatbotApplication:
         self,
         backend: AgentBackend | None = None,
         session: ChatSession | None = None,
+        selector: HybridToolSelector | None = None,
     ) -> None:
         self.backend = backend or ChatbotAgentBackend()
         self.session = session or ChatSession()
+        self.selector = selector or _build_default_selector(self.backend)
 
     def ask(self, question: str) -> ChatResponse:
         normalized_question = _normalize_question(question)
-        prior_user_queries = _collect_prior_user_queries(self.session.history)
-        prior_messages = _collect_prior_messages(self.session.history)
-
-        response = _build_pre_agent_response(
+        prepared = _prepare_runtime_request(
             normalized_question,
-            has_history=bool(self.session.history),
-            prior_user_queries=prior_user_queries,
-            prior_messages=prior_messages,
+            history=self.session.history,
+            selector=self.selector,
         )
-        if response is None:
-            response = self.backend.answer(
-                normalized_question,
+        if prepared.immediate_response is not None:
+            response = prepared.immediate_response
+        else:
+            response = _answer_backend_with_selection(
+                self.backend,
+                question=prepared.backend_question or normalized_question,
                 session_id=self.session.id,
+                selection=prepared.selection,
+            )
+            response = _merge_response_metadata(
+                response,
+                _selection_metadata(prepared.selection),
             )
 
         self._record_exchange(
             normalized_question,
             response.content,
+            user_metadata=prepared.user_metadata,
             metadata=response.metadata,
             guardrail_triggered=response.guardrail_triggered,
         )
@@ -148,36 +215,47 @@ class ChatbotApplication:
         """Responde uma pergunta em streaming, preservando o contrato de historico."""
 
         normalized_question = _normalize_question(question)
-        prior_user_queries = _collect_prior_user_queries(self.session.history)
-        prior_messages = _collect_prior_messages(self.session.history)
-        response = _build_pre_agent_response(
+        prepared = _prepare_runtime_request(
             normalized_question,
-            has_history=bool(self.session.history),
-            prior_user_queries=prior_user_queries,
-            prior_messages=prior_messages,
+            history=self.session.history,
+            selector=self.selector,
         )
-        if response is not None:
+        if prepared.immediate_response is not None:
             self._record_exchange(
                 normalized_question,
-                response.content,
-                metadata=response.metadata,
-                guardrail_triggered=response.guardrail_triggered,
+                prepared.immediate_response.content,
+                user_metadata=prepared.user_metadata,
+                metadata=prepared.immediate_response.metadata,
+                guardrail_triggered=prepared.immediate_response.guardrail_triggered,
             )
-            return iter([response.content])
+            return iter([prepared.immediate_response.content])
 
         stream_answer = getattr(self.backend, "stream_answer", None)
         if stream_answer is None:
-            response = self.backend.answer(
-                normalized_question,
+            response = _answer_backend_with_selection(
+                self.backend,
+                question=prepared.backend_question or normalized_question,
                 session_id=self.session.id,
+                selection=prepared.selection,
             )
-            self._record_exchange(normalized_question, response.content)
+            response = _merge_response_metadata(
+                response,
+                _selection_metadata(prepared.selection),
+            )
+            self._record_exchange(
+                normalized_question,
+                response.content,
+                user_metadata=prepared.user_metadata,
+                metadata=response.metadata,
+            )
             return iter([response.content])
 
         return self._stream_backend_response(
             normalized_question,
-            normalized_question,
-            stream_answer,
+            prepared.backend_question or normalized_question,
+            prepared.user_metadata,
+            _selection_metadata(prepared.selection),
+            prepared.selection,
         )
 
     def reset(self, session_id: str | None = None) -> ChatSession:
@@ -189,10 +267,17 @@ class ChatbotApplication:
         question: str,
         answer: str,
         *,
+        user_metadata: dict[str, Any] | None = None,
         metadata: dict[str, Any] | None = None,
         guardrail_triggered: bool = False,
     ) -> None:
-        self.session.history.append(ChatMessage(role="user", content=question))
+        self.session.history.append(
+            ChatMessage(
+                role="user",
+                content=question,
+                metadata=dict(user_metadata or {}),
+            )
+        )
         assistant_metadata = dict(metadata or {})
         if guardrail_triggered:
             assistant_metadata["guardrail_triggered"] = True
@@ -208,11 +293,27 @@ class ChatbotApplication:
         self,
         display_question: str,
         backend_question: str,
-        stream_answer: Callable[..., Iterator[str]],
+        user_metadata: dict[str, Any],
+        assistant_metadata: dict[str, Any],
+        selection: HybridToolSelection | None,
     ) -> Iterator[str]:
         chunks: list[str] = []
+        stream_answer_with_selection = getattr(
+            self.backend,
+            "stream_answer_with_selection",
+            None,
+        )
+        if stream_answer_with_selection is not None:
+            chunk_stream = stream_answer_with_selection(
+                backend_question,
+                session_id=self.session.id,
+                selection=selection,
+            )
+        else:
+            stream_answer = getattr(self.backend, "stream_answer")
+            chunk_stream = stream_answer(backend_question, session_id=self.session.id)
 
-        for chunk in stream_answer(backend_question, session_id=self.session.id):
+        for chunk in chunk_stream:
             content = str(chunk)
             if not content:
                 continue
@@ -221,15 +322,24 @@ class ChatbotApplication:
 
         final_content = "".join(chunks)
         if not final_content:
-            response = self.backend.answer(
-                backend_question,
+            response = _answer_backend_with_selection(
+                self.backend,
+                question=backend_question,
                 session_id=self.session.id,
+                selection=selection,
             )
+            response = _merge_response_metadata(response, assistant_metadata)
             final_content = response.content
             if final_content:
                 yield final_content
+            assistant_metadata = dict(response.metadata)
 
-        self._record_exchange(display_question, final_content)
+        self._record_exchange(
+            display_question,
+            final_content,
+            user_metadata=user_metadata,
+            metadata=assistant_metadata,
+        )
 
 
 def _extract_last_message_content(result: dict[str, Any]) -> str:
@@ -336,25 +446,64 @@ def _normalize_question(question: str) -> str:
     return question.strip()
 
 
-def _build_pre_agent_response(
+def _prepare_runtime_request(
     question: str,
     *,
-    has_history: bool,
-    prior_user_queries: tuple[str, ...] = (),
-    prior_messages: tuple[tuple[str, str, bool], ...] = (),
-) -> ChatResponse | None:
-    """Mantem respostas locais e guardrails na fronteira pre-modelo."""
+    history: list[ChatMessage],
+    selector: HybridToolSelector,
+) -> PreparedRuntimeRequest:
+    local_response = _build_local_response(question)
+    if local_response is not None:
+        return PreparedRuntimeRequest(immediate_response=local_response)
 
-    response = _build_local_response(question)
-    if response is not None:
-        return response
+    policy = evaluate_deterministic_policy(question, history=history)
+    if policy.action == "block":
+        return PreparedRuntimeRequest(
+            immediate_response=ChatResponse(
+                content=policy.message or "",
+                guardrail_triggered=True,
+                metadata={
+                    "guardrail_category": policy.category,
+                    **policy.assistant_metadata,
+                },
+            ),
+            user_metadata=policy.user_metadata,
+        )
+    if policy.action == "clarify":
+        return PreparedRuntimeRequest(
+            immediate_response=ChatResponse(
+                content=policy.message or "",
+                metadata=policy.assistant_metadata,
+            ),
+            user_metadata=policy.user_metadata,
+        )
 
-    return _build_guardrail_response(
-        question,
-        has_history=has_history,
-        prior_user_queries=prior_user_queries,
-        prior_messages=prior_messages,
+    backend_question = policy.resolved_question or question
+    selection = selector.select(backend_question, history=history)
+    if selection.action != "allow":
+        return PreparedRuntimeRequest(
+            immediate_response=ChatResponse(
+                content=selection.message or "",
+                metadata=_selection_metadata(selection),
+            ),
+            user_metadata=policy.user_metadata,
+        )
+
+    return PreparedRuntimeRequest(
+        backend_question=backend_question,
+        user_metadata=policy.user_metadata,
+        selection=selection,
     )
+
+
+def _normalize_text(text: str) -> str:
+    import unicodedata
+
+    normalized = unicodedata.normalize("NFD", text)
+    without_accents = "".join(
+        char for char in normalized if unicodedata.category(char) != "Mn"
+    )
+    return " ".join(without_accents.lower().strip().split())
 
 
 def _build_local_response(question: str) -> ChatResponse | None:
@@ -374,53 +523,67 @@ def _build_local_response(question: str) -> ChatResponse | None:
     return None
 
 
-def _build_guardrail_response(
-    question: str,
+def _answer_backend_with_selection(
+    backend: AgentBackend,
     *,
-    has_history: bool,
-    prior_user_queries: tuple[str, ...] = (),
-    prior_messages: tuple[tuple[str, str, bool], ...] = (),
-) -> ChatResponse | None:
-    route = route_user_query(question)
-    decision = evaluate_public_query_guardrails(
-        question,
-        compatibility_route=route,
-        has_history=has_history,
-        prior_user_queries=prior_user_queries,
-        prior_messages=prior_messages,
-    )
-    if decision.allowed:
-        return None
-
-    return ChatResponse(
-        content=decision.message or "",
-        guardrail_triggered=True,
-        metadata={"guardrail_category": decision.category},
-    )
-
-
-def _normalize_text(text: str) -> str:
-    import unicodedata
-
-    normalized = unicodedata.normalize("NFD", text)
-    without_accents = "".join(
-        char for char in normalized if unicodedata.category(char) != "Mn"
-    )
-    return " ".join(without_accents.lower().strip().split())
-
-
-def _collect_prior_user_queries(history: list[ChatMessage]) -> tuple[str, ...]:
-    return tuple(message.content for message in history if message.role == "user")
-
-
-def _collect_prior_messages(
-    history: list[ChatMessage],
-) -> tuple[tuple[str, str, bool], ...]:
-    return tuple(
-        (
-            message.role,
-            message.content,
-            bool(message.metadata.get("guardrail_triggered")),
+    question: str,
+    session_id: str,
+    selection: HybridToolSelection | None,
+) -> ChatResponse:
+    answer_with_selection = getattr(backend, "answer_with_selection", None)
+    if answer_with_selection is not None:
+        return answer_with_selection(
+            question,
+            session_id=session_id,
+            selection=selection,
         )
-        for message in history
+    return backend.answer(question, session_id=session_id)
+
+
+def _selection_metadata(
+    selection: HybridToolSelection | None,
+) -> dict[str, Any]:
+    if selection is None:
+        return {}
+    return {
+        "selection_action": selection.action,
+        "selected_tool_names": list(selection.candidate_tool_names),
+        "selection_confidence": selection.confidence,
+        "selection_reason_code": selection.reason_code,
+        "selection_fallback": selection.used_fallback,
+    }
+
+
+def _merge_response_metadata(
+    response: ChatResponse,
+    extra_metadata: dict[str, Any],
+) -> ChatResponse:
+    if not extra_metadata:
+        return response
+    merged_metadata = dict(response.metadata)
+    merged_metadata.update(extra_metadata)
+    return ChatResponse(
+        content=response.content,
+        guardrail_triggered=response.guardrail_triggered,
+        metadata=merged_metadata,
+        raw_result=response.raw_result,
     )
+
+
+def _build_default_selector(backend: AgentBackend) -> HybridToolSelector:
+    if isinstance(backend, ChatbotAgentBackend):
+        return HybridToolSelector()
+    return HybridToolSelector(runner=_non_agent_backend_selector_runner)
+
+
+def _non_agent_backend_selector_runner(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+    return {
+        "action": "allow",
+        "candidate_tool_names": [],
+        "confidence": "low",
+        "reason_code": "backend_without_selector_support",
+    }
+
+
+def _tool_name(tool_obj: object) -> str:
+    return str(getattr(tool_obj, "name", getattr(tool_obj, "__name__", "")))

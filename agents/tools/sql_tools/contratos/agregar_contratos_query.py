@@ -7,7 +7,7 @@ from typing import Any
 from pydantic import ValidationError
 from sqlalchemy import func, select
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import Contrato
 
@@ -164,6 +164,19 @@ def _execute_fallback_aggregate(
     name="agregar_contratos",
     scope=PUBLIC_SCOPE,
     tags=["domain:contratos", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Qual o total contratado pela educacao?",
+            "Quais fornecedores concentram maior valor contratado?",
+        ],
+        hints=[
+            "contrato",
+            "total contratado",
+            "ranking",
+            "fornecedor",
+            "media",
+        ],
+    ),
 )
 def agregar_contratos(
     filtros: dict[str, Any] | None = None,

@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 
 from .agregar_transferencias_financeiras_schema import (
@@ -41,6 +41,23 @@ def _metric_to_json(value: Decimal | int) -> float | int:
     name="agregar_transferencias_financeiras",
     scope=PUBLIC_SCOPE,
     tags=["domain:transferencias_financeiras", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Qual o total recebido em emendas parlamentares?",
+            "Qual unidade recebeu mais transferencias?",
+            "Quantas emendas foram do Nikolas Ferreira em 2025?",
+        ],
+        hints=[
+            "transferencia financeira",
+            "repasse",
+            "emenda parlamentar",
+            "ranking",
+            "total",
+            "contagem por autor",
+            "contagem por funcao",
+            "total por ano",
+        ],
+    ),
 )
 def agregar_transferencias_financeiras(
     filtros: dict[str, Any] | None = None,
@@ -55,7 +72,7 @@ def agregar_transferencias_financeiras(
 
     Use esta tool quando a pergunta pedir total transferido, total recebido,
     quantidade de registros ou rankings por unidade, tipo de movimento, autor,
-    funcao ou tipo de emenda.
+    funcao, ano ou tipo de emenda.
     NAO use para listar registros individuais; para isso use
     `consultar_transferencias_financeiras`.
     """

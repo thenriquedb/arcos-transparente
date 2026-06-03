@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 import os
 from pathlib import Path
 
@@ -61,9 +62,9 @@ def carregar_system_prompt() -> str:
     return SYSTEM_PROMPT_PATH.read_text(encoding="utf-8").strip()
 
 
-def criar_agente_chatbot():
+def criar_agente_chatbot(*, tools: Sequence[object] | None = None):
     return create_agent(
-        tools=get_public_tools(),
+        tools=list(tools) if tools is not None else get_public_tools(),
         model=criar_modelo_llm(),
         system_prompt=carregar_system_prompt(),
         checkpointer=CHECKPOINTER,

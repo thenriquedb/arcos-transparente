@@ -7,7 +7,7 @@ from typing import Any
 from pydantic import ValidationError
 from sqlalchemy import func, literal, select
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import (
     Contrato,
@@ -284,6 +284,19 @@ def _aplicar_aviso_valor_zero(
     name="consultar_contratos",
     scope=PUBLIC_SCOPE,
     tags=["domain:contratos", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quais contratos da saude?",
+            "Detalhe o contrato 178/2025.",
+        ],
+        hints=[
+            "contrato",
+            "fornecedor",
+            "descricao",
+            "numero",
+            "detalhes",
+        ],
+    ),
 )
 def consultar_contratos(
     filtros: dict[str, Any] | None = None,

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-import agents.chatbot.core as chatbot_core
 import agents.chatbot.agent as chatbot_agent
 from agents.chatbot.cli import run_interactive, run_once
+from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
 from agents.chatbot.core import (
     ChatbotAgentBackend,
     ChatMessage,
@@ -12,7 +12,7 @@ from agents.chatbot.core import (
     ChatSession,
     ChatbotApplication,
 )
-from agents.routing.models import RouteDecision
+from agents.tools.registry import get_public_tools, get_public_tools_by_name
 
 
 class FakeBackend:
@@ -31,8 +31,53 @@ class FakeStreamingBackend(FakeBackend):
         yield f" em stream para: {question}"
 
 
+class SelectionAwareBackend(FakeBackend):
+    def __init__(self) -> None:
+        super().__init__()
+        self.selection_calls: list[tuple[tuple[str, ...], str]] = []
+
+    def answer_with_selection(
+        self,
+        question: str,
+        *,
+        session_id: str,
+        selection: HybridToolSelection | None = None,
+    ) -> ChatResponse:
+        self.calls.append((question, session_id))
+        tool_names = tuple(selection.candidate_tool_names) if selection else ()
+        self.selection_calls.append((tool_names, session_id))
+        return ChatResponse(content=f"resposta para: {question}")
+
+
+class StubSelector:
+    def __init__(self, result: HybridToolSelection) -> None:
+        self.result = result
+        self.calls: list[tuple[str, tuple[str, ...]]] = []
+
+    def select(self, question: str, *, history) -> HybridToolSelection:
+        self.calls.append((question, tuple(message.content for message in history)))
+        return self.result
+
+
 def _tool_name(tool_obj) -> str:
     return getattr(tool_obj, "name", getattr(tool_obj, "__name__", ""))
+
+
+def _selection(
+    tool_names: list[str] | tuple[str, ...],
+    *,
+    confidence: str = "high",
+    reason_code: str | None = None,
+    used_fallback: bool = False,
+) -> HybridToolSelection:
+    return HybridToolSelection(
+        action="allow",
+        candidate_tools=tuple(get_public_tools_by_name(tool_names)),
+        candidate_tool_names=tuple(tool_names),
+        confidence=confidence,
+        reason_code=reason_code,
+        used_fallback=used_fallback,
+    )
 
 
 def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
@@ -206,29 +251,32 @@ def test_chatbot_application_bloqueia_prompt_injection_sem_chamar_backend() -> N
     assert backend.calls == []
 
 
-def test_chatbot_application_permite_consulta_no_escopo_sem_rota_confiante(
-    monkeypatch,
-) -> None:
-    backend = FakeBackend()
+def test_chatbot_application_permite_consulta_no_escopo_com_fallback_do_seletor() -> (
+    None
+):
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(
+        runner=lambda *_args: {
+            "action": "allow",
+            "candidate_tool_names": ["consultar_contratos"],
+            "confidence": "low",
+            "reason_code": "uncertain",
+        }
+    )
     app = ChatbotApplication(
         backend=backend,
         session=ChatSession(id="sessao-sem-rota"),
-    )
-
-    monkeypatch.setattr(
-        chatbot_core,
-        "route_user_query",
-        lambda _query: RouteDecision(
-            domain="desconhecido",
-            operation_type="desconhecido",
-            confident=False,
-        ),
+        selector=selector,
     )
 
     response = app.ask("Quais contratos da educacao?")
+    expected_tool_names = tuple(_tool_name(tool_obj) for tool_obj in get_public_tools())
 
     assert response.content == "resposta para: Quais contratos da educacao?"
     assert backend.calls == [("Quais contratos da educacao?", "sessao-sem-rota")]
+    assert backend.selection_calls == [(expected_tool_names, "sessao-sem-rota")]
+    assert response.metadata["selection_fallback"] is True
+    assert response.metadata["selection_reason_code"] == "uncertain"
 
 
 def test_chatbot_application_permite_consulta_de_investimento_em_saude() -> None:
@@ -255,9 +303,15 @@ def test_chatbot_application_permite_consulta_de_transferencias_para_camara() ->
 
     response = app.ask("Quanto foi transferido para a camara em 2026?")
 
-    assert response.content == "resposta para: Quanto foi transferido para a camara em 2026?"
+    assert (
+        response.content
+        == "resposta para: Quanto foi transferido para a camara em 2026?"
+    )
     assert backend.calls == [
-        ("Quanto foi transferido para a camara em 2026?", "sessao-transferencias-camara")
+        (
+            "Quanto foi transferido para a camara em 2026?",
+            "sessao-transferencias-camara",
+        )
     ]
 
 
@@ -289,6 +343,95 @@ def test_chatbot_application_permite_consulta_de_custo_de_evento_publico() -> No
     )
     assert backend.calls == [
         ("qual foi o custo do festival gastronomico de 2026?", "sessao-custo-evento")
+    ]
+
+
+def test_chatbot_application_clarifica_sigla_protegida_antes_do_backend() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-sigla-protegida"),
+    )
+
+    response = app.ask("Quais contratos da UPA?")
+
+    assert response.content == "Você quer dizer UPA como Unidade de Pronto Atendimento?"
+    assert response.guardrail_triggered is False
+    assert response.metadata["policy_category"] == "protected_acronym"
+    assert backend.calls == []
+
+
+def test_chatbot_application_reaproveita_sigla_confirmada_antes_da_selecao() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-sigla-confirmada"),
+    )
+
+    primeira = app.ask("Quais contratos da UPA?")
+    segunda = app.ask("sim")
+    terceira = app.ask("E as licitacoes da UPA?")
+
+    assert primeira.content == "Você quer dizer UPA como Unidade de Pronto Atendimento?"
+    assert (
+        segunda.content
+        == "resposta para: Quais contratos da Unidade de Pronto Atendimento?"
+    )
+    assert (
+        terceira.content
+        == "resposta para: E as licitacoes da Unidade de Pronto Atendimento?"
+    )
+    assert backend.calls == [
+        (
+            "Quais contratos da Unidade de Pronto Atendimento?",
+            "sessao-sigla-confirmada",
+        ),
+        (
+            "E as licitacoes da Unidade de Pronto Atendimento?",
+            "sessao-sigla-confirmada",
+        ),
+    ]
+    assert app.session.history[2].metadata == {
+        "confirmed_acronyms": {"UPA": "Unidade de Pronto Atendimento"}
+    }
+
+
+def test_chatbot_application_entrega_tools_selecionadas_ao_backend() -> None:
+    backend = SelectionAwareBackend()
+    selector = StubSelector(_selection(["consultar_contratos"]))
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-candidatos"),
+        selector=selector,
+    )
+
+    response = app.ask("Quais contratos da saude?")
+
+    assert response.content == "resposta para: Quais contratos da saude?"
+    assert selector.calls == [("Quais contratos da saude?", ())]
+    assert backend.selection_calls == [(("consultar_contratos",), "sessao-candidatos")]
+
+
+def test_chatbot_application_permite_conjunto_multidominio_de_candidatas() -> None:
+    backend = SelectionAwareBackend()
+    selector = StubSelector(_selection(["consultar_licitacoes", "consultar_contratos"]))
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-multidominio"),
+        selector=selector,
+    )
+
+    response = app.ask("Quais licitacoes e contratos do festival gastronomico?")
+
+    assert (
+        response.content
+        == "resposta para: Quais licitacoes e contratos do festival gastronomico?"
+    )
+    assert backend.selection_calls == [
+        (
+            ("consultar_licitacoes", "consultar_contratos"),
+            "sessao-multidominio",
+        )
     ]
 
 
@@ -331,6 +474,35 @@ def test_chatbot_application_permite_followup_temporal_em_outro_escopo() -> None
     assert backend.calls == [
         ("Quais contratos da saude?", "sessao-followup-contratos"),
         ("E em 2024?", "sessao-followup-contratos"),
+    ]
+
+
+def test_chatbot_application_permite_followup_curto_por_autor_em_emendas() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-emendas-autor"),
+    )
+
+    primeira_resposta = app.ask(
+        "quais foram todas as emendas que a prefeitura recebeu em 2025?"
+    )
+    segunda_resposta = app.ask("quantas foram do nikolas ferreira?")
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: quais foram todas as emendas que a prefeitura recebeu em 2025?"
+    )
+    assert segunda_resposta.content == "resposta para: quantas foram do nikolas ferreira?"
+    assert backend.calls == [
+        (
+            "quais foram todas as emendas que a prefeitura recebeu em 2025?",
+            "sessao-followup-emendas-autor",
+        ),
+        (
+            "quantas foram do nikolas ferreira?",
+            "sessao-followup-emendas-autor",
+        ),
     ]
 
 

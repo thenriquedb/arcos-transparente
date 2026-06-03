@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import DespesaDocumento
 
@@ -60,6 +60,19 @@ def _group_value(registro: DespesaDocumento, group: str) -> str | int | None:
     name="agregar_despesas",
     scope=PUBLIC_SCOPE,
     tags=["domain:despesas", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Quanto foi pago em despesas da saude em 2025?",
+            "Quais os maiores credores da prefeitura?",
+        ],
+        hints=[
+            "despesa",
+            "total pago",
+            "empenhado",
+            "ranking",
+            "credor",
+        ],
+    ),
 )
 def agregar_despesas(
     filtros: dict[str, Any] | None = None,

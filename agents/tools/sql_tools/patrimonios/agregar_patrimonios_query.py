@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import Patrimonio
 
@@ -49,6 +49,19 @@ def _group_value(registro: Patrimonio, group: str) -> str | None:
     name="agregar_patrimonios",
     scope=PUBLIC_SCOPE,
     tags=["domain:patrimonios", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Qual o valor total do patrimonio em 2025?",
+            "Qual localizacao concentra mais bens?",
+        ],
+        hints=[
+            "patrimonio",
+            "valor total",
+            "contagem",
+            "ranking",
+            "localizacao",
+        ],
+    ),
 )
 def agregar_patrimonios(
     filtros: dict[str, Any] | None = None,

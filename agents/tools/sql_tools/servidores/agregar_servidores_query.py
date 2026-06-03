@@ -7,7 +7,7 @@ from typing import Any
 from pydantic import ValidationError
 from sqlalchemy import func, select
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import Servidor
 
@@ -41,6 +41,19 @@ def _build_metric_expression(metrica: str):
     name="agregar_servidores",
     scope=PUBLIC_SCOPE,
     tags=["domain:servidores", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Quantos servidores trabalham na saude?",
+            "Qual secretaria tem mais servidores?",
+        ],
+        hints=[
+            "servidor",
+            "contagem",
+            "ranking",
+            "massa salarial",
+            "agrupamento",
+        ],
+    ),
 )
 def agregar_servidores(
     filtros: dict[str, Any] | None = None,

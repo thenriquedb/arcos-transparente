@@ -75,6 +75,9 @@ _SHORT_FOLLOW_UP_CONNECTOR_TOKENS = frozenset(
         "as",
         "qual",
         "quais",
+        "quanto",
+        "quantos",
+        "quantas",
     }
 )
 _SHORT_RANKING_TOKENS = frozenset(
@@ -406,6 +409,8 @@ def _has_public_filter_hint(normalized_text: str) -> bool:
         return True
     if _extract_contrato_fornecedor(normalized_text) is not None:
         return True
+    if _looks_like_named_text_filter(normalized_text):
+        return True
     if is_supported_knowledge_follow_up_fragment(normalized_text):
         return True
     return any(term in normalized_text for term in ("prefeitura", "camara"))
@@ -413,3 +418,13 @@ def _has_public_filter_hint(normalized_text: str) -> bool:
 
 def _tokenize(normalized_text: str) -> tuple[str, ...]:
     return tuple(re.findall(r"[a-z0-9]+", normalized_text))
+
+
+def _looks_like_named_text_filter(normalized_text: str) -> bool:
+    return (
+        re.search(
+            r"\b(?:do|da|de)\s+[a-z0-9]{2,}(?:\s+[a-z0-9]{2,}){1,4}\??$",
+            normalized_text,
+        )
+        is not None
+    )

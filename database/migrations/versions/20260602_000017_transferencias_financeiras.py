@@ -36,12 +36,8 @@ def upgrade() -> None:
         sa.Column("sequencia_origem", sa.Integer(), nullable=False),
         sa.Column("exercicio", sa.Integer(), nullable=False),
         sa.Column("identificacao", sa.String(length=40), nullable=True),
-        sa.Column(
-            "unidade_gestora_concessora", sa.String(length=255), nullable=True
-        ),
-        sa.Column(
-            "unidade_gestora_recebedora", sa.String(length=255), nullable=True
-        ),
+        sa.Column("unidade_gestora_concessora", sa.String(length=255), nullable=True),
+        sa.Column("unidade_gestora_recebedora", sa.String(length=255), nullable=True),
         sa.Column("finalidade", sa.Text(), nullable=True),
         sa.Column("fonte_recurso", sa.Text(), nullable=True),
         sa.Column("detalhamento_fonte", sa.Text(), nullable=True),
@@ -163,7 +159,9 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index("ix_emendas_parlamentares_tipo_emenda", table_name="emendas_parlamentares")
+    op.drop_index(
+        "ix_emendas_parlamentares_tipo_emenda", table_name="emendas_parlamentares"
+    )
     op.drop_index("ix_emendas_parlamentares_funcao", table_name="emendas_parlamentares")
     op.drop_index(
         "ix_emendas_parlamentares_exercicio_consulta",
@@ -174,7 +172,9 @@ def downgrade() -> None:
         "ix_emendas_parlamentares_arquivo_origem",
         table_name="emendas_parlamentares",
     )
-    op.drop_index("ix_emendas_parlamentares_ano_numero", table_name="emendas_parlamentares")
+    op.drop_index(
+        "ix_emendas_parlamentares_ano_numero", table_name="emendas_parlamentares"
+    )
     op.drop_index("ix_emendas_parlamentares_ano", table_name="emendas_parlamentares")
     op.drop_table("emendas_parlamentares")
 

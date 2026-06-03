@@ -8,7 +8,7 @@ from typing import Any
 from pydantic import ValidationError
 from sqlalchemy.orm import selectinload
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import DespesaDocumento
 from shared.utils.decimal_to_float import decimal_to_float
@@ -171,6 +171,19 @@ def project_despesas(
     name="consultar_despesas",
     scope=PUBLIC_SCOPE,
     tags=["domain:despesas", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quais despesas do festival gastronomico em 2025?",
+            "Mostre os empenhos da educacao.",
+        ],
+        hints=[
+            "despesa",
+            "empenho",
+            "credor",
+            "documento",
+            "restos a pagar",
+        ],
+    ),
 )
 def consultar_despesas(
     filtros: dict[str, Any] | None = None,

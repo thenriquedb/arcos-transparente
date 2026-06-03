@@ -32,7 +32,10 @@ from database.models.revenue import (
     ReceitaNatureza,
 )
 from database.models.server import QuadroPessoal, Servidor
-from database.models.transfers import EmendaParlamentar, TransferenciaFinanceiraMovimento
+from database.models.transfers import (
+    EmendaParlamentar,
+    TransferenciaFinanceiraMovimento,
+)
 
 __all__ = [
     "Base",

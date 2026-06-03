@@ -9,7 +9,7 @@ from pydantic import ValidationError
 from sqlalchemy import func, select
 from sqlalchemy.orm import joinedload
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.session import _normalizar_texto
 from database.models import Eleito, FolhaPagamentoRegistro, FolhaServidor
@@ -42,6 +42,19 @@ _CARGO_POLITICO_ALIASES = {
     name="buscar_historico_de_pagamentos_do_servidor",
     scope=PUBLIC_SCOPE,
     tags=["domain:folha", "shape:history"],
+    routing=routing_metadata(
+        examples=[
+            "Qual o salario de Ronaldo Ribeiro?",
+            "Quanto o prefeito recebe?",
+        ],
+        hints=[
+            "salario individual",
+            "quanto recebe",
+            "historico de pagamentos",
+            "nome de pessoa",
+            "folha",
+        ],
+    ),
 )
 def buscar_historico_de_pagamentos_do_servidor(
     nome: str | None = None,

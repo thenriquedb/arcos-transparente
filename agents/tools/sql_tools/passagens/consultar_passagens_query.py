@@ -8,7 +8,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import DespesaDocumento
 from shared.utils.decimal_to_float import decimal_to_float
@@ -136,6 +136,19 @@ def project_passagens(
     name="consultar_passagens",
     scope=PUBLIC_SCOPE,
     tags=["domain:passagens", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quem recebeu passagens em 2026?",
+            "Liste despesas com locomocao para Brasilia.",
+        ],
+        hints=[
+            "passagem",
+            "locomocao",
+            "beneficiario",
+            "destino",
+            "lista",
+        ],
+    ),
 )
 def consultar_passagens(
     filtros: dict[str, Any] | None = None,

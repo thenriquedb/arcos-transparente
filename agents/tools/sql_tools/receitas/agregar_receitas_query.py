@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 
 from .agregar_receitas_schema import (
@@ -26,6 +26,19 @@ from .shared.querying import (
     name="agregar_receitas",
     scope=PUBLIC_SCOPE,
     tags=["domain:receitas", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Quanto foi arrecadado com IPTU em 2025?",
+            "Qual tributo mais arrecadou?",
+        ],
+        hints=[
+            "receita",
+            "arrecadado",
+            "lancado",
+            "ranking",
+            "tributo",
+        ],
+    ),
 )
 def agregar_receitas(
     filtros: dict[str, Any] | None = None,

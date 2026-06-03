@@ -113,9 +113,7 @@ class AgregarTransferenciasFinanceirasMetadata(TransferenciasFinanceirasToolBase
     limite: int
 
 
-class AgregarTransferenciasFinanceirasResponse(
-    TransferenciasFinanceirasToolBaseSchema
-):
+class AgregarTransferenciasFinanceirasResponse(TransferenciasFinanceirasToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarTransferenciasFinanceirasMetadata

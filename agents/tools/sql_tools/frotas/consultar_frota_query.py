@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import FrotaVeiculo
 from shared.utils.decimal_to_float import decimal_to_float
@@ -162,6 +162,19 @@ def project_frota(
     name="consultar_frota",
     scope=PUBLIC_SCOPE,
     tags=["domain:frotas", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quais veiculos da prefeitura?",
+            "Qual a placa da ambulancia da saude?",
+        ],
+        hints=[
+            "frota",
+            "veiculo",
+            "placa",
+            "modelo",
+            "patrimonio",
+        ],
+    ),
 )
 def consultar_frota(
     filtros: dict[str, Any] | None = None,

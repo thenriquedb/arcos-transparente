@@ -4,7 +4,16 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional
 
-from sqlalchemy import Date, DateTime, Integer, Numeric, String, Text, UniqueConstraint, func
+from sqlalchemy import (
+    Date,
+    DateTime,
+    Integer,
+    Numeric,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from database.models.base import Base
@@ -93,5 +102,7 @@ class EmendaParlamentar(Base):
     tipo_emenda: Mapped[Optional[str]] = mapped_column(
         String(255), nullable=True, index=True
     )
-    funcao: Mapped[Optional[str]] = mapped_column(String(120), nullable=True, index=True)
+    funcao: Mapped[Optional[str]] = mapped_column(
+        String(120), nullable=True, index=True
+    )
     valor: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)

@@ -8,7 +8,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import EmendaParlamentar, TransferenciaFinanceiraMovimento
 from shared.utils.decimal_to_float import decimal_to_float
@@ -112,7 +112,9 @@ def load_filtered_transferencias_financeiras(
         ]
     if filtros.identificacao:
         registros = [
-            r for r in registros if matches_text_query(r["identificacao"], filtros.identificacao)
+            r
+            for r in registros
+            if matches_text_query(r["identificacao"], filtros.identificacao)
         ]
     if filtros.unidade_concessora:
         registros = [
@@ -128,11 +130,15 @@ def load_filtered_transferencias_financeiras(
         ]
     if filtros.tipo_movimento:
         registros = [
-            r for r in registros if matches_text_query(r["tipo_movimento"], filtros.tipo_movimento)
+            r
+            for r in registros
+            if matches_text_query(r["tipo_movimento"], filtros.tipo_movimento)
         ]
     if filtros.finalidade:
         registros = [
-            r for r in registros if matches_text_query(r["finalidade"], filtros.finalidade)
+            r
+            for r in registros
+            if matches_text_query(r["finalidade"], filtros.finalidade)
         ]
     if filtros.fonte_recurso:
         registros = [
@@ -147,17 +153,29 @@ def load_filtered_transferencias_financeiras(
             if r.get("exercicio_consulta") == filtros.exercicio_consulta
         ]
     if filtros.ano_numero:
-        registros = [r for r in registros if matches_text_query(r["ano_numero"], filtros.ano_numero)]
+        registros = [
+            r
+            for r in registros
+            if matches_text_query(r["ano_numero"], filtros.ano_numero)
+        ]
     if filtros.autor:
-        registros = [r for r in registros if matches_text_query(r["autor"], filtros.autor)]
+        registros = [
+            r for r in registros if matches_text_query(r["autor"], filtros.autor)
+        ]
     if filtros.objeto:
-        registros = [r for r in registros if matches_text_query(r["objeto"], filtros.objeto)]
+        registros = [
+            r for r in registros if matches_text_query(r["objeto"], filtros.objeto)
+        ]
     if filtros.tipo_emenda:
         registros = [
-            r for r in registros if matches_text_query(r["tipo_emenda"], filtros.tipo_emenda)
+            r
+            for r in registros
+            if matches_text_query(r["tipo_emenda"], filtros.tipo_emenda)
         ]
     if filtros.funcao:
-        registros = [r for r in registros if matches_text_query(r["funcao"], filtros.funcao)]
+        registros = [
+            r for r in registros if matches_text_query(r["funcao"], filtros.funcao)
+        ]
 
     return registros
 
@@ -196,6 +214,23 @@ def project_transferencias_financeiras(
     name="consultar_transferencias_financeiras",
     scope=PUBLIC_SCOPE,
     tags=["domain:transferencias_financeiras", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quanto foi transferido para a camara em 2026?",
+            "Quais emendas parlamentares foram recebidas na saude?",
+            "Liste as emendas do Nikolas Ferreira na saude em 2025.",
+        ],
+        hints=[
+            "transferencia financeira",
+            "repasse",
+            "emenda parlamentar",
+            "recebimento",
+            "movimentacao",
+            "autor da emenda",
+            "funcao da emenda",
+            "ano da emenda",
+        ],
+    ),
 )
 def consultar_transferencias_financeiras(
     filtros: dict[str, Any] | None = None,
@@ -209,7 +244,8 @@ def consultar_transferencias_financeiras(
     Lista movimentos de transferencias financeiras e emendas parlamentares.
 
     Use esta tool quando a pergunta pedir repasses, recebimentos, devolucoes
-    entre unidades publicas ou detalhes de emendas parlamentares.
+    entre unidades publicas ou detalhes de emendas parlamentares por autor,
+    funcao, ano, tipo de emenda ou objeto.
     NAO use para totais, contagens ou rankings agregados; para isso use
     `agregar_transferencias_financeiras`.
     """
@@ -270,9 +306,7 @@ def consultar_transferencias_financeiras(
 
     mensagem = None
     if total > params.offset + len(resultados):
-        mensagem = (
-            f"Mostrando {len(resultados)} de {total} registros encontrados."
-        )
+        mensagem = f"Mostrando {len(resultados)} de {total} registros encontrados."
 
     return ConsultarTransferenciasFinanceirasResponse(
         total=total,

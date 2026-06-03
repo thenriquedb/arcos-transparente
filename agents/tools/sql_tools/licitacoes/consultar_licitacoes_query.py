@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import InstrumentoContratual, Licitacao
 from shared.utils.decimal_to_float import decimal_to_float
@@ -89,6 +89,19 @@ def _aplicar_aviso_valor_estimado_zero(
     name="consultar_licitacoes",
     scope=PUBLIC_SCOPE,
     tags=["domain:licitacoes", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quais licitacoes estao abertas?",
+            "Houve licitacao para o Natal Fest?",
+        ],
+        hints=[
+            "licitacao",
+            "edital",
+            "objeto",
+            "modalidade",
+            "fornecedor vencedor",
+        ],
+    ),
 )
 def consultar_licitacoes(
     filtros: dict[str, Any] | None = None,

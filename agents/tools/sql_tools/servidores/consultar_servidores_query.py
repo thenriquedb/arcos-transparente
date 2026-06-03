@@ -7,7 +7,7 @@ from typing import Any
 from pydantic import ValidationError
 from sqlalchemy import func, select
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import Servidor
 
@@ -37,6 +37,19 @@ SERVER_ORDER_COLUMNS = {
     name="consultar_servidores",
     scope=PUBLIC_SCOPE,
     tags=["domain:servidores", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quais servidores da educacao?",
+            "Quais os 10 maiores salarios da prefeitura?",
+        ],
+        hints=[
+            "servidor",
+            "cargo",
+            "secretaria",
+            "lista",
+            "maiores salarios",
+        ],
+    ),
 )
 def consultar_servidores(
     filtros: dict[str, Any] | None = None,

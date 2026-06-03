@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 
 from .agregar_planejamento_schema import (
@@ -27,6 +27,19 @@ from .shared.querying import (
     name="agregar_planejamento",
     scope=PUBLIC_SCOPE,
     tags=["domain:planejamento", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Quanto foi investido na saude em 2026?",
+            "Quais acoes tiveram maior orcamento em 2025?",
+        ],
+        hints=[
+            "planejamento",
+            "orcamento",
+            "valor pago",
+            "ranking",
+            "acao",
+        ],
+    ),
 )
 def agregar_planejamento(
     filtros: dict[str, Any] | None = None,

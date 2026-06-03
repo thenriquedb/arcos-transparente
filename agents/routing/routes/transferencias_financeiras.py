@@ -140,7 +140,11 @@ def _try_route_transferencias_financeiras_agregacao(
         normalized_text,
         emenda_query=emenda_query,
     )
-    metrica = "contagem" if "quantos" in normalized_text or "quantas" in normalized_text else "soma_valor"
+    metrica = (
+        "contagem"
+        if "quantos" in normalized_text or "quantas" in normalized_text
+        else "soma_valor"
+    )
 
     return RouteDecision(
         domain="transferencias_financeiras",

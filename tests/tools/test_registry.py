@@ -1,6 +1,10 @@
 from __future__ import annotations
 
-from agents.tools.registry import get_all_tools, get_public_tools
+from agents.tools.registry import (
+    get_all_tools,
+    get_public_tool_catalog,
+    get_public_tools,
+)
 
 
 def _tool_name(tool_obj) -> str:
@@ -96,6 +100,16 @@ def test_get_all_tools_nao_duplica_tools_em_chamadas_repetidas() -> None:
 
     assert nomes_primeira == nomes_segunda
     assert len(nomes_primeira) == len(set(nomes_primeira))
+
+
+def test_catalogo_publico_expoe_metadados_de_roteamento_para_todas_as_tools() -> None:
+    catalog = get_public_tool_catalog()
+
+    assert len(catalog) == 26
+    for entry in catalog:
+        assert entry.routing.summary
+        assert len(entry.routing.examples) >= 2
+        assert len(entry.routing.hints) >= 3
 
 
 def test_descricoes_orientam_salario_de_cargo_eleito_para_folha() -> None:

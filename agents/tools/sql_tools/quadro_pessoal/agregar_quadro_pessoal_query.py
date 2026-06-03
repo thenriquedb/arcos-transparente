@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import QuadroPessoal
 
@@ -44,6 +44,19 @@ def _group_value(registro: QuadroPessoal, group: str) -> str | int:
     name="agregar_quadro_pessoal",
     scope=PUBLIC_SCOPE,
     tags=["domain:quadro_pessoal", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Quantas vagas preenchidas por regime no quadro pessoal?",
+            "Qual origem tem mais vagas ocupadas?",
+        ],
+        hints=[
+            "quadro de pessoal",
+            "vaga",
+            "regime",
+            "contagem",
+            "ranking",
+        ],
+    ),
 )
 def agregar_quadro_pessoal(
     filtros: dict[str, Any] | None = None,

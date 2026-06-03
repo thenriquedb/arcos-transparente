@@ -43,9 +43,7 @@ def test_pipeline_importa_e_reimporta_transferencias_financeiras_sem_duplicar(
         encoding="ISO-8859-1",
     )
     csv_arquivo.write_text(
-        (FIXTURES_DIR / "emendas_parlamentares_sample.csv").read_text(
-            encoding="utf-8"
-        ),
+        (FIXTURES_DIR / "emendas_parlamentares_sample.csv").read_text(encoding="utf-8"),
         encoding="ISO-8859-1",
     )
 
