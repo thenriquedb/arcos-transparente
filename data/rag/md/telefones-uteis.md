@@ -1,214 +1,135 @@
-# Telefones úteis
-
-ALMOXARIFADO CENTRAL	
-(37) 3352-2470
-
-ALMOXARIFADO DA SECRETARIA MUNICIPAL DE EDUCAÇÃO	
-(37) 3352-2607
-
-ALMOXARIFADO DE OBRAS - SUBSTITUIÇÃO DE LÂMPADA E OUTROS SERVIÇOS	
-(37) 3352-2477
-
-ALMOXARIFADO DA SECRETARIA MUNICIPAL DE SAÚDE	
-(37) 3352-2666
-
-CAPS	
-(37) 3352-2693
-
-CASA DE CULTURA	
-(37) 3352-2484
-
-CENTRO DE ACOLHIMENTO	
-(37) 3352-2455
-
-CENTRO DE FISIOTERAPIA	
-(37) 3352-2644
-
-CONSELHO TUTELAR	
-(37) 3352-2476
-
-CRAS	
-(37) 3352-2564
-
-CREAS	
-(37) 3352-2460
-
-CRECHE MUNICIPAL ANA LUCIA FRANCO	
-(37) 3352-2482
-
-CRECHE MUNICIPAL ANTÔNIO DAVI FRANCO	
-(37) 3352-2588
-
-CRECHE MUNICIPAL JÁIA BATISTA ASSUNÇÃO SOUSA	
-(37) 3352-2612
-
-CRECHE MUNICIPAL MARIA DA GLÓRIA VELOSO	
-(37) 3352-2486
-
-CRECHE MUNICIPAL PABLO VICTOR DE SOUSA LIMA	
-(37) 3352-2469
-
-ESCOLA MUNICIPAL ANTÔNIO DAVI FRANCO	
-(37) 3352-2498
-
-ESCOLA MUNICIPAL DORVINA TEIXEIRA ARANTES	
-(37) 3352-2490
-
-ESCOLA MUNICIPAL JOSÉ BONIFÁCIO GONÇALVES	
-(37) 3352-2492
-
-ESCOLA MUNICIPAL JULIETA RIBEIRO DA FONSECA	
-(37) 3352-2454
-
-ESCOLA MUNICIPAL LAURA ANDRADE	
-(37) 3352-2610
-
-ESCOLA MUNICIPAL PROFESSORA OLINDA VELOSO	
-(37) 3352-2489
-
-ESCOLA MUNICIPAL SANTO ANTÔNIO	
-(37) 3352-2493
-
-ESCOLA MUNICIPAL SEBASTIÃO TEIXEIRA BORGES	
-(37) 3352-2611
-
-ESCOLA MUNICIPAL VERA LÚCIA PARAÍSO	
-(37) 3352-2480
-
-ESCOLA MUNICIPAL YOLANDA AMORIM DE CARVALHO	
-(37) 3352-2491
-
-FARMÁCIA DE ALTO CUSTO	
-(37) 3352-2648
-
-FARMÁCIA DE MINAS	
-(37) 3352-2683
-
-FISCALIZAÇÃO DE POSTURAS	
-(37) 3359-7929
-
-HOSPITAL MUNICIPAL SÃO JOSÉ	
-(37) 3352-2688
-
-LACTÁRIO E PADARIA MUNICIPAL	
-(37) 3352-2485
-
-OUVIDORIA	
-(37) 3352-2583
-
-PARQUE AQUÁTICO	
-(37) 3352-2699
-
-POLIESPORTIVO	
-(37) 3352-2481
-
-POUPA TEMPO	
-(37) 3352-2533
-
-PREFEITURA MUNICIPAL DE ARCOS	
-(37) 3359-7900
-
-PROCON	
-(37) 3352-2457
-
-PSF BRASÍLIA	
-(37) 3352-2471
-
-PSF CALCITA	
-(37) 3352-2474
-
-PSF CENTRAL	
-(37) 3352-2689
-
-PSF ELDORADO	
-(37) 3352-2690
-
-PSF ESPLANADA	
-(37) 3352-2472
-
-PSF FLORESTA	
-(37) 3352-2749
-
-PSF ILHA	
-(37) 3352-2495
-
-PSF JARDIM BELA VISTA	
-(37) 3352-2691
-
-PSF OLARIA	
-(37) 3352-2692
-
-PSF SANTO ANTÔNIO	
-(37) 3352-2473
-
-PSF SÃO JUDAS	
-(37) 3352-2695
-
-PSF SÃO VICENTE	
-(37) 3352-2550
-
-PSF ZONA NORTE	
-(37) 3352-2694
-
-SALA MINEIRA DO EMPREENDEDOR	
-(37) 3359-7931
-
-SECRETARIA DE ADMINISTRAÇÃO	
-(37) 3359-7938
-
-SECRETARIA DE CULTURA, ESPORTE, LAZER E TURISMO	
-(37) 3352-2586
-
-SECRETARIA DE EDUCAÇÃO (SEMED)	
-(37) 3352-2487
-
-SECRETARIA DE FAZENDA	
-(37) 3359-7900
-
-SECRETARIA DE GOVERNO	
-(37) 3359-7928
-
-SECRETARIA DE INTEGRAÇÃO SOCIAL	
-(37) 3352-2667
-
-SECRETARIA DE MEIO AMBIENTE E AGRICULTURA	
-(37) 3352-2452
-
-SECRETARIA DE OBRAS E SERVIÇOS PÚBLICOS	
-(37) 3359-7910
-
-SECRETARIA DE PLANEJAMENTO	
-(37) 3359-7943
-
-SECRETARIA DE SAÚDE - FUMUSA	
-(37) 3352-2450
-
-SERVIÇO INTEGRADO DE ASSISTÊNCIA TRIBUTÁRIA (SIAT)	
-(37) 3352-2551
-
-SINE	
-(37) 3352-2456
-
-TERMINAL RODOVIÁRIO	
-(37) 3352-2697
-
-TFD (TRATAMENTO FORA DO DOMICÍLIO)	
-(37) 3352-2627
-
-TRÂNSITO	
-(37) 3352-2591
-
-TRANSPORTE DA SECRETARIA DE SAÚDE - MARCAÇÃO DE VIAGEM	
-(37) 3352-2451
-
-TRANSPORTE ESCOLAR E UNIVERSITÁRIO	
-(37) 3352-2608
-
-VIGILÂNCIA EPIDEMIOLÓGICA	
-(37) 3352-2664
-
-VIGILÂNCIA SANITÁRIA (VISA)	
-(37) 3352-2642
-
-ZOONOSES	
-(37) 3352-2453
+---
+tipo_documento: telefones_uteis
+orgao: Prefeitura Municipal de Arcos
+cidade: Arcos
+estado: Minas Gerais
+categoria_geral: Atendimento público municipal
+conteudo: Lista de telefones úteis da Prefeitura Municipal de Arcos
+---
+
+# Telefones úteis da Prefeitura Municipal de Arcos
+
+Esta página reúne contatos telefônicos úteis de setores, secretarias, escolas, unidades de saúde, serviços públicos e órgãos de atendimento da Prefeitura Municipal de Arcos, Minas Gerais.
+
+## Prefeitura e atendimento geral
+
+| Serviço | Telefone | Categoria |
+|---|---:|---|
+| Prefeitura Municipal de Arcos | (37) 3359-7900 | Prefeitura |
+| Ouvidoria | (37) 3352-2583 | Atendimento ao cidadão |
+| Poupa Tempo | (37) 3352-2533 | Atendimento ao cidadão |
+| Procon | (37) 3352-2457 | Defesa do consumidor |
+| Sine | (37) 3352-2456 | Trabalho e emprego |
+| Sala Mineira do Empreendedor | (37) 3359-7931 | Empreendedorismo |
+| Serviço Integrado de Assistência Tributária (SIAT) | (37) 3352-2551 | Tributação |
+| Fiscalização de Posturas | (37) 3359-7929 | Fiscalização |
+| Trânsito | (37) 3352-2591 | Trânsito |
+
+## Secretarias municipais
+
+| Serviço | Telefone | Categoria |
+|---|---:|---|
+| Secretaria de Administração | (37) 3359-7938 | Secretaria municipal |
+| Secretaria de Cultura, Esporte, Lazer e Turismo | (37) 3352-2586 | Secretaria municipal |
+| Secretaria de Educação (SEMED) | (37) 3352-2487 | Secretaria municipal |
+| Secretaria de Fazenda | (37) 3359-7900 | Secretaria municipal |
+| Secretaria de Governo | (37) 3359-7928 | Secretaria municipal |
+| Secretaria de Integração Social | (37) 3352-2667 | Secretaria municipal |
+| Secretaria de Meio Ambiente e Agricultura | (37) 3352-2452 | Secretaria municipal |
+| Secretaria de Obras e Serviços Públicos | (37) 3359-7910 | Secretaria municipal |
+| Secretaria de Planejamento | (37) 3359-7943 | Secretaria municipal |
+| Secretaria de Saúde - FUMUSA | (37) 3352-2450 | Secretaria municipal |
+
+## Almoxarifados
+
+| Serviço | Telefone | Categoria |
+|---|---:|---|
+| Almoxarifado Central | (37) 3352-2470 | Almoxarifado |
+| Almoxarifado da Secretaria Municipal de Educação | (37) 3352-2607 | Almoxarifado |
+| Almoxarifado de Obras - Substituição de lâmpada e outros serviços | (37) 3352-2477 | Almoxarifado / Obras |
+| Almoxarifado da Secretaria Municipal de Saúde | (37) 3352-2666 | Almoxarifado / Saúde |
+
+## Saúde
+
+| Serviço | Telefone | Categoria |
+|---|---:|---|
+| Hospital Municipal São José | (37) 3352-2688 | Saúde |
+| CAPS | (37) 3352-2693 | Saúde mental |
+| Centro de Fisioterapia | (37) 3352-2644 | Saúde |
+| Farmácia de Alto Custo | (37) 3352-2648 | Saúde / Medicamentos |
+| Farmácia de Minas | (37) 3352-2683 | Saúde / Medicamentos |
+| TFD - Tratamento Fora do Domicílio | (37) 3352-2627 | Saúde / Transporte |
+| Transporte da Secretaria de Saúde - Marcação de viagem | (37) 3352-2451 | Saúde / Transporte |
+| Vigilância Epidemiológica | (37) 3352-2664 | Saúde / Vigilância |
+| Vigilância Sanitária (VISA) | (37) 3352-2642 | Saúde / Vigilância |
+| Zoonoses | (37) 3352-2453 | Saúde / Zoonoses |
+
+## PSF - Programa Saúde da Família
+
+| Unidade | Telefone | Categoria |
+|---|---:|---|
+| PSF Brasília | (37) 3352-2471 | Unidade de saúde |
+| PSF Calcita | (37) 3352-2474 | Unidade de saúde |
+| PSF Central | (37) 3352-2689 | Unidade de saúde |
+| PSF Eldorado | (37) 3352-2690 | Unidade de saúde |
+| PSF Esplanada | (37) 3352-2472 | Unidade de saúde |
+| PSF Floresta | (37) 3352-2749 | Unidade de saúde |
+| PSF Ilha | (37) 3352-2495 | Unidade de saúde |
+| PSF Jardim Bela Vista | (37) 3352-2691 | Unidade de saúde |
+| PSF Olaria | (37) 3352-2692 | Unidade de saúde |
+| PSF Santo Antônio | (37) 3352-2473 | Unidade de saúde |
+| PSF São Judas | (37) 3352-2695 | Unidade de saúde |
+| PSF São Vicente | (37) 3352-2550 | Unidade de saúde |
+| PSF Zona Norte | (37) 3352-2694 | Unidade de saúde |
+
+## Assistência social
+
+| Serviço | Telefone | Categoria |
+|---|---:|---|
+| Centro de Acolhimento | (37) 3352-2455 | Assistência social |
+| Conselho Tutelar | (37) 3352-2476 | Assistência social |
+| CRAS | (37) 3352-2564 | Assistência social |
+| CREAS | (37) 3352-2460 | Assistência social |
+| Lactário e Padaria Municipal | (37) 3352-2485 | Assistência social |
+
+## Educação - Creches municipais
+
+| Unidade | Telefone | Categoria |
+|---|---:|---|
+| Creche Municipal Ana Lucia Franco | (37) 3352-2482 | Educação infantil |
+| Creche Municipal Antônio Davi Franco | (37) 3352-2588 | Educação infantil |
+| Creche Municipal Jáia Batista Assunção Sousa | (37) 3352-2612 | Educação infantil |
+| Creche Municipal Maria da Glória Veloso | (37) 3352-2486 | Educação infantil |
+| Creche Municipal Pablo Victor de Sousa Lima | (37) 3352-2469 | Educação infantil |
+
+## Educação - Escolas municipais
+
+| Unidade | Telefone | Categoria |
+|---|---:|---|
+| Escola Municipal Antônio Davi Franco | (37) 3352-2498 | Escola municipal |
+| Escola Municipal Dorvina Teixeira Arantes | (37) 3352-2490 | Escola municipal |
+| Escola Municipal José Bonifácio Gonçalves | (37) 3352-2492 | Escola municipal |
+| Escola Municipal Julieta Ribeiro da Fonseca | (37) 3352-2454 | Escola municipal |
+| Escola Municipal Laura Andrade | (37) 3352-2610 | Escola municipal |
+| Escola Municipal Professora Olinda Veloso | (37) 3352-2489 | Escola municipal |
+| Escola Municipal Santo Antônio | (37) 3352-2493 | Escola municipal |
+| Escola Municipal Sebastião Teixeira Borges | (37) 3352-2611 | Escola municipal |
+| Escola Municipal Vera Lúcia Paraíso | (37) 3352-2480 | Escola municipal |
+| Escola Municipal Yolanda Amorim de Carvalho | (37) 3352-2491 | Escola municipal |
+
+## Cultura, esporte, lazer e turismo
+
+| Serviço | Telefone | Categoria |
+|---|---:|---|
+| Casa de Cultura | (37) 3352-2484 | Cultura |
+| Parque Aquático | (37) 3352-2699 | Esporte e lazer |
+| Poliesportivo | (37) 3352-2481 | Esporte e lazer |
+| Terminal Rodoviário | (37) 3352-2697 | Transporte / Turismo |
+
+## Transporte
+
+| Serviço | Telefone | Categoria |
+|---|---:|---|
+| Transporte Escolar e Universitário | (37) 3352-2608 | Transporte escolar |
+| Transporte da Secretaria de Saúde - Marcação de viagem | (37) 3352-2451 | Transporte de saúde |
+| Terminal Rodoviário | (37) 3352-2697 | Transporte público |

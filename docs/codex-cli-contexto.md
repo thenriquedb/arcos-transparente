@@ -119,8 +119,10 @@ Decisao importante: a variacao da pergunta deve ser absorvida por filtros, orden
 4. Schemas em `ingestion/schemas/` validam e normalizam os dados.
 5. Loaders persistem no SQLite com upsert e relacionamentos.
 6. O agente recebe uma pergunta.
-7. O runtime do chatbot aplica respostas locais e guardrails hard-coded antes de invocar o modelo.
-8. Para consultas permitidas, o agente LangChain recebe a superficie publica ampla de tools, incluindo SQL e RAG markdown-first, e orquestra a execucao via prompt e contratos das tools.
+7. O runtime do chatbot aplica respostas locais, guardrails hard-coded e politica deterministica antes de qualquer selecao de tools.
+8. Para consultas permitidas, o seletor hibrido tenta reduzir a pergunta a poucas tools candidatas usando metadata registrada nas tools publicas.
+9. O agente LangChain recebe esse subconjunto candidato e orquestra a execucao via prompt e contratos das tools.
+10. Se o seletor vier com baixa confianca ou retornar algo invalido, o runtime faz fallback para toda a superficie publica.
 
 ## Decisoes Tecnicas Ja Tomadas
 
@@ -179,8 +181,9 @@ compatibilidade e apoio a testes legados. Ele:
   pergunta vazia e fora de escopo
 - nao e a camada autoritativa para interpretar perguntas permitidas no chatbot atual
 
-No chatbot atual, perguntas permitidas seguem o system prompt e os contratos das
-tools. O router nao deve substituir essas camadas nem impor comportamento
+No chatbot atual, perguntas permitidas passam primeiro pela politica
+deterministica e pela selecao hibrida, e so depois seguem para o prompt e os
+contratos das tools. O router nao deve substituir essas camadas nem impor comportamento
 conversacional concorrente.
 
 ### 6. OpenAI e o caminho oficial desta fase
@@ -188,10 +191,22 @@ conversacional concorrente.
 O bootstrap principal em `agents/chatbot/agent.py` usa:
 
 - `LLM_PROVIDER` ou `MODEL_PROVIDER`
-- `OPENAI_MODEL`, com padrao `gpt-4.1`
+- `OPENAI_MODEL`, com padrao `gpt-4.1-mini`
 - `OPENAI_API_KEY`
 
 Hoje o provider real implementado no bootstrap principal e `ChatOpenAI`.
+
+### 6.1 Contrato de metadata para tools publicas selecionaveis
+
+Cada tool publica precisa declarar no proprio `@register(...)`:
+
+- exemplos representativos de perguntas cidadas
+- hints curtos de selecao
+- tags coerentes de dominio e forma de uso
+
+O seletor hibrido consome esse catalogo enriquecido. Uma nova tool publica
+selecionavel nao depende mais de editar a cadeia principal de heuristicas do
+router para entrar no fluxo principal do chatbot cidadao.
 
 ### 7. Prompt versionado em arquivo
 

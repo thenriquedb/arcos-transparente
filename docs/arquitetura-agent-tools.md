@@ -150,17 +150,23 @@ Hoje o router trabalha com estas classes:
 
 Nos fluxos legados, uma rota clara ainda pode sugerir um subconjunto pequeno de
 tools.
-No chatbot cidadão, o padrão é expor toda a superfície pública permitida e
-deixar a orquestração com o prompt e os contratos das tools.
+No chatbot cidadão, o padrão agora é:
+
+1. aplicar uma política determinística antes do modelo
+2. usar seleção híbrida para reduzir a superfície pública a poucas tools candidatas
+3. deixar a orquestração final com o prompt e os contratos das tools
+4. fazer fallback para toda a superfície pública apenas quando o seletor estiver com baixa confiança ou retornar algo inválido
 
 ### Precedência final de regras
 
 O comportamento público do assistente segue esta ordem:
 
 1. guardrails hard-coded pré-modelo
-2. política conversacional do runtime e do system prompt
-3. contratos e descrições locais das tools
-4. heurísticas de compatibilidade do router
+2. política determinística pré-seleção do runtime
+3. seleção híbrida de tools públicas
+4. política conversacional do runtime e do system prompt
+5. contratos e descrições locais das tools
+6. heurísticas de compatibilidade do router
 
 Isso significa que o router não é mais a autoridade principal para definir
 como perguntas permitidas devem ser interpretadas.
@@ -198,17 +204,31 @@ Arquivo: `agents/chatbot/agent.py`
 Responsabilidades:
 
 - carregar o `system_prompt`
-- criar o agente LangChain com a superfície pública completa de tools
-- deixar a orquestração de consultas permitidas a cargo do prompt e dos contratos das tools
+- criar agentes LangChain reutilizáveis por subconjunto de tools públicas
+- receber do runtime principal apenas as tools candidatas selecionadas para cada pergunta
+- deixar a orquestração de consultas permitidas a cargo do prompt e dos contratos das tools depois da fase de seleção
 - carregar o provider e o modelo do ambiente, com OpenAI como caminho oficial desta fase
 
 Configuração atual do agente:
 
 - `LLM_PROVIDER=openai`
-- `OPENAI_MODEL=gpt-4.1` por padrão
+- `OPENAI_MODEL=gpt-4.1-mini` por padrão
 - `OPENAI_API_KEY` obrigatória para criar o agente
 
 Com isso, o runtime cidadão deixa de depender do router para decidir o fluxo de perguntas permitidas.
+
+### Contrato de metadata para seleção híbrida
+
+Cada tool pública registrada em `agents/tools/registry.py` precisa publicar:
+
+- `routing.examples`: pelo menos duas perguntas representativas de cidadão
+- `routing.hints`: pistas curtas de seleção, como domínio, forma de consulta ou intenção
+- `summary`: resumo derivado da docstring da própria tool
+
+Esse contrato vive junto do decorator `@register(...)` de cada tool pública.
+Adicionar uma nova tool pública selecionável não exige editar uma cadeia central
+de palavras-chave do router; basta registrar a tool com `scope=PUBLIC_SCOPE`,
+tags coerentes e metadata de roteamento suficiente para o seletor híbrido.
 
 ### 4. Tools públicas amplas
 

@@ -80,7 +80,13 @@ def test_consultar_transferencias_financeiras_lista_movimentos(monkeypatch) -> N
             "unidade_recebedora": "camara",
             "tipo_movimento": "recebimento",
         },
-        campos=["tipo_registro", "ano", "unidade_recebedora", "tipo_movimento", "valor"],
+        campos=[
+            "tipo_registro",
+            "ano",
+            "unidade_recebedora",
+            "tipo_movimento",
+            "valor",
+        ],
     )
 
     assert resultado["total"] == 1
@@ -147,6 +153,77 @@ def test_agregar_transferencias_financeiras_por_autor_de_emenda(
     session.close()
 
 
+def test_consultar_transferencias_financeiras_filtra_emendas_por_autor_funcao_e_ano(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            EmendaParlamentar(
+                arquivo_origem="emendas-parlamentares-2025.csv",
+                sequencia_origem=1,
+                exercicio_consulta=2025,
+                ano=2025,
+                ano_numero="2025/10010001",
+                autor="Nikolas Ferreira",
+                objeto="Custeio da atencao basica",
+                tipo_emenda="Emenda Individual",
+                funcao="Saude",
+                valor=Decimal("150000.00"),
+            ),
+            EmendaParlamentar(
+                arquivo_origem="emendas-parlamentares-2025.csv",
+                sequencia_origem=2,
+                exercicio_consulta=2025,
+                ano=2025,
+                ano_numero="2025/10010002",
+                autor="Nikolas Ferreira",
+                objeto="Infraestrutura urbana",
+                tipo_emenda="Emenda Individual",
+                funcao="Urbanismo",
+                valor=Decimal("80000.00"),
+            ),
+            EmendaParlamentar(
+                arquivo_origem="emendas-parlamentares-2024.csv",
+                sequencia_origem=3,
+                exercicio_consulta=2024,
+                ano=2024,
+                ano_numero="2024/10010003",
+                autor="Outro Autor",
+                objeto="Custeio da atencao basica",
+                tipo_emenda="Emenda Individual",
+                funcao="Saude",
+                valor=Decimal("50000.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = transferencias_tools.consultar_transferencias_financeiras(
+        filtros={
+            "tipo_registro": "emenda",
+            "ano": 2025,
+            "autor": "nikolas ferreira",
+            "funcao": "saude",
+        },
+        campos=["tipo_registro", "ano", "autor", "funcao", "valor"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "tipo_registro": "emenda",
+            "ano": 2025,
+            "autor": "Nikolas Ferreira",
+            "funcao": "Saude",
+            "valor": 150000.0,
+        }
+    ]
+
+    session.close()
+
+
 def test_registry_expoe_tools_publicas_de_transferencias_financeiras() -> None:
     tool_names = {
         getattr(tool_obj, "name", "")
@@ -184,7 +261,9 @@ def test_query_de_transferencias_financeiras_rota_para_tool_publica_dedicada(
     _patch_session(monkeypatch, session)
 
     route = route_user_query("Quanto foi transferido para a camara em 2026?")
-    tool = select_public_tools_for_query("Quanto foi transferido para a camara em 2026?")[0]
+    tool = select_public_tools_for_query(
+        "Quanto foi transferido para a camara em 2026?"
+    )[0]
     resultado = tool.invoke(route.tool_kwargs)
 
     assert route.tool_name == "agregar_transferencias_financeiras"
