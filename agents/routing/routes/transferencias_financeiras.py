@@ -5,18 +5,32 @@ from __future__ import annotations
 import re
 
 from agents.routing.constants import TRANSFERENCIAS_FINANCEIRAS_DOMAIN_KEYWORDS
-from agents.routing.extractors import _contains_any, _extract_limit, _extract_year
+from agents.routing.extractors import (
+    _contains_any_term,
+    _extract_limit,
+    _extract_year,
+)
 from agents.routing.models import RouteDecision
 
 
 def _is_transferencias_financeiras_query(normalized_text: str) -> bool:
-    return _contains_any(normalized_text, TRANSFERENCIAS_FINANCEIRAS_DOMAIN_KEYWORDS)
+    return _contains_any_term(
+        normalized_text,
+        TRANSFERENCIAS_FINANCEIRAS_DOMAIN_KEYWORDS,
+    )
 
 
 def _is_emenda_query(normalized_text: str) -> bool:
-    return any(
-        keyword in normalized_text
-        for keyword in ("emenda", "emendas", "parlamentar", "parlamentares")
+    return _contains_any_term(
+        normalized_text,
+        (
+            "emenda",
+            "emendas",
+            "ementa",
+            "ementas",
+            "parlamentar",
+            "parlamentares",
+        ),
     )
 
 
@@ -43,12 +57,17 @@ def _extract_transferencias_financeiras_filters(
             filtros["funcao"] = "urbanismo"
 
         autor_match = re.search(
-            r"\bemendas?\s+(?:do|da|de)\s+([a-z0-9 .&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
+            r"\b(?:emendas?|ementas?)\s+(?:do|da|de)\s+([a-z0-9 .&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
             normalized_text,
         )
         if autor_match is None:
             autor_match = re.search(
                 r"\bautor(?:a)?\s+([a-z0-9 .&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
+                normalized_text,
+            )
+        if autor_match is None:
+            autor_match = re.search(
+                r"\b(?:quanto|quantos|quantas)\s+(?:o|a)?\s*([a-z0-9 .&/-]+?)\s+(?:enviou|destinou|mandou|indicou)\s+de\s+(?:emendas?|ementas?)\b",
                 normalized_text,
             )
         if autor_match is not None:

@@ -288,6 +288,7 @@ def _aplicar_aviso_valor_zero(
         examples=[
             "Quais contratos da saude?",
             "Detalhe o contrato 178/2025.",
+            "Liste os 10 maiores contratos de 2025.",
         ],
         hints=[
             "contrato",
@@ -295,6 +296,9 @@ def _aplicar_aviso_valor_zero(
             "descricao",
             "numero",
             "detalhes",
+            "maiores contratos",
+            "ranking por valor",
+            "contratos de 2025",
         ],
     ),
 )
@@ -320,6 +324,9 @@ def consultar_contratos(
     - 'contratos da secretaria de saude'
     - 'quanto custou o Natal Fest?' (busca por descricao do evento)
     - 'quais servicos foram contratados para o evento X?'
+    - 'liste os 10 maiores contratos de 2025' (use `ordenar_por="valor"`,
+      `ordem="desc"` e preserve o ano como intervalo em
+      `data_inicio_inicio="2025-01-01"` e `data_inicio_fim="2025-12-31"`)
 
     Quando esta tool retornar valor R$ 0,00 em algum contrato, o campo
     'aviso' do resultado ja orienta a proxima acao. Nesse caso, consulte
@@ -335,6 +342,11 @@ def consultar_contratos(
     como 'UPA', 'UBS', 'PSF', 'CRAS' ou 'CREAS', primeiro confirme o significado
     com o usuario e sugira a expansao provavel. So use a tool depois dessa
     confirmacao.
+
+    Se a pergunta pedir "maiores contratos", trate isso como ranking de
+    contratos individuais por `valor`, e nao como agregacao. Se houver recorte
+    de ano, preserve esse filtro exatamente na consulta e NAO substitua a
+    resposta por um total sem o mesmo periodo solicitado.
 
     NAO use para totais, medias ou rankings agregados; para isso use
     `agregar_contratos`.

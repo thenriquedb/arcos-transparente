@@ -227,6 +227,8 @@ TRANSFERENCIAS_FINANCEIRAS_DOMAIN_KEYWORDS = (
     "devolucoes",
     "emenda",
     "emendas",
+    "ementa",
+    "ementas",
     "parlamentar",
     "parlamentares",
     "transferencia especial",

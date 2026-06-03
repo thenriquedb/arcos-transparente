@@ -164,6 +164,25 @@ def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
     assert "ônibus da frota" in prompt
 
 
+def test_system_prompt_orienta_ranking_de_contratos_por_valor_e_ano() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "10 maiores contratos de 2025" in prompt
+    assert "`consultar_contratos`" in prompt
+    assert "`agregar_contratos`" in prompt
+    assert "data_inicio" in prompt
+    assert "Nunca troque esse pedido por um total" in prompt
+
+
+def test_system_prompt_orienta_emendas_por_autor_com_ou_sem_ano() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "quantas emendas foram do autor Cleitinho" in prompt
+    assert "quanto o Cleitinho enviou de emendas" in prompt
+    assert "NÃO peça o ano de novo" in prompt
+    assert "ementas" in prompt
+
+
 def test_chatbot_application_mantem_estado_da_sessao() -> None:
     backend = FakeBackend()
     app = ChatbotApplication(
@@ -493,7 +512,9 @@ def test_chatbot_application_permite_followup_curto_por_autor_em_emendas() -> No
         primeira_resposta.content
         == "resposta para: quais foram todas as emendas que a prefeitura recebeu em 2025?"
     )
-    assert segunda_resposta.content == "resposta para: quantas foram do nikolas ferreira?"
+    assert (
+        segunda_resposta.content == "resposta para: quantas foram do nikolas ferreira?"
+    )
     assert backend.calls == [
         (
             "quais foram todas as emendas que a prefeitura recebeu em 2025?",

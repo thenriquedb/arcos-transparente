@@ -46,6 +46,7 @@ def _metric_to_json(value: Decimal | int) -> float | int:
             "Qual o total recebido em emendas parlamentares?",
             "Qual unidade recebeu mais transferencias?",
             "Quantas emendas foram do Nikolas Ferreira em 2025?",
+            "Quanto o Cleitinho enviou de emendas para a prefeitura em 2025?",
         ],
         hints=[
             "transferencia financeira",
@@ -56,6 +57,7 @@ def _metric_to_json(value: Decimal | int) -> float | int:
             "contagem por autor",
             "contagem por funcao",
             "total por ano",
+            "valor por autor",
         ],
     ),
 )
@@ -73,6 +75,11 @@ def agregar_transferencias_financeiras(
     Use esta tool quando a pergunta pedir total transferido, total recebido,
     quantidade de registros ou rankings por unidade, tipo de movimento, autor,
     funcao, ano ou tipo de emenda.
+    Para perguntas como "quantas emendas foram do autor X?" ou
+    "quanto o Cleitinho enviou de emendas em 2025?", preserve o filtro de
+    `autor` e, quando houver ano na pergunta, preserve tambem `ano`.
+    Se o autor estiver claro e nao houver ano explicito, a consulta pode cobrir
+    todos os anos disponiveis sem pedir recorte temporal adicional.
     NAO use para listar registros individuais; para isso use
     `consultar_transferencias_financeiras`.
     """

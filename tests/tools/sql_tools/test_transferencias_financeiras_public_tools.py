@@ -153,6 +153,68 @@ def test_agregar_transferencias_financeiras_por_autor_de_emenda(
     session.close()
 
 
+def test_agregar_transferencias_financeiras_filtra_emendas_por_autor_e_ano(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            EmendaParlamentar(
+                arquivo_origem="emendas-parlamentares-2025.csv",
+                sequencia_origem=1,
+                exercicio_consulta=2025,
+                ano=2025,
+                ano_numero="2025/11110001",
+                autor="Cleitinho",
+                objeto="Pavimentacao urbana",
+                tipo_emenda="Emenda Individual",
+                funcao="Urbanismo",
+                valor=Decimal("399046.98"),
+            ),
+            EmendaParlamentar(
+                arquivo_origem="emendas-parlamentares-2025.csv",
+                sequencia_origem=2,
+                exercicio_consulta=2025,
+                ano=2025,
+                ano_numero="2025/11110002",
+                autor="Cleitinho",
+                objeto="Pavimentacao urbana",
+                tipo_emenda="Emenda Individual",
+                funcao="Urbanismo",
+                valor=Decimal("399046.98"),
+            ),
+            EmendaParlamentar(
+                arquivo_origem="emendas-parlamentares-2025.csv",
+                sequencia_origem=3,
+                exercicio_consulta=2025,
+                ano=2025,
+                ano_numero="2025/11110003",
+                autor="Outro Autor",
+                objeto="Custeio da saude",
+                tipo_emenda="Emenda Individual",
+                funcao="Saude",
+                valor=Decimal("50000.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    contagem = transferencias_tools.agregar_transferencias_financeiras(
+        filtros={"tipo_registro": "emenda", "autor": "cleitinho"},
+        metrica="contagem",
+    )
+    total_2025 = transferencias_tools.agregar_transferencias_financeiras(
+        filtros={"tipo_registro": "emenda", "autor": "cleitinho", "ano": 2025},
+        metrica="soma_valor",
+    )
+
+    assert contagem["valor_total"] == 2
+    assert total_2025["valor_total"] == 798093.96
+
+    session.close()
+
+
 def test_consultar_transferencias_financeiras_filtra_emendas_por_autor_funcao_e_ano(
     monkeypatch,
 ) -> None:

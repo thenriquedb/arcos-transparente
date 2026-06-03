@@ -11,6 +11,7 @@ from typing import Any, Literal, Protocol
 from pydantic import BaseModel, Field, ValidationError
 
 from agents.chatbot.agent import criar_modelo_llm
+from agents.router import route_user_query
 from agents.tools.registry import (
     PublicToolCatalogEntry,
     get_public_tool_catalog,
@@ -231,6 +232,14 @@ def _select_with_heuristics(
     history: Sequence[HistoryMessage],
 ) -> HybridToolSelection | None:
     if not _is_elected_contact_query(question, history=history):
+        emenda_selection = _select_emenda_query_with_router(question)
+        if emenda_selection is not None:
+            return emenda_selection
+        contract_ranking_selection = _select_contract_value_ranking_with_router(
+            question
+        )
+        if contract_ranking_selection is not None:
+            return contract_ranking_selection
         return None
 
     candidate_names = _normalize_candidate_names(
@@ -249,6 +258,59 @@ def _select_with_heuristics(
         candidate_tool_names=tuple(candidate_names),
         confidence="high",
         reason_code="heuristic_elected_contacts",
+    )
+
+
+def _select_emenda_query_with_router(
+    question: str,
+) -> HybridToolSelection | None:
+    route = route_user_query(question)
+    if not route.confident or route.tool_name not in (
+        "agregar_transferencias_financeiras",
+        "consultar_transferencias_financeiras",
+    ):
+        return None
+
+    filtros = route.tool_kwargs.get("filtros", {})
+    if not isinstance(filtros, dict) or filtros.get("tipo_registro") != "emenda":
+        return None
+
+    candidate_names = _normalize_candidate_names([route.tool_name])
+    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
+    if len(candidate_tools) != len(candidate_names):
+        return None
+
+    return HybridToolSelection(
+        action="allow",
+        candidate_tools=candidate_tools,
+        candidate_tool_names=tuple(candidate_names),
+        confidence="high",
+        reason_code="heuristic_emenda_query",
+    )
+
+
+def _select_contract_value_ranking_with_router(
+    question: str,
+) -> HybridToolSelection | None:
+    route = route_user_query(question)
+    if (
+        not route.confident
+        or route.tool_name != "consultar_contratos"
+        or route.tool_kwargs.get("ordenar_por") != "valor"
+    ):
+        return None
+
+    candidate_names = _normalize_candidate_names(["consultar_contratos"])
+    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
+    if len(candidate_tools) != len(candidate_names):
+        return None
+
+    return HybridToolSelection(
+        action="allow",
+        candidate_tools=candidate_tools,
+        candidate_tool_names=tuple(candidate_names),
+        confidence="high",
+        reason_code="heuristic_contract_value_ranking",
     )
 
 

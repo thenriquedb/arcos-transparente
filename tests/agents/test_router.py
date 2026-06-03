@@ -71,10 +71,39 @@ def test_try_route_agregacao_isolado_permanece_disponivel() -> None:
     assert decision.confident is True
 
 
+def test_route_user_query_extrai_autor_e_ano_em_emendas_por_autor() -> None:
+    decision = route_user_query(
+        "quanto o cleitinho enviou de emendas para a prefeitura em 2025?"
+    )
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_transferencias_financeiras"
+    assert decision.tool_kwargs["filtros"] == {
+        "tipo_registro": "emenda",
+        "ano": 2025,
+        "autor": "cleitinho",
+    }
+
+
+def test_route_user_query_tolera_typo_ementas_em_emendas() -> None:
+    decision = route_user_query(
+        "quanto o cleitinho enviou de ementas para a prefeitura em 2025?"
+    )
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_transferencias_financeiras"
+    assert decision.tool_kwargs["filtros"] == {
+        "tipo_registro": "emenda",
+        "ano": 2025,
+        "autor": "cleitinho",
+    }
+
+
 @pytest.mark.parametrize(
     ("pergunta", "expected_tool_name"),
     [
         ("Qual o total contratado pela educacao?", "agregar_contratos"),
+        ("Liste os 10 maiores contratos de 2025.", "consultar_contratos"),
         ("Quais licitacoes estao abertas?", "consultar_licitacoes"),
         ("Quanto foi arrecadado com IPTU em 2025?", "agregar_receitas"),
         ("Quanto foi pago em diarias em 2025?", "agregar_diarias"),
@@ -98,6 +127,7 @@ def test_route_user_query_cobre_dominios_representativos(
 @pytest.mark.parametrize(
     ("pergunta", "expected_tool_names"),
     [
+        ("Liste os 10 maiores contratos de 2025.", ["consultar_contratos"]),
         ("Quais as 10 maiores licitacoes?", ["consultar_licitacoes"]),
         ("Qual o total contratado pela educacao?", ["agregar_contratos"]),
         ("Quanto foi pago em passagens em 2026?", ["agregar_passagens"]),

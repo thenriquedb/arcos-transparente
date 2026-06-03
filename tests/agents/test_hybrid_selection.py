@@ -148,3 +148,37 @@ def test_hybrid_selector_reaproveita_historico_em_confirmacao_de_contato_de_elei
         "consultar_eleitos",
         "consultar_conhecimento_municipal",
     )
+
+
+def test_hybrid_selector_prioriza_ranking_de_maiores_contratos() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver ranking de contratos")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Liste os 10 maiores contratos de 2025.",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_contract_value_ranking"
+    assert selection.candidate_tool_names == ("consultar_contratos",)
+
+
+def test_hybrid_selector_prioriza_emendas_por_autor() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver emendas por autor")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "quantas emendas foram do autor Cleitinho?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_emenda_query"
+    assert selection.candidate_tool_names == ("agregar_transferencias_financeiras",)
