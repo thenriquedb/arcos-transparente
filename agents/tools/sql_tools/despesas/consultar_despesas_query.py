@@ -209,6 +209,8 @@ def consultar_despesas(
     evento sem cruzar com `consultar_licitacoes` e `consultar_contratos`.
     NAO use para planejamento orcamentario; para isso use
     `consultar_planejamento`.
+    NAO use para o relatorio agregado `despesas-por-funcao`; para isso use
+    `consultar_despesas_por_funcao`.
     NAO use para totais, comparacoes ou rankings agregados; para isso use
     `agregar_despesas`.
 

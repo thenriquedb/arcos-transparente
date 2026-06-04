@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field, ValidationError
 from agents.chatbot.agent import criar_modelo_llm
 from agents.router import route_user_query
 from agents.routing.constants import (
+    DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS,
     DESPESAS_DOMAIN_KEYWORDS,
     DIARIAS_DOMAIN_KEYWORDS,
     PASSAGENS_DOMAIN_KEYWORDS,
@@ -378,10 +379,18 @@ def _select_broad_spend_query(
     )
 
 
+def _strip_despesas_por_funcao_domain_keywords(normalized_question: str) -> str:
+    stripped = normalized_question
+    for keyword in DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS:
+        stripped = stripped.replace(keyword, " ")
+    return " ".join(stripped.split())
+
+
 def _is_explicit_aggregate_spend_request(normalized_question: str) -> bool:
-    if any(term in normalized_question for term in _SPEND_GROUPING_TERMS):
+    aggregate_text = _strip_despesas_por_funcao_domain_keywords(normalized_question)
+    if any(term in aggregate_text for term in _SPEND_GROUPING_TERMS):
         return True
-    return any(term in normalized_question for term in _SPEND_AGGREGATION_TERMS)
+    return any(term in aggregate_text for term in _SPEND_AGGREGATION_TERMS)
 
 
 def _select_direct_spend_candidate_names(
@@ -389,12 +398,16 @@ def _select_direct_spend_candidate_names(
     *,
     route_tool_name: str | None,
 ) -> list[str] | None:
+    if _has_any_term(normalized_question, DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS):
+        return ["consultar_despesas_por_funcao"]
     if _has_any_term(normalized_question, DIARIAS_DOMAIN_KEYWORDS):
         return ["consultar_diarias"]
     if _has_any_term(normalized_question, PASSAGENS_DOMAIN_KEYWORDS):
         return ["consultar_passagens"]
     if _has_any_term(normalized_question, DESPESAS_DOMAIN_KEYWORDS):
         return ["consultar_despesas"]
+    if route_tool_name == "agregar_despesas_por_funcao":
+        return ["consultar_despesas_por_funcao"]
     if route_tool_name == "agregar_diarias":
         return ["consultar_diarias"]
     if route_tool_name == "agregar_passagens":

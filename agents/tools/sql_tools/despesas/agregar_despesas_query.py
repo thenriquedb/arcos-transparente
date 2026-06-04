@@ -101,6 +101,8 @@ def agregar_despesas(
     `consultar_despesas`.
     NAO use para planejamento orcamentario; para isso use
     `agregar_planejamento`.
+    NAO use para o relatorio agregado `despesas-por-funcao`; para isso use
+    `agregar_despesas_por_funcao`.
 
     Args:
         filtros: Objeto com filtros opcionais. Campos aceitos: `tipo`, `origem`,

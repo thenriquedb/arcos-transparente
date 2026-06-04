@@ -104,8 +104,12 @@ python cli.py importar --force
 - XMLs administrativos e de transparência já consolidados do projeto
 - CSVs dedicados de `diarias`
 - CSVs dedicados de `passagens`
+- CSVs dedicados de `despesas-por-funcao`
 - XMLs `recebimentos-YYYY.xml` de `transferencias-financeiras`
 - CSVs `emendas-parlamentares-YYYY.csv` de `transferencias-financeiras`
+
+Observação:
+- `python cli.py importar --tipo despesas` agora cobre tanto os XMLs documentais (`empenhos`, `restos-a-pagar`, `documentos-extras`) quanto os CSVs dedicados de `diarias`, `passagens` e `despesas-por-funcao`, cada um persistido no contrato SQL apropriado.
 
 ## Como adicionar novo tipo de arquivo
 

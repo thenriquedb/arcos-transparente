@@ -1,0 +1,158 @@
+"""Regras de roteamento para o relatorio `despesas-por-funcao`."""
+
+from __future__ import annotations
+
+import re
+
+from agents.routing.constants import DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS
+from agents.routing.extractors import _contains_any, _extract_limit, _extract_year
+from agents.routing.models import RouteDecision
+
+
+def _strip_despesas_por_funcao_domain_keywords(normalized_text: str) -> str:
+    stripped = normalized_text
+    for keyword in DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS:
+        stripped = stripped.replace(keyword, " ")
+    return " ".join(stripped.split())
+
+
+def _is_despesas_por_funcao_query(normalized_text: str) -> bool:
+    if _contains_any(normalized_text, DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS):
+        return True
+    return (
+        any(token in normalized_text for token in ("funcao", "funcoes"))
+        and "despesa" in normalized_text
+        and any(
+            token in normalized_text
+            for token in (
+                "dotacao",
+                "creditos adicionais",
+                "valor empenhado",
+                "valor liquidado",
+                "valor pago",
+            )
+        )
+    )
+
+
+def _extract_despesas_por_funcao_filters(normalized_text: str) -> dict[str, object]:
+    filtros: dict[str, object] = {}
+    if year := _extract_year(normalized_text):
+        filtros["ano"] = year
+    if "saude" in normalized_text or "fumusa" in normalized_text:
+        filtros["origem"] = "saude"
+    elif "prefeitura" in normalized_text:
+        filtros["origem"] = "prefeitura"
+    elif "camara" in normalized_text:
+        filtros["origem"] = "camara"
+
+    unidade_match = re.search(
+        r"\bunidade gestora\b\s+(?:da|de|do)?\s*([a-z0-9 .&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
+        normalized_text,
+    )
+    if unidade_match is not None:
+        filtros["unidade_gestora"] = " ".join(unidade_match.group(1).split())
+
+    funcao_match = re.search(
+        r"\bfunc(?:ao|oes)\b\s+(?:da|de|do|na|no)?\s*([a-z0-9 .&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
+        normalized_text,
+    )
+    if funcao_match is not None:
+        valor = " ".join(funcao_match.group(1).split())
+        valor_sem_pontuacao = valor.strip(" .")
+        if (
+            valor
+            and "despesas por funcao" not in valor
+            and re.fullmatch(r"(?:em\s+)?\d{4}", valor_sem_pontuacao) is None
+        ):
+            filtros["funcao"] = valor
+
+    return filtros
+
+
+def _try_route_despesas_por_funcao_agregacao(
+    normalized_text: str,
+) -> RouteDecision | None:
+    if not _is_despesas_por_funcao_query(normalized_text):
+        return None
+    aggregation_text = _strip_despesas_por_funcao_domain_keywords(normalized_text)
+    if not any(
+        keyword in aggregation_text
+        for keyword in ("quanto", "total", "maior", "maiores", "por ", "quantas")
+    ):
+        return None
+
+    filtros = _extract_despesas_por_funcao_filters(normalized_text)
+    if "quantas" in aggregation_text:
+        metrica = "contagem"
+    elif "dotacao inicial" in normalized_text:
+        metrica = "soma_dotacao_inicial"
+    elif "creditos adicionais" in normalized_text or "reducoes" in normalized_text:
+        metrica = "soma_creditos_adicionais"
+    elif "dotacao atualizada" in normalized_text:
+        metrica = "soma_dotacao_atualizada"
+    elif "em liquidacao" in normalized_text:
+        metrica = "soma_valor_em_liquidacao"
+    elif "liquidado" in normalized_text:
+        metrica = "soma_valor_liquidado"
+    elif "empenhado" in normalized_text:
+        metrica = "soma_valor_empenhado"
+    else:
+        metrica = "soma_valor_pago"
+
+    if "por origem" in aggregation_text:
+        agrupar_por = "origem"
+    elif "por unidade" in aggregation_text or "por unidade gestora" in aggregation_text:
+        agrupar_por = "unidade_gestora"
+    elif "por ano" in aggregation_text or "por exercicio" in aggregation_text:
+        agrupar_por = "ano"
+    elif "por funcao" in aggregation_text or (
+        "funcoes" in aggregation_text
+        and any(
+            token in aggregation_text
+            for token in ("quais", "maior", "maiores", "ranking")
+        )
+    ):
+        agrupar_por = "funcao"
+    else:
+        agrupar_por = None
+
+    return RouteDecision(
+        domain="despesas_por_funcao",
+        operation_type="agregacao_ranking",
+        tool_name="agregar_despesas_por_funcao",
+        tool_kwargs={
+            "filtros": filtros,
+            "agrupar_por": agrupar_por,
+            "metrica": metrica,
+            "ordenar_por": "metrica",
+            "ordem": "desc",
+            "limite": _extract_limit(normalized_text, default=10),
+        },
+        tags=["scope:public", "domain:despesas_por_funcao", "shape:aggregate"],
+        confident=True,
+    )
+
+
+def _try_route_despesas_por_funcao_lista(normalized_text: str) -> RouteDecision | None:
+    if not _is_despesas_por_funcao_query(normalized_text):
+        return None
+
+    filtros = _extract_despesas_por_funcao_filters(normalized_text)
+    return RouteDecision(
+        domain="despesas_por_funcao",
+        operation_type="consulta_lista",
+        tool_name="consultar_despesas_por_funcao",
+        tool_kwargs={
+            "filtros": filtros,
+            "ordenar_por": "valor_pago"
+            if any(keyword in normalized_text for keyword in ("maior", "maiores"))
+            else "periodo_fim",
+            "ordem": "desc",
+            "limite": 100
+            if any(keyword in normalized_text for keyword in ("todos", "todas"))
+            else _extract_limit(normalized_text, default=10),
+        },
+        tags=["scope:public", "domain:despesas_por_funcao", "shape:lookup"],
+        confident=True,
+    )

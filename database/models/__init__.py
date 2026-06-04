@@ -16,6 +16,7 @@ from database.models.expenses import (
     DespesaDocumento,
     DespesaDocumentoComprobatorio,
     DespesaDocumentoItem,
+    DespesaPorFuncao,
 )
 from database.models.elected import Eleito
 from database.models.fleet import FrotaDespesa, FrotaVeiculo
@@ -46,6 +47,7 @@ __all__ = [
     "DespesaDocumento",
     "DespesaDocumentoItem",
     "DespesaDocumentoComprobatorio",
+    "DespesaPorFuncao",
     "Licitacao",
     "Fornecedor",
     "VencedorLicitacao",

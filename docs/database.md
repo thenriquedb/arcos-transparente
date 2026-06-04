@@ -75,6 +75,8 @@ emendas_parlamentares
 
 planejamento_despesas
 
+despesas_por_funcao
+
 despesa_documentos
 ├── despesa_documento_itens
 └── despesa_documentos_comprobatorios
@@ -612,6 +614,31 @@ Regras importantes:
 - filtros textuais nas tools ignoram diferenças de acento
 - importa os arquivos de planejamento da saúde e da prefeitura
 
+### `despesas_por_funcao`
+
+Linhas agregadas do relatório CSV `despesas-por-funcao`.
+
+Campos principais:
+
+- `arquivo_origem` e `linha_origem`: preservam a linhagem do CSV importado
+- `origem`, `exercicio`
+- `periodo_inicio` e `periodo_fim`
+- `unidade_gestora`
+- `funcao`
+- `dotacao_inicial`
+- `creditos_adicionais`
+- `dotacao_atualizada`
+- `valor_empenhado`
+- `valor_em_liquidacao`
+- `valor_liquidado`
+- `valor_pago`
+
+Regras importantes:
+
+- unicidade por origem, exercício, período, unidade gestora e função
+- a linha sintética `Totais` do relatório não é persistida para evitar dupla contagem
+- esse contrato é diferente de `planejamento_despesas`: aqui a granularidade é o relatório agregado por função, não linhas mensais por programa/ação
+
 ### `despesa_documentos`
 
 Documentos de despesa importados de empenhos, restos a pagar e documentos extras.
@@ -748,6 +775,8 @@ Ao criar tools, vale pensar em contratos de entrada e saída que respeitem a est
   usar `receita_arrecadacoes` com filtros por `exercicio`, `mes`, `unidade_gestora` e `natureza_id`
 - consultar repasses e emendas:
   usar `consultar_transferencias_financeiras` ou `agregar_transferencias_financeiras`
+- consultar o relatório agregado por função:
+  usar `consultar_despesas_por_funcao` ou `agregar_despesas_por_funcao`
 - analisar custos de frota:
   cruzar `frota_veiculos` e `frota_despesas`
 

@@ -21,6 +21,7 @@ from database.models import (
     DespesaDocumento,
     DespesaDocumentoComprobatorio,
     DespesaDocumentoItem,
+    DespesaPorFuncao,
     EmendaParlamentar,
     Eleito,
     Fornecedor,
@@ -154,6 +155,10 @@ def db_status() -> None:
         )
         tabela.add_row(
             "despesa_documentos", str(session.query(DespesaDocumento).count())
+        )
+        tabela.add_row(
+            "despesas_por_funcao",
+            str(session.query(DespesaPorFuncao).count()),
         )
         for tipo, quantidade in sorted(_contagem_despesas_por_tipo(session).items()):
             tabela.add_row(f"despesa_documentos:{tipo}", str(quantidade))

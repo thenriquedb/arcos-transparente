@@ -256,6 +256,23 @@ def test_hybrid_selector_prioriza_lista_detalhada_de_despesas_em_gasto_amplo() -
     assert selection.candidate_tool_names == ("consultar_despesas",)
 
 
+def test_hybrid_selector_prioriza_lista_detalhada_de_despesas_por_funcao() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria priorizar consulta detalhada")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quais foram os gastos no relatorio de despesas por funcao em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_broad_spend_query"
+    assert selection.candidate_tool_names == ("consultar_despesas_por_funcao",)
+
+
 def test_hybrid_selector_respeita_pedido_expresso_de_total_em_gasto() -> None:
     selector = HybridToolSelector(
         runner=lambda *_args: {

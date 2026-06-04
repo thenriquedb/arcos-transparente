@@ -54,6 +54,8 @@ def consultar_planejamento(
     Use esta tool quando a pergunta pedir o planejamento, o orcamento ou os valores
     previstos, comprometidos, confirmados, pagos ou cancelados dentro da estrutura
     orcamentaria.
+    NAO use para o relatorio agregado `despesas-por-funcao`; para isso use
+    `consultar_despesas_por_funcao`.
     NAO use para empenhos, restos a pagar ou documentos de despesa efetivamente
     emitidos; para isso use `consultar_despesas`.
     NAO use para totais, comparacoes ou rankings agregados; para isso use

@@ -178,6 +178,8 @@ def test_system_prompt_orienta_gastos_amplos_com_lista_detalhada() -> None:
         "Só puxe `agregar_*` quando o usuário pedir explicitamente apenas total, ranking, contagem ou comparação"
         in prompt
     )
+    assert "`consultar_despesas_por_funcao`" in prompt
+    assert "`agregar_despesas_por_funcao`" in prompt
 
 
 def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
@@ -504,6 +506,39 @@ def test_chatbot_application_prioriza_lista_detalhada_de_diarias_em_gasto_amplo(
     )
     assert backend.selection_calls == [
         (("consultar_diarias",), "sessao-gasto-amplo-diarias")
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
+
+
+def test_chatbot_application_prioriza_lista_de_despesas_por_funcao_em_gasto_amplo() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError(
+            "heuristica deveria resolver gasto amplo de despesas por funcao"
+        )
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-amplo-despesas-por-funcao"),
+        selector=selector,
+    )
+
+    response = app.ask(
+        "Quais foram os gastos no relatorio de despesas por funcao em 2025?"
+    )
+
+    assert (
+        response.content
+        == "resposta para: Quais foram os gastos no relatorio de despesas por funcao em 2025?"
+    )
+    assert backend.selection_calls == [
+        (
+            ("consultar_despesas_por_funcao",),
+            "sessao-gasto-amplo-despesas-por-funcao",
+        )
     ]
     assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
 

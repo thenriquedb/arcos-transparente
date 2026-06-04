@@ -55,6 +55,8 @@ def agregar_planejamento(
     Use esta tool quando a pergunta pedir quanto foi orcado, comprometido,
     confirmado, pago ou cancelado dentro do planejamento, ou quando pedir
     comparacoes por area, programa, acao, grupo de gasto ou fonte de recurso.
+    NAO use para o relatorio agregado `despesas-por-funcao`; para isso use
+    `agregar_despesas_por_funcao`.
     NAO use para listar linhas individuais do planejamento; para isso use
     `consultar_planejamento`.
     NAO use para somar documentos de despesa efetivamente emitidos; para isso use

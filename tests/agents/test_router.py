@@ -99,6 +99,18 @@ def test_route_user_query_tolera_typo_ementas_em_emendas() -> None:
     }
 
 
+def test_route_user_query_total_de_despesas_por_funcao_nao_agrupar_por_padrao() -> None:
+    decision = route_user_query(
+        "Qual foi o total pago no relatorio de despesas por funcao em 2025?"
+    )
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_despesas_por_funcao"
+    assert decision.tool_kwargs["filtros"] == {"ano": 2025}
+    assert decision.tool_kwargs["agrupar_por"] is None
+    assert decision.tool_kwargs["metrica"] == "soma_valor_pago"
+
+
 @pytest.mark.parametrize(
     ("pergunta", "expected_tool_name"),
     [
@@ -106,6 +118,10 @@ def test_route_user_query_tolera_typo_ementas_em_emendas() -> None:
         ("Liste os 10 maiores contratos de 2025.", "consultar_contratos"),
         ("Quais licitacoes estao abertas?", "consultar_licitacoes"),
         ("Quanto foi arrecadado com IPTU em 2025?", "agregar_receitas"),
+        (
+            "Qual foi o total pago no relatorio de despesas por funcao em 2025?",
+            "agregar_despesas_por_funcao",
+        ),
         ("Quanto foi pago em diarias em 2025?", "agregar_diarias"),
         (
             "Quanto foi transferido para a camara em 2026?",
@@ -130,6 +146,10 @@ def test_route_user_query_cobre_dominios_representativos(
         ("Liste os 10 maiores contratos de 2025.", ["consultar_contratos"]),
         ("Quais as 10 maiores licitacoes?", ["consultar_licitacoes"]),
         ("Qual o total contratado pela educacao?", ["agregar_contratos"]),
+        (
+            "Liste o relatorio de despesas por funcao de 2025.",
+            ["consultar_despesas_por_funcao"],
+        ),
         ("Quanto foi pago em passagens em 2026?", ["agregar_passagens"]),
         (
             "Quanto foi transferido para a camara em 2026?",

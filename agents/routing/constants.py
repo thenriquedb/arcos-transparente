@@ -153,6 +153,10 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "mandatos",
     "legislatura",
     "legislaturas",
+    "despesas por funcao",
+    "dotacao inicial",
+    "dotacao atualizada",
+    "creditos adicionais",
 )
 
 SUPPORTED_SCOPE_WEAK_KEYWORDS = (
@@ -207,6 +211,12 @@ PASSAGENS_DOMAIN_KEYWORDS = (
     "passagens",
     "locomocao",
     "despesas com locomocao",
+)
+
+DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS = (
+    "despesas por funcao",
+    "relatorio de despesas por funcao",
+    "relatorio despesas por funcao",
 )
 
 TRANSFERENCIAS_FINANCEIRAS_DOMAIN_KEYWORDS = (
