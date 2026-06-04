@@ -8,7 +8,7 @@ from typing import Any
 from sqlalchemy import func
 
 from database.session import _normalizar_texto
-from database.models import Servidor
+from database.models import FolhaServidor
 from shared.utils.decimal_to_float import decimal_to_float
 
 from .filters import ServidoresFiltroSchema
@@ -39,14 +39,14 @@ def apply_servidores_filters(
 ):
     if mes_de_referencia_considerado is not None:
         stmt = stmt.where(
-            Servidor.competencia_referencia == mes_de_referencia_considerado
+            FolhaServidor.competencia_referencia == mes_de_referencia_considerado
         )
     elif (
         filtros.mes_de_referencia_inicio is not None
         and filtros.mes_de_referencia_fim is not None
     ):
         stmt = stmt.where(
-            Servidor.competencia_referencia.between(
+            FolhaServidor.competencia_referencia.between(
                 filtros.mes_de_referencia_inicio,
                 filtros.mes_de_referencia_fim,
             )
@@ -54,17 +54,17 @@ def apply_servidores_filters(
 
     if filtros.nome:
         for term in (_normalizar_texto(filtros.nome) or "").split():
-            stmt = _apply_text_contains_filter(stmt, Servidor.nome, term)
+            stmt = _apply_text_contains_filter(stmt, FolhaServidor.nome, term)
     if filtros.secretaria:
         stmt = _apply_text_contains_filter(
-            stmt, Servidor.secretaria, filtros.secretaria
+            stmt, FolhaServidor.secretaria, filtros.secretaria
         )
     if filtros.cargo:
-        stmt = _apply_text_contains_filter(stmt, Servidor.cargo, filtros.cargo)
+        stmt = _apply_text_contains_filter(stmt, FolhaServidor.cargo, filtros.cargo)
     if filtros.salario_min is not None:
-        stmt = stmt.where(Servidor.salario_base >= filtros.salario_min)
+        stmt = stmt.where(FolhaServidor.salario_base >= filtros.salario_min)
     if filtros.salario_max is not None:
-        stmt = stmt.where(Servidor.salario_base <= filtros.salario_max)
+        stmt = stmt.where(FolhaServidor.salario_base <= filtros.salario_max)
     return stmt
 
 
@@ -76,7 +76,7 @@ def _apply_text_contains_filter(stmt, column, value: str):
 
 
 def project_servidor_fields(
-    servidor: Servidor,
+    servidor: FolhaServidor,
     campos: list[str],
 ) -> dict[str, Any]:
     serialized = serializar_servidor(servidor)

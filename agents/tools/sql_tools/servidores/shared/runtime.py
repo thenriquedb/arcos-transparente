@@ -7,13 +7,13 @@ from typing import Any
 
 from sqlalchemy import func, select
 
-from database.models import Servidor
+from database.models import FolhaServidor
 from shared.utils.decimal_to_float import decimal_to_float
 
 from .responses import ServidorToolItem
 
 
-def serializar_servidor(servidor: Servidor) -> dict[str, Any]:
+def serializar_servidor(servidor: FolhaServidor) -> dict[str, Any]:
     """Serializa o modelo ORM em payload padronizado para as tools."""
 
     payload = ServidorToolItem.model_validate(
@@ -31,5 +31,5 @@ def serializar_servidor(servidor: Servidor) -> dict[str, Any]:
 
 def obter_mes_de_referencia_mais_recente(session) -> date | None:
     return session.execute(
-        select(func.max(Servidor.competencia_referencia))
+        select(func.max(FolhaServidor.competencia_referencia))
     ).scalar_one_or_none()

@@ -732,6 +732,12 @@ class IngestionPipeline:
                             nome=reg["nome_servidor"],
                             cargo=reg.get("cargo"),
                             lotacao=reg.get("lotacao"),
+                            competencia_referencia=date(
+                                reg["competencia_ano"],
+                                reg["competencia_mes_num"],
+                                1,
+                            ),
+                            salario_base=reg.get("salario_base"),
                         )
                         lotacao = self._get_or_create_folha_dim(
                             session, FolhaLotacao, reg.get("lotacao")
@@ -863,83 +869,42 @@ class IngestionPipeline:
         nome: str,
         cargo: Optional[str],
         lotacao: Optional[str],
+        competencia_referencia: date,
+        salario_base,
     ) -> FolhaServidor:
-        """Busca/cria dimensão de folha e tenta vincular ao servidor canônico."""
+        """Busca ou cria o snapshot legado mantido a partir da folha."""
         nome = sanitize_xml_payload(nome)
         cargo = sanitize_xml_payload(cargo)
         lotacao = sanitize_xml_payload(lotacao)
+        salario_base = sanitize_xml_payload(salario_base)
+        cargo = cargo or "nao_informado"
+        lotacao = lotacao or "nao_informado"
         existente = session.execute(
-            select(FolhaServidor).where(FolhaServidor.nome == nome)
+            select(FolhaServidor).where(
+                and_(
+                    FolhaServidor.nome == nome,
+                    FolhaServidor.cargo == cargo,
+                    FolhaServidor.secretaria == lotacao,
+                    FolhaServidor.competencia_referencia == competencia_referencia,
+                )
+            )
         ).scalar_one_or_none()
-        servidor_canonico = IngestionPipeline._find_servidor_canonico(
-            session=session,
-            nome=nome,
-            cargo=cargo,
-            secretaria=lotacao,
-        )
 
         if existente is not None:
-            if existente.servidor_id is None and servidor_canonico is not None:
-                existente.servidor_id = servidor_canonico.id
+            if existente.salario_base != salario_base:
+                existente.salario_base = salario_base
             return existente
 
         obj = FolhaServidor(
             nome=nome,
-            servidor_id=servidor_canonico.id if servidor_canonico is not None else None,
+            cargo=cargo,
+            secretaria=lotacao,
+            salario_base=salario_base,
+            competencia_referencia=competencia_referencia,
         )
         session.add(obj)
         session.flush()
         return obj
-
-    @staticmethod
-    def _find_servidor_canonico(
-        session,
-        nome: str,
-        cargo: Optional[str],
-        secretaria: Optional[str],
-    ) -> Optional[Servidor]:
-        """Resolve o melhor servidor canônico para um nome da folha."""
-        nome = sanitize_xml_payload(nome)
-        cargo = sanitize_xml_payload(cargo)
-        secretaria = sanitize_xml_payload(secretaria)
-        filtros = [Servidor.nome == nome]
-        if cargo:
-            filtros.append(Servidor.cargo == cargo)
-        if secretaria:
-            filtros.append(Servidor.secretaria == secretaria)
-
-        candidatos = (
-            session.execute(
-                select(Servidor)
-                .where(and_(*filtros))
-                .order_by(
-                    Servidor.competencia_referencia.desc(),
-                    Servidor.id.desc(),
-                )
-            )
-            .scalars()
-            .all()
-        )
-        if candidatos:
-            return candidatos[0]
-
-        if cargo or secretaria:
-            fallback = (
-                session.execute(
-                    select(Servidor)
-                    .where(Servidor.nome == nome)
-                    .order_by(
-                        Servidor.competencia_referencia.desc(),
-                        Servidor.id.desc(),
-                    )
-                )
-                .scalars()
-                .all()
-            )
-            if len(fallback) == 1:
-                return fallback[0]
-
-        return None
 
     def _parse_despesas_csv(self, arquivo: Path) -> list[dict[str, Any]]:
         """Despacha CSVs de despesas para o parser dedicado correto."""
@@ -990,16 +955,14 @@ class IngestionPipeline:
                 transferencias_path.rglob("emendas-parlamentares-*.csv")
             )
         elif tipo == "servidores":
-            arquivos = sorted(servidores_path.rglob("*servidores*.xml"))
-            if not arquivos:
-                arquivos = sorted(servidores_path.rglob("*folha-pagamento*.xml"))
+            arquivos = sorted(servidores_path.rglob("relacao-servidores*.json"))
         elif tipo == "contratos":
             arquivos = sorted(administracao_path.rglob("*contrato*.xml"))
             if not arquivos:
                 arquivos = sorted(administracao_path.rglob("*licitacoes*.xml"))
         else:
             arquivos = sorted(self.data_dir.rglob(f"*{tipo}*.xml"))
-        if ano is None or tipo == "eleitos":
+        if ano is None or tipo in {"eleitos", "servidores"}:
             return arquivos
         marcador = str(ano)
         return [arquivo for arquivo in arquivos if marcador in arquivo.name]

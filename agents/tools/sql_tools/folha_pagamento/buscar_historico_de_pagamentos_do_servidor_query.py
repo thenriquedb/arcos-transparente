@@ -131,22 +131,18 @@ def buscar_historico_de_pagamentos_do_servidor(
 
     with session_manager.get_session() as session:
         if params.folha_servidor_id is not None:
-            stmt = (
-                select(FolhaServidor)
-                .options(
-                    joinedload(FolhaServidor.servidor_canonico),
-                    joinedload(FolhaServidor.pagamentos).joinedload(
-                        FolhaPagamentoRegistro.cargo
-                    ),
-                    joinedload(FolhaServidor.pagamentos).joinedload(
-                        FolhaPagamentoRegistro.lotacao
-                    ),
+            representante = (
+                session.execute(
+                    _base_folha_servidores_stmt().where(
+                        FolhaServidor.id == params.folha_servidor_id
+                    )
                 )
-                .where(FolhaServidor.id == params.folha_servidor_id)
+                .unique()
+                .scalars()
+                .one_or_none()
             )
-            servidores = session.execute(stmt).unique().scalars().all()
 
-            if not servidores:
+            if representante is None:
                 return resposta_sem_resultados(
                     mensagem=(
                         "Nao encontrei o servidor selecionado para consultar o "
@@ -154,10 +150,8 @@ def buscar_historico_de_pagamentos_do_servidor(
                     )
                 )
 
-            resultados = [
-                serializar_servidor(servidor, params.max_meses)
-                for servidor in servidores
-            ]
+            servidores = _carregar_servidores_por_nome(session, representante.nome)
+            resultados = [serializar_servidor(servidores, params.max_meses)]
             return HistoricoPagamentosServidorResponse(
                 query=params.nome,
                 total=len(resultados),
@@ -192,19 +186,20 @@ def buscar_historico_de_pagamentos_do_servidor(
             for t in _normalizar_texto(nome_resolvido).split()
             if len(t) > 2  # ignora artigos: "de", "da", "do", "e"
         ]
-        candidatos_stmt = (
-            select(FolhaServidor.id)
-            .order_by(FolhaServidor.nome.asc())
-            .limit(params.limite)
+        candidatos_stmt = _base_folha_servidores_stmt().order_by(
+            FolhaServidor.nome.asc(),
+            FolhaServidor.competencia_referencia.desc(),
+            FolhaServidor.id.desc(),
         )
         for termo in termos:
             candidatos_stmt = candidatos_stmt.where(
                 func.normalizar(FolhaServidor.nome).like(f"%{termo}%")
             )
 
-        candidatos_ids = session.execute(candidatos_stmt).scalars().all()
+        candidatos = session.execute(candidatos_stmt).unique().scalars().all()
+        grupos = _agrupar_servidores_por_nome(candidatos)
 
-        if not candidatos_ids:
+        if not grupos:
             total_servidores_folha = session.execute(
                 select(func.count(FolhaServidor.id))
             ).scalar_one()
@@ -237,29 +232,15 @@ def buscar_historico_de_pagamentos_do_servidor(
                 ),
             )
 
-        stmt = (
-            select(FolhaServidor)
-            .options(
-                joinedload(FolhaServidor.servidor_canonico),
-                joinedload(FolhaServidor.pagamentos).joinedload(
-                    FolhaPagamentoRegistro.cargo
-                ),
-                joinedload(FolhaServidor.pagamentos).joinedload(
-                    FolhaPagamentoRegistro.lotacao
-                ),
-            )
-            .where(FolhaServidor.id.in_(candidatos_ids))
-            .order_by(FolhaServidor.nome.asc())
-        )
-        servidores = session.execute(stmt).unique().scalars().all()
+        grupos_limitados = list(grupos.values())[: params.limite]
 
-        if len(servidores) > 1:
+        if len(grupos) > 1:
             candidatos = [
-                serializar_candidato_servidor(servidor) for servidor in servidores
+                serializar_candidato_servidor(grupo) for grupo in grupos_limitados
             ]
             return resposta_sem_resultados(
                 query=params.nome,
-                total=len(candidatos),
+                total=len(grupos),
                 candidatos=candidatos,
                 mensagem=(
                     "Encontrei mais de um servidor compatível com esse nome. "
@@ -269,9 +250,9 @@ def buscar_historico_de_pagamentos_do_servidor(
                 ),
             )
 
-    resultados = [
-        serializar_servidor(servidor, params.max_meses) for servidor in servidores
-    ]
+        servidores = grupos_limitados[0]
+
+    resultados = [serializar_servidor(servidores, params.max_meses)]
 
     return HistoricoPagamentosServidorResponse(
         query=params.nome,
@@ -332,3 +313,35 @@ def _resolve_nome_por_cargo_politico(
         )
 
     return em_exercicio[0].nome_completo, None
+
+
+def _base_folha_servidores_stmt():
+    return select(FolhaServidor).options(
+        joinedload(FolhaServidor.pagamentos).joinedload(FolhaPagamentoRegistro.cargo),
+        joinedload(FolhaServidor.pagamentos).joinedload(FolhaPagamentoRegistro.lotacao),
+    )
+
+
+def _carregar_servidores_por_nome(session, nome: str) -> list[FolhaServidor]:
+    return (
+        session.execute(
+            _base_folha_servidores_stmt()
+            .where(FolhaServidor.nome == nome)
+            .order_by(
+                FolhaServidor.competencia_referencia.desc(),
+                FolhaServidor.id.desc(),
+            )
+        )
+        .unique()
+        .scalars()
+        .all()
+    )
+
+
+def _agrupar_servidores_por_nome(
+    servidores: list[FolhaServidor],
+) -> dict[str, list[FolhaServidor]]:
+    grupos: dict[str, list[FolhaServidor]] = {}
+    for servidor in servidores:
+        grupos.setdefault(servidor.nome, []).append(servidor)
+    return grupos

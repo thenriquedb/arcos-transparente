@@ -9,7 +9,7 @@ from sqlalchemy import func, select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
-from database.models import Servidor
+from database.models import FolhaServidor
 
 from .consultar_servidores_schema import (
     ConsultarServidoresMetadata,
@@ -25,11 +25,11 @@ from .shared.querying import (
 
 
 SERVER_ORDER_COLUMNS = {
-    "nome": Servidor.nome,
-    "cargo": Servidor.cargo,
-    "secretaria": Servidor.secretaria,
-    "salario_base": Servidor.salario_base,
-    "mes_de_referencia": Servidor.competencia_referencia,
+    "nome": FolhaServidor.nome,
+    "cargo": FolhaServidor.cargo,
+    "secretaria": FolhaServidor.secretaria,
+    "salario_base": FolhaServidor.salario_base,
+    "mes_de_referencia": FolhaServidor.competencia_referencia,
 }
 
 
@@ -135,7 +135,7 @@ def consultar_servidores(
         )
 
         base_stmt = apply_servidores_filters(
-            select(Servidor),
+            select(FolhaServidor),
             params.filtros,
             mes_de_referencia_considerado=mes_de_referencia_considerado,
         )
@@ -146,7 +146,7 @@ def consultar_servidores(
         order_column = SERVER_ORDER_COLUMNS[params.ordenar_por]
         ordered_stmt = base_stmt.order_by(
             order_column.desc() if params.ordem == "desc" else order_column.asc(),
-            Servidor.nome.asc(),
+            FolhaServidor.nome.asc(),
         )
         servidores = (
             session.execute(ordered_stmt.offset(params.offset).limit(params.limite))

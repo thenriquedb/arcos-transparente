@@ -1,45 +1,32 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from decimal import Decimal
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 
 from sqlalchemy import (
     Date,
     DateTime,
     Index,
     Integer,
-    Numeric,
     String,
     UniqueConstraint,
     func,
 )
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from database.models.base import Base
 
-if TYPE_CHECKING:
-    from database.models.payroll import FolhaServidor
-
 
 class Servidor(Base):
-    """Representa snapshots mensais de servidores a partir da folha."""
+    """Representa o cadastro funcional importado do JSON de servidores."""
 
     __tablename__ = "servidores"
     __table_args__ = (
-        UniqueConstraint(
-            "nome",
-            "cargo",
-            "secretaria",
-            "competencia_referencia",
-            name="uq_servidor_nome_cargo_sec_comp_ref",
-        ),
-        Index(
-            "ix_servidores_secretaria_cargo_comp_ref",
-            "secretaria",
-            "cargo",
-            "competencia_referencia",
-        ),
+        UniqueConstraint("source_id", name="uq_servidores_source_id"),
+        Index("ix_servidores_nome", "nome"),
+        Index("ix_servidores_matricula", "matricula"),
+        Index("ix_servidores_lotacao", "lotacao"),
+        Index("ix_servidores_competencia_referencia", "competencia_referencia"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -53,18 +40,40 @@ class Servidor(Base):
         nullable=False,
     )
 
+    source_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    competencia_referencia: Mapped[date] = mapped_column(Date, nullable=False)
     nome: Mapped[str] = mapped_column(String(255), nullable=False)
-    cargo: Mapped[str] = mapped_column(String(150), nullable=False, index=True)
-    secretaria: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
-    salario_base: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
+    cpf: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    matricula: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    cargo_funcao: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    fundamento_legal: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    lotacao: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    situacao_funcional: Mapped[Optional[str]] = mapped_column(
+        String(120), nullable=True
     )
-    competencia_referencia: Mapped[date] = mapped_column(
-        Date, nullable=False, index=True
+    forma_contratacao_investidura: Mapped[Optional[str]] = mapped_column(
+        String(120), nullable=True
     )
-
-    registros_folha: Mapped[list["FolhaServidor"]] = relationship(
-        back_populates="servidor_canonico"
+    data_admissao: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    data_desligamento: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    horario_trabalho: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
+    carga_horaria: Mapped[Optional[str]] = mapped_column(String(40), nullable=True)
+    local_origem_cedencia: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True
+    )
+    local_destino_cedencia: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True
+    )
+    onus_pagamento_cedencia: Mapped[Optional[str]] = mapped_column(
+        String(120), nullable=True
+    )
+    data_inicio_cessao: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    data_fim_cessao: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    regime_aposentadoria: Mapped[Optional[str]] = mapped_column(
+        String(120), nullable=True
+    )
+    vinculo_empregaticio: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True
     )
 
 

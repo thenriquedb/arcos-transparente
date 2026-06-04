@@ -111,3 +111,210 @@ def test_migration_de_transferencias_define_defaults_de_timestamp(tmp_path) -> N
     assert emenda[1] is not None
 
     conn.close()
+
+
+def test_migration_reestrutura_snapshot_de_servidores_em_folha(tmp_path) -> None:
+    db_path = tmp_path / "migrations-servidores.db"
+    env = os.environ.copy()
+    env["DATABASE_URL"] = f"sqlite:///{db_path}"
+
+    subprocess.run(
+        ["alembic", "upgrade", "20260602_000017"],
+        cwd=PROJECT_ROOT,
+        env=env,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO servidores (
+            nome,
+            cargo,
+            secretaria,
+            salario_base,
+            competencia_referencia
+        ) VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            "Maria da Silva",
+            "Enfermeira",
+            "Secretaria de Saude",
+            2500.00,
+            "2025-01-01",
+        ),
+    )
+    servidor_janeiro_id = cursor.lastrowid
+    cursor.execute(
+        """
+        INSERT INTO servidores (
+            nome,
+            cargo,
+            secretaria,
+            salario_base,
+            competencia_referencia
+        ) VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            "Maria da Silva",
+            "Enfermeira",
+            "Secretaria de Saude",
+            2600.00,
+            "2025-02-01",
+        ),
+    )
+
+    cursor.execute(
+        """
+        INSERT INTO folha_servidores (nome, servidor_id)
+        VALUES (?, ?)
+        """,
+        ("Maria da Silva", servidor_janeiro_id),
+    )
+    folha_servidor_legacy_id = cursor.lastrowid
+
+    cursor.execute("INSERT INTO folha_cargos (nome) VALUES (?)", ("Enfermeira",))
+    cargo_id = cursor.lastrowid
+    cursor.execute(
+        "INSERT INTO folha_lotacoes (nome) VALUES (?)",
+        ("Secretaria de Saude",),
+    )
+    lotacao_id = cursor.lastrowid
+
+    cursor.execute(
+        """
+        INSERT INTO folha_pagamentos (
+            competencia_ano,
+            competencia_mes_num,
+            competencia_mes_nome,
+            servidor_id,
+            lotacao_id,
+            cargo_id,
+            salario_base,
+            proventos,
+            vantagens,
+            vencimentos_totais,
+            descontos,
+            liquido
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            2025,
+            1,
+            "Janeiro",
+            folha_servidor_legacy_id,
+            lotacao_id,
+            cargo_id,
+            2500.00,
+            3000.00,
+            150.00,
+            3150.00,
+            350.00,
+            2800.00,
+        ),
+    )
+    cursor.execute(
+        """
+        INSERT INTO folha_pagamentos (
+            competencia_ano,
+            competencia_mes_num,
+            competencia_mes_nome,
+            servidor_id,
+            lotacao_id,
+            cargo_id,
+            salario_base,
+            proventos,
+            vantagens,
+            vencimentos_totais,
+            descontos,
+            liquido
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            2025,
+            2,
+            "Fevereiro",
+            folha_servidor_legacy_id,
+            lotacao_id,
+            cargo_id,
+            2600.00,
+            3100.00,
+            200.00,
+            3300.00,
+            400.00,
+            2900.00,
+        ),
+    )
+    conn.commit()
+    conn.close()
+
+    subprocess.run(
+        ["alembic", "upgrade", "head"],
+        cwd=PROJECT_ROOT,
+        env=env,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    conn = sqlite3.connect(db_path)
+    colunas_folha = {
+        row[1] for row in conn.execute("PRAGMA table_info('folha_servidores')")
+    }
+    assert "servidor_id" not in colunas_folha
+    assert {
+        "cargo",
+        "secretaria",
+        "salario_base",
+        "competencia_referencia",
+    } <= colunas_folha
+
+    colunas_servidores = {
+        row[1] for row in conn.execute("PRAGMA table_info('servidores')")
+    }
+    assert "source_id" in colunas_servidores
+    assert "cargo" not in colunas_servidores
+
+    snapshots = conn.execute(
+        """
+        SELECT nome, cargo, secretaria, salario_base, competencia_referencia
+        FROM folha_servidores
+        ORDER BY competencia_referencia
+        """
+    ).fetchall()
+    assert snapshots == [
+        (
+            "Maria da Silva",
+            "Enfermeira",
+            "Secretaria de Saude",
+            2500,
+            "2025-01-01",
+        ),
+        (
+            "Maria da Silva",
+            "Enfermeira",
+            "Secretaria de Saude",
+            2600,
+            "2025-02-01",
+        ),
+    ]
+
+    pagamentos = conn.execute(
+        """
+        SELECT fp.competencia_mes_num, fs.competencia_referencia, fs.salario_base
+        FROM folha_pagamentos fp
+        JOIN folha_servidores fs ON fs.id = fp.servidor_id
+        ORDER BY fp.competencia_mes_num
+        """
+    ).fetchall()
+    assert pagamentos == [
+        (1, "2025-01-01", 2500),
+        (2, "2025-02-01", 2600),
+    ]
+
+    assert conn.execute("SELECT COUNT(*) FROM servidores").fetchone()[0] == 0
+    conn.close()

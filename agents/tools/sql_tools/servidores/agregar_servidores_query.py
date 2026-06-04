@@ -9,7 +9,7 @@ from sqlalchemy import func, select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
-from database.models import Servidor
+from database.models import FolhaServidor
 
 from .agregar_servidores_schema import (
     AgregacaoServidoresItem,
@@ -25,16 +25,16 @@ from .shared.querying import (
 
 
 GROUP_BY_COLUMNS = {
-    "secretaria": Servidor.secretaria,
-    "cargo": Servidor.cargo,
-    "mes_de_referencia": Servidor.competencia_referencia,
+    "secretaria": FolhaServidor.secretaria,
+    "cargo": FolhaServidor.cargo,
+    "mes_de_referencia": FolhaServidor.competencia_referencia,
 }
 
 
 def _build_metric_expression(metrica: str):
     if metrica == "contagem":
-        return func.count(func.distinct(func.lower(Servidor.nome))).label(metrica)
-    return func.coalesce(func.sum(Servidor.salario_base), 0).label(metrica)
+        return func.count(func.distinct(func.lower(FolhaServidor.nome))).label(metrica)
+    return func.coalesce(func.sum(FolhaServidor.salario_base), 0).label(metrica)
 
 
 @register(
