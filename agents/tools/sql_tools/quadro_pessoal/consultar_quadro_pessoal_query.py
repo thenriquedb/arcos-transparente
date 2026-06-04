@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import QuadroPessoal
 from shared.utils.text import matches_text_query
@@ -105,6 +105,19 @@ def project_quadro_pessoal(
     name="consultar_quadro_pessoal",
     scope=PUBLIC_SCOPE,
     tags=["domain:quadro_pessoal", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Mostre o quadro de pessoal da prefeitura em 2025.",
+            "Quais vagas estao preenchidas na saude?",
+        ],
+        hints=[
+            "quadro de pessoal",
+            "vaga",
+            "regime",
+            "origem",
+            "lista",
+        ],
+    ),
 )
 def consultar_quadro_pessoal(
     filtros: dict[str, Any] | None = None,

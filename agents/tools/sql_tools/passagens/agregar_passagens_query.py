@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import DespesaDocumento
 
@@ -57,6 +57,19 @@ def _group_value(registro: DespesaDocumento, group: str) -> str | int | None:
     name="agregar_passagens",
     scope=PUBLIC_SCOPE,
     tags=["domain:passagens", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Quanto foi pago em passagens em 2026?",
+            "Quais beneficiarios receberam mais passagens?",
+        ],
+        hints=[
+            "passagem",
+            "total pago",
+            "ranking",
+            "beneficiario",
+            "locomocao",
+        ],
+    ),
 )
 def agregar_passagens(
     filtros: dict[str, Any] | None = None,
@@ -72,6 +85,10 @@ def agregar_passagens(
     Use esta tool quando a pergunta pedir total pago, total empenhado,
     quantidade de beneficiarios ou rankings de passagens por beneficiario,
     origem, unidade gestora ou categoria.
+    Se a pergunta usar linguagem ampla de gasto e houver interesse em ver os
+    registros que compoem o valor, consulte primeiro `consultar_passagens` e
+    use esta tool apenas como resumo complementar ou quando o usuario pedir
+    explicitamente total, ranking, contagem ou comparacao.
     NAO use para listar registros individuais; para isso use
     `consultar_passagens`.
     """

@@ -1,6 +1,6 @@
 # Contexto Atual do Projeto para Codex CLI
 
-Atualizado com base no codigo do repositorio em 2026-06-01.
+Atualizado com base no codigo do repositorio em 2026-06-02.
 
 ## Objetivo
 
@@ -58,6 +58,7 @@ O pipeline cobre estes tipos de importacao:
 - `patrimonios`
 - `quadro_pessoal`
 - `eleitos`
+- `transferencias_financeiras`
 
 As consultas do agente hoje se concentram nestes dominios publicos:
 
@@ -68,15 +69,18 @@ As consultas do agente hoje se concentram nestes dominios publicos:
 - receitas
 - planejamento
 - despesas
+- diarias
+- passagens
 - patrimonios
 - quadro de pessoal
 - eleitos
 - frota
+- transferencias_financeiras
 - conhecimento municipal curado via markdown
 
 ## Superficie Publica do Agente
 
-O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools estreitas. A superficie publica atual tem 20 tools:
+O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools estreitas. A superficie publica atual tem 26 tools:
 
 - `consultar_servidores`
 - `agregar_servidores`
@@ -90,12 +94,18 @@ O projeto tomou a decisao de expor poucas tools amplas, em vez de muitas tools e
 - `agregar_planejamento`
 - `consultar_despesas`
 - `agregar_despesas`
+- `consultar_diarias`
+- `agregar_diarias`
+- `consultar_passagens`
+- `agregar_passagens`
 - `consultar_patrimonios`
 - `agregar_patrimonios`
 - `consultar_quadro_pessoal`
 - `agregar_quadro_pessoal`
 - `consultar_eleitos`
 - `consultar_frota`
+- `consultar_transferencias_financeiras`
+- `agregar_transferencias_financeiras`
 - `buscar_historico_de_pagamentos_do_servidor`
 - `consultar_conhecimento_municipal`
 
@@ -109,8 +119,10 @@ Decisao importante: a variacao da pergunta deve ser absorvida por filtros, orden
 4. Schemas em `ingestion/schemas/` validam e normalizam os dados.
 5. Loaders persistem no SQLite com upsert e relacionamentos.
 6. O agente recebe uma pergunta.
-7. O runtime do chatbot aplica respostas locais e guardrails hard-coded antes de invocar o modelo.
-8. Para consultas permitidas, o agente LangChain recebe a superficie publica ampla de tools, incluindo SQL e RAG markdown-first, e orquestra a execucao via prompt e contratos das tools.
+7. O runtime do chatbot aplica respostas locais, guardrails hard-coded e politica deterministica antes de qualquer selecao de tools.
+8. Para consultas permitidas, o seletor hibrido tenta reduzir a pergunta a poucas tools candidatas usando metadata registrada nas tools publicas.
+9. O agente LangChain recebe esse subconjunto candidato e orquestra a execucao via prompt e contratos das tools.
+10. Se o seletor vier com baixa confianca ou retornar algo invalido, o runtime faz fallback para toda a superficie publica.
 
 ## Decisoes Tecnicas Ja Tomadas
 
@@ -145,6 +157,7 @@ Mas alguns dominios usam carga especializada em `ingestion/pipeline.py` porque p
 - receitas
 - frotas
 - folha de pagamento
+- transferencias financeiras
 
 ### 4. Rastreabilidade acima de simplificacao excessiva
 
@@ -168,8 +181,9 @@ compatibilidade e apoio a testes legados. Ele:
   pergunta vazia e fora de escopo
 - nao e a camada autoritativa para interpretar perguntas permitidas no chatbot atual
 
-No chatbot atual, perguntas permitidas seguem o system prompt e os contratos das
-tools. O router nao deve substituir essas camadas nem impor comportamento
+No chatbot atual, perguntas permitidas passam primeiro pela politica
+deterministica e pela selecao hibrida, e so depois seguem para o prompt e os
+contratos das tools. O router nao deve substituir essas camadas nem impor comportamento
 conversacional concorrente.
 
 ### 6. OpenAI e o caminho oficial desta fase
@@ -177,10 +191,22 @@ conversacional concorrente.
 O bootstrap principal em `agents/chatbot/agent.py` usa:
 
 - `LLM_PROVIDER` ou `MODEL_PROVIDER`
-- `OPENAI_MODEL`, com padrao `gpt-4.1`
+- `OPENAI_MODEL`, com padrao `gpt-4.1-mini`
 - `OPENAI_API_KEY`
 
 Hoje o provider real implementado no bootstrap principal e `ChatOpenAI`.
+
+### 6.1 Contrato de metadata para tools publicas selecionaveis
+
+Cada tool publica precisa declarar no proprio `@register(...)`:
+
+- exemplos representativos de perguntas cidadas
+- hints curtos de selecao
+- tags coerentes de dominio e forma de uso
+
+O seletor hibrido consome esse catalogo enriquecido. Uma nova tool publica
+selecionavel nao depende mais de editar a cadeia principal de heuristicas do
+router para entrar no fluxo principal do chatbot cidadao.
 
 ### 7. Prompt versionado em arquivo
 

@@ -1,19 +1,44 @@
+---
+tipo_documento: informacoes_institucionais_camara_municipal
+titulo: Câmara Municipal de Arcos - Informações Institucionais, FAQ e Contato
+instituicao: Câmara Municipal de Arcos
+cidade: Arcos
+estado: Minas Gerais
+pais: Brasil
+mandato: 2025-2028
+assunto_principal: Funcionamento da Câmara Municipal de Arcos, vereadores, reuniões, comissões, processo legislativo, FAQ e contato institucional
+categoria: Poder Legislativo Municipal
+poder: Legislativo
+esfera: Municipal
+numero_vereadores: 9
+duracao_mandato_vereadores: 4 anos
+reunioes_ordinarias: Quatro primeiras segundas-feiras de cada mês
+horario_reunioes_ordinarias: "18h"
+numero_comissoes_permanentes: 6
+endereco: Rua Vinte e Cinco de Dezembro, 760, Centro, Arcos - MG
+cep: "35598-028"
+telefone: "(37) 3351-3422"
+email: contato@camaraarcos.mg.gov.br
+horario_atendimento: Segunda-feira a sexta-feira, das 12h às 18h
+fonte: Câmara Municipal de Arcos
+---
+
 # Câmara Municipal de Arcos
 
-## Visão Geral
+## Visão geral
 
 A Câmara Municipal de Arcos é o órgão responsável pelo Poder Legislativo no município de Arcos, Minas Gerais.
 
 É o local onde são debatidos, analisados e votados projetos de lei de interesse público municipal.
 
-### Principais funções da Câmara Municipal
+## Principais funções da Câmara Municipal
 
-* Elaborar e votar leis de competência municipal.
-* Fiscalizar os atos da Prefeitura.
-* Fiscalizar gastos públicos municipais.
-* Acompanhar a prestação de serviços públicos.
-* Representar os interesses da população.
-* Promover o debate de assuntos de interesse coletivo.
+- Elaborar e votar leis de competência municipal.
+- Fiscalizar os atos da Prefeitura.
+- Fiscalizar gastos públicos municipais.
+- Acompanhar a prestação de serviços públicos.
+- Representar os interesses da população.
+- Promover o debate de assuntos de interesse coletivo.
 
 ---
 
@@ -23,58 +48,54 @@ A Câmara Municipal de Arcos é o órgão responsável pelo Poder Legislativo no
 
 A Câmara Municipal de Arcos é composta por 9 vereadores.
 
-### Mandato
+### Mandato dos vereadores
 
-* Duração: 4 anos.
-* Reeleição: permitida sem limite de mandatos.
+- Duração: 4 anos.
+- Reeleição: permitida sem limite de mandatos.
 
 ### Papel dos vereadores
 
-Os vereadores atuam como representantes da população e têm duas funções principais:
+Os vereadores atuam como representantes da população e têm duas funções principais: legislar e fiscalizar.
 
-#### Função legislativa
+#### Função legislativa dos vereadores
 
-* Propor projetos de lei.
-* Debater propostas legislativas.
-* Votar projetos de lei.
-* Criar normas de competência municipal.
+- Propor projetos de lei.
+- Debater propostas legislativas.
+- Votar projetos de lei.
+- Criar normas de competência municipal.
 
-#### Função fiscalizadora
+#### Função fiscalizadora dos vereadores
 
-* Fiscalizar a Prefeitura Municipal.
-* Acompanhar a aplicação dos recursos públicos.
-* Avaliar políticas públicas.
-* Solicitar informações ao Poder Executivo.
-* Sugerir melhorias para os serviços públicos.
+- Fiscalizar a Prefeitura Municipal.
+- Acompanhar a aplicação dos recursos públicos.
+- Avaliar políticas públicas.
+- Solicitar informações ao Poder Executivo.
+- Sugerir melhorias para os serviços públicos.
 
 Os vereadores devem atuar como elo entre os cidadãos e o poder público, apresentando demandas e necessidades da população.
 
 ---
 
-## Reuniões da Câmara Municipal
+## Reuniões da Câmara Municipal de Arcos
 
-### Reuniões Ordinárias
+### Reuniões ordinárias
 
-As reuniões ordinárias possuem as seguintes características:
+As reuniões ordinárias da Câmara Municipal de Arcos são abertas ao público.
 
-* Abertas ao público.
-* Realizadas nas quatro primeiras segundas-feiras de cada mês.
-* Horário de início: 18h.
+- Periodicidade: quatro primeiras segundas-feiras de cada mês.
+- Horário de início: 18h.
 
-### Reuniões Extraordinárias
+### Reuniões extraordinárias
 
-As reuniões extraordinárias:
-
-* São convocadas pelo Presidente da Câmara.
-* Ocorrem conforme necessidade administrativa ou legislativa.
+As reuniões extraordinárias são convocadas pelo Presidente da Câmara e ocorrem conforme necessidade administrativa ou legislativa.
 
 ---
 
-## Comissões da Câmara Municipal
+## Comissões da Câmara Municipal de Arcos
 
 As comissões são órgãos responsáveis pela análise técnica das matérias legislativas.
 
-### Comissões Permanentes
+### Comissões permanentes
 
 A Câmara Municipal de Arcos possui 6 comissões permanentes.
 
@@ -104,43 +125,26 @@ Responsável pela análise de matérias relacionadas aos serviços públicos e �
 
 Responsável pela análise de temas relacionados à mobilidade, desenvolvimento rural, meio ambiente, comércio e indústria.
 
----
-
-## Comissões Temporárias
+### Comissões temporárias
 
 Além das comissões permanentes, a Câmara pode criar comissões temporárias.
 
-### Finalidades das comissões temporárias
+#### Finalidades das comissões temporárias
 
-* Analisar assuntos específicos.
-* Apurar denúncias.
-* Realizar investigações.
-* Produzir estudos e relatórios.
+- Analisar assuntos específicos.
+- Apurar denúncias.
+- Realizar investigações.
+- Produzir estudos e relatórios.
 
-### Encerramento das comissões temporárias
+#### Encerramento das comissões temporárias
 
 Uma comissão temporária pode ser encerrada quando:
 
-* Cumprir sua finalidade.
-* Expirar o prazo de funcionamento estabelecido.
-* Encerrar-se a legislatura.
+- Cumprir sua finalidade.
+- Expirar o prazo de funcionamento estabelecido.
+- Encerrar-se a legislatura.
 
 ---
-
-## Dados Estruturados
-
-### Resumo institucional
-
-* Órgão: Câmara Municipal de Arcos
-* Esfera: Municipal
-* Poder: Legislativo
-* Número de vereadores: 9
-* Duração do mandato: 4 anos
-* Reeleição: Permitida
-* Reuniões ordinárias: Quatro primeiras segundas-feiras do mês
-* Horário das reuniões ordinárias: 18h
-* Número de comissões permanentes: 6
-* Funções principais: Legislar e fiscalizar
 
 # FAQ - Câmara Municipal de Arcos
 
@@ -148,7 +152,7 @@ Uma comissão temporária pode ser encerrada quando:
 
 O Poder Legislativo é um dos três poderes da República, independente e harmônico com os demais poderes.
 
-### Principais funções
+### Principais funções do Poder Legislativo
 
 - Elaborar leis.
 - Fiscalizar o Poder Executivo.
@@ -164,11 +168,11 @@ Além de criar e votar leis, os vereadores devem:
 - Fiscalizar os atos do Poder Executivo.
 - Acompanhar a aplicação dos recursos públicos.
 - Avaliar a qualidade dos serviços prestados à população.
-- Julgar as contas do prefeito após análise do Tribunal de Contas do Estado de Minas Gerais (TCE-MG).
+- Julgar as contas do prefeito após análise do Tribunal de Contas do Estado de Minas Gerais, o TCE-MG.
 
-### Representantes
+### Representantes do Poder Legislativo Municipal
 
-Os representantes do Poder Legislativo são os vereadores, eleitos pela população.
+Os representantes do Poder Legislativo Municipal são os vereadores, eleitos pela população.
 
 ---
 
@@ -176,7 +180,7 @@ Os representantes do Poder Legislativo são os vereadores, eleitos pela populaç
 
 A Câmara Municipal é o órgão responsável pelo Poder Legislativo em nível municipal.
 
-### Competências
+### Competências da Câmara Municipal
 
 - Elaborar leis municipais.
 - Discutir e votar projetos de lei.
@@ -187,10 +191,10 @@ A Câmara Municipal é o órgão responsável pelo Poder Legislativo em nível m
 
 ## Como é composta a Câmara Municipal de Arcos?
 
-### Composição
+A Câmara Municipal de Arcos é composta por:
 
 - 9 vereadores.
-- Eleitos por voto direto.
+- Vereadores eleitos por voto direto.
 - Mandato de 4 anos.
 - Sistema eleitoral proporcional.
 
@@ -202,14 +206,14 @@ A administração da Câmara é exercida pela Mesa Diretora.
 
 ### Composição da Mesa Diretora
 
-- Presidente
-- Vice-Presidente
-- Primeiro-Secretário
-- Segundo-Secretário
+- Presidente.
+- Vice-Presidente.
+- Primeiro-Secretário.
+- Segundo-Secretário.
 
-### Duração do mandato
+### Mandato da Mesa Diretora
 
-- 1 ano.
+- Duração: 1 ano.
 
 ---
 
@@ -221,7 +225,7 @@ Os vereadores são eleitos:
 - Por cidadãos maiores de 16 anos.
 - Em eleições municipais.
 
-### Duração do mandato
+### Duração do mandato de vereador
 
 - 4 anos.
 - Possibilidade de reeleição.
@@ -232,7 +236,7 @@ Os vereadores são eleitos:
 
 Os vereadores representam a população e atuam como elo entre os cidadãos e o poder público.
 
-### Principais atribuições
+### Principais atribuições dos vereadores
 
 #### Representação
 
@@ -257,21 +261,23 @@ Os vereadores representam a população e atuam como elo entre os cidadãos e o 
 
 ## Vereador administra obras e serviços públicos?
 
-Não.
+Não. O vereador não administra obras e serviços públicos do município.
 
 ### O que o vereador administra
 
 - Apenas os serviços da Câmara Municipal.
-- Os servidores da Câmara.
+- Os servidores da Câmara Municipal.
 
 ### O que não é atribuição do vereador
+
+O vereador não pode:
 
 - Asfaltar ruas.
 - Contratar professores.
 - Executar obras públicas.
 - Administrar secretarias municipais.
 
-Essas atribuições pertencem ao Poder Executivo.
+Essas atribuições pertencem ao Poder Executivo Municipal.
 
 ---
 
@@ -295,9 +301,9 @@ Também cabe à Câmara:
 
 ## Vereador pode conceder ajuda financeira ao cidadão?
 
-Não.
+Não. O vereador não pode conceder ajuda financeira ao cidadão.
 
-### Exemplos
+### Exemplos de ações que o vereador não pode realizar
 
 O vereador não pode:
 
@@ -310,19 +316,19 @@ Essas situações devem ser analisadas pela Assistência Social do município.
 
 ---
 
-## O que é uma Legislatura?
+## O que é uma legislatura?
 
 Legislatura é o período correspondente ao mandato dos vereadores.
 
-### Duração
+### Duração da legislatura
 
 - 4 anos.
 
-### Início
+### Início da legislatura
 
 - 1º de janeiro após a eleição municipal.
 
-### Término
+### Término da legislatura
 
 - 31 de dezembro do quarto ano do mandato.
 
@@ -337,11 +343,11 @@ O Plenário é:
 
 ---
 
-## O que é Processo Legislativo?
+## O que é processo legislativo?
 
-É o conjunto de etapas necessárias para criação de normas jurídicas.
+Processo legislativo é o conjunto de etapas necessárias para criação de normas jurídicas.
 
-### Exemplos de normas
+### Exemplos de normas criadas pelo processo legislativo
 
 - Emendas à Lei Orgânica.
 - Leis Complementares.
@@ -351,11 +357,11 @@ O Plenário é:
 
 ---
 
-## O que são Proposições?
+## O que são proposições?
 
-São matérias sujeitas à deliberação da Câmara.
+Proposições são matérias sujeitas à deliberação da Câmara.
 
-### Principais tipos
+### Principais tipos de proposições
 
 - Proposta de Emenda à Lei Orgânica.
 - Projeto de Lei Complementar.
@@ -370,53 +376,51 @@ São matérias sujeitas à deliberação da Câmara.
 
 ## Um vereador pode propor qualquer tipo de lei?
 
-Não.
-
-Existem matérias cuja iniciativa é exclusiva do Poder Executivo, conforme previsto na Lei Orgânica Municipal.
+Não. Existem matérias cuja iniciativa é exclusiva do Poder Executivo, conforme previsto na Lei Orgânica Municipal.
 
 ---
 
 ## Como um projeto se torna lei?
 
-### Etapas
+### Etapas para um projeto se tornar lei
 
 1. Apresentação da proposição.
 2. Discussão.
 3. Votação.
 4. Aprovação ou rejeição.
 
-### Após aprovação
+### Após aprovação do projeto
 
 O projeto deve ser:
 
 - Sancionado pelo prefeito; ou
 - Promulgado pelo presidente da Câmara.
 
-Depois disso, deve ser publicado oficialmente para entrar em vigor.
+Depois disso, o projeto aprovado deve ser publicado oficialmente para entrar em vigor.
 
 ---
 
-## Onde consultar as leis municipais?
+## Onde consultar as leis municipais de Arcos?
 
-### SAPL
+### SAPL da Câmara Municipal de Arcos
 
 https://sapl.arcos.mg.leg.br
 
-### Leis Municipais
+### Portal Leis Municipais
 
 https://leismunicipais.com.br/prefeitura/mg/arcos
 
 ---
 
-## O que são Indicações, Moções e Requerimentos?
+## O que são indicações, moções e requerimentos?
 
 ### Indicações
 
-Sugestões encaminhadas aos órgãos competentes.
+Indicações são sugestões encaminhadas aos órgãos competentes.
 
 ### Moções
 
-Manifestação de posicionamento do vereador ou da Câmara.
+Moções são manifestações de posicionamento do vereador ou da Câmara.
 
 Exemplos:
 
@@ -425,22 +429,22 @@ Exemplos:
 
 ### Requerimentos
 
-Pedidos formais relacionados a:
+Requerimentos são pedidos formais relacionados a:
 
 - Informações.
 - Obras.
 - Serviços.
 - Convocação de autoridades.
 
-Necessitam aprovação do Plenário.
+Os requerimentos necessitam de aprovação do Plenário.
 
 ---
 
 ## O que é a Lei Orgânica do Município?
 
-É a norma fundamental do município.
+A Lei Orgânica é a norma fundamental do município.
 
-### Define
+### A Lei Orgânica define
 
 - Organização administrativa.
 - Competências municipais.
@@ -452,55 +456,55 @@ Necessitam aprovação do Plenário.
 
 ### Lei Orgânica de Arcos
 
-Lei Municipal nº 1.256/1990.
+- Lei Municipal nº 1.256/1990.
 
 ---
 
 ## O que é o Regimento Interno?
 
-É o conjunto de regras que disciplina o funcionamento da Câmara Municipal.
+O Regimento Interno é o conjunto de regras que disciplina o funcionamento da Câmara Municipal.
 
 ---
 
 ## O que é a Mesa Diretora?
 
-Órgão responsável pela administração da Câmara e condução do processo legislativo.
+A Mesa Diretora é o órgão responsável pela administração da Câmara e pela condução do processo legislativo.
 
-### Composição
+### Composição da Mesa Diretora
 
-- Presidente
-- Vice-Presidente
-- Primeiro-Secretário
-- Segundo-Secretário
+- Presidente.
+- Vice-Presidente.
+- Primeiro-Secretário.
+- Segundo-Secretário.
 
-### Mandato
+### Mandato da Mesa Diretora
 
 - 1 ano.
 
 ---
 
-## O que são as Comissões da Câmara?
+## O que são as comissões da Câmara?
 
-Órgãos técnicos compostos por vereadores responsáveis pela análise detalhada das proposições.
+As comissões da Câmara são órgãos técnicos compostos por vereadores responsáveis pela análise detalhada das proposições.
 
-### Funções
+### Funções das comissões
 
 - Emitir pareceres.
 - Estudar projetos.
 - Propor emendas.
 
-### Comissões Permanentes da Câmara de Arcos
+### Comissões permanentes da Câmara de Arcos
 
-1. Legislação, Justiça e Redação Final
-2. Finanças, Orçamento e Tomada de Contas
-3. Saúde e Assistência Social
-4. Educação, Cultura, Esportes e Direitos Humanos
-5. Serviços Públicos e Segurança Pública Municipal
-6. Transportes, Área Rural, Meio Ambiente, Comércio e Indústria
+1. Legislação, Justiça e Redação Final.
+2. Finanças, Orçamento e Tomada de Contas.
+3. Saúde e Assistência Social.
+4. Educação, Cultura, Esportes e Direitos Humanos.
+5. Serviços Públicos e Segurança Pública Municipal.
+6. Transportes, Área Rural, Meio Ambiente, Comércio e Indústria.
 
-### Comissões Temporárias
+### Comissões temporárias da Câmara
 
-Criadas para:
+As comissões temporárias são criadas para:
 
 - Analisar temas específicos.
 - Apurar denúncias.
@@ -510,58 +514,59 @@ Criadas para:
 
 ## Quais tipos de sessões existem?
 
-### Sessões Ordinárias
+### Sessões ordinárias
 
-Destinadas aos trabalhos legislativos regulares.
+As sessões ordinárias são destinadas aos trabalhos legislativos regulares.
 
 **Periodicidade em Arcos:**
+
 - Quatro primeiras segundas-feiras de cada mês.
-- Às 18h.
+- Horário: 18h.
 
-### Sessões Extraordinárias
+### Sessões extraordinárias
 
-Convocadas para assuntos específicos.
+As sessões extraordinárias são convocadas para assuntos específicos.
 
-### Sessões Especiais
+### Sessões especiais
 
-Destinadas a:
+As sessões especiais são destinadas a:
 
 - Homenagens.
 - Comemorações.
 - Temas relevantes.
 
-### Sessões Solenes
+### Sessões solenes
 
-Destinadas a:
+As sessões solenes são destinadas a:
 
 - Posse de autoridades.
 - Instalação ou encerramento de sessões legislativas.
 
 ---
 
-## Quem pode assistir às reuniões?
+## Quem pode assistir às reuniões da Câmara Municipal de Arcos?
 
-Qualquer cidadão.
+Qualquer cidadão pode assistir às reuniões da Câmara Municipal de Arcos.
 
 ### Transmissão ao vivo
 
-Canal oficial da Câmara Municipal de Arcos no YouTube.
+As reuniões são transmitidas ao vivo pelo canal oficial da Câmara Municipal de Arcos no YouTube.
 
 ---
 
 ## Como utilizar a Tribuna Livre?
 
-### Requisitos
+### Requisitos para utilizar a Tribuna Livre
 
-- Inscrição prévia na Secretaria da Câmara.
-- Solicitação com antecedência mínima de 72 horas.
+- Fazer inscrição prévia na Secretaria da Câmara.
+- Solicitar a inscrição com antecedência mínima de 72 horas.
 - Informar o tema da manifestação.
 
-### Tempo máximo
+### Tempo máximo de fala na Tribuna Livre
 
 - 15 minutos.
 
-### Restrições
+### Restrições da Tribuna Livre
 
 Não são permitidas manifestações:
 
@@ -573,7 +578,9 @@ Não são permitidas manifestações:
 
 ## Por que a Câmara possui site e redes sociais?
 
-### Objetivos
+A Câmara possui site e redes sociais para garantir transparência pública e divulgar suas atividades legislativas.
+
+### Objetivos do site e das redes sociais da Câmara
 
 - Garantir transparência pública.
 - Divulgar atividades legislativas.
@@ -581,86 +588,69 @@ Não são permitidas manifestações:
 - Disponibilizar licitações.
 - Divulgar pautas e atas.
 
-### Redes utilizadas
+### Redes sociais utilizadas pela Câmara
 
-- Facebook
-- Instagram
-- YouTube
+- Facebook.
+- Instagram.
+- YouTube.
 
 ### Base legal
 
-Lei Federal nº 12.527/2011 (Lei de Acesso à Informação - LAI).
+- Lei Federal nº 12.527/2011, conhecida como Lei de Acesso à Informação, ou LAI.
 
 ---
 
 ## Quem pode trabalhar na Câmara?
 
-Qualquer cidadão que:
+Qualquer cidadão pode trabalhar na Câmara, desde que atenda aos requisitos legais.
 
 ### Cargo efetivo
 
-- Seja aprovado em concurso público.
+Para ocupar cargo efetivo, é necessário ser aprovado em concurso público.
 
 ### Cargo comissionado
 
-- Seja nomeado conforme requisitos legais e disponibilidade de vagas.
-# Câmara Municipal de Arcos - Contato
+Para ocupar cargo comissionado, é necessário ser nomeado conforme requisitos legais e disponibilidade de vagas.
 
-## Informações Gerais
+---
 
-**Endereço:** Rua Vinte e Cinco de Dezembro, 760, Centro, Arcos - MG  
-**CEP:** 35598-028
+# Contato da Câmara Municipal de Arcos
 
-**Horário de Atendimento:** Segunda-feira a sexta-feira, das 12h às 18h
+## Informações gerais
 
-**Telefone:** (37) 3351-3422
+- Endereço: Rua Vinte e Cinco de Dezembro, 760, Centro, Arcos - MG
+- CEP: 35598-028
+- Horário de atendimento: segunda-feira a sexta-feira, das 12h às 18h
+- Telefone: (37) 3351-3422
 
-## Contato Institucional
+## Contato institucional
 
-**E-mail:** contato@camaraarcos.mg.gov.br
+- E-mail: contato@camaraarcos.mg.gov.br
 
-## Vereadores e Contatos
+---
 
-### Alex Didier
-- Partido: SOLIDARIEDADE
-- E-mail: ver.alexribeiro@camaraarcos.mg.gov.br
+# Dados estruturados
 
-### Carlos David Borges
-- Partido: PL
-- E-mail: ver.carlosdavid@camaraarcos.mg.gov.br
+## Resumo institucional
 
-### Hernane Queijinho
-- Partido: AVANTE
-- E-mail: ver.hernanedias@camaraarcos.mg.gov.br
-
-### Jaiane Soares
-- Partido: REPUBLICANOS
-- E-mail: ver.jaianesoares@camaraarcos.mg.gov.br
-
-### João Paulo Ferreira (Joãozinho)
-- Partido: PSD
-- E-mail: ver.joaozinho@camaraarcos.mg.gov.br
-
-### José Agenor (Genorinho)
-- Partido: PODE
-- E-mail: ver.joseagenor@camaraarcos.mg.gov.br
-
-### Kátia Mateus
-- Partido: PL
-- E-mail: ver.katiamateus@camaraarcos.mg.gov.br
-
-### Leslie Mariana
-- Partido: AGIR
-- E-mail: ver.lesliecosta@camaraarcos.mg.gov.br
-
-### Orlando Martins
-- Partido: AVANTE
-- E-mail: ver.orlandoferreira@camaraarcos.mg.gov.br
-
-## Resumo
-
-A Câmara Municipal de Arcos está localizada na Rua Vinte e Cinco de Dezembro, 760, Centro, Arcos-MG, CEP 35598-028. O atendimento ao público ocorre de segunda a sexta-feira, das 12h às 18h. O telefone para contato é (37) 3351-3422 e o e-mail institucional é contato@camaraarcos.mg.gov.br.
-
-## Gravações das sessões 
-
-As gravações das sessões estão disponivel no canal oficial no YouTube da camara municipal de Arcos através do link https://www.youtube.com/@CamaraMunicipalArcos/streams
+| Informação | Valor |
+|---|---|
+| Órgão | Câmara Municipal de Arcos |
+| Esfera | Municipal |
+| Poder | Legislativo |
+| Cidade | Arcos |
+| Estado | Minas Gerais |
+| País | Brasil |
+| Número de vereadores | 9 |
+| Duração do mandato dos vereadores | 4 anos |
+| Reeleição de vereadores | Permitida |
+| Reuniões ordinárias | Quatro primeiras segundas-feiras de cada mês |
+| Horário das reuniões ordinárias | 18h |
+| Número de comissões permanentes | 6 |
+| Funções principais | Legislar e fiscalizar |
+| Endereço | Rua Vinte e Cinco de Dezembro, 760, Centro, Arcos - MG |
+| CEP | 35598-028 |
+| Telefone | (37) 3351-3422 |
+| E-mail | contato@camaraarcos.mg.gov.br |
+| Horário de atendimento | Segunda-feira a sexta-feira, das 12h às 18h |
+```

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<TransferenciasFinanceiras>
+    <TransferenciaFinanceira>
+        <Identificacao>27</Identificacao>
+        <UnidadeGestoraConcessora>PREFEITURA MUNICIPAL</UnidadeGestoraConcessora>
+        <UnidadeGestoraRecebedora>CAMARA MUNICIPAL</UnidadeGestoraRecebedora>
+        <Finalidade>Transferencia para Camara</Finalidade>
+        <FonteRecurso>Recursos nao Vinculados de Impostos</FonteRecurso>
+        <DetalhamentoFonte>Nao se aplica</DetalhamentoFonte>
+        <ProgramacaoInicial>R$ 6.630.000,00</ProgramacaoInicial>
+        <DataMovimento>01/01/2026</DataMovimento>
+        <TipoMovimento>Programacao Inicial</TipoMovimento>
+        <ValorMovimento>R$ 6.630.000,00</ValorMovimento>
+    </TransferenciaFinanceira>
+    <TransferenciaFinanceira>
+        <Identificacao>27</Identificacao>
+        <UnidadeGestoraConcessora>PREFEITURA MUNICIPAL</UnidadeGestoraConcessora>
+        <UnidadeGestoraRecebedora>CAMARA MUNICIPAL</UnidadeGestoraRecebedora>
+        <Finalidade>Transferencia para Camara</Finalidade>
+        <FonteRecurso>Recursos nao Vinculados de Impostos</FonteRecurso>
+        <DetalhamentoFonte>Nao se aplica</DetalhamentoFonte>
+        <ProgramacaoInicial>R$ 552.500,00</ProgramacaoInicial>
+        <DataMovimento>16/01/2026</DataMovimento>
+        <TipoMovimento>Recebimento</TipoMovimento>
+        <ValorMovimento>R$ 552.500,00</ValorMovimento>
+    </TransferenciaFinanceira>
+</TransferenciasFinanceiras>

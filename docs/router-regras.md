@@ -24,8 +24,10 @@ Regras por domínio:
 Antes de criar uma regra nova, decida em qual camada ela pertence:
 
 - Se for guardrail hard-coded de bloqueio, mantenha na camada compartilhada de guardrails
-- Se for interpretação conversacional geral, prefira o system prompt e o runtime do chatbot
+- Se for continuidade curta, sigla protegida ambígua ou confirmação curta, prefira a política determinística do runtime
+- Se for interpretação conversacional geral depois da seleção, prefira o system prompt e o runtime do chatbot
 - Se for regra local de um domínio específico, prefira a descrição/contrato da tool correspondente
+- Se o objetivo for tornar uma nova tool pública selecionável no chatbot cidadão, prefira adicionar metadata de roteamento no próprio `@register(...)` da tool em vez de criar heurística nova no router
 - Se for palavra-chave compartilhada ou pattern global, coloque em `constants.py`
 - Se for extração de nome, ano, entidade, secretaria ou filtros, coloque em `extractors.py`
 - Se for heurística de compatibilidade de um domínio, coloque no arquivo de `routes/` desse domínio
@@ -35,10 +37,11 @@ Antes de criar uma regra nova, decida em qual camada ela pertence:
 
 1. Identifique o domínio da pergunta.
 2. Reaproveite extractors existentes antes de criar novos.
-3. Crie ou ajuste uma função `_try_route_*` no módulo do domínio.
-4. Faça a função retornar `RouteDecision` quando houver match claro e `None` quando não houver.
-5. Posicione a função na `ROUTE_PRIORITY_CHAIN` com cuidado.
-6. Adicione testes de roteamento e guardrail.
+3. Confirme primeiro se o caso realmente precisa de compatibilidade legada e nao pode ser resolvido pela metadata da tool ou pela seleção híbrida.
+4. Crie ou ajuste uma função `_try_route_*` no módulo do domínio.
+5. Faça a função retornar `RouteDecision` quando houver match claro e `None` quando não houver.
+6. Posicione a função na `ROUTE_PRIORITY_CHAIN` com cuidado.
+7. Adicione testes de roteamento e guardrail.
 
 ## Como Não Quebrar A Prioridade
 

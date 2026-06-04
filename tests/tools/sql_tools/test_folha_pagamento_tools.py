@@ -16,7 +16,6 @@ from database.models import (
     FolhaLotacao,
     FolhaPagamentoRegistro,
     FolhaServidor,
-    Servidor,
 )
 
 
@@ -37,24 +36,44 @@ def _build_session():
     return session_local()
 
 
+def _snapshot(
+    *,
+    nome: str,
+    cargo: str = "nao_informado",
+    secretaria: str = "nao_informado",
+    salario_base=None,
+    competencia_referencia: date,
+) -> FolhaServidor:
+    return FolhaServidor(
+        nome=nome,
+        cargo=cargo,
+        secretaria=secretaria,
+        salario_base=salario_base,
+        competencia_referencia=competencia_referencia,
+    )
+
+
 def test_busca_historico_de_pagamentos_serializa_contrato_leigo(monkeypatch) -> None:
     session = _build_session()
 
-    servidor_canonico = Servidor(
+    folha_servidor_janeiro = _snapshot(
         nome="Maria da Silva",
         cargo="Enfermeira",
         secretaria="Secretaria de Saude",
         salario_base=2500,
-        competencia_referencia=date(2025, 2, 1),
+        competencia_referencia=date(2025, 1, 1),
     )
-    folha_servidor = FolhaServidor(
+    folha_servidor_fevereiro = _snapshot(
         nome="Maria da Silva",
-        servidor_canonico=servidor_canonico,
+        cargo="Enfermeira",
+        secretaria="Secretaria de Saude",
+        salario_base=2600,
+        competencia_referencia=date(2025, 2, 1),
     )
     cargo = FolhaCargo(nome="Enfermeira")
     lotacao = FolhaLotacao(nome="UPA Central")
 
-    session.add_all([servidor_canonico, folha_servidor, cargo, lotacao])
+    session.add_all([folha_servidor_janeiro, folha_servidor_fevereiro, cargo, lotacao])
     session.flush()
 
     session.add_all(
@@ -63,7 +82,7 @@ def test_busca_historico_de_pagamentos_serializa_contrato_leigo(monkeypatch) -> 
                 competencia_ano=2025,
                 competencia_mes_num=2,
                 competencia_mes_nome="Fevereiro",
-                servidor=folha_servidor,
+                servidor=folha_servidor_fevereiro,
                 cargo=cargo,
                 lotacao=lotacao,
                 salario_base=2600,
@@ -77,7 +96,7 @@ def test_busca_historico_de_pagamentos_serializa_contrato_leigo(monkeypatch) -> 
                 competencia_ano=2025,
                 competencia_mes_num=1,
                 competencia_mes_nome="Janeiro",
-                servidor=folha_servidor,
+                servidor=folha_servidor_janeiro,
                 cargo=cargo,
                 lotacao=lotacao,
                 salario_base=2500,
@@ -105,7 +124,9 @@ def test_busca_historico_de_pagamentos_serializa_contrato_leigo(monkeypatch) -> 
 
     assert resultado["query"] == "Maria da Silva"
     assert resultado["total"] == 1
-    assert resultado["resultados"][0]["folha_servidor_id"] == folha_servidor.id
+    assert (
+        resultado["resultados"][0]["folha_servidor_id"] == folha_servidor_fevereiro.id
+    )
     assert resultado["resultados"][0]["nome"] == "Maria da Silva"
     assert resultado["resultados"][0]["cargo_atual"] == "Enfermeira"
     assert resultado["resultados"][0]["setor_atual"] == "UPA Central"
@@ -163,7 +184,13 @@ def test_busca_historico_de_pagamentos_aceita_termos_nao_contiguos(
 ) -> None:
     session = _build_session()
 
-    folha_servidor = FolhaServidor(nome="Ronaldo Gaspar Ribeiro")
+    folha_servidor = _snapshot(
+        nome="Ronaldo Gaspar Ribeiro",
+        cargo="Motorista",
+        secretaria="Secretaria de Transportes",
+        salario_base=2200,
+        competencia_referencia=date(2025, 3, 1),
+    )
     cargo = FolhaCargo(nome="Motorista")
     lotacao = FolhaLotacao(nome="Transportes")
 
@@ -209,7 +236,13 @@ def test_busca_historico_de_pagamentos_ignora_diferenca_de_acentos(
 ) -> None:
     session = _build_session()
 
-    folha_servidor = FolhaServidor(nome="Wellington Francelli Estevao Rodrigues Roque")
+    folha_servidor = _snapshot(
+        nome="Wellington Francelli Estevao Rodrigues Roque",
+        cargo="Prefeito Municipal",
+        secretaria="Governo",
+        salario_base=22614.44,
+        competencia_referencia=date(2025, 12, 1),
+    )
     cargo = FolhaCargo(nome="Prefeito Municipal")
     lotacao = FolhaLotacao(nome="M. SEC. GOV-SUB.PREF")
 
@@ -270,7 +303,13 @@ def test_busca_historico_de_pagamentos_resolve_cargo_politico_automaticamente(
         )
     )
 
-    folha_servidor = FolhaServidor(nome="Wellington Francelli Estevao Rodrigues Roque")
+    folha_servidor = _snapshot(
+        nome="Wellington Francelli Estevao Rodrigues Roque",
+        cargo="Prefeito Municipal",
+        secretaria="Governo",
+        salario_base=22614.44,
+        competencia_referencia=date(2025, 12, 1),
+    )
     cargo = FolhaCargo(nome="Prefeito Municipal")
     lotacao = FolhaLotacao(nome="Gabinete do Prefeito")
 
@@ -320,27 +359,19 @@ def test_busca_historico_de_pagamentos_desambigua_multiplos_candidatos(
 ) -> None:
     session = _build_session()
 
-    servidor_canonico_primeiro = Servidor(
+    primeiro = _snapshot(
         nome="Ronaldo Gaspar Ribeiro",
         cargo="Motorista",
         secretaria="Secretaria de Transportes",
         salario_base=2200,
         competencia_referencia=date(2025, 3, 1),
     )
-    servidor_canonico_segundo = Servidor(
+    segundo = _snapshot(
         nome="Ronaldo Ribeiro Silva",
         cargo="Auxiliar Administrativo",
         secretaria="Secretaria de Saude",
         salario_base=2500,
         competencia_referencia=date(2025, 4, 1),
-    )
-    primeiro = FolhaServidor(
-        nome="Ronaldo Gaspar Ribeiro",
-        servidor_canonico=servidor_canonico_primeiro,
-    )
-    segundo = FolhaServidor(
-        nome="Ronaldo Ribeiro Silva",
-        servidor_canonico=servidor_canonico_segundo,
     )
     cargo_primeiro = FolhaCargo(nome="Motorista")
     cargo_segundo = FolhaCargo(nome="Auxiliar Administrativo")
@@ -349,8 +380,6 @@ def test_busca_historico_de_pagamentos_desambigua_multiplos_candidatos(
 
     session.add_all(
         [
-            servidor_canonico_primeiro,
-            servidor_canonico_segundo,
             primeiro,
             segundo,
             cargo_primeiro,
@@ -436,37 +465,56 @@ def test_busca_historico_de_pagamentos_aceita_folha_servidor_id_para_desempate(
 ) -> None:
     session = _build_session()
 
-    servidor_canonico = Servidor(
+    folha_servidor_janeiro = _snapshot(
+        nome="Ronaldo Gaspar Ribeiro",
+        cargo="Motorista",
+        secretaria="Secretaria de Transportes",
+        salario_base=2100,
+        competencia_referencia=date(2025, 1, 1),
+    )
+    folha_servidor_marco = _snapshot(
         nome="Ronaldo Gaspar Ribeiro",
         cargo="Motorista",
         secretaria="Secretaria de Transportes",
         salario_base=2200,
         competencia_referencia=date(2025, 3, 1),
     )
-    folha_servidor = FolhaServidor(
-        nome="Ronaldo Gaspar Ribeiro",
-        servidor_canonico=servidor_canonico,
-    )
     cargo = FolhaCargo(nome="Motorista")
     lotacao = FolhaLotacao(nome="Transportes")
 
-    session.add_all([servidor_canonico, folha_servidor, cargo, lotacao])
+    session.add_all([folha_servidor_janeiro, folha_servidor_marco, cargo, lotacao])
     session.flush()
-    session.add(
-        FolhaPagamentoRegistro(
-            competencia_ano=2025,
-            competencia_mes_num=3,
-            competencia_mes_nome="Marco",
-            servidor=folha_servidor,
-            cargo=cargo,
-            lotacao=lotacao,
-            salario_base=2200,
-            proventos=2200,
-            vantagens=0,
-            vencimentos_totais=2200,
-            descontos=200,
-            liquido=2000,
-        )
+    session.add_all(
+        [
+            FolhaPagamentoRegistro(
+                competencia_ano=2025,
+                competencia_mes_num=1,
+                competencia_mes_nome="Janeiro",
+                servidor=folha_servidor_janeiro,
+                cargo=cargo,
+                lotacao=lotacao,
+                salario_base=2100,
+                proventos=2100,
+                vantagens=0,
+                vencimentos_totais=2100,
+                descontos=180,
+                liquido=1920,
+            ),
+            FolhaPagamentoRegistro(
+                competencia_ano=2025,
+                competencia_mes_num=3,
+                competencia_mes_nome="Marco",
+                servidor=folha_servidor_marco,
+                cargo=cargo,
+                lotacao=lotacao,
+                salario_base=2200,
+                proventos=2200,
+                vantagens=0,
+                vencimentos_totais=2200,
+                descontos=200,
+                liquido=2000,
+            ),
+        ]
     )
     session.commit()
 
@@ -477,13 +525,14 @@ def test_busca_historico_de_pagamentos_aceita_folha_servidor_id_para_desempate(
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
     resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
-        folha_servidor_id=folha_servidor.id
+        folha_servidor_id=folha_servidor_marco.id
     )
 
     assert resultado["total"] == 1
-    assert resultado["resultados"][0]["folha_servidor_id"] == folha_servidor.id
+    assert resultado["resultados"][0]["folha_servidor_id"] == folha_servidor_marco.id
     assert resultado["resultados"][0]["nome"] == "Ronaldo Gaspar Ribeiro"
     assert resultado["resultados"][0]["cargo_atual"] == "Motorista"
+    assert resultado["resultados"][0]["total_meses_considerados"] == 2
 
     session.close()
 
@@ -542,7 +591,15 @@ def test_busca_historico_de_pagamentos_retorna_sugestao_sem_resultados(
     monkeypatch,
 ) -> None:
     session = _build_session()
-    session.add(FolhaServidor(nome="Maria da Silva"))
+    session.add(
+        _snapshot(
+            nome="Maria da Silva",
+            cargo="Enfermeira",
+            secretaria="Secretaria de Saude",
+            salario_base=2500,
+            competencia_referencia=date(2025, 2, 1),
+        )
+    )
     session.commit()
 
     @contextmanager

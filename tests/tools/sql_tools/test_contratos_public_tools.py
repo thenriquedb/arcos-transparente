@@ -278,6 +278,78 @@ def test_consultar_contratos_suporta_ranking_por_valor(monkeypatch) -> None:
     session.close()
 
 
+def test_consultar_contratos_suporta_ranking_por_valor_filtrado_por_ano(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _contrato(
+                numero="001/2024",
+                fornecedor="Fornecedor Alfa",
+                cnpj="123",
+                valor=90000,
+                data_inicio=date(2024, 12, 30),
+                data_fim=None,
+                categoria="Servico",
+                secretaria="Secretaria de Saude",
+                descricao="Contrato anterior",
+            ),
+            _contrato(
+                numero="001/2025",
+                fornecedor="Fornecedor Beta",
+                cnpj="456",
+                valor=10500,
+                data_inicio=date(2025, 1, 10),
+                data_fim=None,
+                categoria="Servico",
+                secretaria="Secretaria de Saude",
+                descricao="Locacao de estrutura",
+            ),
+            _contrato(
+                numero="002/2025",
+                fornecedor="Fornecedor Gama",
+                cnpj="789",
+                valor=32000,
+                data_inicio=date(2025, 3, 1),
+                data_fim=None,
+                categoria="Servico",
+                secretaria="Secretaria de Obras",
+                descricao="Obra de infraestrutura",
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.consultar_contratos(
+        filtros={
+            "data_inicio_inicio": "2025-01-01",
+            "data_inicio_fim": "2025-12-31",
+        },
+        ordenar_por="valor",
+        ordem="desc",
+        limite=10,
+        campos=["numero", "valor", "data_inicio"],
+    )
+
+    assert resultado["total"] == 2
+    assert resultado["resultados"] == [
+        {
+            "numero": "002/2025",
+            "valor": 32000.0,
+            "data_inicio": "2025-03-01",
+        },
+        {
+            "numero": "001/2025",
+            "valor": 10500.0,
+            "data_inicio": "2025-01-10",
+        },
+    ]
+
+    session.close()
+
+
 def test_consultar_contratos_faz_fallback_de_fornecedor_para_descricao(
     monkeypatch,
 ) -> None:

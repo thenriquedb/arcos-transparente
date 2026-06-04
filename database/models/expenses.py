@@ -266,3 +266,71 @@ class DespesaDocumentoComprobatorio(Base):
     documento: Mapped["DespesaDocumento"] = relationship(
         back_populates="documentos_comprobatorios"
     )
+
+
+class DespesaPorFuncao(Base):
+    """Linhas agregadas do relatorio `despesas-por-funcao`."""
+
+    __tablename__ = "despesas_por_funcao"
+    __table_args__ = (
+        UniqueConstraint(
+            "origem",
+            "exercicio",
+            "periodo_inicio",
+            "periodo_fim",
+            "unidade_gestora",
+            "funcao",
+            name="uq_despesa_funcao_periodo",
+        ),
+        Index(
+            "ix_despesas_por_funcao_exercicio_funcao",
+            "exercicio",
+            "funcao",
+        ),
+        Index(
+            "ix_despesas_por_funcao_origem_periodo",
+            "origem",
+            "periodo_fim",
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    criado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    atualizado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+    arquivo_origem: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    linha_origem: Mapped[int] = mapped_column(Integer, nullable=False)
+    origem: Mapped[str] = mapped_column(String(80), nullable=False, index=True)
+    exercicio: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    periodo_inicio: Mapped[date] = mapped_column(Date, nullable=False)
+    periodo_fim: Mapped[date] = mapped_column(Date, nullable=False)
+    unidade_gestora: Mapped[str] = mapped_column(
+        String(255), nullable=False, index=True
+    )
+    funcao: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
+    dotacao_inicial: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True
+    )
+    creditos_adicionais: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True
+    )
+    dotacao_atualizada: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True
+    )
+    valor_empenhado: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True
+    )
+    valor_em_liquidacao: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True
+    )
+    valor_liquidado: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True
+    )
+    valor_pago: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)

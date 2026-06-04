@@ -7,7 +7,7 @@ from typing import Any
 from pydantic import ValidationError
 from sqlalchemy import func, select
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import Licitacao
 from shared.utils.text import matches_text_query
@@ -59,6 +59,19 @@ def _group_value_from_row(licitacao: Licitacao, agrupar_por: str):
     name="agregar_licitacoes",
     scope=PUBLIC_SCOPE,
     tags=["domain:licitacoes", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Quantas licitacoes existem na saude?",
+            "Qual modalidade teve maior valor estimado?",
+        ],
+        hints=[
+            "licitacao",
+            "contagem",
+            "valor estimado",
+            "ranking",
+            "modalidade",
+        ],
+    ),
 )
 def agregar_licitacoes(
     filtros: dict[str, Any] | None = None,

@@ -21,6 +21,8 @@ from database.models import (
     DespesaDocumento,
     DespesaDocumentoComprobatorio,
     DespesaDocumentoItem,
+    DespesaPorFuncao,
+    EmendaParlamentar,
     Eleito,
     Fornecedor,
     FolhaCargo,
@@ -39,6 +41,7 @@ from database.models import (
     ReceitaLancamento,
     ReceitaNatureza,
     Servidor,
+    TransferenciaFinanceiraMovimento,
     VencedorLicitacao,
 )
 from database.session import engine, get_session
@@ -131,6 +134,14 @@ def db_status() -> None:
         tabela.add_row(
             "receita_lancamentos", str(session.query(ReceitaLancamento).count())
         )
+        tabela.add_row(
+            "transferencias_financeiras_movimentos",
+            str(session.query(TransferenciaFinanceiraMovimento).count()),
+        )
+        tabela.add_row(
+            "emendas_parlamentares",
+            str(session.query(EmendaParlamentar).count()),
+        )
         tabela.add_row("folha_servidores", str(session.query(FolhaServidor).count()))
         tabela.add_row("folha_lotacoes", str(session.query(FolhaLotacao).count()))
         tabela.add_row("folha_cargos", str(session.query(FolhaCargo).count()))
@@ -144,6 +155,10 @@ def db_status() -> None:
         )
         tabela.add_row(
             "despesa_documentos", str(session.query(DespesaDocumento).count())
+        )
+        tabela.add_row(
+            "despesas_por_funcao",
+            str(session.query(DespesaPorFuncao).count()),
         )
         for tipo, quantidade in sorted(_contagem_despesas_por_tipo(session).items()):
             tabela.add_row(f"despesa_documentos:{tipo}", str(quantidade))
@@ -174,7 +189,8 @@ def importar(
         default=None,
         help=(
             "Tipo: contratos|licitacoes|frotas|receitas|folha_pagamento|"
-            "servidores|planejamentos|despesas|patrimonios|quadro_pessoal|eleitos"
+            "servidores|planejamentos|despesas|patrimonios|quadro_pessoal|"
+            "eleitos|transferencias_financeiras"
         ),
     ),
     ano: Optional[int] = typer.Option(
@@ -211,6 +227,7 @@ def importar(
         "patrimonios",
         "quadro_pessoal",
         "eleitos",
+        "transferencias_financeiras",
     ]
     total_arquivos = sum(
         len(pipeline._arquivos_por_tipo(t, ano)) for t in tipos_resolvidos

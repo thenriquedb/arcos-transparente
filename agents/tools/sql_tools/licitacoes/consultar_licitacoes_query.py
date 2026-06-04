@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import InstrumentoContratual, Licitacao
 from shared.utils.decimal_to_float import decimal_to_float
@@ -89,6 +89,19 @@ def _aplicar_aviso_valor_estimado_zero(
     name="consultar_licitacoes",
     scope=PUBLIC_SCOPE,
     tags=["domain:licitacoes", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quais licitacoes estao abertas?",
+            "Houve licitacao para o Natal Fest?",
+        ],
+        hints=[
+            "licitacao",
+            "edital",
+            "objeto",
+            "modalidade",
+            "fornecedor vencedor",
+        ],
+    ),
 )
 def consultar_licitacoes(
     filtros: dict[str, Any] | None = None,
@@ -124,6 +137,13 @@ def consultar_licitacoes(
     'aviso' do resultado ja orienta a proxima acao. Nesse caso, consulte
     `consultar_contratos` com o mesmo objeto ou fornecedor para verificar
     o valor efetivamente contratado.
+
+    Quando a pergunta for sobre "gasto" ou "custo" de um evento, servico,
+    fornecedor ou outro objeto contratual, apresente as licitacoes como lista
+    detalhada de valores estimados e deixe claro que licitacao nao e a mesma
+    coisa que contrato nem pagamento efetivo. Nesses casos, cruze a resposta
+    com `consultar_contratos` e `consultar_despesas` quando essas fontes
+    tambem forem relevantes.
 
     O retorno inclui `valor_total_estimado`, que soma todas as licitacoes
     encontradas pelos filtros, mesmo quando a lista exibida estiver paginada.

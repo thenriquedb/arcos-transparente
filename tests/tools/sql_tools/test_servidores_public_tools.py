@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 import agents.tools.sql_tools.servidores as servidores_tools
 from database import session as session_manager
 from database.session import _normalizar_texto
-from database.models import Base, Servidor
+from database.models import Base, FolhaServidor
 
 
 def _build_session():
@@ -36,6 +36,23 @@ def _patch_session(monkeypatch, session) -> None:
         yield session
 
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+
+def Servidor(
+    *,
+    nome: str,
+    cargo: str,
+    secretaria: str,
+    salario_base,
+    competencia_referencia: date,
+) -> FolhaServidor:
+    return FolhaServidor(
+        nome=nome,
+        cargo=cargo,
+        secretaria=secretaria,
+        salario_base=salario_base,
+        competencia_referencia=competencia_referencia,
+    )
 
 
 def test_consultar_servidores_aplica_mes_mais_recente_por_padrao(monkeypatch) -> None:

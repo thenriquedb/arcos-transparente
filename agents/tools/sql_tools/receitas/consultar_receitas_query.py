@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 
 from .consultar_receitas_schema import (
@@ -22,6 +22,19 @@ from .shared.querying import load_filtered_receitas, project_rows, sort_receitas
     name="consultar_receitas",
     scope=PUBLIC_SCOPE,
     tags=["domain:receitas", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Liste receitas do FUNDEB em 2025.",
+            "Quais receitas foram arrecadadas em abril?",
+        ],
+        hints=[
+            "receita",
+            "arrecadacao",
+            "lancamento",
+            "tributo",
+            "lista",
+        ],
+    ),
 )
 def consultar_receitas(
     filtros: dict[str, Any] | None = None,

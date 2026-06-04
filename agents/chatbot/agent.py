@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 import os
 from pathlib import Path
 
@@ -15,7 +16,7 @@ from agents.tools.registry import get_public_tools
 load_dotenv()
 
 DEFAULT_MODEL_PROVIDER = "openai"
-DEFAULT_OPENAI_MODEL = "gpt-4.1"
+DEFAULT_OPENAI_MODEL = "gpt-4.1-mini"
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SYSTEM_PROMPT_PATH = PROJECT_ROOT / "docs" / "agent-system-prompt.md"
 CHECKPOINTER = InMemorySaver()
@@ -61,9 +62,9 @@ def carregar_system_prompt() -> str:
     return SYSTEM_PROMPT_PATH.read_text(encoding="utf-8").strip()
 
 
-def criar_agente_chatbot():
+def criar_agente_chatbot(*, tools: Sequence[object] | None = None):
     return create_agent(
-        tools=get_public_tools(),
+        tools=list(tools) if tools is not None else get_public_tools(),
         model=criar_modelo_llm(),
         system_prompt=carregar_system_prompt(),
         checkpointer=CHECKPOINTER,

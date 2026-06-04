@@ -4,12 +4,17 @@ from __future__ import annotations
 
 import re
 
-from agents.routing.constants import DESPESAS_DOMAIN_KEYWORDS
+from agents.routing.constants import (
+    DESPESAS_DOMAIN_KEYWORDS,
+    DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS,
+)
 from agents.routing.extractors import _contains_any, _extract_limit, _extract_year
 from agents.routing.models import RouteDecision
 
 
 def _is_despesas_query(normalized_text: str) -> bool:
+    if _contains_any(normalized_text, DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS):
+        return False
     return _contains_any(normalized_text, DESPESAS_DOMAIN_KEYWORDS)
 
 

@@ -8,7 +8,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import DespesaDocumento
 from shared.utils.decimal_to_float import decimal_to_float
@@ -136,6 +136,19 @@ def project_passagens(
     name="consultar_passagens",
     scope=PUBLIC_SCOPE,
     tags=["domain:passagens", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quem recebeu passagens em 2026?",
+            "Liste despesas com locomocao para Brasilia.",
+        ],
+        hints=[
+            "passagem",
+            "locomocao",
+            "beneficiario",
+            "destino",
+            "lista",
+        ],
+    ),
 )
 def consultar_passagens(
     filtros: dict[str, Any] | None = None,
@@ -150,6 +163,9 @@ def consultar_passagens(
 
     Use esta tool quando a pergunta pedir quem recebeu passagens, valores pagos,
     empenhados ou liquidados por beneficiario, origem ou periodo.
+    Quando a pergunta vier em linguagem ampla de gasto, como "gastos com
+    passagens" ou "quanto a prefeitura gastou com passagens", esta deve ser a
+    resposta padrao para mostrar a lista detalhada que sustenta o valor.
     NAO use para totais, rankings ou contagens agregadas; para isso use
     `agregar_passagens`.
     """

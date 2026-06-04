@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 from sqlalchemy import (
+    Date,
     DateTime,
     ForeignKey,
     Index,
@@ -18,13 +19,25 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.models.base import Base
 
-if TYPE_CHECKING:
-    from database.models.server import Servidor
-
 
 class FolhaServidor(Base):
     __tablename__ = "folha_servidores"
-    __table_args__ = (UniqueConstraint("nome", name="uq_folha_servidor_nome"),)
+    __table_args__ = (
+        UniqueConstraint(
+            "nome",
+            "cargo",
+            "secretaria",
+            "competencia_referencia",
+            name="uq_folha_servidor_nome_cargo_sec_comp_ref",
+        ),
+        Index("ix_folha_servidores_nome", "nome"),
+        Index(
+            "ix_folha_servidores_secretaria_cargo_comp_ref",
+            "secretaria",
+            "cargo",
+            "competencia_referencia",
+        ),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     criado_em: Mapped[datetime] = mapped_column(
@@ -36,16 +49,16 @@ class FolhaServidor(Base):
         onupdate=func.now(),
         nullable=False,
     )
-    nome: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
-    servidor_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("servidores.id", ondelete="SET NULL"), nullable=True, index=True
+    nome: Mapped[str] = mapped_column(String(255), nullable=False)
+    cargo: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    secretaria: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    salario_base: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True
     )
+    competencia_referencia: Mapped[date] = mapped_column(Date, nullable=False)
 
     pagamentos: Mapped[list["FolhaPagamentoRegistro"]] = relationship(
         back_populates="servidor"
-    )
-    servidor_canonico: Mapped[Optional["Servidor"]] = relationship(
-        back_populates="registros_folha"
     )
 
 

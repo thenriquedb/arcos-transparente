@@ -101,6 +101,26 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "passagens",
     "locomocao",
     "despesas com locomocao",
+    "transferencia",
+    "transferencias",
+    "transferencia financeira",
+    "transferencias financeiras",
+    "transferido",
+    "transferida",
+    "repasse",
+    "repasses",
+    "repassado",
+    "repassada",
+    "repassou",
+    "recebimento",
+    "recebimentos",
+    "devolucao",
+    "devolucoes",
+    "emenda",
+    "emendas",
+    "parlamentar",
+    "parlamentares",
+    "transferencia especial",
     "credor",
     "credores",
     "frota",
@@ -133,6 +153,10 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "mandatos",
     "legislatura",
     "legislaturas",
+    "despesas por funcao",
+    "dotacao inicial",
+    "dotacao atualizada",
+    "creditos adicionais",
 )
 
 SUPPORTED_SCOPE_WEAK_KEYWORDS = (
@@ -140,6 +164,10 @@ SUPPORTED_SCOPE_WEAK_KEYWORDS = (
     "salarios",
     "recebeu",
     "recebe",
+    "investimento",
+    "investimentos",
+    "investido",
+    "investida",
     "arrecadado",
     "arrecadou",
     "lancado",
@@ -183,6 +211,37 @@ PASSAGENS_DOMAIN_KEYWORDS = (
     "passagens",
     "locomocao",
     "despesas com locomocao",
+)
+
+DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS = (
+    "despesas por funcao",
+    "relatorio de despesas por funcao",
+    "relatorio despesas por funcao",
+)
+
+TRANSFERENCIAS_FINANCEIRAS_DOMAIN_KEYWORDS = (
+    "transferencia",
+    "transferencias",
+    "transferencia financeira",
+    "transferencias financeiras",
+    "transferido",
+    "transferida",
+    "repasse",
+    "repasses",
+    "repassado",
+    "repassada",
+    "repassou",
+    "recebimento",
+    "recebimentos",
+    "devolucao",
+    "devolucoes",
+    "emenda",
+    "emendas",
+    "ementa",
+    "ementas",
+    "parlamentar",
+    "parlamentares",
+    "transferencia especial",
 )
 
 PATRIMONIOS_DOMAIN_KEYWORDS = (
@@ -281,6 +340,8 @@ PLANEJAMENTO_DIRECT_KEYWORDS = (
     "dotacao",
     "empenhado",
     "liquidado",
+    "investimento",
+    "investimentos",
 )
 
 PLANEJAMENTO_ENTITY_HINT_KEYWORDS = (
@@ -297,4 +358,8 @@ PLANEJAMENTO_ENTITY_HINT_KEYWORDS = (
     "gastos",
     "pago",
     "pagos",
+    "investido",
+    "investida",
+    "investimento",
+    "investimentos",
 )

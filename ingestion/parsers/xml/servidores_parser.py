@@ -1,33 +1,61 @@
-"""Parser XML para servidores (folha de pagamento)."""
+"""Parser do JSON de relacao de servidores."""
 
 from __future__ import annotations
 
-import xml.etree.ElementTree as ET
+import json
 from typing import Any
 
 from loguru import logger
 from pydantic import ValidationError
 
-from ingestion.parsers.xml.shared import parse_xml_root
 from ingestion.schemas.servidores import ServidorInSchema
 
 
 class ServidoresParser:
-    """Converte XML de servidores em lista de dicionários validados."""
+    """Converte o JSON de servidores em lista de dicionarios validados."""
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
-        """Lê arquivo XML e retorna registros normalizados com Pydantic."""
-        root = parse_xml_root(filepath)
+        """Le arquivo JSON e retorna registros normalizados com Pydantic."""
+        with open(filepath, "r", encoding="utf-8") as fp:
+            payload = json.load(fp)
+
+        if not isinstance(payload, list):
+            raise ValueError(
+                "JSON de servidores deve ser uma lista de objetos suportados"
+            )
+
         registros: list[dict[str, Any]] = []
         invalidos = 0
 
-        for node in root.findall(".//FolhaPagamento"):
+        for raw_row in payload:
+            if not isinstance(raw_row, dict):
+                invalidos += 1
+                continue
+
             payload_raw = {
-                "nome": self._txt(node, "NomServidor"),
-                "cargo": self._txt(node, "Cargo"),
-                "secretaria": self._txt(node, "Lotacao"),
-                "salario_base": self._txt(node, "SalarioBase"),
-                "competencia_referencia": self._txt(node, "Competencia"),
+                "source_id": raw_row.get("id"),
+                "competencia_referencia": raw_row.get("Competencia"),
+                "nome": raw_row.get("Nome"),
+                "cpf": raw_row.get("CPF"),
+                "matricula": raw_row.get("Matricula"),
+                "cargo_funcao": raw_row.get("CargoFuncao"),
+                "fundamento_legal": raw_row.get("FundamentoLegal"),
+                "lotacao": raw_row.get("Lotacao"),
+                "situacao_funcional": raw_row.get("SituacaoFuncional"),
+                "forma_contratacao_investidura": raw_row.get(
+                    "FormaContratacaoInvestidura"
+                ),
+                "data_admissao": raw_row.get("DataAdmissao"),
+                "data_desligamento": raw_row.get("DataDesligamento"),
+                "horario_trabalho": raw_row.get("HorarioTrabalho"),
+                "carga_horaria": raw_row.get("CargaHoraria"),
+                "local_origem_cedencia": raw_row.get("LocalOrigemCedencia"),
+                "local_destino_cedencia": raw_row.get("LocalDestinoCedencia"),
+                "onus_pagamento_cedencia": raw_row.get("OnusPagamentoCedencia"),
+                "data_inicio_cessao": raw_row.get("DataInicioCessao"),
+                "data_fim_cessao": raw_row.get("DataFimCessao"),
+                "regime_aposentadoria": raw_row.get("RegimeAposentadoria"),
+                "vinculo_empregaticio": raw_row.get("VinculoEmpregaticio"),
             }
 
             try:
@@ -44,11 +72,3 @@ class ServidoresParser:
             )
 
         return registros
-
-    @staticmethod
-    def _txt(node: ET.Element, tag: str) -> str | None:
-        child = node.find(tag)
-        if child is None or child.text is None:
-            return None
-        value = child.text.strip()
-        return value or None

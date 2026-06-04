@@ -8,7 +8,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import DespesaDocumento
 from shared.utils.decimal_to_float import decimal_to_float
@@ -129,6 +129,19 @@ def project_diarias(
     name="consultar_diarias",
     scope=PUBLIC_SCOPE,
     tags=["domain:diarias", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quem recebeu diarias em 2025?",
+            "Liste diarias para Belo Horizonte.",
+        ],
+        hints=[
+            "diaria",
+            "viagem",
+            "beneficiario",
+            "destino",
+            "lista",
+        ],
+    ),
 )
 def consultar_diarias(
     filtros: dict[str, Any] | None = None,
@@ -143,6 +156,9 @@ def consultar_diarias(
 
     Use esta tool quando a pergunta pedir quem recebeu diarias, valores pagos,
     empenhados ou liquidados por beneficiario, origem ou periodo.
+    Quando a pergunta vier em linguagem ampla de gasto, como "gastos com
+    diarias" ou "quanto a prefeitura gastou com diarias", esta deve ser a
+    resposta padrao para mostrar a lista detalhada que sustenta o valor.
     NAO use para totais, rankings ou contagens agregadas; para isso use
     `agregar_diarias`.
 

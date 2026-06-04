@@ -7,7 +7,7 @@ from typing import Any
 from pydantic import ValidationError
 from sqlalchemy import func, literal, select
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import (
     Contrato,
@@ -284,6 +284,23 @@ def _aplicar_aviso_valor_zero(
     name="consultar_contratos",
     scope=PUBLIC_SCOPE,
     tags=["domain:contratos", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Quais contratos da saude?",
+            "Detalhe o contrato 178/2025.",
+            "Liste os 10 maiores contratos de 2025.",
+        ],
+        hints=[
+            "contrato",
+            "fornecedor",
+            "descricao",
+            "numero",
+            "detalhes",
+            "maiores contratos",
+            "ranking por valor",
+            "contratos de 2025",
+        ],
+    ),
 )
 def consultar_contratos(
     filtros: dict[str, Any] | None = None,
@@ -307,6 +324,9 @@ def consultar_contratos(
     - 'contratos da secretaria de saude'
     - 'quanto custou o Natal Fest?' (busca por descricao do evento)
     - 'quais servicos foram contratados para o evento X?'
+    - 'liste os 10 maiores contratos de 2025' (use `ordenar_por="valor"`,
+      `ordem="desc"` e preserve o ano como intervalo em
+      `data_inicio_inicio="2025-01-01"` e `data_inicio_fim="2025-12-31"`)
 
     Quando esta tool retornar valor R$ 0,00 em algum contrato, o campo
     'aviso' do resultado ja orienta a proxima acao. Nesse caso, consulte
@@ -318,10 +338,22 @@ def consultar_contratos(
     nao ha dados — pode existir processo licitatorio sem contrato
     formalizado ou com valor ainda nao registrado na base.
 
+    Quando a pergunta for sobre "gasto" ou "custo" de um evento, servico,
+    fornecedor ou outro objeto contratual, apresente os contratos como lista
+    detalhada de valores contratados e deixe claro que contrato nao e a mesma
+    coisa que licitacao nem pagamento efetivo. Nesses casos, cruze a resposta
+    com `consultar_licitacoes` e `consultar_despesas` quando essas fontes
+    tambem forem relevantes.
+
     Se o filtro textual vier apenas de uma sigla curta ou termo ambiguo,
     como 'UPA', 'UBS', 'PSF', 'CRAS' ou 'CREAS', primeiro confirme o significado
     com o usuario e sugira a expansao provavel. So use a tool depois dessa
     confirmacao.
+
+    Se a pergunta pedir "maiores contratos", trate isso como ranking de
+    contratos individuais por `valor`, e nao como agregacao. Se houver recorte
+    de ano, preserve esse filtro exatamente na consulta e NAO substitua a
+    resposta por um total sem o mesmo periodo solicitado.
 
     NAO use para totais, medias ou rankings agregados; para isso use
     `agregar_contratos`.

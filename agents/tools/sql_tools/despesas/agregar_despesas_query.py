@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import DespesaDocumento
 
@@ -60,6 +60,19 @@ def _group_value(registro: DespesaDocumento, group: str) -> str | int | None:
     name="agregar_despesas",
     scope=PUBLIC_SCOPE,
     tags=["domain:despesas", "shape:aggregate"],
+    routing=routing_metadata(
+        examples=[
+            "Quanto foi pago em despesas da saude em 2025?",
+            "Quais os maiores credores da prefeitura?",
+        ],
+        hints=[
+            "despesa",
+            "total pago",
+            "empenhado",
+            "ranking",
+            "credor",
+        ],
+    ),
 )
 def agregar_despesas(
     filtros: dict[str, Any] | None = None,
@@ -75,10 +88,21 @@ def agregar_despesas(
     Use esta tool quando a pergunta pedir total pago, total empenhado, total
     anulado, maiores credores ou comparacoes por area, origem, unidade ou tipo
     de documento.
+    Se a pergunta usar linguagem ampla de gasto e houver interesse em ver os
+    documentos que sustentam o valor, consulte primeiro `consultar_despesas` e
+    use esta tool apenas como resumo complementar ou quando o usuario pedir
+    explicitamente total, ranking ou comparacao.
+    Quando o filtro textual for o nome de um evento, nao trate automaticamente
+    a soma encontrada como "custo do evento": a descricao pode citar apenas
+    despesas indiretas, preparatorias ou acessorias, como divulgacao, viagem,
+    diaria, pedagio ou reuniao. Nesses casos, confirme o contexto com
+    `consultar_licitacoes` e `consultar_contratos` antes de afirmar um total.
     NAO use para listar documentos individuais; para isso use
     `consultar_despesas`.
     NAO use para planejamento orcamentario; para isso use
     `agregar_planejamento`.
+    NAO use para o relatorio agregado `despesas-por-funcao`; para isso use
+    `agregar_despesas_por_funcao`.
 
     Args:
         filtros: Objeto com filtros opcionais. Campos aceitos: `tipo`, `origem`,

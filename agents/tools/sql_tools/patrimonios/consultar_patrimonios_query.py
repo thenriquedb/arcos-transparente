@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 from database.models import Patrimonio
 from shared.utils.decimal_to_float import decimal_to_float
@@ -144,6 +144,19 @@ def project_patrimonios(
     name="consultar_patrimonios",
     scope=PUBLIC_SCOPE,
     tags=["domain:patrimonios", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Liste os patrimonios da educacao em 2025.",
+            "Quais bens estao na prefeitura?",
+        ],
+        hints=[
+            "patrimonio",
+            "bem",
+            "localizacao",
+            "aquisicao",
+            "lista",
+        ],
+    ),
 )
 def consultar_patrimonios(
     filtros: dict[str, Any] | None = None,

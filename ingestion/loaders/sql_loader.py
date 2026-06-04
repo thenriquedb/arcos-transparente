@@ -13,6 +13,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.schema import UniqueConstraint
 
+from database.models import Servidor
 from ingestion.parsers.xml.shared import sanitize_xml_payload
 
 
@@ -53,6 +54,15 @@ class SQLLoader:
                             ).scalar_one_or_none()
 
                             if existente is None:
+                                if duplicate := self._find_duplicate_before_insert(
+                                    payload,
+                                    modelo,
+                                ):
+                                    resultado.ignorados += 1
+                                    logger.warning(
+                                        f"Ignorado (matricula ja cadastrada) em {modelo.__tablename__}: {payload}"
+                                    )
+                                    continue
                                 self.session.add(modelo(**payload))
                                 # Flush garante que registros novos fiquem visiveis
                                 # para o restante do batch e evita violacao de unique
@@ -160,6 +170,23 @@ class SQLLoader:
             payload[coluna.name] = valor
 
         return payload
+
+    def _find_duplicate_before_insert(
+        self,
+        payload: dict[str, Any],
+        modelo: type,
+    ) -> Any | None:
+        """Aplica regras de deduplicacao que nao devem virar upsert."""
+        if modelo is not Servidor:
+            return None
+
+        matricula = payload.get("matricula")
+        if not matricula:
+            return None
+
+        return self.session.execute(
+            select(Servidor).where(Servidor.matricula == matricula)
+        ).scalar_one_or_none()
 
     @staticmethod
     def _apply_updates(instancia: Any, payload: dict[str, Any]) -> bool:

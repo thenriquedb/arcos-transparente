@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from agents.tools.registry import PUBLIC_SCOPE, register
+from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
 
 from .consultar_planejamento_schema import (
@@ -26,6 +26,19 @@ from .shared.querying import (
     name="consultar_planejamento",
     scope=PUBLIC_SCOPE,
     tags=["domain:planejamento", "shape:lookup"],
+    routing=routing_metadata(
+        examples=[
+            "Liste o planejamento da saude em 2025.",
+            "Quais programas tiveram valor pago na prefeitura?",
+        ],
+        hints=[
+            "planejamento",
+            "orcamento",
+            "programa",
+            "acao",
+            "valor pago",
+        ],
+    ),
 )
 def consultar_planejamento(
     filtros: dict[str, Any] | None = None,
@@ -41,6 +54,8 @@ def consultar_planejamento(
     Use esta tool quando a pergunta pedir o planejamento, o orcamento ou os valores
     previstos, comprometidos, confirmados, pagos ou cancelados dentro da estrutura
     orcamentaria.
+    NAO use para o relatorio agregado `despesas-por-funcao`; para isso use
+    `consultar_despesas_por_funcao`.
     NAO use para empenhos, restos a pagar ou documentos de despesa efetivamente
     emitidos; para isso use `consultar_despesas`.
     NAO use para totais, comparacoes ou rankings agregados; para isso use

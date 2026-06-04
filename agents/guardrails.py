@@ -75,6 +75,9 @@ _SHORT_FOLLOW_UP_CONNECTOR_TOKENS = frozenset(
         "as",
         "qual",
         "quais",
+        "quanto",
+        "quantos",
+        "quantas",
     }
 )
 _SHORT_RANKING_TOKENS = frozenset(
@@ -116,6 +119,28 @@ _SHORT_RANKING_STOPWORDS = frozenset(
         "delas",
     }
 )
+_CONFIRMATION_TOKENS = frozenset(
+    {
+        "sim",
+        "isso",
+        "exato",
+        "correto",
+        "confirmo",
+        "confirmado",
+        "pode ser",
+        "pode",
+    }
+)
+_CONFIRMATION_REPLY_PATTERN = re.compile(
+    r"^(?:"
+    r"sim|"
+    r"isso(?:\s+mesmo)?|"
+    r"exato|"
+    r"correto|"
+    r"confirm(?:o|ado|a|ar)?|"
+    r"pode(?:\s+ser|\s+confirmar)?"
+    r")$"
+)
 
 
 def evaluate_public_query_guardrails(
@@ -139,8 +164,8 @@ def evaluate_public_query_guardrails(
                 "no sistema ou sobre o acervo municipal curado, como servidores, "
                 "secretarias, salários-base, licitações, despesas, diárias, "
                 "passagens, frota e veículos, patrimônio, planejamento, "
-                "receitas, políticos eleitos, telefones úteis ou horários de "
-                "ônibus."
+                "receitas, transferências financeiras, emendas parlamentares, "
+                "políticos eleitos, telefones úteis ou horários de ônibus."
             ),
         )
 
@@ -180,6 +205,13 @@ def evaluate_public_query_guardrails(
     if has_history and contextual_follow_up and has_public_context_anchor:
         return GuardrailDecision(allowed=True, category="allowed")
 
+    if (
+        has_history
+        and has_public_context_anchor
+        and _looks_like_confirmation_reply(normalized_text, prior_messages)
+    ):
+        return GuardrailDecision(allowed=True, category="allowed")
+
     if compatibility_route is not None and compatibility_route.confident:
         return GuardrailDecision(allowed=True, category="allowed")
 
@@ -201,8 +233,9 @@ def evaluate_public_query_guardrails(
             "especialmente sobre servidores, secretarias, salários-base, "
             "histórico de pagamentos, licitações, despesas, diárias, "
             "passagens, frota, veículos, patrimônio, quadro de pessoal, "
-            "planejamento, receitas, políticos eleitos, telefones úteis, "
-            "estrutura organizacional e horários de ônibus."
+            "planejamento, receitas, transferências financeiras, emendas "
+            "parlamentares, políticos eleitos, telefones úteis, estrutura "
+            "organizacional e horários de ônibus."
         ),
     )
 
@@ -332,6 +365,47 @@ def _looks_like_short_ranking_follow_up(normalized_text: str) -> bool:
     )
 
 
+def _looks_like_confirmation_reply(
+    normalized_text: str,
+    prior_messages: Sequence[tuple[str, str, bool]],
+) -> bool:
+    if not _looks_like_confirmation_text(normalized_text):
+        return False
+
+    for role, content, guardrail_triggered in reversed(prior_messages):
+        if guardrail_triggered:
+            return False
+        if role != "assistant":
+            continue
+
+        normalized_content = _normalize(content)
+        if not normalized_content:
+            return False
+        if "?" in content:
+            return True
+        return any(
+            hint in normalized_content
+            for hint in (
+                "voce quer",
+                "voce gostaria",
+                "pode ser",
+                "confirma",
+                "confirmar",
+                "ano especifico",
+                "qual periodo",
+                "qual ano",
+            )
+        )
+
+    return False
+
+
+def _looks_like_confirmation_text(normalized_text: str) -> bool:
+    if normalized_text in _CONFIRMATION_TOKENS:
+        return True
+    return _CONFIRMATION_REPLY_PATTERN.fullmatch(normalized_text) is not None
+
+
 def _has_public_filter_hint(normalized_text: str) -> bool:
     if _extract_year(normalized_text) is not None:
         return True
@@ -351,6 +425,8 @@ def _has_public_filter_hint(normalized_text: str) -> bool:
         return True
     if _extract_contrato_fornecedor(normalized_text) is not None:
         return True
+    if _looks_like_named_text_filter(normalized_text):
+        return True
     if is_supported_knowledge_follow_up_fragment(normalized_text):
         return True
     return any(term in normalized_text for term in ("prefeitura", "camara"))
@@ -358,3 +434,13 @@ def _has_public_filter_hint(normalized_text: str) -> bool:
 
 def _tokenize(normalized_text: str) -> tuple[str, ...]:
     return tuple(re.findall(r"[a-z0-9]+", normalized_text))
+
+
+def _looks_like_named_text_filter(normalized_text: str) -> bool:
+    return (
+        re.search(
+            r"\b(?:do|da|de)\s+[a-z0-9]{2,}(?:\s+[a-z0-9]{2,}){1,4}\??$",
+            normalized_text,
+        )
+        is not None
+    )

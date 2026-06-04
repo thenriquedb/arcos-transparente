@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import date
 
-from database.models import FolhaServidor
+from database.models import FolhaPagamentoRegistro, FolhaServidor
 from shared.utils.decimal_to_float import decimal_to_float
 
 from .responses import (
@@ -13,6 +13,8 @@ from .responses import (
     HistoricoPagamentosServidorResponse,
     PagamentoMensalItem,
 )
+
+_PLACEHOLDER = "nao_informado"
 
 
 def resposta_sem_resultados(
@@ -34,40 +36,25 @@ def resposta_sem_resultados(
 
 
 def serializar_servidor(
-    servidor: FolhaServidor,
+    servidores: list[FolhaServidor],
     max_meses: int,
 ) -> dict[str, object]:
-    pagamentos = sorted(
-        servidor.pagamentos,
-        key=lambda registro: (
-            registro.competencia_ano,
-            registro.competencia_mes_num,
-        ),
-        reverse=True,
-    )
+    representante = _representante(servidores)
+    pagamentos = _pagamentos_ordenados(servidores)
     pagamentos_limitados = pagamentos[:max_meses]
     pagamento_recente = pagamentos_limitados[0] if pagamentos_limitados else None
 
     payload = HistoricoPagamentosServidorItem.model_validate(
         {
-            "folha_servidor_id": servidor.id,
-            "nome": servidor.nome,
-            "cargo_atual": (
-                pagamento_recente.cargo.nome
-                if pagamento_recente and pagamento_recente.cargo
-                else None
-            ),
+            "folha_servidor_id": representante.id,
+            "nome": representante.nome,
+            "cargo_atual": _cargo_snapshot(representante, pagamento_recente),
             "setor_atual": (
                 pagamento_recente.lotacao.nome
                 if pagamento_recente and pagamento_recente.lotacao
-                else None
+                else _nullable_snapshot_text(representante.secretaria)
             ),
-            "mes_de_referencia_do_servidor": (
-                servidor.servidor_canonico.competencia_referencia
-                if servidor.servidor_canonico
-                and servidor.servidor_canonico.competencia_referencia
-                else None
-            ),
+            "mes_de_referencia_do_servidor": representante.competencia_referencia,
             "total_meses_considerados": len(pagamentos_limitados),
             "pagamentos": [
                 PagamentoMensalItem(
@@ -102,43 +89,63 @@ def serializar_servidor(
 
 
 def serializar_candidato_servidor(
-    servidor: FolhaServidor,
+    servidores: list[FolhaServidor],
 ) -> dict[str, object]:
-    pagamentos = sorted(
-        servidor.pagamentos,
-        key=lambda registro: (
-            registro.competencia_ano,
-            registro.competencia_mes_num,
-        ),
-        reverse=True,
-    )
-    pagamento_recente = pagamentos[0] if pagamentos else None
+    representante = _representante(servidores)
+    pagamento_recente = _pagamentos_ordenados(servidores)[0] if servidores else None
 
     payload = FolhaServidorCandidato.model_validate(
         {
-            "folha_servidor_id": servidor.id,
-            "nome": servidor.nome,
-            "cargo_atual": (
-                pagamento_recente.cargo.nome
-                if pagamento_recente and pagamento_recente.cargo
-                else None
-            ),
-            "secretaria_atual": (
-                servidor.servidor_canonico.secretaria
-                if servidor.servidor_canonico
-                else None
-            ),
+            "folha_servidor_id": representante.id,
+            "nome": representante.nome,
+            "cargo_atual": _cargo_snapshot(representante, pagamento_recente),
+            "secretaria_atual": _nullable_snapshot_text(representante.secretaria),
             "setor_atual": (
                 pagamento_recente.lotacao.nome
                 if pagamento_recente and pagamento_recente.lotacao
-                else None
+                else _nullable_snapshot_text(representante.secretaria)
             ),
-            "mes_de_referencia_do_servidor": (
-                servidor.servidor_canonico.competencia_referencia
-                if servidor.servidor_canonico
-                and servidor.servidor_canonico.competencia_referencia
-                else None
-            ),
+            "mes_de_referencia_do_servidor": representante.competencia_referencia,
         }
     )
     return payload.model_dump(mode="json")
+
+
+def _representante(servidores: list[FolhaServidor]) -> FolhaServidor:
+    return sorted(
+        servidores,
+        key=lambda servidor: (servidor.competencia_referencia, servidor.id),
+        reverse=True,
+    )[0]
+
+
+def _pagamentos_ordenados(
+    servidores: list[FolhaServidor],
+) -> list[FolhaPagamentoRegistro]:
+    pagamentos = [
+        pagamento for servidor in servidores for pagamento in servidor.pagamentos
+    ]
+    pagamentos.sort(
+        key=lambda registro: (
+            registro.competencia_ano,
+            registro.competencia_mes_num,
+            registro.id,
+        ),
+        reverse=True,
+    )
+    return pagamentos
+
+
+def _cargo_snapshot(
+    representante: FolhaServidor,
+    pagamento_recente: FolhaPagamentoRegistro | None,
+) -> str | None:
+    if pagamento_recente and pagamento_recente.cargo:
+        return pagamento_recente.cargo.nome
+    return _nullable_snapshot_text(representante.cargo)
+
+
+def _nullable_snapshot_text(value: str | None) -> str | None:
+    if not value or value == _PLACEHOLDER:
+        return None
+    return value

@@ -17,6 +17,7 @@ O schema está dividido em domínios:
 - fornecedores
 - frotas
 - receitas
+- transferências financeiras
 - servidores e folha de pagamento
 - planejamento de despesas
 - documentos de despesa
@@ -68,7 +69,13 @@ receita_naturezas
 frota_veiculos
 └── frota_despesas
 
+transferencias_financeiras_movimentos
+
+emendas_parlamentares
+
 planejamento_despesas
+
+despesas_por_funcao
 
 despesa_documentos
 ├── despesa_documento_itens
@@ -459,6 +466,63 @@ Observação:
 Embora faça parte do domínio de receitas, essa tabela não representa arrecadação efetiva,
 mas sim valores lançados.
 
+### `transferencias_financeiras_movimentos`
+
+Movimentos financeiros entre unidades públicas, como repasses, recebimentos e devoluções.
+
+Campos principais:
+
+- `arquivo_origem`
+- `sequencia_origem`
+- `exercicio`
+- `identificacao`
+- `unidade_gestora_concessora`
+- `unidade_gestora_recebedora`
+- `finalidade`
+- `fonte_recurso`
+- `detalhamento_fonte`
+- `programacao_inicial`
+- `data_movimento`
+- `tipo_movimento`
+- `valor_movimento`
+
+Regras importantes:
+
+- unicidade por `arquivo_origem + sequencia_origem`
+- índices por `exercicio`, `data_movimento`, `identificacao`, `tipo_movimento`, `unidade_gestora_concessora` e `unidade_gestora_recebedora`
+
+Observação:
+
+Essa tabela preserva a semântica própria do domínio de transferências financeiras, sem
+coagir os movimentos para as tabelas de receitas ou despesas.
+
+### `emendas_parlamentares`
+
+Emendas parlamentares importadas de relatórios CSV do portal.
+
+Campos principais:
+
+- `arquivo_origem`
+- `sequencia_origem`
+- `exercicio_consulta`
+- `ano`
+- `ano_numero`
+- `autor`
+- `objeto`
+- `tipo_emenda`
+- `funcao`
+- `valor`
+
+Regras importantes:
+
+- unicidade por `arquivo_origem + sequencia_origem`
+- índices por `ano`, `ano_numero`, `autor`, `exercicio_consulta`, `funcao` e `tipo_emenda`
+
+Observação:
+
+`exercicio_consulta` preserva o exercício do relatório exportado, enquanto `ano`
+representa o ano embutido no identificador `ano_numero`, útil para filtros públicos.
+
 ### `frota_veiculos`
 
 Cadastro de veículos e bens de frota.
@@ -550,6 +614,31 @@ Regras importantes:
 - filtros textuais nas tools ignoram diferenças de acento
 - importa os arquivos de planejamento da saúde e da prefeitura
 
+### `despesas_por_funcao`
+
+Linhas agregadas do relatório CSV `despesas-por-funcao`.
+
+Campos principais:
+
+- `arquivo_origem` e `linha_origem`: preservam a linhagem do CSV importado
+- `origem`, `exercicio`
+- `periodo_inicio` e `periodo_fim`
+- `unidade_gestora`
+- `funcao`
+- `dotacao_inicial`
+- `creditos_adicionais`
+- `dotacao_atualizada`
+- `valor_empenhado`
+- `valor_em_liquidacao`
+- `valor_liquidado`
+- `valor_pago`
+
+Regras importantes:
+
+- unicidade por origem, exercício, período, unidade gestora e função
+- a linha sintética `Totais` do relatório não é persistida para evitar dupla contagem
+- esse contrato é diferente de `planejamento_despesas`: aqui a granularidade é o relatório agregado por função, não linhas mensais por programa/ação
+
 ### `despesa_documentos`
 
 Documentos de despesa importados de empenhos, restos a pagar e documentos extras.
@@ -609,6 +698,8 @@ Os relacionamentos abaixo são os mais úteis para queries e tools:
 - `folha_lotacoes -> folha_pagamentos`
 - `receita_naturezas -> receita_arrecadacoes`
 - `frota_veiculos -> frota_despesas`
+- `transferencias_financeiras_movimentos`
+- `emendas_parlamentares`
 - `despesa_documentos -> despesa_documento_itens`
 - `despesa_documentos -> despesa_documentos_comprobatorios`
 
@@ -639,6 +730,13 @@ Há dois tipos de pergunta diferentes:
 
 - arrecadação efetiva: `receita_arrecadacoes`
 - valores lançados: `receita_lancamentos`
+
+### Consultas por transferências financeiras
+
+Para perguntas sobre repasses à Câmara, recebimentos, devoluções ou emendas parlamentares:
+
+- use `transferencias_financeiras_movimentos` para movimentações entre unidades públicas
+- use `emendas_parlamentares` para valores destinados por autor, função ou tipo de emenda
 
 ### Consultas por licitação
 
@@ -675,6 +773,10 @@ Ao criar tools, vale pensar em contratos de entrada e saída que respeitem a est
   usar `consultar_licitacoes` com `incluir_detalhes=True` para expandir vencedores, instrumentos e matérias
 - resumir receita por período:
   usar `receita_arrecadacoes` com filtros por `exercicio`, `mes`, `unidade_gestora` e `natureza_id`
+- consultar repasses e emendas:
+  usar `consultar_transferencias_financeiras` ou `agregar_transferencias_financeiras`
+- consultar o relatório agregado por função:
+  usar `consultar_despesas_por_funcao` ou `agregar_despesas_por_funcao`
 - analisar custos de frota:
   cruzar `frota_veiculos` e `frota_despesas`
 

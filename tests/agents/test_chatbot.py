@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-import agents.chatbot.core as chatbot_core
 import agents.chatbot.agent as chatbot_agent
 from agents.chatbot.cli import run_interactive, run_once
+from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
 from agents.chatbot.core import (
     ChatbotAgentBackend,
     ChatMessage,
@@ -12,7 +12,7 @@ from agents.chatbot.core import (
     ChatSession,
     ChatbotApplication,
 )
-from agents.routing.models import RouteDecision
+from agents.tools.registry import get_public_tools, get_public_tools_by_name
 
 
 class FakeBackend:
@@ -31,8 +31,53 @@ class FakeStreamingBackend(FakeBackend):
         yield f" em stream para: {question}"
 
 
+class SelectionAwareBackend(FakeBackend):
+    def __init__(self) -> None:
+        super().__init__()
+        self.selection_calls: list[tuple[tuple[str, ...], str]] = []
+
+    def answer_with_selection(
+        self,
+        question: str,
+        *,
+        session_id: str,
+        selection: HybridToolSelection | None = None,
+    ) -> ChatResponse:
+        self.calls.append((question, session_id))
+        tool_names = tuple(selection.candidate_tool_names) if selection else ()
+        self.selection_calls.append((tool_names, session_id))
+        return ChatResponse(content=f"resposta para: {question}")
+
+
+class StubSelector:
+    def __init__(self, result: HybridToolSelection) -> None:
+        self.result = result
+        self.calls: list[tuple[str, tuple[str, ...]]] = []
+
+    def select(self, question: str, *, history) -> HybridToolSelection:
+        self.calls.append((question, tuple(message.content for message in history)))
+        return self.result
+
+
 def _tool_name(tool_obj) -> str:
     return getattr(tool_obj, "name", getattr(tool_obj, "__name__", ""))
+
+
+def _selection(
+    tool_names: list[str] | tuple[str, ...],
+    *,
+    confidence: str = "high",
+    reason_code: str | None = None,
+    used_fallback: bool = False,
+) -> HybridToolSelection:
+    return HybridToolSelection(
+        action="allow",
+        candidate_tools=tuple(get_public_tools_by_name(tool_names)),
+        candidate_tool_names=tuple(tool_names),
+        confidence=confidence,
+        reason_code=reason_code,
+        used_fallback=used_fallback,
+    )
 
 
 def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
@@ -68,6 +113,7 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     assert "consultar_contratos" in nomes
     assert "consultar_diarias" in nomes
     assert "consultar_passagens" in nomes
+    assert "consultar_transferencias_financeiras" in nomes
     assert "consultar_conhecimento_municipal" in nomes
 
 
@@ -103,7 +149,37 @@ def test_system_prompt_documenta_excecoes_sem_recorte_temporal() -> None:
     assert "Exceções — consulte sem pedir recorte temporal" in prompt
     assert "Busca de servidor por nome" in prompt
     assert "Contagens simples" in prompt
+
+
+def test_system_prompt_orienta_custo_de_evento_com_licitacoes_e_contratos() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "Custo de eventos e festivais" in prompt
+    assert "lista auditável" in prompt
+    assert "todas as fontes estruturadas relevantes" in prompt
+    assert "consulte primeiro `consultar_licitacoes` e `consultar_contratos`" in prompt
+    assert "consulte a base de contratos também" in prompt
+    assert "licitação` é o processo de compra" in prompt
+    assert "`contrato` é o instrumento assinado" in prompt
+    assert "não afirme um total do evento" in prompt.lower()
     assert "lista completa" in prompt
+
+
+def test_system_prompt_orienta_gastos_amplos_com_lista_detalhada() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "perguntas amplas sobre gastos ou custos" in prompt
+    assert "priorize `consultar_despesas`" in prompt
+    assert (
+        "priorize respectivamente `consultar_despesas`, `consultar_diarias` e `consultar_passagens`"
+        in prompt
+    )
+    assert (
+        "Só puxe `agregar_*` quando o usuário pedir explicitamente apenas total, ranking, contagem ou comparação"
+        in prompt
+    )
+    assert "`consultar_despesas_por_funcao`" in prompt
+    assert "`agregar_despesas_por_funcao`" in prompt
 
 
 def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
@@ -113,8 +189,28 @@ def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
     assert "`consultar_conhecimento_municipal`" in prompt
     assert "`consultar_diarias`" in prompt
     assert "`consultar_passagens`" in prompt
+    assert "`consultar_transferencias_financeiras`" in prompt
     assert "arquivo_fonte" in prompt
     assert "ônibus da frota" in prompt
+
+
+def test_system_prompt_orienta_ranking_de_contratos_por_valor_e_ano() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "10 maiores contratos de 2025" in prompt
+    assert "`consultar_contratos`" in prompt
+    assert "`agregar_contratos`" in prompt
+    assert "data_inicio" in prompt
+    assert "Nunca troque esse pedido por um total" in prompt
+
+
+def test_system_prompt_orienta_emendas_por_autor_com_ou_sem_ano() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "quantas emendas foram do autor Cleitinho" in prompt
+    assert "quanto o Cleitinho enviou de emendas" in prompt
+    assert "NÃO peça o ano de novo" in prompt
+    assert "ementas" in prompt
 
 
 def test_chatbot_application_mantem_estado_da_sessao() -> None:
@@ -160,7 +256,8 @@ def test_chatbot_application_stream_bloqueia_pergunta_vazia_sem_chamar_backend()
             "no sistema ou sobre o acervo municipal curado, como servidores, "
             "secretarias, salários-base, licitações, despesas, diárias, "
             "passagens, frota e veículos, patrimônio, planejamento, receitas, "
-            "políticos eleitos, telefones úteis ou horários de ônibus."
+            "transferências financeiras, emendas parlamentares, políticos "
+            "eleitos, telefones úteis ou horários de ônibus."
         )
     ]
     assert backend.calls == []
@@ -203,29 +300,68 @@ def test_chatbot_application_bloqueia_prompt_injection_sem_chamar_backend() -> N
     assert backend.calls == []
 
 
-def test_chatbot_application_permite_consulta_no_escopo_sem_rota_confiante(
-    monkeypatch,
-) -> None:
-    backend = FakeBackend()
+def test_chatbot_application_permite_consulta_no_escopo_com_fallback_do_seletor() -> (
+    None
+):
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(
+        runner=lambda *_args: {
+            "action": "allow",
+            "candidate_tool_names": ["consultar_contratos"],
+            "confidence": "low",
+            "reason_code": "uncertain",
+        }
+    )
     app = ChatbotApplication(
         backend=backend,
         session=ChatSession(id="sessao-sem-rota"),
-    )
-
-    monkeypatch.setattr(
-        chatbot_core,
-        "route_user_query",
-        lambda _query: RouteDecision(
-            domain="desconhecido",
-            operation_type="desconhecido",
-            confident=False,
-        ),
+        selector=selector,
     )
 
     response = app.ask("Quais contratos da educacao?")
+    expected_tool_names = tuple(_tool_name(tool_obj) for tool_obj in get_public_tools())
 
     assert response.content == "resposta para: Quais contratos da educacao?"
     assert backend.calls == [("Quais contratos da educacao?", "sessao-sem-rota")]
+    assert backend.selection_calls == [(expected_tool_names, "sessao-sem-rota")]
+    assert response.metadata["selection_fallback"] is True
+    assert response.metadata["selection_reason_code"] == "uncertain"
+
+
+def test_chatbot_application_permite_consulta_de_investimento_em_saude() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-investimento-saude"),
+    )
+
+    response = app.ask("Quanto foi investido na saude em 2026?")
+
+    assert response.content == "resposta para: Quanto foi investido na saude em 2026?"
+    assert backend.calls == [
+        ("Quanto foi investido na saude em 2026?", "sessao-investimento-saude")
+    ]
+
+
+def test_chatbot_application_permite_consulta_de_transferencias_para_camara() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-transferencias-camara"),
+    )
+
+    response = app.ask("Quanto foi transferido para a camara em 2026?")
+
+    assert (
+        response.content
+        == "resposta para: Quanto foi transferido para a camara em 2026?"
+    )
+    assert backend.calls == [
+        (
+            "Quanto foi transferido para a camara em 2026?",
+            "sessao-transferencias-camara",
+        )
+    ]
 
 
 def test_chatbot_application_permite_pergunta_documental_do_acervo_markdown() -> None:
@@ -257,6 +393,185 @@ def test_chatbot_application_permite_consulta_de_custo_de_evento_publico() -> No
     assert backend.calls == [
         ("qual foi o custo do festival gastronomico de 2026?", "sessao-custo-evento")
     ]
+
+
+def test_chatbot_application_clarifica_sigla_protegida_antes_do_backend() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-sigla-protegida"),
+    )
+
+    response = app.ask("Quais contratos da UPA?")
+
+    assert response.content == "Você quer dizer UPA como Unidade de Pronto Atendimento?"
+    assert response.guardrail_triggered is False
+    assert response.metadata["policy_category"] == "protected_acronym"
+    assert backend.calls == []
+
+
+def test_chatbot_application_reaproveita_sigla_confirmada_antes_da_selecao() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-sigla-confirmada"),
+    )
+
+    primeira = app.ask("Quais contratos da UPA?")
+    segunda = app.ask("sim")
+    terceira = app.ask("E as licitacoes da UPA?")
+
+    assert primeira.content == "Você quer dizer UPA como Unidade de Pronto Atendimento?"
+    assert (
+        segunda.content
+        == "resposta para: Quais contratos da Unidade de Pronto Atendimento?"
+    )
+    assert (
+        terceira.content
+        == "resposta para: E as licitacoes da Unidade de Pronto Atendimento?"
+    )
+    assert backend.calls == [
+        (
+            "Quais contratos da Unidade de Pronto Atendimento?",
+            "sessao-sigla-confirmada",
+        ),
+        (
+            "E as licitacoes da Unidade de Pronto Atendimento?",
+            "sessao-sigla-confirmada",
+        ),
+    ]
+    assert app.session.history[2].metadata == {
+        "confirmed_acronyms": {"UPA": "Unidade de Pronto Atendimento"}
+    }
+
+
+def test_chatbot_application_entrega_tools_selecionadas_ao_backend() -> None:
+    backend = SelectionAwareBackend()
+    selector = StubSelector(_selection(["consultar_contratos"]))
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-candidatos"),
+        selector=selector,
+    )
+
+    response = app.ask("Quais contratos da saude?")
+
+    assert response.content == "resposta para: Quais contratos da saude?"
+    assert selector.calls == [("Quais contratos da saude?", ())]
+    assert backend.selection_calls == [(("consultar_contratos",), "sessao-candidatos")]
+
+
+def test_chatbot_application_permite_conjunto_multidominio_de_candidatas() -> None:
+    backend = SelectionAwareBackend()
+    selector = StubSelector(_selection(["consultar_licitacoes", "consultar_contratos"]))
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-multidominio"),
+        selector=selector,
+    )
+
+    response = app.ask("Quais licitacoes e contratos do festival gastronomico?")
+
+    assert (
+        response.content
+        == "resposta para: Quais licitacoes e contratos do festival gastronomico?"
+    )
+    assert backend.selection_calls == [
+        (
+            ("consultar_licitacoes", "consultar_contratos"),
+            "sessao-multidominio",
+        )
+    ]
+
+
+def test_chatbot_application_prioriza_lista_detalhada_de_diarias_em_gasto_amplo() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver gasto amplo de diarias")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-amplo-diarias"),
+        selector=selector,
+    )
+
+    response = app.ask("Quanto a prefeitura gastou com diarias em 2025?")
+
+    assert (
+        response.content
+        == "resposta para: Quanto a prefeitura gastou com diarias em 2025?"
+    )
+    assert backend.selection_calls == [
+        (("consultar_diarias",), "sessao-gasto-amplo-diarias")
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
+
+
+def test_chatbot_application_prioriza_lista_de_despesas_por_funcao_em_gasto_amplo() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError(
+            "heuristica deveria resolver gasto amplo de despesas por funcao"
+        )
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-amplo-despesas-por-funcao"),
+        selector=selector,
+    )
+
+    response = app.ask(
+        "Quais foram os gastos no relatorio de despesas por funcao em 2025?"
+    )
+
+    assert (
+        response.content
+        == "resposta para: Quais foram os gastos no relatorio de despesas por funcao em 2025?"
+    )
+    assert backend.selection_calls == [
+        (
+            ("consultar_despesas_por_funcao",),
+            "sessao-gasto-amplo-despesas-por-funcao",
+        )
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
+
+
+def test_chatbot_application_prioriza_fontes_multifonte_em_gasto_de_evento() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver gasto multi-fonte")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-amplo-evento"),
+        selector=selector,
+    )
+
+    response = app.ask("Qual foi o valor gasto com o festival gastronomico de 2026?")
+
+    assert (
+        response.content
+        == "resposta para: Qual foi o valor gasto com o festival gastronomico de 2026?"
+    )
+    assert backend.selection_calls == [
+        (
+            (
+                "consultar_licitacoes",
+                "consultar_contratos",
+                "consultar_despesas",
+            ),
+            "sessao-gasto-amplo-evento",
+        )
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_event_spend_query"
 
 
 def test_chatbot_application_permite_followup_eliptico_com_contexto_publico() -> None:
@@ -301,6 +616,37 @@ def test_chatbot_application_permite_followup_temporal_em_outro_escopo() -> None
     ]
 
 
+def test_chatbot_application_permite_followup_curto_por_autor_em_emendas() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-emendas-autor"),
+    )
+
+    primeira_resposta = app.ask(
+        "quais foram todas as emendas que a prefeitura recebeu em 2025?"
+    )
+    segunda_resposta = app.ask("quantas foram do nikolas ferreira?")
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: quais foram todas as emendas que a prefeitura recebeu em 2025?"
+    )
+    assert (
+        segunda_resposta.content == "resposta para: quantas foram do nikolas ferreira?"
+    )
+    assert backend.calls == [
+        (
+            "quais foram todas as emendas que a prefeitura recebeu em 2025?",
+            "sessao-followup-emendas-autor",
+        ),
+        (
+            "quantas foram do nikolas ferreira?",
+            "sessao-followup-emendas-autor",
+        ),
+    ]
+
+
 def test_chatbot_application_permite_followup_de_ano_apos_clarificacao_de_diarias() -> (
     None
 ):
@@ -324,6 +670,144 @@ def test_chatbot_application_permite_followup_de_ano_apos_clarificacao_de_diaria
             "sessao-followup-diarias",
         ),
         ("em 2025", "sessao-followup-diarias"),
+    ]
+
+
+def test_chatbot_application_permite_confirmacao_curta_apos_clarificacao_publica() -> (
+    None
+):
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-confirmacao"),
+    )
+
+    primeira_resposta = app.ask(
+        "quanto a prefeitura recebeu de emendas parlamentares em 2026?"
+    )
+    app.session.history.append(
+        ChatMessage(
+            role="assistant",
+            content=(
+                "Você poderia confirmar se quer informações apenas para o ano "
+                "de 2026 sobre emendas parlamentares recebidas pela "
+                "prefeitura de Arcos?"
+            ),
+        )
+    )
+    segunda_resposta = app.ask("sim")
+    pergunta_resolvida = (
+        "quanto a prefeitura recebeu de emendas parlamentares em 2026?\n\n"
+        "Considere a seguinte clarificacao ja confirmada pelo usuario para a "
+        "mesma pergunta: Você poderia confirmar se quer informações apenas "
+        "para o ano de 2026 sobre emendas parlamentares recebidas pela "
+        "prefeitura de Arcos?"
+    )
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: quanto a prefeitura recebeu de emendas parlamentares em 2026?"
+    )
+    assert segunda_resposta.content == f"resposta para: {pergunta_resolvida}"
+    assert backend.calls == [
+        (
+            "quanto a prefeitura recebeu de emendas parlamentares em 2026?",
+            "sessao-followup-confirmacao",
+        ),
+        (pergunta_resolvida, "sessao-followup-confirmacao"),
+    ]
+
+
+def test_chatbot_application_reaproveita_isso_apos_clarificacao_publica() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-isso"),
+    )
+
+    primeira_resposta = app.ask("Quanto foi gasto no festival gastronomico de 2026?")
+    app.session.history.append(
+        ChatMessage(
+            role="assistant",
+            content=(
+                "Você pode me confirmar se está se referindo ao festival "
+                "gastronômico de Arcos em 2026? Quero ter certeza para buscar "
+                "os dados corretos para você."
+            ),
+        )
+    )
+
+    segunda_resposta = app.ask("isso")
+    pergunta_resolvida = (
+        "Quanto foi gasto no festival gastronomico de 2026?\n\n"
+        "Considere a seguinte clarificacao ja confirmada pelo usuario para a "
+        "mesma pergunta: Você pode me confirmar se está se referindo ao "
+        "festival gastronômico de Arcos em 2026? Quero ter certeza para "
+        "buscar os dados corretos para você."
+    )
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: Quanto foi gasto no festival gastronomico de 2026?"
+    )
+    assert segunda_resposta.content == f"resposta para: {pergunta_resolvida}"
+    assert backend.calls == [
+        (
+            "Quanto foi gasto no festival gastronomico de 2026?",
+            "sessao-followup-isso",
+        ),
+        (pergunta_resolvida, "sessao-followup-isso"),
+    ]
+    assert [(msg.role, msg.content) for msg in app.session.history[-2:]] == [
+        ("user", "isso"),
+        ("assistant", segunda_resposta.content),
+    ]
+
+
+def test_chatbot_application_reaproveita_pode_confirmar_apos_clarificacao_publica() -> (
+    None
+):
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-pode-confirmar"),
+    )
+
+    primeira_resposta = app.ask(
+        "Quanto a prefeitura gastou com o festival gastronomico de 2026?"
+    )
+    app.session.history.append(
+        ChatMessage(
+            role="assistant",
+            content=(
+                "Para informar o gasto da prefeitura com o festival "
+                "gastronômico de 2026, preciso confirmar se você está se "
+                "referindo ao festival gastronômico oficial de Arcos em 2026. "
+                "Pode confirmar?"
+            ),
+        )
+    )
+
+    segunda_resposta = app.ask("Pode confirmar")
+    pergunta_resolvida = (
+        "Quanto a prefeitura gastou com o festival gastronomico de 2026?\n\n"
+        "Considere a seguinte clarificacao ja confirmada pelo usuario para a "
+        "mesma pergunta: Para informar o gasto da prefeitura com o festival "
+        "gastronômico de 2026, preciso confirmar se você está se referindo "
+        "ao festival gastronômico oficial de Arcos em 2026. Pode confirmar?"
+    )
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: Quanto a prefeitura gastou com o festival gastronomico de 2026?"
+    )
+    assert segunda_resposta.content == f"resposta para: {pergunta_resolvida}"
+    assert backend.calls == [
+        (
+            "Quanto a prefeitura gastou com o festival gastronomico de 2026?",
+            "sessao-followup-pode-confirmar",
+        ),
+        (pergunta_resolvida, "sessao-followup-pode-confirmar"),
     ]
 
 
@@ -462,8 +946,9 @@ def test_chatbot_application_stream_bloqueia_followup_apos_turno_bloqueado() -> 
             "especialmente sobre servidores, secretarias, salários-base, "
             "histórico de pagamentos, licitações, despesas, diárias, "
             "passagens, frota, veículos, patrimônio, quadro de pessoal, "
-            "planejamento, receitas, políticos eleitos, telefones úteis, "
-            "estrutura organizacional e horários de ônibus."
+            "planejamento, receitas, transferências financeiras, emendas "
+            "parlamentares, políticos eleitos, telefones úteis, estrutura "
+            "organizacional e horários de ônibus."
         )
     ]
     assert backend.calls == [
