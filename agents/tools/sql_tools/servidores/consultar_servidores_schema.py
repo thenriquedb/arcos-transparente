@@ -7,10 +7,10 @@ from typing import Any
 
 from pydantic import Field, field_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
-from .shared.base import ServidoresToolBaseSchema
 from .shared.filters import (
     ALLOWED_ORDER_VALUES,
     ALLOWED_SERVER_FIELDS,
@@ -20,7 +20,7 @@ from .shared.filters import (
 )
 
 
-class ConsultarServidoresParams(ServidoresToolBaseSchema):
+class ConsultarServidoresParams(SqlToolBaseSchema):
     filtros: ServidoresFiltroSchema = Field(default_factory=ServidoresFiltroSchema)
     ordenar_por: str = "nome"
     ordem: str = "asc"
@@ -75,7 +75,7 @@ class ConsultarServidoresParams(ServidoresToolBaseSchema):
         return CamposServidorSchema.model_validate({"campos": value}).campos
 
 
-class ConsultarServidoresMetadata(ServidoresToolBaseSchema):
+class ConsultarServidoresMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -86,7 +86,7 @@ class ConsultarServidoresMetadata(ServidoresToolBaseSchema):
     mes_de_referencia_padrao_aplicado: bool = False
 
 
-class ConsultarServidoresResponse(ServidoresToolBaseSchema):
+class ConsultarServidoresResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarServidoresMetadata

@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from datetime import date
 
-from .base import ContratosToolBaseSchema
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 
 
-class ContratoToolItem(ContratosToolBaseSchema):
+class ContratoToolItem(SqlToolBaseSchema):
     id: int
     numero: str
     fornecedor: str
@@ -21,7 +21,7 @@ class ContratoToolItem(ContratosToolBaseSchema):
     classificacao_da_despesa: str | None = None
 
 
-class ContratoDespesaOrcamentariaToolItem(ContratosToolBaseSchema):
+class ContratoDespesaOrcamentariaToolItem(SqlToolBaseSchema):
     ordem: int
     unidade_gestora: str | None = None
     exercicio: int | None = None
@@ -34,7 +34,7 @@ class ContratoDespesaOrcamentariaToolItem(ContratosToolBaseSchema):
     valor_despesa: float | None = None
 
 
-class ContratoItemAdquiridoToolItem(ContratosToolBaseSchema):
+class ContratoItemAdquiridoToolItem(SqlToolBaseSchema):
     ordem: int
     unidade_gestora: str | None = None
     numero_lote: str | None = None

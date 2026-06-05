@@ -13,7 +13,6 @@ from shared.utils.text import matches_text_query
 
 from .entities import get_planejamento_entidade_search_terms
 from .filters import PlanejamentoFiltroSchema
-from .runtime import project_planejamento_fields
 
 
 TEXT_FILTER_FIELDS = {
@@ -117,35 +116,7 @@ def load_filtered_planejamentos(session, filtros: PlanejamentoFiltroSchema):
     ]
 
 
-def sort_planejamentos(
-    registros: list[PlanejamentoDespesa],
-    ordenar_por: str,
-    ordem: str,
-) -> list[PlanejamentoDespesa]:
-    return sorted(
-        registros,
-        key=lambda row: (SORT_FIELD_GETTERS[ordenar_por](row), row.id),
-        reverse=ordem == "desc",
-    )
-
-
-def calculate_metric(rows: list[PlanejamentoDespesa], metrica: str) -> int | Decimal:
-    if metrica == "contagem":
-        return len(rows)
-    total = Decimal("0")
-    for row in rows:
-        total += METRIC_FIELD_GETTERS[metrica](row) or Decimal("0")
-    return total
-
-
 def metric_to_json(value: int | Decimal) -> int | float:
     if isinstance(value, Decimal):
         return decimal_to_float(value) or 0.0
     return value
-
-
-def project_rows(
-    registros: list[PlanejamentoDespesa],
-    campos: list[str],
-) -> list[dict[str, Any]]:
-    return [project_planejamento_fields(registro, campos) for registro in registros]

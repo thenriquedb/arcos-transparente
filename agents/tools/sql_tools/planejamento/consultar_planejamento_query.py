@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_collection_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 
 from .consultar_planejamento_schema import (
@@ -17,9 +21,9 @@ from .consultar_planejamento_schema import (
 from .shared.filters import ALLOWED_PLANNING_FIELDS
 from .shared.querying import (
     load_filtered_planejamentos,
-    project_rows,
-    sort_planejamentos,
+    SORT_FIELD_GETTERS,
 )
+from .shared.runtime import project_planejamento_fields
 
 
 @register(
@@ -94,36 +98,43 @@ def consultar_planejamento(
         - `mensagem`: aviso quando a resposta estiver paginada.
         - `sugestao`: dica quando nenhum registro for encontrado.
     """
-    try:
-        params = ConsultarPlanejamentoParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarPlanejamentoMetadata(
-            ordenar_por="mes_num",
-            ordem="asc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarPlanejamentoResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+        },
+        schema_type=ConsultarPlanejamentoParams,
+        on_error=lambda exc: ConsultarPlanejamentoResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarPlanejamentoMetadata(
+                ordenar_por="mes_num",
+                ordem="asc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_planejamentos(session, params.filtros)
-        total = len(registros)
-        ordenados = sort_planejamentos(registros, params.ordenar_por, params.ordem)
-        pagina = ordenados[params.offset : params.offset + params.limite]
+        total, pagina = execute_collection_lookup(
+            registros,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            offset=params.offset,
+            limite=params.limite,
+            sort_key_getters=SORT_FIELD_GETTERS,
+            tie_breaker_getters=(lambda row: row.id,),
+        )
 
     metadata = ConsultarPlanejamentoMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -134,22 +145,19 @@ def consultar_planejamento(
         campos=params.campos or list(ALLOWED_PLANNING_FIELDS),
     )
 
-    if not pagina:
-        return ConsultarPlanejamentoResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao="Nenhum registro de planejamento encontrado com os filtros.",
-        ).model_dump(mode="json")
-
-    resultados = project_rows(pagina, params.campos)
-    mensagem = None
-    if total > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} registros encontrados."
-
-    return ConsultarPlanejamentoResponse(
+    execution = LookupExecutionResult(
         total=total,
-        resultados=resultados,
+        rows=pagina,
+        suggestion=(
+            "Nenhum registro de planejamento encontrado com os filtros."
+            if not pagina
+            else None
+        ),
+    )
+    return build_lookup_response(
+        response_type=ConsultarPlanejamentoResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=execution,
+        project_row=project_planejamento_fields,
+        campos=params.campos,
+    )

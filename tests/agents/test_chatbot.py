@@ -151,6 +151,13 @@ def test_system_prompt_documenta_excecoes_sem_recorte_temporal() -> None:
     assert "Contagens simples" in prompt
 
 
+def test_system_prompt_reconhece_ano_como_recorte_temporal_suficiente() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "Ano isolado já conta como recorte temporal válido" in prompt
+    assert "consulte diretamente e NÃO peça dia e mês" in prompt
+
+
 def test_system_prompt_orienta_custo_de_evento_com_licitacoes_e_contratos() -> None:
     prompt = chatbot_agent.carregar_system_prompt()
 
@@ -180,6 +187,10 @@ def test_system_prompt_orienta_gastos_amplos_com_lista_detalhada() -> None:
     )
     assert "`consultar_despesas_por_funcao`" in prompt
     assert "`agregar_despesas_por_funcao`" in prompt
+    assert "saúde, educação, urbanismo" in prompt
+    assert "explique em linguagem simples o que significa cada campo" in prompt
+    assert "não escolha silenciosamente só `valor_pago`" in prompt
+    assert "`valor_em_liquidacao`" in prompt
 
 
 def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
@@ -526,19 +537,42 @@ def test_chatbot_application_prioriza_lista_de_despesas_por_funcao_em_gasto_ampl
         selector=selector,
     )
 
-    response = app.ask(
-        "Quais foram os gastos no relatorio de despesas por funcao em 2025?"
-    )
+    response = app.ask("Quanto a prefeitura gastou na saude em 2025?")
 
     assert (
         response.content
-        == "resposta para: Quais foram os gastos no relatorio de despesas por funcao em 2025?"
+        == "resposta para: Quanto a prefeitura gastou na saude em 2025?"
     )
     assert backend.selection_calls == [
         (
             ("consultar_despesas_por_funcao",),
             "sessao-gasto-amplo-despesas-por-funcao",
         )
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
+
+
+def test_chatbot_application_prioriza_lista_de_despesas_por_funcao_em_urbanismo() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError(
+            "heuristica deveria resolver gasto amplo de despesas por funcao"
+        )
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-amplo-urbanismo"),
+        selector=selector,
+    )
+
+    response = app.ask("Quanto foi gasto com urbanismo em 2025?")
+
+    assert response.content == "resposta para: Quanto foi gasto com urbanismo em 2025?"
+    assert backend.selection_calls == [
+        (("consultar_despesas_por_funcao",), "sessao-gasto-amplo-urbanismo")
     ]
     assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
 

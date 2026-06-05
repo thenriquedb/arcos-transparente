@@ -22,7 +22,7 @@ from shared.utils.validation import (
 )
 
 
-ALLOWED_DESPESAS_POR_FUNCAO_FIELDS = {
+DEFAULT_DESPESAS_POR_FUNCAO_FIELDS = (
     "origem",
     "ano",
     "periodo_inicio",
@@ -36,7 +36,34 @@ ALLOWED_DESPESAS_POR_FUNCAO_FIELDS = {
     "valor_em_liquidacao",
     "valor_liquidado",
     "valor_pago",
+)
+ALLOWED_DESPESAS_POR_FUNCAO_FIELDS = set(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)
+DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS = {
+    "origem": "Origem do arquivo importado que gerou a linha, como prefeitura ou saude.",
+    "ano": "Exercicio orcamentario ao qual a linha pertence.",
+    "periodo_inicio": "Data inicial do periodo consolidado no relatorio.",
+    "periodo_fim": "Data final do periodo consolidado no relatorio.",
+    "unidade_gestora": "Unidade gestora responsavel pela execucao orcamentaria.",
+    "funcao": "Funcao de governo padronizada nacionalmente, como saude ou educacao.",
+    "dotacao_inicial": "Valor aprovado no orcamento inicial para a funcao no periodo.",
+    "creditos_adicionais": "Ajustes feitos no orcamento ao longo do exercicio.",
+    "dotacao_atualizada": "Dotacao inicial somada aos creditos adicionais.",
+    "valor_empenhado": "Valor ja comprometido oficialmente pela administracao.",
+    "valor_em_liquidacao": "Valor que esta em fase de conferencia antes da liquidacao.",
+    "valor_liquidado": "Valor com entrega ou servico reconhecido pela administracao.",
+    "valor_pago": "Valor efetivamente pago no periodo.",
 }
+DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS = (
+    "valor_empenhado",
+    "valor_em_liquidacao",
+    "valor_liquidado",
+    "valor_pago",
+)
+DESPESAS_POR_FUNCAO_BROAD_SPEND_GUIDANCE = (
+    "Em perguntas amplas sobre gasto por funcao, nao resuma a resposta em apenas "
+    "um total. Mostre e diferencie valor_empenhado, valor_em_liquidacao, "
+    "valor_liquidado e valor_pago."
+)
 ALLOWED_DESPESAS_POR_FUNCAO_SORT_FIELDS = {
     "periodo_fim",
     "funcao",
@@ -162,8 +189,12 @@ class ConsultarDespesasPorFuncaoMetadata(DespesasPorFuncaoToolBaseSchema):
     limite: int
     offset: int
     campos: list[str] = Field(
-        default_factory=lambda: list(ALLOWED_DESPESAS_POR_FUNCAO_FIELDS)
+        default_factory=lambda: list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)
     )
+    explicacao_campos: dict[str, str] = Field(default_factory=dict)
+    campos_financeiros_prioritarios: list[str] = Field(default_factory=list)
+    explicacao_estagios_despesa: dict[str, str] = Field(default_factory=dict)
+    orientacao_gasto_amplo: str | None = None
 
 
 class ConsultarDespesasPorFuncaoResponse(DespesasPorFuncaoToolBaseSchema):

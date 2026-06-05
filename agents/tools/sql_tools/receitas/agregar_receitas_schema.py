@@ -6,10 +6,10 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
-from .shared.base import ReceitasToolBaseSchema
 from .shared.filters import (
     ALLOWED_GROUP_FIELDS,
     ALLOWED_METRICS,
@@ -18,7 +18,7 @@ from .shared.filters import (
 )
 
 
-class AgregarReceitasParams(ReceitasToolBaseSchema):
+class AgregarReceitasParams(SqlToolBaseSchema):
     filtros: ReceitaFiltroSchema = Field(default_factory=ReceitaFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_valor_recebido"
@@ -82,7 +82,7 @@ class AgregarReceitasParams(ReceitasToolBaseSchema):
         return self
 
 
-class AgregarReceitasMetadata(ReceitasToolBaseSchema):
+class AgregarReceitasMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -91,7 +91,7 @@ class AgregarReceitasMetadata(ReceitasToolBaseSchema):
     limite: int
 
 
-class AgregacaoReceitasItem(ReceitasToolBaseSchema):
+class AgregacaoReceitasItem(SqlToolBaseSchema):
     mes: str | None = None
     unidade_responsavel: str | None = None
     categoria: str | None = None
@@ -106,7 +106,7 @@ class AgregacaoReceitasItem(ReceitasToolBaseSchema):
     soma_valor_em_cobranca_judicial: float | None = None
 
 
-class AgregarReceitasResponse(ReceitasToolBaseSchema):
+class AgregarReceitasResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarReceitasMetadata

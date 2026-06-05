@@ -4,10 +4,16 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
 from sqlalchemy import func, select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.aggregate import (
+    AggregateExecutionResult,
+    build_aggregate_response,
+    execute_statement_grouped,
+    execute_statement_total,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import Contrato
 
@@ -45,27 +51,24 @@ def _execute_total_sem_grupo(
     available_columns: set[str],
 ) -> tuple[int, float | int | None]:
     """Executa agregacao sem agrupamento e devolve contagem real + valor."""
-
-    contagem = session.execute(
-        apply_contratos_filters(
+    metric_expression = METRIC_EXPRESSIONS[params.metrica].label(params.metrica)
+    contagem, valor_total = execute_statement_total(
+        session,
+        count_stmt=apply_contratos_filters(
             select(func.count(Contrato.id)),
             params.filtros,
             include_descricao_despesa=include_descricao_despesa,
             include_xml_original=include_xml_original,
             available_columns=available_columns,
-        )
-    ).scalar_one()
-
-    metric_expression = METRIC_EXPRESSIONS[params.metrica].label(params.metrica)
-    valor_total = session.execute(
-        apply_contratos_filters(
+        ),
+        value_stmt=apply_contratos_filters(
             select(metric_expression),
             params.filtros,
             include_descricao_despesa=include_descricao_despesa,
             include_xml_original=include_xml_original,
             available_columns=available_columns,
-        )
-    ).scalar_one()
+        ),
+    )
     return contagem, decimal_or_int_to_json(valor_total)
 
 
@@ -88,21 +91,15 @@ def _execute_grupo(
         include_xml_original=include_xml_original,
         available_columns=available_columns,
     ).group_by(group_column)
-
-    total_grupos = session.execute(
-        select(func.count()).select_from(grouped_stmt.order_by(None).subquery())
-    ).scalar_one()
-
-    if params.ordenar_por == "metrica":
-        order_column = metric_expression
-    else:
-        order_column = group_column
-    grouped_stmt = grouped_stmt.order_by(
-        order_column.desc() if params.ordem == "desc" else order_column.asc()
-    ).limit(params.limite)
-
-    rows = session.execute(grouped_stmt).all()
-    return total_grupos, rows
+    return execute_statement_grouped(
+        session,
+        grouped_stmt=grouped_stmt,
+        ordenar_por=params.ordenar_por,
+        ordem=params.ordem,
+        limite=params.limite,
+        group_column=group_column,
+        metric_expression=metric_expression,
+    )
 
 
 def _execute_fallback_aggregate(
@@ -219,30 +216,31 @@ def agregar_contratos(
         - `mensagem`: aviso quando so parte dos grupos for exibida.
         - `sugestao`: dica quando nenhum contrato corresponder aos filtros.
     """
-    try:
-        params = AgregarContratosParams.model_validate(
-            {
-                "filtros": filtros,
-                "agrupar_por": agrupar_por,
-                "metrica": metrica,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = AgregarContratosMetadata(
-            metrica="contagem",
-            ordenar_por="metrica",
-            ordem="desc",
-            limite=10,
-        )
-        return AgregarContratosResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "agrupar_por": agrupar_por,
+            "metrica": metrica,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+        },
+        schema_type=AgregarContratosParams,
+        on_error=lambda exc: AgregarContratosResponse(
             total_grupos=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=AgregarContratosMetadata(
+                metrica="contagem",
+                ordenar_por="metrica",
+                ordem="desc",
+                limite=10,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         include_descricao_despesa = contratos_supports_descricao_despesa(session)
@@ -289,45 +287,38 @@ def agregar_contratos(
                             "filtros_fallback_aplicados": filtros_execucao.to_metadata_dict()
                         }
                     )
-            return AgregarContratosResponse(
-                total_grupos=0,
-                resultados=[],
-                metadata=metadata,
-                valor_total=valor_total_json,
-                mensagem=(
-                    " ".join(
-                        mensagem
-                        for mensagem in [
-                            (
-                                build_descricao_despesa_unavailable_message(
-                                    params.filtros
-                                )
-                                if not include_descricao_despesa and total_match > 0
-                                else None
-                            ),
-                            (
-                                build_contract_fallback_message(
-                                    fallback_source_field,
-                                    fallback_target_field,
-                                )
-                                if fallback_aplicado
-                                else None
-                            ),
-                        ]
-                        if mensagem
-                    )
-                    or None
-                ),
-                sugestao=(
+            mensagens = [
+                (
                     build_descricao_despesa_unavailable_message(params.filtros)
-                    if total_match == 0 and not include_descricao_despesa
-                    else (
-                        "Nenhum contrato encontrado com os filtros informados."
-                        if total_match == 0
-                        else None
-                    )
+                    if not include_descricao_despesa and total_match > 0
+                    else None
                 ),
-            ).model_dump(mode="json")
+                (
+                    build_contract_fallback_message(
+                        fallback_source_field,
+                        fallback_target_field,
+                    )
+                    if fallback_aplicado
+                    else None
+                ),
+            ]
+            return build_aggregate_response(
+                response_type=AgregarContratosResponse,
+                metadata=metadata,
+                execution=AggregateExecutionResult(
+                    valor_total=valor_total_json,
+                    messages=mensagens,
+                    suggestion=(
+                        build_descricao_despesa_unavailable_message(params.filtros)
+                        if total_match == 0 and not include_descricao_despesa
+                        else (
+                            "Nenhum contrato encontrado com os filtros informados."
+                            if total_match == 0
+                            else None
+                        )
+                    ),
+                ),
+            )
         total_grupos, rows = _execute_grupo(
             session,
             params,
@@ -357,33 +348,6 @@ def agregar_contratos(
                     }
                 )
 
-    if not rows:
-        return AgregarContratosResponse(
-            total_grupos=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao=(
-                build_descricao_despesa_unavailable_message(params.filtros)
-                if not include_descricao_despesa
-                else "Nenhum contrato encontrado com os filtros informados."
-            ),
-        ).model_dump(mode="json")
-
-    resultados = []
-    for group_value, metric_value in rows:
-        if params.agrupar_por == "ano_inicio" and group_value is not None:
-            group_value = int(group_value)
-        item_payload = {
-            params.agrupar_por: group_value,
-            params.metrica: decimal_or_int_to_json(metric_value),
-        }
-        resultados.append(
-            AgregacaoContratosItem.model_validate(item_payload).model_dump(
-                mode="json",
-                exclude_none=True,
-            )
-        )
-
     mensagens: list[str] = []
     if not include_descricao_despesa:
         warning = build_descricao_despesa_unavailable_message(params.filtros)
@@ -396,15 +360,32 @@ def agregar_contratos(
                 fallback_target_field,
             )
         )
-    if total_grupos > len(resultados):
-        mensagens.append(
-            f"Mostrando {len(resultados)} de {total_grupos} grupos encontrados."
-        )
-    mensagem = " ".join(mensagens) or None
-
-    return AgregarContratosResponse(
-        total_grupos=total_grupos,
-        resultados=resultados,
+    return build_aggregate_response(
+        response_type=AgregarContratosResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=AggregateExecutionResult(
+            total_grupos=total_grupos,
+            rows=rows,
+            messages=mensagens if rows else (),
+            suggestion=(
+                (
+                    build_descricao_despesa_unavailable_message(params.filtros)
+                    if not include_descricao_despesa
+                    else "Nenhum contrato encontrado com os filtros informados."
+                )
+                if not rows
+                else None
+            ),
+        ),
+        item_model=AgregacaoContratosItem,
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica,
+        serialize_group_value=(
+            lambda value: (
+                int(value)
+                if params.agrupar_por == "ano_inicio" and value is not None
+                else value
+            )
+        ),
+        serialize_metric=decimal_or_int_to_json,
+    )

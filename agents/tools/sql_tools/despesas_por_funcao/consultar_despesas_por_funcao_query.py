@@ -14,10 +14,13 @@ from shared.utils.decimal_to_float import decimal_to_float
 from shared.utils.text import matches_text_query
 
 from .consultar_despesas_por_funcao_schema import (
-    ALLOWED_DESPESAS_POR_FUNCAO_FIELDS,
     ConsultarDespesasPorFuncaoMetadata,
     ConsultarDespesasPorFuncaoParams,
     ConsultarDespesasPorFuncaoResponse,
+    DEFAULT_DESPESAS_POR_FUNCAO_FIELDS,
+    DESPESAS_POR_FUNCAO_BROAD_SPEND_GUIDANCE,
+    DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS,
+    DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS,
     DespesasPorFuncaoFiltroSchema,
 )
 
@@ -107,7 +110,7 @@ def project_despesas_por_funcao(
     registros: list[DespesaPorFuncao],
     campos: list[str],
 ) -> list[dict[str, Any]]:
-    selected = campos or list(ALLOWED_DESPESAS_POR_FUNCAO_FIELDS)
+    selected = campos or list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)
     return [
         {
             campo: value
@@ -116,6 +119,21 @@ def project_despesas_por_funcao(
         }
         for registro in registros
     ]
+
+
+def _field_explanations(campos: list[str]) -> dict[str, str]:
+    return {
+        campo: DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS[campo]
+        for campo in campos
+        if campo in DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS
+    }
+
+
+def _financial_stage_explanations() -> dict[str, str]:
+    return {
+        campo: DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS[campo]
+        for campo in DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS
+    }
 
 
 @register(
@@ -147,16 +165,31 @@ def consultar_despesas_por_funcao(
     """
     Lista linhas agregadas do relatorio `despesas-por-funcao`.
 
-    Use esta tool quando a pergunta citar explicitamente o relatorio
-    `despesas-por-funcao` ou pedir os valores agregados por funcao, como
-    dotacao inicial, creditos adicionais, dotacao atualizada, empenhado,
-    liquidado ou pago por funcao e periodo.
+    Use esta tool quando a pergunta vier em linguagem ampla de gasto por
+    funcao de governo, como "gastos da saude", "quanto foi gasto com
+    educacao" ou "quanto a prefeitura gastou em urbanismo".
+    Em perguntas como "qual foi o gasto com saude em 2025?", nao reduza a
+    resposta a `valor_pago`: mostre tambem `valor_empenhado`,
+    `valor_em_liquidacao`, `valor_liquidado` e explique a diferenca.
+    Se o usuario ja informar um ano, como "em 2025", esse recorte ja basta;
+    nao peca dia e mes para executar a consulta.
     NAO use para planejamento mensal por programa ou acao; para isso use
     `consultar_planejamento`.
     NAO use para empenhos, restos a pagar ou documentos executados
     individualmente; para isso use `consultar_despesas`.
     NAO use para totais, comparacoes ou rankings agregados; para isso use
     `agregar_despesas_por_funcao`.
+
+    Returns:
+        dict com:
+        - `total`: total de linhas encontradas antes da paginacao.
+        - `resultados`: lista de linhas do relatorio por funcao.
+        - `metadata`: filtros aplicados, paginacao, campos retornados e a
+          explicacao resumida de cada campo em `explicacao_campos`. Para
+          perguntas amplas de gasto, use tambem `campos_financeiros_prioritarios`,
+          `explicacao_estagios_despesa` e `orientacao_gasto_amplo`.
+        - `mensagem`: aviso quando a resposta estiver paginada.
+        - `sugestao`: dica quando nenhuma linha for encontrada.
     """
     try:
         params = ConsultarDespesasPorFuncaoParams.model_validate(
@@ -194,13 +227,21 @@ def consultar_despesas_por_funcao(
         pagina = ordenados[params.offset : params.offset + params.limite]
         resultados = project_despesas_por_funcao(pagina, params.campos)
 
+    campos_retorno = params.campos or list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)
+
     metadata = ConsultarDespesasPorFuncaoMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
         ordenar_por=params.ordenar_por,
         ordem=params.ordem,
         limite=params.limite,
         offset=params.offset,
-        campos=params.campos or list(ALLOWED_DESPESAS_POR_FUNCAO_FIELDS),
+        campos=campos_retorno,
+        explicacao_campos=_field_explanations(campos_retorno),
+        campos_financeiros_prioritarios=list(
+            DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS
+        ),
+        explicacao_estagios_despesa=_financial_stage_explanations(),
+        orientacao_gasto_amplo=DESPESAS_POR_FUNCAO_BROAD_SPEND_GUIDANCE,
     )
 
     if not resultados:

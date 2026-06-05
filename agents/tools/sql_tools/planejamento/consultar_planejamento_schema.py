@@ -6,10 +6,10 @@ from typing import Any
 
 from pydantic import Field, field_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
-from .shared.base import PlanejamentoToolBaseSchema
 from .shared.filters import (
     ALLOWED_ORDER_VALUES,
     ALLOWED_PLANNING_FIELDS,
@@ -19,7 +19,7 @@ from .shared.filters import (
 )
 
 
-class ConsultarPlanejamentoParams(PlanejamentoToolBaseSchema):
+class ConsultarPlanejamentoParams(SqlToolBaseSchema):
     filtros: PlanejamentoFiltroSchema = Field(default_factory=PlanejamentoFiltroSchema)
     ordenar_por: str = "mes_num"
     ordem: str = "asc"
@@ -70,7 +70,7 @@ class ConsultarPlanejamentoParams(PlanejamentoToolBaseSchema):
         return CamposPlanejamentoSchema.model_validate({"campos": value}).campos
 
 
-class ConsultarPlanejamentoMetadata(PlanejamentoToolBaseSchema):
+class ConsultarPlanejamentoMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -79,7 +79,7 @@ class ConsultarPlanejamentoMetadata(PlanejamentoToolBaseSchema):
     campos: list[str] = Field(default_factory=lambda: list(ALLOWED_PLANNING_FIELDS))
 
 
-class ConsultarPlanejamentoResponse(PlanejamentoToolBaseSchema):
+class ConsultarPlanejamentoResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarPlanejamentoMetadata

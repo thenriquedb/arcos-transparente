@@ -6,10 +6,10 @@ from typing import Any
 
 from pydantic import Field, field_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
-from .shared.base import ReceitasToolBaseSchema
 from .shared.filters import (
     ALLOWED_ORDER_VALUES,
     ALLOWED_RECEITA_FIELDS,
@@ -19,7 +19,7 @@ from .shared.filters import (
 )
 
 
-class ConsultarReceitasParams(ReceitasToolBaseSchema):
+class ConsultarReceitasParams(SqlToolBaseSchema):
     filtros: ReceitaFiltroSchema = Field(default_factory=ReceitaFiltroSchema)
     ordenar_por: str = "data"
     ordem: str = "desc"
@@ -74,7 +74,7 @@ class ConsultarReceitasParams(ReceitasToolBaseSchema):
         return CamposReceitaSchema.model_validate({"campos": value}).campos
 
 
-class ConsultarReceitasMetadata(ReceitasToolBaseSchema):
+class ConsultarReceitasMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -83,7 +83,7 @@ class ConsultarReceitasMetadata(ReceitasToolBaseSchema):
     campos: list[str] = Field(default_factory=lambda: list(ALLOWED_RECEITA_FIELDS))
 
 
-class ConsultarReceitasResponse(ReceitasToolBaseSchema):
+class ConsultarReceitasResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarReceitasMetadata

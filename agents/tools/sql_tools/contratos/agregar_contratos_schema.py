@@ -6,10 +6,10 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
-from .shared.base import ContratosToolBaseSchema
 from .shared.filters import (
     ALLOWED_GROUP_FIELDS,
     ALLOWED_METRICS,
@@ -18,7 +18,7 @@ from .shared.filters import (
 )
 
 
-class AgregarContratosParams(ContratosToolBaseSchema):
+class AgregarContratosParams(SqlToolBaseSchema):
     filtros: ContratosFiltroSchema = Field(default_factory=ContratosFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "contagem"
@@ -82,7 +82,7 @@ class AgregarContratosParams(ContratosToolBaseSchema):
         return self
 
 
-class AgregarContratosMetadata(ContratosToolBaseSchema):
+class AgregarContratosMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     filtros_fallback_aplicados: dict[str, Any] | None = None
     agrupar_por: str | None = None
@@ -92,7 +92,7 @@ class AgregarContratosMetadata(ContratosToolBaseSchema):
     limite: int
 
 
-class AgregacaoContratosItem(ContratosToolBaseSchema):
+class AgregacaoContratosItem(SqlToolBaseSchema):
     secretaria: str | None = None
     categoria: str | None = None
     fornecedor: str | None = None
@@ -102,7 +102,7 @@ class AgregacaoContratosItem(ContratosToolBaseSchema):
     media_valor: float | None = None
 
 
-class AgregarContratosResponse(ContratosToolBaseSchema):
+class AgregarContratosResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarContratosMetadata

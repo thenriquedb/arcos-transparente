@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from datetime import date
 
-from .base import ServidoresToolBaseSchema
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 
 
-class ServidorToolItem(ServidoresToolBaseSchema):
+class ServidorToolItem(SqlToolBaseSchema):
     id: int
     nome: str
     cargo: str

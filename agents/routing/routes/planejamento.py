@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from agents.routing.routes.despesas_por_funcao import _is_despesas_por_funcao_query
 from agents.routing.extractors import (
     _contains_term,
     _extract_limit,
@@ -29,6 +30,8 @@ def _try_route_planejamento_agregacao(normalized_text: str) -> RouteDecision | N
         "salario do pedro"          -> vai para _try_route_historico
     """
     if not _is_planejamento_query(normalized_text):
+        return None
+    if _is_despesas_por_funcao_query(normalized_text):
         return None
 
     # Pedidos de lista sem linguagem de total/ranking ficam com a tool de consulta.

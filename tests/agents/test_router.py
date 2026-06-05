@@ -111,6 +111,30 @@ def test_route_user_query_total_de_despesas_por_funcao_nao_agrupar_por_padrao() 
     assert decision.tool_kwargs["metrica"] == "soma_valor_pago"
 
 
+def test_route_user_query_reconhece_gasto_amplo_por_funcao_de_governo() -> None:
+    decision = route_user_query("Quanto a prefeitura gastou na saude em 2025?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_despesas_por_funcao"
+    assert decision.tool_kwargs["filtros"] == {
+        "ano": 2025,
+        "origem": "prefeitura",
+        "funcao": "saude",
+    }
+    assert decision.tool_kwargs["metrica"] == "soma_valor_pago"
+
+
+def test_route_user_query_lista_despesas_por_funcao_em_qual_foi_o_gasto() -> None:
+    decision = route_user_query("Qual foi o gasto com saude em 2025?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "consultar_despesas_por_funcao"
+    assert decision.tool_kwargs["filtros"] == {
+        "ano": 2025,
+        "funcao": "saude",
+    }
+
+
 @pytest.mark.parametrize(
     ("pergunta", "expected_tool_name"),
     [

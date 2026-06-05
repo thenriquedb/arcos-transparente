@@ -406,6 +406,14 @@ def _select_direct_spend_candidate_names(
         return ["consultar_passagens"]
     if _has_any_term(normalized_question, DESPESAS_DOMAIN_KEYWORDS):
         return ["consultar_despesas"]
+    if route_tool_name == "consultar_despesas_por_funcao":
+        return ["consultar_despesas_por_funcao"]
+    if route_tool_name == "consultar_diarias":
+        return ["consultar_diarias"]
+    if route_tool_name == "consultar_passagens":
+        return ["consultar_passagens"]
+    if route_tool_name == "consultar_despesas":
+        return ["consultar_despesas"]
     if route_tool_name == "agregar_despesas_por_funcao":
         return ["consultar_despesas_por_funcao"]
     if route_tool_name == "agregar_diarias":

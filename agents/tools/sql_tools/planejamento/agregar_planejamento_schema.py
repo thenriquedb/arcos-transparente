@@ -6,10 +6,10 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
-from .shared.base import PlanejamentoToolBaseSchema
 from .shared.filters import (
     ALLOWED_GROUP_FIELDS,
     ALLOWED_METRICS,
@@ -18,7 +18,7 @@ from .shared.filters import (
 )
 
 
-class AgregarPlanejamentoParams(PlanejamentoToolBaseSchema):
+class AgregarPlanejamentoParams(SqlToolBaseSchema):
     filtros: PlanejamentoFiltroSchema = Field(default_factory=PlanejamentoFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_orcamento_atualizado"
@@ -82,7 +82,7 @@ class AgregarPlanejamentoParams(PlanejamentoToolBaseSchema):
         return self
 
 
-class AgregarPlanejamentoMetadata(PlanejamentoToolBaseSchema):
+class AgregarPlanejamentoMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -91,7 +91,7 @@ class AgregarPlanejamentoMetadata(PlanejamentoToolBaseSchema):
     limite: int
 
 
-class AgregacaoPlanejamentoItem(PlanejamentoToolBaseSchema):
+class AgregacaoPlanejamentoItem(SqlToolBaseSchema):
     mes: str | None = None
     area: str | None = None
     subarea: str | None = None
@@ -109,7 +109,7 @@ class AgregacaoPlanejamentoItem(PlanejamentoToolBaseSchema):
     soma_valor_cancelado: float | None = None
 
 
-class AgregarPlanejamentoResponse(PlanejamentoToolBaseSchema):
+class AgregarPlanejamentoResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarPlanejamentoMetadata

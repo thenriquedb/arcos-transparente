@@ -7,10 +7,9 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_selected_fields
 from shared.utils.validation import clean_text, parse_decimal, parse_month
-
-from .base import PlanejamentoToolBaseSchema
 
 
 ALLOWED_PLANNING_FIELDS = (
@@ -80,7 +79,7 @@ ALLOWED_METRICS = (
 ALLOWED_ORDER_VALUES = ("asc", "desc")
 
 
-class PlanejamentoFiltroSchema(PlanejamentoToolBaseSchema):
+class PlanejamentoFiltroSchema(SqlToolBaseSchema):
     origem: str | None = "saude"
     ano: int | None = None
     mes: int | None = None
@@ -153,7 +152,7 @@ class PlanejamentoFiltroSchema(PlanejamentoToolBaseSchema):
         return self
 
 
-class CamposPlanejamentoSchema(PlanejamentoToolBaseSchema):
+class CamposPlanejamentoSchema(SqlToolBaseSchema):
     campos: list[str] = Field(default_factory=list)
 
     @field_validator("campos", mode="before")

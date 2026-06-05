@@ -7,10 +7,10 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
-from .shared.base import ServidoresToolBaseSchema
 from .shared.filters import (
     ALLOWED_GROUP_FIELDS,
     ALLOWED_METRICS,
@@ -19,7 +19,7 @@ from .shared.filters import (
 )
 
 
-class AgregarServidoresParams(ServidoresToolBaseSchema):
+class AgregarServidoresParams(SqlToolBaseSchema):
     filtros: ServidoresFiltroSchema = Field(default_factory=ServidoresFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "contagem"
@@ -83,7 +83,7 @@ class AgregarServidoresParams(ServidoresToolBaseSchema):
         return self
 
 
-class AgregarServidoresMetadata(ServidoresToolBaseSchema):
+class AgregarServidoresMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -94,7 +94,7 @@ class AgregarServidoresMetadata(ServidoresToolBaseSchema):
     mes_de_referencia_padrao_aplicado: bool = False
 
 
-class AgregacaoServidoresItem(ServidoresToolBaseSchema):
+class AgregacaoServidoresItem(SqlToolBaseSchema):
     secretaria: str | None = None
     cargo: str | None = None
     mes_de_referencia: date | None = None
@@ -102,7 +102,7 @@ class AgregacaoServidoresItem(ServidoresToolBaseSchema):
     soma_salario_base: float | None = None
 
 
-class AgregarServidoresResponse(ServidoresToolBaseSchema):
+class AgregarServidoresResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarServidoresMetadata

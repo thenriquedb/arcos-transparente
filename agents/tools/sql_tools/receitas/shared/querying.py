@@ -9,11 +9,7 @@ from database.models import ReceitaArrecadacao, ReceitaLancamento
 from shared.utils.text import matches_text_query, normalize_search_text
 
 from .filters import ReceitaFiltroSchema
-from .runtime import (
-    project_receita_fields,
-    serializar_receita_arrecadacao,
-    serializar_receita_lancamento,
-)
+from .runtime import serializar_receita_arrecadacao, serializar_receita_lancamento
 
 
 TEXT_FILTER_FIELDS = {
@@ -154,25 +150,3 @@ def load_filtered_receitas(
         for registro in serializados
         if _match_receita_filters(registro, filtros)
     ]
-
-
-def sort_receitas(
-    registros: list[dict[str, object]], ordenar_por: str, ordem: str
-) -> list[dict[str, object]]:
-    return sorted(
-        registros,
-        key=lambda row: (SORT_FIELD_GETTERS[ordenar_por](row), row.get("id") or 0),
-        reverse=ordem == "desc",
-    )
-
-
-def calculate_metric(rows: list[dict[str, object]], metrica: str) -> int | float:
-    if metrica == "contagem":
-        return len(rows)
-    return float(sum(METRIC_FIELD_GETTERS[metrica](row) for row in rows))
-
-
-def project_rows(
-    registros: list[dict[str, object]], campos: list[str]
-) -> list[dict[str, object]]:
-    return [project_receita_fields(registro, campos) for registro in registros]

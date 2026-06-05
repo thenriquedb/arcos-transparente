@@ -8,6 +8,7 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_selected_fields
 from shared.utils.validation import (
     clean_text,
@@ -15,9 +16,6 @@ from shared.utils.validation import (
     parse_decimal,
     validate_date_period,
 )
-
-from .base import ServidoresToolBaseSchema
-
 
 ALLOWED_SERVER_FIELDS = (
     "id",
@@ -41,7 +39,7 @@ ALLOWED_METRICS = ("contagem", "soma_salario_base")
 ALLOWED_ORDER_VALUES = ("asc", "desc")
 
 
-class ServidoresFiltroSchema(ServidoresToolBaseSchema):
+class ServidoresFiltroSchema(SqlToolBaseSchema):
     nome: str | None = None
     secretaria: str | None = None
     cargo: str | None = None
@@ -107,7 +105,7 @@ class ServidoresFiltroSchema(ServidoresToolBaseSchema):
         return self
 
 
-class CamposServidorSchema(ServidoresToolBaseSchema):
+class CamposServidorSchema(SqlToolBaseSchema):
     campos: list[str] = Field(default_factory=list)
 
     @field_validator("campos", mode="before")

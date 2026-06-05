@@ -4,10 +4,15 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
-from sqlalchemy import func, select
+from sqlalchemy import select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_statement_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import FolhaServidor
 
@@ -101,30 +106,31 @@ def consultar_servidores(
         - `mensagem`: aviso quando a resposta estiver paginada.
         - `sugestao`: dica quando nenhum registro for encontrado.
     """
-    try:
-        params = ConsultarServidoresParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarServidoresMetadata(
-            ordenar_por="nome",
-            ordem="asc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarServidoresResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+        },
+        schema_type=ConsultarServidoresParams,
+        on_error=lambda exc: ConsultarServidoresResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarServidoresMetadata(
+                ordenar_por="nome",
+                ordem="asc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         mes_de_referencia_considerado, mes_padrao_aplicado = (
@@ -139,19 +145,16 @@ def consultar_servidores(
             params.filtros,
             mes_de_referencia_considerado=mes_de_referencia_considerado,
         )
-        total = session.execute(
-            select(func.count()).select_from(base_stmt.order_by(None).subquery())
-        ).scalar_one()
-
-        order_column = SERVER_ORDER_COLUMNS[params.ordenar_por]
-        ordered_stmt = base_stmt.order_by(
-            order_column.desc() if params.ordem == "desc" else order_column.asc(),
-            FolhaServidor.nome.asc(),
-        )
-        servidores = (
-            session.execute(ordered_stmt.offset(params.offset).limit(params.limite))
-            .scalars()
-            .all()
+        total, servidores = execute_statement_lookup(
+            session,
+            stmt=base_stmt,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            offset=params.offset,
+            limite=params.limite,
+            order_columns=SERVER_ORDER_COLUMNS,
+            tie_breakers=(FolhaServidor.nome.asc(),),
+            load_rows=lambda db_session, stmt: db_session.execute(stmt).scalars().all(),
         )
 
     metadata = ConsultarServidoresMetadata(
@@ -165,24 +168,19 @@ def consultar_servidores(
         mes_de_referencia_padrao_aplicado=mes_padrao_aplicado,
     )
 
-    if not servidores:
-        return ConsultarServidoresResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao="Nenhum servidor encontrado com os filtros informados.",
-        ).model_dump(mode="json")
-
-    resultados = [
-        project_servidor_fields(servidor, params.campos) for servidor in servidores
-    ]
-    mensagem = None
-    if total > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} registros encontrados."
-
-    return ConsultarServidoresResponse(
+    execution = LookupExecutionResult(
         total=total,
-        resultados=resultados,
+        rows=servidores,
+        suggestion=(
+            "Nenhum servidor encontrado com os filtros informados."
+            if not servidores
+            else None
+        ),
+    )
+    return build_lookup_response(
+        response_type=ConsultarServidoresResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=execution,
+        project_row=project_servidor_fields,
+        campos=params.campos,
+    )

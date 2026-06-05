@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.aggregate import (
+    AggregateExecutionResult,
+    build_aggregate_response,
+    execute_collection_aggregate,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 
 from .agregar_receitas_schema import (
@@ -17,8 +21,8 @@ from .agregar_receitas_schema import (
 )
 from .shared.querying import (
     GROUP_FIELD_GETTERS,
-    calculate_metric,
     load_filtered_receitas,
+    METRIC_FIELD_GETTERS,
 )
 
 
@@ -88,30 +92,31 @@ def agregar_receitas(
         - `mensagem`: aviso quando so parte dos grupos for exibida.
         - `sugestao`: dica quando nenhum registro corresponder aos filtros.
     """
-    try:
-        params = AgregarReceitasParams.model_validate(
-            {
-                "filtros": filtros,
-                "agrupar_por": agrupar_por,
-                "metrica": metrica,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = AgregarReceitasMetadata(
-            metrica="soma_valor_recebido",
-            ordenar_por="metrica",
-            ordem="desc",
-            limite=10,
-        )
-        return AgregarReceitasResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "agrupar_por": agrupar_por,
+            "metrica": metrica,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+        },
+        schema_type=AgregarReceitasParams,
+        on_error=lambda exc: AgregarReceitasResponse(
             total_grupos=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=AgregarReceitasMetadata(
+                metrica="soma_valor_recebido",
+                ordenar_por="metrica",
+                ordem="desc",
+                limite=10,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_receitas(session, params.filtros)
@@ -125,60 +130,35 @@ def agregar_receitas(
         limite=params.limite,
     )
 
-    if params.agrupar_por is None:
-        valor_total = calculate_metric(registros, params.metrica)
-        return AgregarReceitasResponse(
-            total_grupos=0,
-            resultados=[],
-            metadata=metadata,
-            valor_total=valor_total,
-            sugestao=(
-                "Nenhum registro de receitas encontrado com os filtros."
-                if not valor_total
-                else None
-            ),
-        ).model_dump(mode="json")
-
-    grouped_rows: dict[str, list[dict[str, object]]] = {}
-    group_getter = GROUP_FIELD_GETTERS[params.agrupar_por]
-    for registro in registros:
-        group_value = group_getter(registro) or "nao_informado"
-        grouped_rows.setdefault(str(group_value), []).append(registro)
-
-    resultados = []
-    for group_value, group_rows in grouped_rows.items():
-        metric_value = calculate_metric(group_rows, params.metrica)
-        item_payload = {
-            params.agrupar_por: group_value,
-            params.metrica: metric_value,
-        }
-        resultados.append(
-            AgregacaoReceitasItem.model_validate(item_payload).model_dump(
-                mode="json",
-                exclude_none=True,
-            )
+    execution = execute_collection_aggregate(
+        registros,
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica,
+        ordenar_por=params.ordenar_por,
+        ordem=params.ordem,
+        limite=params.limite,
+        group_key_getters=GROUP_FIELD_GETTERS,
+        metric_getters=METRIC_FIELD_GETTERS,
+        serialize_metric=lambda value: value,
+    )
+    suggestion = (
+        "Nenhum registro de receitas encontrado com os filtros."
+        if (
+            (params.agrupar_por is None and not execution.valor_total)
+            or (params.agrupar_por is not None and not execution.rows)
         )
-
-    reverse = params.ordem == "desc"
-    if params.ordenar_por == "metrica":
-        resultados.sort(key=lambda item: item[params.metrica], reverse=reverse)
-    else:
-        resultados.sort(key=lambda item: item[params.agrupar_por], reverse=reverse)
-
-    total_grupos = len(resultados)
-    resultados = resultados[: params.limite]
-    mensagem = None
-    if total_grupos > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total_grupos} grupos encontrados."
-
-    return AgregarReceitasResponse(
-        total_grupos=total_grupos,
-        resultados=resultados,
+        else None
+    )
+    return build_aggregate_response(
+        response_type=AgregarReceitasResponse,
         metadata=metadata,
-        mensagem=mensagem,
-        sugestao=(
-            "Nenhum registro de receitas encontrado com os filtros."
-            if not resultados
-            else None
+        execution=AggregateExecutionResult(
+            total_grupos=execution.total_grupos,
+            rows=execution.rows,
+            valor_total=execution.valor_total,
+            suggestion=suggestion,
         ),
-    ).model_dump(mode="json")
+        item_model=AgregacaoReceitasItem if params.agrupar_por is not None else None,
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica if params.agrupar_por is not None else None,
+    )

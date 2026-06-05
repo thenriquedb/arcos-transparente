@@ -183,6 +183,74 @@ def test_consultar_receitas_filtra_lancamento_por_tributo(monkeypatch) -> None:
     session.close()
 
 
+def test_consultar_receitas_preserva_paginacao_ordenacao_e_projecao(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    natureza_iptu = _natureza(
+        identificacao="1.1.1.2",
+        nome="Imposto Predial e Territorial Urbano - Principal",
+    )
+    natureza_fundeb = _natureza(
+        identificacao="1.7.5.1",
+        nome="Transferencias de Recursos do FUNDEB - Principal",
+    )
+    session.add_all(
+        [
+            _arrecadacao(
+                natureza=natureza_iptu,
+                mes="JANEIRO",
+                data_arrecadacao=date(2025, 1, 15),
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                fonte_recurso="Recursos proprios",
+                valor_previsto_liquido="20000.00",
+                valor_arrecadado_liquido="19000.00",
+            ),
+            _arrecadacao(
+                natureza=natureza_iptu,
+                mes="FEVEREIRO",
+                data_arrecadacao=date(2025, 2, 15),
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                fonte_recurso="Recursos proprios",
+                valor_previsto_liquido="21000.00",
+                valor_arrecadado_liquido="20000.00",
+            ),
+            _arrecadacao(
+                natureza=natureza_fundeb,
+                mes="MARCO",
+                data_arrecadacao=date(2025, 3, 20),
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                fonte_recurso="FUNDEB",
+                valor_previsto_liquido="50000.00",
+                valor_arrecadado_liquido="47000.00",
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = receitas_tools.consultar_receitas(
+        filtros={"tipo_de_dado": "arrecadacao", "ano": 2025},
+        ordenar_por="valor_recebido",
+        ordem="desc",
+        limite=1,
+        campos=["mes", "categoria", "valor_recebido"],
+    )
+
+    assert resultado["total"] == 3
+    assert resultado["resultados"] == [
+        {
+            "mes": "MARCO",
+            "categoria": "Transferencias de Recursos do FUNDEB - Principal",
+            "valor_recebido": 47000.0,
+        }
+    ]
+    assert resultado["mensagem"] == "Mostrando 1 de 3 registros encontrados."
+    assert resultado["metadata"]["campos"] == ["mes", "categoria", "valor_recebido"]
+
+    session.close()
+
+
 def test_agregar_receitas_soma_valor_recebido_por_categoria(monkeypatch) -> None:
     session = _build_session()
     natureza_iptu = _natureza(

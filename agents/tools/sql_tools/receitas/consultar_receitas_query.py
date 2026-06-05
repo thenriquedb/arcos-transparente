@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_collection_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 
 from .consultar_receitas_schema import (
@@ -15,7 +19,8 @@ from .consultar_receitas_schema import (
     ConsultarReceitasResponse,
 )
 from .shared.filters import ALLOWED_RECEITA_FIELDS
-from .shared.querying import load_filtered_receitas, project_rows, sort_receitas
+from .shared.querying import SORT_FIELD_GETTERS, load_filtered_receitas
+from .shared.runtime import project_receita_fields
 
 
 @register(
@@ -87,36 +92,43 @@ def consultar_receitas(
         - `mensagem`: aviso quando a resposta estiver paginada.
         - `sugestao`: dica quando nenhum registro for encontrado.
     """
-    try:
-        params = ConsultarReceitasParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarReceitasMetadata(
-            ordenar_por="data",
-            ordem="desc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarReceitasResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+        },
+        schema_type=ConsultarReceitasParams,
+        on_error=lambda exc: ConsultarReceitasResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarReceitasMetadata(
+                ordenar_por="data",
+                ordem="desc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_receitas(session, params.filtros)
-        total = len(registros)
-        ordenados = sort_receitas(registros, params.ordenar_por, params.ordem)
-        pagina = ordenados[params.offset : params.offset + params.limite]
+        total, pagina = execute_collection_lookup(
+            registros,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            offset=params.offset,
+            limite=params.limite,
+            sort_key_getters=SORT_FIELD_GETTERS,
+            tie_breaker_getters=(lambda row: row.get("id") or 0,),
+        )
 
     metadata = ConsultarReceitasMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -127,27 +139,24 @@ def consultar_receitas(
         campos=params.campos or list(ALLOWED_RECEITA_FIELDS),
     )
 
-    if not pagina:
-        tipo_label = (
-            "arrecadacoes"
-            if params.filtros.tipo_de_dado == "arrecadacao"
-            else "lancamentos"
-        )
-        return ConsultarReceitasResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao=f"Nenhum registro de {tipo_label} encontrado com os filtros.",
-        ).model_dump(mode="json")
-
-    resultados = project_rows(pagina, params.campos)
-    mensagem = None
-    if total > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} registros encontrados."
-
-    return ConsultarReceitasResponse(
+    tipo_label = (
+        "arrecadacoes"
+        if params.filtros.tipo_de_dado == "arrecadacao"
+        else "lancamentos"
+    )
+    execution = LookupExecutionResult(
         total=total,
-        resultados=resultados,
+        rows=pagina,
+        suggestion=(
+            f"Nenhum registro de {tipo_label} encontrado com os filtros."
+            if not pagina
+            else None
+        ),
+    )
+    return build_lookup_response(
+        response_type=ConsultarReceitasResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=execution,
+        project_row=project_receita_fields,
+        campos=params.campos,
+    )

@@ -82,6 +82,12 @@ def agregar_despesas_por_funcao(
 
     Use esta tool quando a pergunta pedir total, comparacao, contagem ou ranking
     sobre as linhas agregadas do relatorio `despesas-por-funcao`.
+    NAO use para perguntas amplas como "qual foi o gasto com saude em 2025?"
+    quando o usuario nao pediu explicitamente apenas um total. Nesses casos,
+    use `consultar_despesas_por_funcao` e mostre os estagios
+    `valor_empenhado`, `valor_em_liquidacao`, `valor_liquidado` e `valor_pago`.
+    Se o usuario ja informar um ano, como "em 2025", esse recorte ja basta;
+    nao peca dia e mes para responder.
     NAO use para listar linhas individuais do relatorio; para isso use
     `consultar_despesas_por_funcao`.
     NAO use para planejamento mensal por programa ou acao; para isso use

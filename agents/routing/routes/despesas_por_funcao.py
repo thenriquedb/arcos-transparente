@@ -9,6 +9,56 @@ from agents.routing.extractors import _contains_any, _extract_limit, _extract_ye
 from agents.routing.models import RouteDecision
 
 
+_DESPESAS_POR_FUNCAO_SPEND_SIGNAL_KEYWORDS = (
+    "gasto",
+    "gastos",
+    "gastou",
+    "custo",
+    "custos",
+    "custou",
+    "valor gasto",
+    "pago",
+    "pagos",
+    "despesa",
+    "despesas",
+    "investido",
+    "investida",
+    "investimento",
+)
+
+_FUNCOES_DE_GOVERNO_ALIASES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("assistencia social", ("assistencia social", "assistencia")),
+    ("desporto e lazer", ("desporto", "esporte", "lazer")),
+    ("direitos da cidadania", ("direitos da cidadania", "cidadania")),
+    ("gestao ambiental", ("gestao ambiental", "meio ambiente", "ambiental")),
+    ("previdencia social", ("previdencia social", "previdencia")),
+    ("seguranca publica", ("seguranca publica", "seguranca")),
+    ("urbanismo", ("urbanismo",)),
+    ("administracao", ("administracao",)),
+    ("agricultura", ("agricultura",)),
+    ("cultura", ("cultura",)),
+    ("educacao", ("educacao",)),
+    ("energia", ("energia",)),
+    ("habitacao", ("habitacao",)),
+    ("legislativa", ("legislativa", "legislativo")),
+    ("saude", ("saude",)),
+    ("saneamento", ("saneamento",)),
+    ("trabalho", ("trabalho",)),
+    ("transporte", ("transporte",)),
+)
+
+
+def _extract_funcao_de_governo(normalized_text: str) -> str | None:
+    for funcao, aliases in _FUNCOES_DE_GOVERNO_ALIASES:
+        for alias in aliases:
+            if re.search(
+                rf"\b(?:na|no|da|do|com|em|para)\b\s+{re.escape(alias)}\b",
+                normalized_text,
+            ):
+                return funcao
+    return None
+
+
 def _strip_despesas_por_funcao_domain_keywords(normalized_text: str) -> str:
     stripped = normalized_text
     for keyword in DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS:
@@ -18,6 +68,10 @@ def _strip_despesas_por_funcao_domain_keywords(normalized_text: str) -> str:
 
 def _is_despesas_por_funcao_query(normalized_text: str) -> bool:
     if _contains_any(normalized_text, DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS):
+        return True
+    if _extract_funcao_de_governo(normalized_text) and any(
+        token in normalized_text for token in _DESPESAS_POR_FUNCAO_SPEND_SIGNAL_KEYWORDS
+    ):
         return True
     return (
         any(token in normalized_text for token in ("funcao", "funcoes"))
@@ -39,7 +93,7 @@ def _extract_despesas_por_funcao_filters(normalized_text: str) -> dict[str, obje
     filtros: dict[str, object] = {}
     if year := _extract_year(normalized_text):
         filtros["ano"] = year
-    if "saude" in normalized_text or "fumusa" in normalized_text:
+    if "fumusa" in normalized_text:
         filtros["origem"] = "saude"
     elif "prefeitura" in normalized_text:
         filtros["origem"] = "prefeitura"
@@ -66,6 +120,8 @@ def _extract_despesas_por_funcao_filters(normalized_text: str) -> dict[str, obje
             and re.fullmatch(r"(?:em\s+)?\d{4}", valor_sem_pontuacao) is None
         ):
             filtros["funcao"] = valor
+    elif funcao := _extract_funcao_de_governo(normalized_text):
+        filtros["funcao"] = funcao
 
     return filtros
 

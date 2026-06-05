@@ -8,6 +8,7 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_selected_fields
 from shared.utils.validation import (
     clean_text,
@@ -15,9 +16,6 @@ from shared.utils.validation import (
     parse_decimal,
     validate_date_period,
 )
-
-from .base import ContratosToolBaseSchema
-
 
 ALLOWED_CONTRACT_FIELDS = (
     "id",
@@ -54,7 +52,7 @@ TEXT_FALLBACK_TARGETS = {
 }
 
 
-class ContratosFiltroSchema(ContratosToolBaseSchema):
+class ContratosFiltroSchema(SqlToolBaseSchema):
     numero: str | None = None
     fornecedor: str | None = None
     documento_fornecedor: str | None = None
@@ -159,7 +157,7 @@ class ContratosFiltroSchema(ContratosToolBaseSchema):
         return candidates
 
 
-class CamposContratoSchema(ContratosToolBaseSchema):
+class CamposContratoSchema(SqlToolBaseSchema):
     campos: list[str] = Field(default_factory=list)
 
     @field_validator("campos", mode="before")

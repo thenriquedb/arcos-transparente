@@ -4,10 +4,15 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
-from sqlalchemy import func, literal, select
+from sqlalchemy import literal, select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_statement_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import (
     Contrato,
@@ -122,21 +127,19 @@ def _fetch_contratos(
         include_xml_original=include_xml_original,
         available_columns=available_columns,
     )
-    total = session.execute(
-        select(func.count()).select_from(base_stmt.order_by(None).subquery())
-    ).scalar_one()
-
-    order_column = CONTRACT_ORDER_COLUMNS[params.ordenar_por]
-    ordered_stmt = base_stmt.order_by(
-        order_column.desc() if params.ordem == "desc" else order_column.asc(),
-        Contrato.id.desc(),
+    total, contratos = execute_statement_lookup(
+        session,
+        stmt=base_stmt,
+        ordenar_por=params.ordenar_por,
+        ordem=params.ordem,
+        offset=params.offset,
+        limite=params.limite,
+        order_columns=CONTRACT_ORDER_COLUMNS,
+        tie_breakers=(Contrato.id.desc(),),
+        load_rows=lambda db_session, stmt: [
+            dict(row) for row in db_session.execute(stmt).mappings()
+        ],
     )
-    contratos = [
-        dict(row)
-        for row in session.execute(
-            ordered_stmt.offset(params.offset).limit(params.limite)
-        ).mappings()
-    ]
     return total, contratos
 
 
@@ -280,6 +283,13 @@ def _aplicar_aviso_valor_zero(
     return resultados
 
 
+def _project_contrato_lookup_item(
+    contrato: Contrato | dict[str, Any],
+    campos: list[str],
+) -> dict[str, Any]:
+    return _aplicar_aviso_valor_zero([project_contrato_fields(contrato, campos)])[0]
+
+
 @register(
     name="consultar_contratos",
     scope=PUBLIC_SCOPE,
@@ -396,31 +406,32 @@ def consultar_contratos(
         - `sugestao`: dica quando nenhum contrato for encontrado, incluindo
           orientacao para consultar `consultar_licitacoes` com os mesmos termos.
     """
-    try:
-        params = ConsultarContratosParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-                "incluir_detalhes": incluir_detalhes,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarContratosMetadata(
-            ordenar_por="data_inicio",
-            ordem="desc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarContratosResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+            "incluir_detalhes": incluir_detalhes,
+        },
+        schema_type=ConsultarContratosParams,
+        on_error=lambda exc: ConsultarContratosResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarContratosMetadata(
+                ordenar_por="data_inicio",
+                ordem="desc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         available_columns = get_contratos_available_columns(session)
@@ -478,28 +489,6 @@ def consultar_contratos(
         campos=params.campos or list(ALLOWED_CONTRACT_FIELDS),
     )
 
-    if not contratos:
-        sugestao = _SUGESTAO_SEM_RESULTADOS
-        if not include_descricao_despesa:
-            sugestao = (
-                build_descricao_despesa_unavailable_message(params.filtros) or sugestao
-            )
-        if params.incluir_detalhes and not details_available:
-            sugestao = build_contrato_details_unavailable_message()
-        return ConsultarContratosResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao=sugestao,
-        ).model_dump(mode="json")
-
-    resultados = [
-        project_contrato_fields(contrato, params.campos) for contrato in contratos
-    ]
-
-    # Sinaliza contratos com valor zero para o LLM encadear com licitacoes
-    resultados = _aplicar_aviso_valor_zero(resultados)
-
     mensagens: list[str] = []
     if not include_descricao_despesa:
         warning = build_descricao_despesa_unavailable_message(params.filtros)
@@ -514,15 +503,30 @@ def consultar_contratos(
                 fallback_target_field,
             )
         )
-    if total > len(resultados):
-        mensagens.append(
-            f"Mostrando {len(resultados)} de {total} registros encontrados."
-        )
-    mensagem = " ".join(mensagens) or None
-
-    return ConsultarContratosResponse(
+    execution = LookupExecutionResult(
         total=total,
-        resultados=resultados,
+        rows=contratos,
+        messages=mensagens if contratos else (),
+        suggestion=(
+            (
+                build_contrato_details_unavailable_message()
+                if params.incluir_detalhes and not details_available
+                else None
+            )
+            or (
+                build_descricao_despesa_unavailable_message(params.filtros)
+                if not include_descricao_despesa
+                else None
+            )
+            or _SUGESTAO_SEM_RESULTADOS
+            if not contratos
+            else None
+        ),
+    )
+    return build_lookup_response(
+        response_type=ConsultarContratosResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=execution,
+        project_row=_project_contrato_lookup_item,
+        campos=params.campos,
+    )

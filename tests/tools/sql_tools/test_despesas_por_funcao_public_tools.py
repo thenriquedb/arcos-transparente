@@ -91,6 +91,124 @@ def test_consultar_despesas_por_funcao_lista_por_funcao(monkeypatch) -> None:
             "periodo_fim": "2025-01-31",
         }
     ]
+    assert resultado["metadata"]["campos"] == [
+        "funcao",
+        "valor_pago",
+        "dotacao_atualizada",
+        "periodo_fim",
+    ]
+    assert resultado["metadata"]["explicacao_campos"] == {
+        "funcao": "Funcao de governo padronizada nacionalmente, como saude ou educacao.",
+        "valor_pago": "Valor efetivamente pago no periodo.",
+        "dotacao_atualizada": "Dotacao inicial somada aos creditos adicionais.",
+        "periodo_fim": "Data final do periodo consolidado no relatorio.",
+    }
+    assert resultado["metadata"]["campos_financeiros_prioritarios"] == [
+        "valor_empenhado",
+        "valor_em_liquidacao",
+        "valor_liquidado",
+        "valor_pago",
+    ]
+    assert resultado["metadata"]["explicacao_estagios_despesa"] == {
+        "valor_empenhado": "Valor ja comprometido oficialmente pela administracao.",
+        "valor_em_liquidacao": "Valor que esta em fase de conferencia antes da liquidacao.",
+        "valor_liquidado": "Valor com entrega ou servico reconhecido pela administracao.",
+        "valor_pago": "Valor efetivamente pago no periodo.",
+    }
+    assert (
+        resultado["metadata"]["orientacao_gasto_amplo"]
+        == "Em perguntas amplas sobre gasto por funcao, nao resuma a resposta em apenas um total. Mostre e diferencie valor_empenhado, valor_em_liquidacao, valor_liquidado e valor_pago."
+    )
+
+    session.close()
+
+
+def test_consultar_despesas_por_funcao_retorna_estagios_financeiros_por_padrao(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add(
+        DespesaPorFuncao(
+            arquivo_origem="despesas-por-funcao-prefeitura-2025.csv",
+            linha_origem=10,
+            origem="prefeitura",
+            exercicio=2025,
+            periodo_inicio=date(2025, 1, 1),
+            periodo_fim=date(2025, 12, 31),
+            unidade_gestora="PREFEITURA MUNICIPAL",
+            funcao="Saude",
+            dotacao_inicial=Decimal("1000000.00"),
+            creditos_adicionais=Decimal("250000.00"),
+            dotacao_atualizada=Decimal("1250000.00"),
+            valor_empenhado=Decimal("800000.00"),
+            valor_em_liquidacao=Decimal("600000.00"),
+            valor_liquidado=Decimal("580000.00"),
+            valor_pago=Decimal("550000.00"),
+        )
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = despesas_por_funcao_tools.consultar_despesas_por_funcao(
+        filtros={"ano": 2025, "funcao": "saude"},
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"][0]["valor_empenhado"] == 800000.0
+    assert resultado["resultados"][0]["valor_em_liquidacao"] == 600000.0
+    assert resultado["resultados"][0]["valor_liquidado"] == 580000.0
+    assert resultado["resultados"][0]["valor_pago"] == 550000.0
+
+    session.close()
+
+
+def test_consultar_despesas_por_funcao_detecta_funcao_sem_confundir_com_origem(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            DespesaPorFuncao(
+                arquivo_origem="despesas-por-funcao-prefeitura-2025.csv",
+                linha_origem=10,
+                origem="prefeitura",
+                exercicio=2025,
+                periodo_inicio=date(2025, 1, 1),
+                periodo_fim=date(2025, 1, 31),
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                funcao="Saude",
+                valor_pago=Decimal("550000.00"),
+            ),
+            DespesaPorFuncao(
+                arquivo_origem="despesas-por-funcao-saude-2025.csv",
+                linha_origem=11,
+                origem="saude",
+                exercicio=2025,
+                periodo_inicio=date(2025, 1, 1),
+                periodo_fim=date(2025, 1, 31),
+                unidade_gestora="FUMUSA",
+                funcao="Administracao",
+                valor_pago=Decimal("120000.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    decision = route_user_query("Quanto a prefeitura gastou na saude em 2025?")
+    tool = select_public_tools_for_query(
+        "Quanto a prefeitura gastou na saude em 2025?"
+    )[0]
+    resultado = tool.invoke(decision.tool_kwargs)
+
+    assert decision.tool_name == "agregar_despesas_por_funcao"
+    assert decision.tool_kwargs["filtros"] == {
+        "ano": 2025,
+        "origem": "prefeitura",
+        "funcao": "saude",
+    }
+    assert getattr(tool, "name", "") == "agregar_despesas_por_funcao"
+    assert resultado["valor_total"] == 550000.0
 
     session.close()
 

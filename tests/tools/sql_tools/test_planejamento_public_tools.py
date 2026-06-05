@@ -173,6 +173,66 @@ def test_consultar_planejamento_filtra_por_entidade_fumusa(monkeypatch) -> None:
     session.close()
 
 
+def test_consultar_planejamento_preserva_paginacao_ordenacao_e_projecao(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _planejamento(
+                mes="JANEIRO",
+                mes_num=1,
+                subfuncao="Atenção Básica",
+                acao="Manutenção da Atenção Primária à Saúde",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("150000.00"),
+                valor_pago=Decimal("9000.00"),
+            ),
+            _planejamento(
+                mes="FEVEREIRO",
+                mes_num=2,
+                subfuncao="Atenção Básica",
+                acao="Manutenção da Atenção Primária à Saúde",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("150000.00"),
+                valor_pago=Decimal("11000.00"),
+            ),
+            _planejamento(
+                mes="MARCO",
+                mes_num=3,
+                subfuncao="Vigilância Sanitária",
+                acao="Manutenção da Vigilância Sanitária",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("60000.00"),
+                valor_pago=Decimal("5000.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"ano": 2025},
+        ordenar_por="valor_pago",
+        ordem="desc",
+        limite=1,
+        campos=["mes", "acao", "valor_pago"],
+    )
+
+    assert resultado["total"] == 3
+    assert resultado["resultados"] == [
+        {
+            "mes": "FEVEREIRO",
+            "acao": "Manutenção da Atenção Primária à Saúde",
+            "valor_pago": 11000.0,
+        }
+    ]
+    assert resultado["mensagem"] == "Mostrando 1 de 3 registros encontrados."
+    assert resultado["metadata"]["campos"] == ["mes", "acao", "valor_pago"]
+
+    session.close()
+
+
 def test_agregar_planejamento_soma_valor_pago_por_subarea(monkeypatch) -> None:
     session = _build_session()
     session.add_all(

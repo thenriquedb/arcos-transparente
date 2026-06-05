@@ -7,10 +7,9 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_selected_fields
 from shared.utils.validation import clean_text, parse_decimal, parse_month
-
-from .base import ReceitasToolBaseSchema
 
 
 ALLOWED_RECEITA_FIELDS = (
@@ -74,7 +73,7 @@ ALLOWED_ORDER_VALUES = ("asc", "desc")
 ALLOWED_RECEITA_TYPES = ("arrecadacao", "lancamento")
 
 
-class ReceitaFiltroSchema(ReceitasToolBaseSchema):
+class ReceitaFiltroSchema(SqlToolBaseSchema):
     tipo_de_dado: str = "arrecadacao"
     ano: int | None = None
     mes: int | None = None
@@ -153,7 +152,7 @@ class ReceitaFiltroSchema(ReceitasToolBaseSchema):
         return self
 
 
-class CamposReceitaSchema(ReceitasToolBaseSchema):
+class CamposReceitaSchema(SqlToolBaseSchema):
     campos: list[str] = Field(default_factory=list)
 
     @field_validator("campos", mode="before")

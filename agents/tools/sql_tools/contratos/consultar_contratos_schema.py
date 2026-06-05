@@ -6,10 +6,10 @@ from typing import Any
 
 from pydantic import Field, field_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
-from .shared.base import ContratosToolBaseSchema
 from .shared.filters import (
     ALLOWED_CONTRACT_FIELDS,
     ALLOWED_CONTRACT_SORT_FIELDS,
@@ -19,7 +19,7 @@ from .shared.filters import (
 )
 
 
-class ConsultarContratosParams(ContratosToolBaseSchema):
+class ConsultarContratosParams(SqlToolBaseSchema):
     filtros: ContratosFiltroSchema = Field(default_factory=ContratosFiltroSchema)
     ordenar_por: str = "data_inicio"
     ordem: str = "desc"
@@ -75,7 +75,7 @@ class ConsultarContratosParams(ContratosToolBaseSchema):
         return CamposContratoSchema.model_validate({"campos": value}).campos
 
 
-class ConsultarContratosMetadata(ContratosToolBaseSchema):
+class ConsultarContratosMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     filtros_fallback_aplicados: dict[str, Any] | None = None
     ordenar_por: str
@@ -86,7 +86,7 @@ class ConsultarContratosMetadata(ContratosToolBaseSchema):
     campos: list[str] = Field(default_factory=lambda: list(ALLOWED_CONTRACT_FIELDS))
 
 
-class ConsultarContratosResponse(ContratosToolBaseSchema):
+class ConsultarContratosResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarContratosMetadata

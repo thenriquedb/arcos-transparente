@@ -4,10 +4,16 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
 from sqlalchemy import func, select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.aggregate import (
+    AggregateExecutionResult,
+    build_aggregate_response,
+    execute_statement_grouped,
+    execute_statement_total,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import FolhaServidor
 
@@ -100,30 +106,31 @@ def agregar_servidores(
         - `mensagem`: aviso quando so parte dos grupos for exibida.
         - `sugestao`: dica quando nenhum resultado for encontrado.
     """
-    try:
-        params = AgregarServidoresParams.model_validate(
-            {
-                "filtros": filtros,
-                "agrupar_por": agrupar_por,
-                "metrica": metrica,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = AgregarServidoresMetadata(
-            metrica="contagem",
-            ordenar_por="metrica",
-            ordem="desc",
-            limite=10,
-        )
-        return AgregarServidoresResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "agrupar_por": agrupar_por,
+            "metrica": metrica,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+        },
+        schema_type=AgregarServidoresParams,
+        on_error=lambda exc: AgregarServidoresResponse(
             total_grupos=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=AgregarServidoresMetadata(
+                metrica="contagem",
+                ordenar_por="metrica",
+                ordem="desc",
+                limite=10,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         mes_de_referencia_considerado, mes_padrao_aplicado = (
@@ -143,29 +150,34 @@ def agregar_servidores(
             mes_de_referencia_considerado=mes_de_referencia_considerado,
             mes_de_referencia_padrao_aplicado=mes_padrao_aplicado,
         )
-
         metric_expression = _build_metric_expression(params.metrica)
 
         if params.agrupar_por is None:
-            valor_total = session.execute(
-                apply_servidores_filters(
+            total_match, valor_total = execute_statement_total(
+                session,
+                count_stmt=apply_servidores_filters(
+                    select(func.count()),
+                    params.filtros,
+                    mes_de_referencia_considerado=mes_de_referencia_considerado,
+                ),
+                value_stmt=apply_servidores_filters(
                     select(metric_expression),
                     params.filtros,
                     mes_de_referencia_considerado=mes_de_referencia_considerado,
-                )
-            ).scalar_one()
-            valor_total_json = decimal_or_int_to_json(valor_total)
-            return AgregarServidoresResponse(
-                total_grupos=0,
-                resultados=[],
-                metadata=metadata,
-                valor_total=valor_total_json,
-                sugestao=(
-                    "Nenhum servidor encontrado com os filtros informados."
-                    if not valor_total_json
-                    else None
                 ),
-            ).model_dump(mode="json")
+            )
+            return build_aggregate_response(
+                response_type=AgregarServidoresResponse,
+                metadata=metadata,
+                execution=AggregateExecutionResult(
+                    valor_total=decimal_or_int_to_json(valor_total),
+                    suggestion=(
+                        "Nenhum servidor encontrado com os filtros informados."
+                        if total_match == 0
+                        else None
+                    ),
+                ),
+            )
 
         group_column = GROUP_BY_COLUMNS[params.agrupar_por]
         grouped_stmt = apply_servidores_filters(
@@ -174,48 +186,30 @@ def agregar_servidores(
             mes_de_referencia_considerado=mes_de_referencia_considerado,
         ).group_by(group_column)
 
-        total_grupos = session.execute(
-            select(func.count()).select_from(grouped_stmt.order_by(None).subquery())
-        ).scalar_one()
-
-        if params.ordenar_por == "metrica":
-            order_column = metric_expression
-        else:
-            order_column = group_column
-        grouped_stmt = grouped_stmt.order_by(
-            order_column.desc() if params.ordem == "desc" else order_column.asc()
-        ).limit(params.limite)
-
-        rows = session.execute(grouped_stmt).all()
-
-    if not rows:
-        return AgregarServidoresResponse(
-            total_grupos=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao="Nenhum servidor encontrado com os filtros informados.",
-        ).model_dump(mode="json")
-
-    resultados = []
-    for group_value, metric_value in rows:
-        item_payload = {
-            params.agrupar_por: group_value,
-            params.metrica: decimal_or_int_to_json(metric_value),
-        }
-        resultados.append(
-            AgregacaoServidoresItem.model_validate(item_payload).model_dump(
-                mode="json",
-                exclude_none=True,
-            )
+        total_grupos, rows = execute_statement_grouped(
+            session,
+            grouped_stmt=grouped_stmt,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            limite=params.limite,
+            group_column=group_column,
+            metric_expression=metric_expression,
         )
 
-    mensagem = None
-    if total_grupos > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total_grupos} grupos encontrados."
-
-    return AgregarServidoresResponse(
-        total_grupos=total_grupos,
-        resultados=resultados,
+    return build_aggregate_response(
+        response_type=AgregarServidoresResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=AggregateExecutionResult(
+            total_grupos=total_grupos,
+            rows=rows,
+            suggestion=(
+                "Nenhum servidor encontrado com os filtros informados."
+                if not rows
+                else None
+            ),
+        ),
+        item_model=AgregacaoServidoresItem,
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica,
+        serialize_metric=decimal_or_int_to_json,
+    )

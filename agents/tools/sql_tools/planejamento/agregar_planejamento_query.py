@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.aggregate import (
+    AggregateExecutionResult,
+    build_aggregate_response,
+    execute_collection_aggregate,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 
 from .agregar_planejamento_schema import (
@@ -17,8 +21,8 @@ from .agregar_planejamento_schema import (
 )
 from .shared.querying import (
     GROUP_FIELD_GETTERS,
-    calculate_metric,
     load_filtered_planejamentos,
+    METRIC_FIELD_GETTERS,
     metric_to_json,
 )
 
@@ -93,30 +97,31 @@ def agregar_planejamento(
         - `mensagem`: aviso quando so parte dos grupos for exibida.
         - `sugestao`: dica quando nenhum registro corresponder aos filtros.
     """
-    try:
-        params = AgregarPlanejamentoParams.model_validate(
-            {
-                "filtros": filtros,
-                "agrupar_por": agrupar_por,
-                "metrica": metrica,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = AgregarPlanejamentoMetadata(
-            metrica="soma_orcamento_atualizado",
-            ordenar_por="metrica",
-            ordem="desc",
-            limite=10,
-        )
-        return AgregarPlanejamentoResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "agrupar_por": agrupar_por,
+            "metrica": metrica,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+        },
+        schema_type=AgregarPlanejamentoParams,
+        on_error=lambda exc: AgregarPlanejamentoResponse(
             total_grupos=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=AgregarPlanejamentoMetadata(
+                metrica="soma_orcamento_atualizado",
+                ordenar_por="metrica",
+                ordem="desc",
+                limite=10,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_planejamentos(session, params.filtros)
@@ -130,60 +135,37 @@ def agregar_planejamento(
         limite=params.limite,
     )
 
-    if params.agrupar_por is None:
-        valor_total = metric_to_json(calculate_metric(registros, params.metrica))
-        return AgregarPlanejamentoResponse(
-            total_grupos=0,
-            resultados=[],
-            metadata=metadata,
-            valor_total=valor_total,
-            sugestao=(
-                "Nenhum registro de planejamento encontrado com os filtros."
-                if not valor_total
-                else None
-            ),
-        ).model_dump(mode="json")
-
-    grouped_rows: dict[str, list[Any]] = {}
-    group_getter = GROUP_FIELD_GETTERS[params.agrupar_por]
-    for registro in registros:
-        group_value = group_getter(registro) or "nao_informado"
-        grouped_rows.setdefault(str(group_value), []).append(registro)
-
-    resultados = []
-    for group_value, group_rows in grouped_rows.items():
-        metric_value = metric_to_json(calculate_metric(group_rows, params.metrica))
-        item_payload = {
-            params.agrupar_por: group_value,
-            params.metrica: metric_value,
-        }
-        resultados.append(
-            AgregacaoPlanejamentoItem.model_validate(item_payload).model_dump(
-                mode="json",
-                exclude_none=True,
-            )
+    execution = execute_collection_aggregate(
+        registros,
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica,
+        ordenar_por=params.ordenar_por,
+        ordem=params.ordem,
+        limite=params.limite,
+        group_key_getters=GROUP_FIELD_GETTERS,
+        metric_getters=METRIC_FIELD_GETTERS,
+        serialize_metric=metric_to_json,
+    )
+    suggestion = (
+        "Nenhum registro de planejamento encontrado com os filtros."
+        if (
+            (params.agrupar_por is None and not execution.valor_total)
+            or (params.agrupar_por is not None and not execution.rows)
         )
-
-    reverse = params.ordem == "desc"
-    if params.ordenar_por == "metrica":
-        resultados.sort(key=lambda item: item[params.metrica], reverse=reverse)
-    else:
-        resultados.sort(key=lambda item: item[params.agrupar_por], reverse=reverse)
-
-    total_grupos = len(resultados)
-    resultados = resultados[: params.limite]
-    mensagem = None
-    if total_grupos > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total_grupos} grupos encontrados."
-
-    return AgregarPlanejamentoResponse(
-        total_grupos=total_grupos,
-        resultados=resultados,
+        else None
+    )
+    return build_aggregate_response(
+        response_type=AgregarPlanejamentoResponse,
         metadata=metadata,
-        mensagem=mensagem,
-        sugestao=(
-            "Nenhum registro de planejamento encontrado com os filtros."
-            if not resultados
-            else None
+        execution=AggregateExecutionResult(
+            total_grupos=execution.total_grupos,
+            rows=execution.rows,
+            valor_total=execution.valor_total,
+            suggestion=suggestion,
         ),
-    ).model_dump(mode="json")
+        item_model=(
+            AgregacaoPlanejamentoItem if params.agrupar_por is not None else None
+        ),
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica if params.agrupar_por is not None else None,
+    )
