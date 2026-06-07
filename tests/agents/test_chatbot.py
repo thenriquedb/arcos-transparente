@@ -94,19 +94,18 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     monkeypatch.setattr(
         chatbot_agent,
         "ChatOpenAI",
-        lambda model: f"openai-model::{model}",
+        lambda model, api_key: f"openai-model::{model}::{api_key}",
     )
-    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
     monkeypatch.setenv("LLM_PROVIDER", "openai")
-    monkeypatch.setenv("OPENAI_MODEL", chatbot_agent.DEFAULT_OPENAI_MODEL)
-    monkeypatch.delenv("AGENT_MODEL", raising=False)
+    monkeypatch.setenv("OPENAI_MODEL", "gpt-4.1-mini")
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
 
     resultado = chatbot_agent.criar_agente_chatbot()
 
     nomes = {_tool_name(tool_obj) for tool_obj in capturado["tools"]}
 
     assert resultado == "agente-chatbot-fake"
-    assert capturado["model"] == f"openai-model::{chatbot_agent.DEFAULT_OPENAI_MODEL}"
+    assert capturado["model"] == "openai-model::gpt-4.1-mini::test-key"
     assert capturado["system_prompt"] == chatbot_agent.carregar_system_prompt()
     assert capturado["checkpointer"] is chatbot_agent.CHECKPOINTER
     assert "buscar_historico_de_pagamentos_do_servidor" in nomes
@@ -115,6 +114,71 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     assert "consultar_passagens" in nomes
     assert "consultar_transferencias_financeiras" in nomes
     assert "consultar_conhecimento_municipal" in nomes
+
+
+def test_obter_configuracao_llm_retorna_valores_canonicos(monkeypatch) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "openai")
+    monkeypatch.setenv("OPENAI_MODEL", "gpt-4.1-mini")
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+    assert chatbot_agent.obter_configuracao_llm() == {
+        "provider": "openai",
+        "model_name": "gpt-4.1-mini",
+        "api_key": "test-key",
+    }
+
+
+def test_obter_configuracao_llm_rejeita_openai_model_ausente(monkeypatch) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "openai")
+    monkeypatch.delenv("OPENAI_MODEL", raising=False)
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+    with pytest.raises(
+        ValueError,
+        match="OPENAI_MODEL deve ser informado no ambiente ou no \\.env\\.",
+    ):
+        chatbot_agent.obter_configuracao_llm()
+
+
+def test_obter_configuracao_llm_rejeita_openai_api_key_ausente(monkeypatch) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "openai")
+    monkeypatch.setenv("OPENAI_MODEL", "gpt-4.1-mini")
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+
+    with pytest.raises(
+        ValueError,
+        match="OPENAI_API_KEY deve ser informado no ambiente ou no \\.env\\.",
+    ):
+        chatbot_agent.obter_configuracao_llm()
+
+
+def test_obter_configuracao_llm_rejeita_provider_nao_suportado(
+    monkeypatch,
+) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "anthropic")
+    monkeypatch.setenv("OPENAI_MODEL", "gpt-4.1-mini")
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+    with pytest.raises(
+        ValueError,
+        match=(
+            "Provider nao suportado pelo chatbot: anthropic\\. "
+            "Defina LLM_PROVIDER=openai no ambiente ou no \\.env\\."
+        ),
+    ):
+        chatbot_agent.obter_configuracao_llm()
+
+
+def test_obter_configuracao_llm_rejeita_llm_provider_ausente(monkeypatch) -> None:
+    monkeypatch.delenv("LLM_PROVIDER", raising=False)
+    monkeypatch.setenv("OPENAI_MODEL", "gpt-4.1-mini")
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+    with pytest.raises(
+        ValueError,
+        match="LLM_PROVIDER deve ser informado no ambiente ou no \\.env\\.",
+    ):
+        chatbot_agent.obter_configuracao_llm()
 
 
 def test_system_prompt_orienta_salario_de_cargo_eleito_sem_pedir_nome() -> None:

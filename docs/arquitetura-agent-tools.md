@@ -212,8 +212,9 @@ Responsabilidades:
 Configuração atual do agente:
 
 - `LLM_PROVIDER=openai`
-- `OPENAI_MODEL=gpt-4.1-mini` por padrão
-- `OPENAI_API_KEY` obrigatória para criar o agente
+- `OPENAI_MODEL` definido explicitamente no ambiente ou no `.env`
+- `OPENAI_API_KEY` obrigatoria para criar o agente
+- `.env.example` documenta o contrato canonico usado no bootstrap
 
 Com isso, o runtime cidadão deixa de depender do router para decidir o fluxo de perguntas permitidas.
 

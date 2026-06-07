@@ -122,10 +122,17 @@ def friendly_error_message(exc: Exception) -> str:
     message = str(exc).strip()
     normalized = message.lower()
 
-    if "openai_api_key" in normalized:
+    if "openai_api_key" in normalized or "openai_model" in normalized:
         return (
-            "OPENAI_API_KEY nao configurada. Defina a chave no ambiente ou no .env "
-            "antes de iniciar o chat."
+            "Configuracao do chatbot incompleta. Defina LLM_PROVIDER=openai, "
+            "OPENAI_MODEL e OPENAI_API_KEY no ambiente ou no .env antes de iniciar "
+            "o chat."
+        )
+
+    if "provider nao suportado pelo chatbot" in normalized or "llm_provider" in normalized:
+        return (
+            "Provider nao suportado para o chatbot nesta fase. Use "
+            "LLM_PROVIDER=openai no ambiente ou no .env."
         )
 
     database_markers = (

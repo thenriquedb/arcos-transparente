@@ -190,9 +190,9 @@ conversacional concorrente.
 
 O bootstrap principal em `agents/chatbot/agent.py` usa:
 
-- `LLM_PROVIDER` ou `MODEL_PROVIDER`
-- `OPENAI_MODEL`, com padrao `gpt-4.1-mini`
-- `OPENAI_API_KEY`
+- `LLM_PROVIDER`, com valor `openai`
+- `OPENAI_MODEL`, definido explicitamente no ambiente ou no `.env`
+- `OPENAI_API_KEY`, definida explicitamente no ambiente ou no `.env`
 
 Hoje o provider real implementado no bootstrap principal e `ChatOpenAI`.
 

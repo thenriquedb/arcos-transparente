@@ -15,47 +15,43 @@ from agents.tools.registry import get_public_tools
 
 load_dotenv()
 
-DEFAULT_MODEL_PROVIDER = "openai"
-DEFAULT_OPENAI_MODEL = "gpt-4.1-mini"
+SUPPORTED_LLM_PROVIDER = "openai"
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SYSTEM_PROMPT_PATH = PROJECT_ROOT / "docs" / "agent-system-prompt.md"
 CHECKPOINTER = InMemorySaver()
 
 
+def _read_required_env(var_name: str) -> str:
+    value = os.getenv(var_name)
+    if value is None or not value.strip():
+        raise ValueError(f"{var_name} deve ser informado no ambiente ou no .env.")
+    return value.strip()
+
+
 def obter_configuracao_llm() -> dict[str, str]:
-    provider = (
-        (
-            os.getenv("LLM_PROVIDER")
-            or os.getenv("MODEL_PROVIDER")
-            or DEFAULT_MODEL_PROVIDER
-        )
-        .strip()
-        .lower()
-    )
-    if provider != DEFAULT_MODEL_PROVIDER:
+    provider = _read_required_env("LLM_PROVIDER").lower()
+    if provider != SUPPORTED_LLM_PROVIDER:
         raise ValueError(
-            f"Provider nao suportado pelo chatbot: {provider}. Use apenas 'openai'."
+            f"Provider nao suportado pelo chatbot: {provider}. "
+            "Defina LLM_PROVIDER=openai no ambiente ou no .env."
         )
 
-    model_name = (
-        os.getenv("OPENAI_MODEL") or os.getenv("AGENT_MODEL") or DEFAULT_OPENAI_MODEL
-    ).strip()
-    if not model_name:
-        raise ValueError("OPENAI_MODEL deve ser informado.")
-
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise ValueError("OPENAI_API_KEY nao configurada.")
+    model_name = _read_required_env("OPENAI_MODEL")
+    api_key = _read_required_env("OPENAI_API_KEY")
 
     return {
         "provider": provider,
         "model_name": model_name,
+        "api_key": api_key,
     }
 
 
 def criar_modelo_llm():
     config = obter_configuracao_llm()
-    return ChatOpenAI(model=config["model_name"])
+    return ChatOpenAI(
+        model=config["model_name"],
+        api_key=config["api_key"],
+    )
 
 
 def carregar_system_prompt() -> str:
