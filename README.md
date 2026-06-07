@@ -10,31 +10,36 @@ Sistema de importação e normalização de dados públicos da prefeitura de Arc
 uv sync
 ```
 
-### 2. Inicializar banco de dados
+### 2. Criar o arquivo `.env`
+
+```bash
+cp .env.example .env
+```
+
+Preencha ou ajuste no `.env`:
+
+```env
+DATABASE_URL=sqlite:///database/transparencia.db
+LLM_PROVIDER=openai
+OPENAI_MODEL=gpt-4.1-mini
+OPENAI_API_KEY=sua_chave_aqui
+```
+
+`LLM_PROVIDER` deve permanecer como `openai` nesta fase. O `.env.example`
+ja traz um modelo OpenAI recomendado; altere `OPENAI_MODEL` apenas se quiser
+usar outro modelo OpenAI suportado.
+
+### 3. Inicializar banco de dados
 
 ```bash
 uv run python cli.py db init
 ```
 
-### 3. Importar dados
+### 4. Importar dados
 
 ```bash
 uv run python cli.py importar
 ```
-
-### 4. Configurar o agente com OpenAI
-
-O provider oficial desta fase e a OpenAI.
-
-Configure no `.env`:
-
-```env
-OPENAI_API_KEY=sua_chave_aqui
-OPENAI_MODEL=gpt-4o-mini
-LLM_PROVIDER=openai
-```
-
-`OPENAI_MODEL` e opcional. Se nao for informado, o projeto usa `gpt-4o-mini`.
 
 ### 5. Gerar o índice RAG local do acervo markdown
 
