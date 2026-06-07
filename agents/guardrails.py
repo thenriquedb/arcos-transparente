@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 import re
 
+from agents.chatbot.help_messages import build_scope_help_message
 from agents.routing.constants import (
     SUPPORTED_SCOPE_STRONG_KEYWORDS,
     SUPPORTED_SCOPE_WEAK_KEYWORDS,
@@ -227,16 +228,7 @@ def evaluate_public_query_guardrails(
     return GuardrailDecision(
         allowed=False,
         category="out_of_scope",
-        message=(
-            "Posso ajudar apenas com consultas aos dados públicos municipais "
-            "disponíveis neste sistema e com o acervo municipal curado local, "
-            "especialmente sobre servidores, secretarias, salários-base, "
-            "histórico de pagamentos, licitações, despesas, diárias, "
-            "passagens, frota, veículos, patrimônio, quadro de pessoal, "
-            "planejamento, receitas, transferências financeiras, emendas "
-            "parlamentares, políticos eleitos, telefones úteis, estrutura "
-            "organizacional e horários de ônibus."
-        ),
+        message=build_scope_help_message(),
     )
 
 

@@ -13,6 +13,7 @@ from typing import Any, Protocol
 from uuid import uuid4
 
 from agents.chatbot.agent import criar_agente_chatbot
+from agents.chatbot.help_messages import build_scope_help_message
 from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
 from agents.chatbot.policy import evaluate_deterministic_policy
 from agents.tools.registry import get_public_tools
@@ -519,6 +520,14 @@ def _build_local_response(question: str) -> ChatResponse | None:
                 "quadro de pessoal e eleitos."
             ),
             metadata={"local_response": "identity"},
+        )
+    if re.fullmatch(
+        r"(o que posso perguntar|o que eu posso perguntar|o que posso consultar|sobre o que voce pode responder)\??",
+        normalized,
+    ):
+        return ChatResponse(
+            content=build_scope_help_message(),
+            metadata={"local_response": "scope_help"},
         )
     return None
 

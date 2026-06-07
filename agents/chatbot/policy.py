@@ -21,6 +21,7 @@ _PROTECTED_ACRONYMS = {
     "PSF": "Programa Saude da Familia",
     "CRAS": "Centro de Referencia de Assistencia Social",
     "CREAS": "Centro de Referencia Especializado de Assistencia Social",
+    "FUMUSA": "Fundação Municipal de Saúde e Assistência"
 }
 _CONFIRMATION_TOKENS = frozenset(
     {

@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 import agents.chatbot.agent as chatbot_agent
+from agents.chatbot.help_messages import build_scope_help_message
 from agents.chatbot.cli import run_interactive, run_once
 from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
 from agents.chatbot.core import (
@@ -358,6 +359,19 @@ def test_chatbot_application_bloqueia_fora_do_escopo_sem_chamar_backend() -> Non
     assert response.guardrail_triggered is True
     assert response.metadata == {"guardrail_category": "out_of_scope"}
     assert "dados públicos municipais" in response.content
+    assert backend.calls == []
+
+
+def test_chatbot_application_responde_escopo_com_lista_e_exemplos_sem_chamar_backend() -> (
+    None
+):
+    backend = FakeBackend()
+    app = ChatbotApplication(backend=backend)
+
+    response = app.ask("O que posso perguntar?")
+
+    assert response.content == build_scope_help_message()
+    assert response.metadata == {"local_response": "scope_help"}
     assert backend.calls == []
 
 
@@ -1037,18 +1051,7 @@ def test_chatbot_application_stream_bloqueia_followup_apos_turno_bloqueado() -> 
         == "resposta para: Quanto foi arrecadado com IPTU em 2025?"
     )
     assert resposta_bloqueada.guardrail_triggered is True
-    assert chunks == [
-        (
-            "Posso ajudar apenas com consultas aos dados públicos municipais "
-            "disponíveis neste sistema e com o acervo municipal curado local, "
-            "especialmente sobre servidores, secretarias, salários-base, "
-            "histórico de pagamentos, licitações, despesas, diárias, "
-            "passagens, frota, veículos, patrimônio, quadro de pessoal, "
-            "planejamento, receitas, transferências financeiras, emendas "
-            "parlamentares, políticos eleitos, telefones úteis, estrutura "
-            "organizacional e horários de ônibus."
-        )
-    ]
+    assert chunks == [build_scope_help_message()]
     assert backend.calls == [
         ("Quanto foi arrecadado com IPTU em 2025?", "sessao-stream-followup-bloqueado")
     ]
