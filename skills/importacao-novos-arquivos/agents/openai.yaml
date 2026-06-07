@@ -1,7 +1,0 @@
-interface:
-  display_name: "Importacao XML Arcos"
-  short_description: "Amplie a ingestao de dados do projeto"
-  default_prompt: "Use $importacao-novos-arquivos para adicionar um novo fluxo de importacao neste projeto."
-
-policy:
-  allow_implicit_invocation: true
