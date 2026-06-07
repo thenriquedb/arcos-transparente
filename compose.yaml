@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      PORT: ${DOCKER_PORT:-8501}
+      DATABASE_URL: ${DOCKER_DATABASE_URL:-sqlite:////app/runtime/database/transparencia.db}
+      RAG_PERSIST_DIRECTORY: ${DOCKER_RAG_PERSIST_DIRECTORY:-/app/runtime/vector_store/knowledge_markdown}
+    ports:
+      - "${DOCKER_PORT:-8501}:${DOCKER_PORT:-8501}"
+    volumes:
+      - app_runtime:/app/runtime
+
+volumes:
+  app_runtime:

@@ -4,15 +4,35 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 import os
+from pathlib import Path
 import unicodedata
 from typing import Generator
 
 from dotenv import load_dotenv
+from sqlalchemy.engine import make_url
 from sqlalchemy import Engine, create_engine, event
 from sqlalchemy.orm import Session, sessionmaker
 
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///database/transparencia.db")
+
+
+def _ensure_sqlite_storage_directory(database_url: str) -> None:
+    """Cria o diretório pai do arquivo SQLite quando a URL aponta para disco."""
+
+    url = make_url(database_url)
+    if not url.drivername.startswith("sqlite"):
+        return
+
+    database = url.database
+    if not database or database == ":memory:":
+        return
+
+    # URLs SQLite em arquivo local precisam do diretório pai existente.
+    Path(database).expanduser().parent.mkdir(parents=True, exist_ok=True)
+
+
+_ensure_sqlite_storage_directory(DATABASE_URL)
 
 
 engine: Engine = create_engine(

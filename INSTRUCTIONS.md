@@ -59,6 +59,47 @@ Crie `.env` na raiz:
 DATABASE_URL=sqlite:///database/transparencia.db
 ```
 
+Para o chatbot web, use tambem:
+
+```env
+LLM_PROVIDER=openai
+OPENAI_MODEL=gpt-4.1-mini
+OPENAI_API_KEY=sua_chave_openai_aqui
+```
+
+---
+
+## Execução com Docker
+
+O repositório agora inclui `Dockerfile`, `compose.yaml` e
+`docker/entrypoint.sh` para o fluxo oficial de containerização. A referência
+operacional completa está em `docs/docker.md`.
+
+Fluxo operacional recomendado:
+
+```bash
+docker compose build
+docker compose run --rm app python cli.py db init
+docker compose run --rm app python cli.py importar
+docker compose run --rm app python cli.py rag index
+docker compose up app
+```
+
+Overrides opcionais para o runtime Docker:
+
+```env
+DOCKER_PORT=8501
+DOCKER_DATABASE_URL=sqlite:////app/runtime/database/transparencia.db
+DOCKER_RAG_PERSIST_DIRECTORY=/app/runtime/vector_store/knowledge_markdown
+```
+
+Notas operacionais:
+
+- o volume persistente do container deve preservar `/app/runtime`
+- a implementação atual e de instancia unica stateful
+- a importacao continua recriando toda a base antes da carga
+- o entrypoint do container prepara os diretórios de runtime antes de subir o app
+
 ---
 
 ## Estrutura do projeto

@@ -56,6 +56,7 @@ uv run python cli.py rag status
 ## Sumário Da Documentação
 
 - [INSTRUCTIONS.md](./INSTRUCTIONS.md): guia geral do projeto, ambiente, comandos, modelagem e operação
+- [Guia Docker](./docs/docker.md): fluxo oficial de containerização com Docker e persistência local
 - [Contexto para Codex CLI](./docs/codex-cli-contexto.md): resumo atual do projeto, decisoes tecnicas e pontos de atencao para novas sessoes
 - [Arquitetura de agent e tools](./docs/arquitetura-agent-tools.md): visão da arquitetura híbrida com router, registry e tools públicas
 - [Prompt do agente](./docs/agent-system-prompt.md): instruções de sistema usadas pelo assistente em produção
@@ -96,6 +97,28 @@ Ou via Homebrew:
 brew install uv
 ```
 
+## Execução Com Docker
+
+O repositório agora inclui `Dockerfile`, `compose.yaml` e um entrypoint para
+subir a interface Streamlit por padrão. O guia completo está em
+[docs/docker.md](./docs/docker.md).
+
+Fluxo recomendado:
+
+```bash
+docker compose build
+docker compose run --rm app python cli.py db init
+docker compose run --rm app python cli.py importar
+docker compose run --rm app python cli.py rag index
+docker compose up app
+```
+
+Observacoes importantes:
+
+- o fluxo usa uma unica instancia stateful
+- o volume `app_runtime` preserva banco SQLite e indice RAG
+- voce pode sobrescrever os defaults do Docker com `DOCKER_PORT`, `DOCKER_DATABASE_URL` e `DOCKER_RAG_PERSIST_DIRECTORY`
+
 ## Estrutura do Projeto
 
 ```
@@ -118,4 +141,4 @@ arcos-transparente/
 
 ## Licença
 
-MIT
+AGPL
