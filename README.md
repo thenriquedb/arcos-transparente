@@ -103,7 +103,15 @@ O repositório agora inclui `Dockerfile`, `compose.yaml` e um entrypoint para
 subir a interface Streamlit por padrão. O guia completo está em
 [docs/docker.md](./docs/docker.md).
 
-Fluxo recomendado:
+Para deploy automatizado, subir o container já executa `db init`, `importar` e
+`rag index` antes de abrir o Streamlit:
+
+```bash
+docker compose build
+docker compose up app
+```
+
+Se quiser rodar as rotinas manualmente, o fluxo continua disponível:
 
 ```bash
 docker compose build
@@ -117,6 +125,8 @@ Observacoes importantes:
 
 - o fluxo usa uma unica instancia stateful
 - o volume `app_runtime` preserva banco SQLite e indice RAG
+- por padrao, o startup do container roda `db init`, `importar` e `rag index`
+- voce pode desativar esse bootstrap automatico com `AUTO_BOOTSTRAP_ON_START=0`
 - voce pode sobrescrever os defaults do Docker com `DOCKER_PORT`, `DOCKER_DATABASE_URL` e `DOCKER_RAG_PERSIST_DIRECTORY`
 
 ## Estrutura do Projeto

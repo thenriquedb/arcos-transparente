@@ -75,7 +75,15 @@ O repositório agora inclui `Dockerfile`, `compose.yaml` e
 `docker/entrypoint.sh` para o fluxo oficial de containerização. A referência
 operacional completa está em `docs/docker.md`.
 
-Fluxo operacional recomendado:
+Para deploy automatizado, o container agora executa `db init`, `importar` e
+`rag index` no startup padrão antes de subir o Streamlit:
+
+```bash
+docker compose build
+docker compose up app
+```
+
+Se precisar rodar as rotinas manualmente, o fluxo continua disponível:
 
 ```bash
 docker compose build
@@ -91,6 +99,7 @@ Overrides opcionais para o runtime Docker:
 DOCKER_PORT=8501
 DOCKER_DATABASE_URL=sqlite:////app/runtime/database/transparencia.db
 DOCKER_RAG_PERSIST_DIRECTORY=/app/runtime/vector_store/knowledge_markdown
+AUTO_BOOTSTRAP_ON_START=1
 ```
 
 Notas operacionais:
@@ -98,6 +107,8 @@ Notas operacionais:
 - o volume persistente do container deve preservar `/app/runtime`
 - a implementação atual e de instancia unica stateful
 - a importacao continua recriando toda a base antes da carga
+- por padrao, esse recarregamento e o `rag index` acontecem automaticamente em cada startup
+- use `AUTO_BOOTSTRAP_ON_START=0` se quiser subir o app sem bootstrap automatico
 - o entrypoint do container prepara os diretórios de runtime antes de subir o app
 
 ---

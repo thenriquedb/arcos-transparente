@@ -8,6 +8,7 @@ services:
       PORT: ${DOCKER_PORT:-8501}
       DATABASE_URL: ${DOCKER_DATABASE_URL:-sqlite:////app/runtime/database/transparencia.db}
       RAG_PERSIST_DIRECTORY: ${DOCKER_RAG_PERSIST_DIRECTORY:-/app/runtime/vector_store/knowledge_markdown}
+      AUTO_BOOTSTRAP_ON_START: ${AUTO_BOOTSTRAP_ON_START:-1}
     ports:
       - "${DOCKER_PORT:-8501}:${DOCKER_PORT:-8501}"
     volumes:

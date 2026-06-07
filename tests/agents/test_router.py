@@ -61,6 +61,14 @@ def test_try_route_historico_isolado_permanece_disponivel() -> None:
     assert decision.tool_kwargs == {"nome": "pedro oliveira"}
 
 
+def test_try_route_historico_reconhece_formato_quanto_nome_recebe() -> None:
+    decision = _try_route_historico(_normalize("Quanto Lincoln manuel correa recebe?"))
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": "lincoln manuel correa"}
+
+
 def test_try_route_agregacao_isolado_permanece_disponivel() -> None:
     decision = _try_route_agregacao(
         _normalize("quais os 10 maiores salarios da prefeitura?")

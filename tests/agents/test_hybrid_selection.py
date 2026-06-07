@@ -115,6 +115,25 @@ def test_hybrid_selector_prioriza_contato_de_eleitos_sem_chamar_modelo() -> None
     )
 
 
+def test_hybrid_selector_prioriza_historico_de_salario_individual() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver salario individual")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quanto Lincoln manuel correa recebe?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_salary_history_query"
+    assert selection.candidate_tool_names == (
+        "buscar_historico_de_pagamentos_do_servidor",
+    )
+
+
 def test_hybrid_selector_reaproveita_historico_em_confirmacao_de_contato_de_eleitos() -> (
     None
 ):

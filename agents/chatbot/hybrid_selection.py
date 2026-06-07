@@ -279,6 +279,9 @@ def _select_with_heuristics(
     history: Sequence[HistoryMessage],
 ) -> HybridToolSelection | None:
     if not _is_elected_contact_query(question, history=history):
+        salary_history_selection = _select_salary_history_with_router(question)
+        if salary_history_selection is not None:
+            return salary_history_selection
         spend_selection = _select_broad_spend_query(question)
         if spend_selection is not None:
             return spend_selection
@@ -308,6 +311,30 @@ def _select_with_heuristics(
         candidate_tool_names=tuple(candidate_names),
         confidence="high",
         reason_code="heuristic_elected_contacts",
+    )
+
+
+def _select_salary_history_with_router(
+    question: str,
+) -> HybridToolSelection | None:
+    route = route_user_query(question)
+    if (
+        not route.confident
+        or route.tool_name != "buscar_historico_de_pagamentos_do_servidor"
+    ):
+        return None
+
+    candidate_names = _normalize_candidate_names([route.tool_name])
+    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
+    if len(candidate_tools) != len(candidate_names):
+        return None
+
+    return HybridToolSelection(
+        action="allow",
+        candidate_tools=candidate_tools,
+        candidate_tool_names=tuple(candidate_names),
+        confidence="high",
+        reason_code="heuristic_salary_history_query",
     )
 
 
