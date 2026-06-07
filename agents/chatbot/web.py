@@ -129,7 +129,10 @@ def friendly_error_message(exc: Exception) -> str:
             "o chat."
         )
 
-    if "provider nao suportado pelo chatbot" in normalized or "llm_provider" in normalized:
+    if (
+        "provider nao suportado pelo chatbot" in normalized
+        or "llm_provider" in normalized
+    ):
         return (
             "Provider nao suportado para o chatbot nesta fase. Use "
             "LLM_PROVIDER=openai no ambiente ou no .env."
