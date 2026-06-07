@@ -40,11 +40,7 @@ ALLOWED_PASSAGENS_SORT_FIELDS = {
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
-class PassagemToolBaseSchema(SqlToolBaseSchema):
-    pass
-
-
-class PassagemFiltroSchema(PassagemToolBaseSchema):
+class PassagemFiltroSchema(SqlToolBaseSchema):
     origem: str | None = None
     ano: int | None = None
     periodo_inicio: date | None = None
@@ -77,7 +73,7 @@ class PassagemFiltroSchema(PassagemToolBaseSchema):
         return parse_date(value)
 
 
-class ConsultarPassagensParams(PassagemToolBaseSchema):
+class ConsultarPassagensParams(SqlToolBaseSchema):
     filtros: PassagemFiltroSchema = Field(default_factory=PassagemFiltroSchema)
     ordenar_por: str = "periodo_fim"
     ordem: str = "desc"
@@ -133,7 +129,7 @@ class ConsultarPassagensParams(PassagemToolBaseSchema):
         )
 
 
-class ConsultarPassagensMetadata(PassagemToolBaseSchema):
+class ConsultarPassagensMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -142,7 +138,7 @@ class ConsultarPassagensMetadata(PassagemToolBaseSchema):
     campos: list[str] = Field(default_factory=lambda: list(ALLOWED_PASSAGENS_FIELDS))
 
 
-class ConsultarPassagensResponse(PassagemToolBaseSchema):
+class ConsultarPassagensResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarPassagensMetadata

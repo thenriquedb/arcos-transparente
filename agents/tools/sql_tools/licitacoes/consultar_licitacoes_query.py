@@ -4,14 +4,18 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_statement_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import InstrumentoContratual, Licitacao
-from shared.utils.decimal_to_float import decimal_to_float
 from shared.utils.text import matches_text_query
 
 from .consultar_licitacoes_schema import (
@@ -83,6 +87,24 @@ def _aplicar_aviso_valor_estimado_zero(
         ):
             licitacao["aviso"] = _AVISO_VALOR_ESTIMADO_ZERO
     return resultados
+
+
+def _apply_lookup_detail_options(stmt):
+    return stmt.options(
+        selectinload(Licitacao.vencedores),
+        selectinload(Licitacao.instrumentos_contratuais).selectinload(
+            InstrumentoContratual.materias
+        ),
+        selectinload(Licitacao.instrumentos_contratuais).selectinload(
+            InstrumentoContratual.fornecedor
+        ),
+    )
+
+
+def _valor_total_estimado_to_json(valor_total_estimado: Any) -> float:
+    if valor_total_estimado is None:
+        return 0.0
+    return float(valor_total_estimado)
 
 
 @register(
@@ -199,55 +221,48 @@ def consultar_licitacoes(
         - `sugestao`: dica quando nenhuma licitacao for encontrada, incluindo
           orientacao para consultar `consultar_contratos` com os mesmos termos.
     """
-    try:
-        params = ConsultarLicitacoesParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-                "incluir_detalhes": incluir_detalhes,
-                "max_vencedores": max_vencedores,
-                "max_instrumentos": max_instrumentos,
-                "max_itens": max_itens,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarLicitacoesMetadata(
-            ordenar_por="data_abertura",
-            ordem="desc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarLicitacoesResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+            "incluir_detalhes": incluir_detalhes,
+            "max_vencedores": max_vencedores,
+            "max_instrumentos": max_instrumentos,
+            "max_itens": max_itens,
+        },
+        schema_type=ConsultarLicitacoesParams,
+        on_error=lambda exc: ConsultarLicitacoesResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarLicitacoesMetadata(
+                ordenar_por="data_abertura",
+                ordem="desc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         base_stmt = apply_licitacoes_filters(select(Licitacao), params.filtros)
-        order_column = BIDDING_ORDER_COLUMNS[params.ordenar_por]
-        ordered_stmt = base_stmt.order_by(
-            order_column.desc() if params.ordem == "desc" else order_column.asc(),
-            Licitacao.numero.asc(),
-        )
-
-        if params.incluir_detalhes:
-            ordered_stmt = ordered_stmt.options(
-                selectinload(Licitacao.vencedores),
-                selectinload(Licitacao.instrumentos_contratuais).selectinload(
-                    InstrumentoContratual.materias
-                ),
-                selectinload(Licitacao.instrumentos_contratuais).selectinload(
-                    InstrumentoContratual.fornecedor
-                ),
-            )
 
         if params.filtros.objeto:
+            order_column = BIDDING_ORDER_COLUMNS[params.ordenar_por]
+            ordered_stmt = base_stmt.order_by(
+                order_column.desc() if params.ordem == "desc" else order_column.asc(),
+                Licitacao.numero.asc(),
+            )
+            if params.incluir_detalhes:
+                ordered_stmt = _apply_lookup_detail_options(ordered_stmt)
+
             todas_licitacoes_filtradas = [
                 licitacao
                 for licitacao in session.execute(ordered_stmt).scalars().all()
@@ -262,30 +277,29 @@ def consultar_licitacoes(
                 params.offset : params.offset + params.limite
             ]
         else:
-            total = session.execute(
-                select(func.count()).select_from(base_stmt.order_by(None).subquery())
-            ).scalar_one()
+            total, licitacoes = execute_statement_lookup(
+                session,
+                stmt=base_stmt,
+                ordenar_por=params.ordenar_por,
+                ordem=params.ordem,
+                offset=params.offset,
+                limite=params.limite,
+                order_columns=BIDDING_ORDER_COLUMNS,
+                tie_breakers=(Licitacao.numero.asc(),),
+                load_rows=lambda db_session, stmt: (
+                    db_session.execute(
+                        _apply_lookup_detail_options(stmt)
+                        if params.incluir_detalhes
+                        else stmt
+                    )
+                    .scalars()
+                    .all()
+                ),
+            )
             total_subquery = base_stmt.order_by(None).subquery()
             valor_total_estimado = session.execute(
                 select(func.coalesce(func.sum(total_subquery.c.valor_estimado), 0))
             ).scalar_one()
-            licitacoes = (
-                session.execute(ordered_stmt.offset(params.offset).limit(params.limite))
-                .scalars()
-                .all()
-            )
-
-        resultados = [
-            project_licitacao_fields(
-                licitacao,
-                params.campos,
-                incluir_detalhes=params.incluir_detalhes,
-                max_vencedores=params.max_vencedores,
-                max_instrumentos=params.max_instrumentos,
-                max_itens=params.max_itens,
-            )
-            for licitacao in licitacoes
-        ]
 
     metadata = ConsultarLicitacoesMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -297,26 +311,26 @@ def consultar_licitacoes(
         incluir_detalhes=params.incluir_detalhes,
     )
 
-    if not resultados:
-        return ConsultarLicitacoesResponse(
-            total=0,
-            valor_total_estimado=0.0,
-            resultados=[],
-            metadata=metadata,
-            sugestao=_SUGESTAO_SEM_RESULTADOS,
-        ).model_dump(mode="json")
-
-    # Sinaliza licitacoes com valor estimado zero para o LLM encadear com contratos
-    resultados = _aplicar_aviso_valor_estimado_zero(resultados)
-
-    mensagem = None
-    if total > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} registros encontrados."
-
-    return ConsultarLicitacoesResponse(
+    execution = LookupExecutionResult(
         total=total,
-        valor_total_estimado=decimal_to_float(valor_total_estimado),
-        resultados=resultados,
+        rows=licitacoes,
+        response_updates={
+            "valor_total_estimado": _valor_total_estimado_to_json(valor_total_estimado)
+        },
+        suggestion=_SUGESTAO_SEM_RESULTADOS if not licitacoes else None,
+    )
+    return build_lookup_response(
+        response_type=ConsultarLicitacoesResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=execution,
+        project_row=lambda licitacao, requested_fields: project_licitacao_fields(
+            licitacao,
+            requested_fields,
+            incluir_detalhes=params.incluir_detalhes,
+            max_vencedores=params.max_vencedores,
+            max_instrumentos=params.max_instrumentos,
+            max_itens=params.max_itens,
+        ),
+        campos=params.campos,
+        transform_results=_aplicar_aviso_valor_estimado_zero,
+    )

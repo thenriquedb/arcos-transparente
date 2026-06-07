@@ -21,6 +21,7 @@ class LookupExecutionResult:
     total: int
     rows: Sequence[Any]
     metadata_updates: Mapping[str, Any] = field(default_factory=dict)
+    response_updates: Mapping[str, Any] = field(default_factory=dict)
     messages: Sequence[str | None] = field(default_factory=tuple)
     suggestion: str | None = None
 
@@ -91,10 +92,14 @@ def build_lookup_response(
     execution: LookupExecutionResult,
     project_row: Callable[[Any, list[str]], dict[str, Any]],
     campos: list[str],
+    transform_results: Callable[[list[dict[str, Any]]], list[dict[str, Any]]]
+    | None = None,
+    pagination_message_builder: Callable[[int, int], str] | None = None,
 ) -> dict[str, Any]:
     """Shape a normalized lookup result into the public response envelope."""
 
     messages = list(execution.messages)
+    response_payload = dict(execution.response_updates)
     if not execution.rows:
         return response_type(
             total=0,
@@ -102,13 +107,19 @@ def build_lookup_response(
             metadata=metadata,
             mensagem=compose_message(messages),
             sugestao=execution.suggestion,
+            **response_payload,
         ).model_dump(mode="json")
 
     resultados = [project_row(row, campos) for row in execution.rows]
-    if execution.total > len(resultados):
-        messages.append(
-            f"Mostrando {len(resultados)} de {execution.total} registros encontrados."
+    if transform_results is not None:
+        resultados = transform_results(resultados)
+
+    offset = getattr(metadata, "offset", 0) or 0
+    if execution.total > offset + len(resultados):
+        message_builder = pagination_message_builder or (
+            lambda shown, total: f"Mostrando {shown} de {total} registros encontrados."
         )
+        messages.append(message_builder(len(resultados), execution.total))
 
     return response_type(
         total=execution.total,
@@ -116,4 +127,5 @@ def build_lookup_response(
         metadata=metadata,
         mensagem=compose_message(messages),
         sugestao=execution.suggestion,
+        **response_payload,
     ).model_dump(mode="json")

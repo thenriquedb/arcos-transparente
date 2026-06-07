@@ -6,13 +6,13 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
 from .consultar_despesas_por_funcao_schema import (
     ALLOWED_ORDER_VALUES,
     DespesasPorFuncaoFiltroSchema,
-    DespesasPorFuncaoToolBaseSchema,
 )
 
 
@@ -34,7 +34,7 @@ ALLOWED_DESPESAS_POR_FUNCAO_METRICS = {
 }
 
 
-class AgregarDespesasPorFuncaoParams(DespesasPorFuncaoToolBaseSchema):
+class AgregarDespesasPorFuncaoParams(SqlToolBaseSchema):
     filtros: DespesasPorFuncaoFiltroSchema = Field(
         default_factory=DespesasPorFuncaoFiltroSchema
     )
@@ -100,7 +100,7 @@ class AgregarDespesasPorFuncaoParams(DespesasPorFuncaoToolBaseSchema):
         return self
 
 
-class AgregarDespesasPorFuncaoMetadata(DespesasPorFuncaoToolBaseSchema):
+class AgregarDespesasPorFuncaoMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -109,7 +109,7 @@ class AgregarDespesasPorFuncaoMetadata(DespesasPorFuncaoToolBaseSchema):
     limite: int
 
 
-class AgregarDespesasPorFuncaoResponse(DespesasPorFuncaoToolBaseSchema):
+class AgregarDespesasPorFuncaoResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarDespesasPorFuncaoMetadata

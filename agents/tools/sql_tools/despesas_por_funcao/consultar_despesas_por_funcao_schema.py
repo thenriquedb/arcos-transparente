@@ -75,11 +75,7 @@ ALLOWED_DESPESAS_POR_FUNCAO_SORT_FIELDS = {
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
-class DespesasPorFuncaoToolBaseSchema(SqlToolBaseSchema):
-    pass
-
-
-class DespesasPorFuncaoFiltroSchema(DespesasPorFuncaoToolBaseSchema):
+class DespesasPorFuncaoFiltroSchema(SqlToolBaseSchema):
     origem: str | None = None
     ano: int | None = None
     periodo_inicio: date | None = None
@@ -122,7 +118,7 @@ class DespesasPorFuncaoFiltroSchema(DespesasPorFuncaoToolBaseSchema):
         return self
 
 
-class ConsultarDespesasPorFuncaoParams(DespesasPorFuncaoToolBaseSchema):
+class ConsultarDespesasPorFuncaoParams(SqlToolBaseSchema):
     filtros: DespesasPorFuncaoFiltroSchema = Field(
         default_factory=DespesasPorFuncaoFiltroSchema
     )
@@ -182,7 +178,7 @@ class ConsultarDespesasPorFuncaoParams(DespesasPorFuncaoToolBaseSchema):
         )
 
 
-class ConsultarDespesasPorFuncaoMetadata(DespesasPorFuncaoToolBaseSchema):
+class ConsultarDespesasPorFuncaoMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -197,7 +193,7 @@ class ConsultarDespesasPorFuncaoMetadata(DespesasPorFuncaoToolBaseSchema):
     orientacao_gasto_amplo: str | None = None
 
 
-class ConsultarDespesasPorFuncaoResponse(DespesasPorFuncaoToolBaseSchema):
+class ConsultarDespesasPorFuncaoResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarDespesasPorFuncaoMetadata

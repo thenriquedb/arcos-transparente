@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.aggregate import (
+    AggregateExecutionResult,
+    build_aggregate_response,
+    execute_collection_aggregate,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import QuadroPessoal
 
@@ -31,13 +35,27 @@ def _metric(registros: list[QuadroPessoal], metrica: str) -> int:
     )
 
 
-def _group_value(registro: QuadroPessoal, group: str) -> str | int:
-    mapping = {
-        "origem": registro.origem,
-        "regime": registro.regime_contratacao,
-        "mes": registro.competencia_referencia.month,
-    }
-    return mapping[group]
+GROUP_FIELD_GETTERS = {
+    "origem": lambda registro: registro.origem,
+    "regime": lambda registro: registro.regime_contratacao,
+    "mes": lambda registro: registro.competencia_referencia.month,
+}
+METRIC_FIELD_GETTERS = {
+    "soma_vagas_criadas": lambda registro: registro.vagas_criadas or 0,
+    "soma_vagas_preenchidas": lambda registro: registro.vagas_preenchidas or 0,
+    "saldo_vagas": lambda registro: (
+        (registro.vagas_criadas or 0) - (registro.vagas_preenchidas or 0)
+    ),
+}
+
+
+def _project_quadro_pessoal_group(
+    group_value: Any,
+    metric_value: Any,
+    agrupar_por: str,
+    metrica: str,
+) -> dict[str, Any]:
+    return {agrupar_por: group_value, metrica: metric_value}
 
 
 @register(
@@ -97,30 +115,31 @@ def agregar_quadro_pessoal(
         - `mensagem`: aviso quando so parte dos grupos for exibida.
         - `sugestao`: dica quando nenhum registro corresponder aos filtros.
     """
-    try:
-        params = AgregarQuadroPessoalParams.model_validate(
-            {
-                "filtros": filtros,
-                "agrupar_por": agrupar_por,
-                "metrica": metrica,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = AgregarQuadroPessoalMetadata(
-            metrica="soma_vagas_preenchidas",
-            ordenar_por="metrica",
-            ordem="desc",
-            limite=10,
-        )
-        return AgregarQuadroPessoalResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "agrupar_por": agrupar_por,
+            "metrica": metrica,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+        },
+        schema_type=AgregarQuadroPessoalParams,
+        on_error=lambda exc: AgregarQuadroPessoalResponse(
             total_grupos=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=AgregarQuadroPessoalMetadata(
+                metrica="soma_vagas_preenchidas",
+                ordenar_por="metrica",
+                ordem="desc",
+                limite=10,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_quadro_pessoal(session, params.filtros)
@@ -134,54 +153,37 @@ def agregar_quadro_pessoal(
         limite=params.limite,
     )
 
-    if params.agrupar_por is None:
-        valor_total = _metric(registros, params.metrica)
-        return AgregarQuadroPessoalResponse(
-            total_grupos=0,
-            resultados=[],
-            metadata=metadata,
-            valor_total=valor_total,
-            sugestao=(
-                "Nenhum registro de quadro de pessoal encontrado."
-                if not valor_total
-                else None
-            ),
-        ).model_dump(mode="json")
-
-    grupos: dict[str, list[QuadroPessoal]] = {}
-    for registro in registros:
-        valor = _group_value(registro, params.agrupar_por)
-        grupos.setdefault(str(valor), []).append(registro)
-
-    resultados = []
-    for group_value, group_rows in grupos.items():
-        resultados.append(
-            {
-                params.agrupar_por: group_value,
-                params.metrica: _metric(group_rows, params.metrica),
-            }
+    execution = execute_collection_aggregate(
+        registros,
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica,
+        ordenar_por=params.ordenar_por,
+        ordem=params.ordem,
+        limite=params.limite,
+        group_key_getters=GROUP_FIELD_GETTERS,
+        metric_getters=METRIC_FIELD_GETTERS,
+        serialize_metric=lambda value: value,
+    )
+    suggestion = (
+        "Nenhum registro de quadro de pessoal encontrado."
+        if (
+            (params.agrupar_por is None and not execution.valor_total)
+            or (params.agrupar_por is not None and not execution.rows)
         )
-
-    reverse = params.ordem == "desc"
-    if params.ordenar_por == "metrica":
-        resultados.sort(key=lambda item: item[params.metrica], reverse=reverse)
-    else:
-        resultados.sort(key=lambda item: item[params.agrupar_por], reverse=reverse)
-
-    total_grupos = len(resultados)
-    resultados = resultados[: params.limite]
-    mensagem = None
-    if total_grupos > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total_grupos} grupos encontrados."
-
-    return AgregarQuadroPessoalResponse(
-        total_grupos=total_grupos,
-        resultados=resultados,
+        else None
+    )
+    return build_aggregate_response(
+        response_type=AgregarQuadroPessoalResponse,
         metadata=metadata,
-        mensagem=mensagem,
-        sugestao=(
-            "Nenhum registro de quadro de pessoal encontrado."
-            if not resultados
-            else None
+        execution=AggregateExecutionResult(
+            total_grupos=execution.total_grupos,
+            rows=execution.rows,
+            valor_total=execution.valor_total,
+            suggestion=suggestion,
         ),
-    ).model_dump(mode="json")
+        project_group=(
+            _project_quadro_pessoal_group if params.agrupar_por is not None else None
+        ),
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica if params.agrupar_por is not None else None,
+    )

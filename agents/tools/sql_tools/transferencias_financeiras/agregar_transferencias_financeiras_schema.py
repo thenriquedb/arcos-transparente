@@ -6,13 +6,13 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
 from .consultar_transferencias_financeiras_schema import (
     ALLOWED_ORDER_VALUES,
     TransferenciasFinanceirasFiltroSchema,
-    TransferenciasFinanceirasToolBaseSchema,
 )
 
 
@@ -35,7 +35,7 @@ ALLOWED_TRANSFERENCIAS_METRICS = {
 }
 
 
-class AgregarTransferenciasFinanceirasParams(TransferenciasFinanceirasToolBaseSchema):
+class AgregarTransferenciasFinanceirasParams(SqlToolBaseSchema):
     filtros: TransferenciasFinanceirasFiltroSchema = Field(
         default_factory=TransferenciasFinanceirasFiltroSchema
     )
@@ -104,7 +104,7 @@ class AgregarTransferenciasFinanceirasParams(TransferenciasFinanceirasToolBaseSc
         return self
 
 
-class AgregarTransferenciasFinanceirasMetadata(TransferenciasFinanceirasToolBaseSchema):
+class AgregarTransferenciasFinanceirasMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -113,7 +113,7 @@ class AgregarTransferenciasFinanceirasMetadata(TransferenciasFinanceirasToolBase
     limite: int
 
 
-class AgregarTransferenciasFinanceirasResponse(TransferenciasFinanceirasToolBaseSchema):
+class AgregarTransferenciasFinanceirasResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarTransferenciasFinanceirasMetadata

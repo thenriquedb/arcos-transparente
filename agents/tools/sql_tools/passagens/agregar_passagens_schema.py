@@ -6,13 +6,13 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
 from .consultar_passagens_schema import (
     ALLOWED_ORDER_VALUES,
     PassagemFiltroSchema,
-    PassagemToolBaseSchema,
 )
 
 
@@ -32,7 +32,7 @@ ALLOWED_PASSAGENS_METRICS = {
 }
 
 
-class AgregarPassagensParams(PassagemToolBaseSchema):
+class AgregarPassagensParams(SqlToolBaseSchema):
     filtros: PassagemFiltroSchema = Field(default_factory=PassagemFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_valor_pago"
@@ -96,7 +96,7 @@ class AgregarPassagensParams(PassagemToolBaseSchema):
         return self
 
 
-class AgregarPassagensMetadata(PassagemToolBaseSchema):
+class AgregarPassagensMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -105,7 +105,7 @@ class AgregarPassagensMetadata(PassagemToolBaseSchema):
     limite: int
 
 
-class AgregarPassagensResponse(PassagemToolBaseSchema):
+class AgregarPassagensResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarPassagensMetadata

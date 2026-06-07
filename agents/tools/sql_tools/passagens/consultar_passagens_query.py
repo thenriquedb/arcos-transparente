@@ -6,9 +6,13 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_collection_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import DespesaDocumento
 from shared.utils.decimal_to_float import decimal_to_float
@@ -96,40 +100,26 @@ def load_filtered_passagens(
     return registros
 
 
-def sort_passagens(
-    registros: list[DespesaDocumento],
-    ordenar_por: str,
-    ordem: str,
-) -> list[DespesaDocumento]:
-    reverse = ordem == "desc"
-
-    def key(registro: DespesaDocumento) -> Any:
-        mapping = {
-            "periodo_fim": _period_end(registro),
-            "valor_empenhado": registro.valor_empenhado or Decimal("0"),
-            "valor_liquidado": registro.valor_liquidado or Decimal("0"),
-            "valor_pago": registro.valor_pago or Decimal("0"),
-            "beneficiario": registro.credor or "",
-            "categoria": registro.categoria_documento or "",
-        }
-        return mapping[ordenar_por]
-
-    return sorted(registros, key=key, reverse=reverse)
+SORT_FIELD_GETTERS = {
+    "periodo_fim": lambda registro: _period_end(registro),
+    "valor_empenhado": lambda registro: registro.valor_empenhado or Decimal("0"),
+    "valor_liquidado": lambda registro: registro.valor_liquidado or Decimal("0"),
+    "valor_pago": lambda registro: registro.valor_pago or Decimal("0"),
+    "beneficiario": lambda registro: registro.credor or "",
+    "categoria": lambda registro: registro.categoria_documento or "",
+}
 
 
-def project_passagens(
-    registros: list[DespesaDocumento],
+def project_passagem_fields(
+    registro: DespesaDocumento,
     campos: list[str],
-) -> list[dict[str, Any]]:
+) -> dict[str, Any]:
     selected = campos or list(ALLOWED_PASSAGENS_FIELDS)
-    return [
-        {
-            campo: value
-            for campo, value in _row_to_public_dict(registro).items()
-            if campo in selected
-        }
-        for registro in registros
-    ]
+    return {
+        campo: value
+        for campo, value in _row_to_public_dict(registro).items()
+        if campo in selected
+    }
 
 
 @register(
@@ -169,37 +159,42 @@ def consultar_passagens(
     NAO use para totais, rankings ou contagens agregadas; para isso use
     `agregar_passagens`.
     """
-    try:
-        params = ConsultarPassagensParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarPassagensMetadata(
-            ordenar_por="periodo_fim",
-            ordem="desc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarPassagensResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+        },
+        schema_type=ConsultarPassagensParams,
+        on_error=lambda exc: ConsultarPassagensResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarPassagensMetadata(
+                ordenar_por="periodo_fim",
+                ordem="desc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_passagens(session, params.filtros)
-        total = len(registros)
-        ordenados = sort_passagens(registros, params.ordenar_por, params.ordem)
-        pagina = ordenados[params.offset : params.offset + params.limite]
-        resultados = project_passagens(pagina, params.campos)
+        total, pagina = execute_collection_lookup(
+            registros,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            offset=params.offset,
+            limite=params.limite,
+            sort_key_getters=SORT_FIELD_GETTERS,
+        )
 
     metadata = ConsultarPassagensMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -210,21 +205,19 @@ def consultar_passagens(
         campos=params.campos or list(ALLOWED_PASSAGENS_FIELDS),
     )
 
-    if not resultados:
-        return ConsultarPassagensResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao="Nenhuma passagem encontrada com os filtros.",
-        ).model_dump(mode="json")
-
-    mensagem = None
-    if total > params.offset + len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} passagens encontradas."
-
-    return ConsultarPassagensResponse(
-        total=total,
-        resultados=resultados,
+    return build_lookup_response(
+        response_type=ConsultarPassagensResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=LookupExecutionResult(
+            total=total,
+            rows=pagina,
+            suggestion=(
+                "Nenhuma passagem encontrada com os filtros." if not pagina else None
+            ),
+        ),
+        project_row=project_passagem_fields,
+        campos=params.campos,
+        pagination_message_builder=lambda shown, total: (
+            f"Mostrando {shown} de {total} passagens encontradas."
+        ),
+    )

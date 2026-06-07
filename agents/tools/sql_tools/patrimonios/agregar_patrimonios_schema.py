@@ -6,13 +6,13 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
 from .consultar_patrimonios_schema import (
     ALLOWED_ORDER_VALUES,
     PatrimonioFiltroSchema,
-    PatrimonioToolBaseSchema,
 )
 
 
@@ -31,7 +31,7 @@ ALLOWED_PATRIMONIO_METRICS = {
 }
 
 
-class AgregarPatrimoniosParams(PatrimonioToolBaseSchema):
+class AgregarPatrimoniosParams(SqlToolBaseSchema):
     filtros: PatrimonioFiltroSchema = Field(default_factory=PatrimonioFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "contagem"
@@ -95,7 +95,7 @@ class AgregarPatrimoniosParams(PatrimonioToolBaseSchema):
         return self
 
 
-class AgregarPatrimoniosMetadata(PatrimonioToolBaseSchema):
+class AgregarPatrimoniosMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -104,7 +104,7 @@ class AgregarPatrimoniosMetadata(PatrimonioToolBaseSchema):
     limite: int
 
 
-class AgregarPatrimoniosResponse(PatrimonioToolBaseSchema):
+class AgregarPatrimoniosResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarPatrimoniosMetadata

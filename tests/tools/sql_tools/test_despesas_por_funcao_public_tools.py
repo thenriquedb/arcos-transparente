@@ -123,6 +123,51 @@ def test_consultar_despesas_por_funcao_lista_por_funcao(monkeypatch) -> None:
     session.close()
 
 
+def test_consultar_despesas_por_funcao_preserva_mensagem_de_paginacao(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            DespesaPorFuncao(
+                arquivo_origem="despesas-por-funcao-prefeitura-2025.csv",
+                linha_origem=10,
+                origem="prefeitura",
+                exercicio=2025,
+                periodo_inicio=date(2025, 1, 1),
+                periodo_fim=date(2025, 1, 31),
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                funcao="Saude",
+                valor_pago=Decimal("550000.00"),
+            ),
+            DespesaPorFuncao(
+                arquivo_origem="despesas-por-funcao-prefeitura-2025.csv",
+                linha_origem=11,
+                origem="prefeitura",
+                exercicio=2025,
+                periodo_inicio=date(2025, 1, 1),
+                periodo_fim=date(2025, 1, 31),
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                funcao="Educacao",
+                valor_pago=Decimal("470000.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = despesas_por_funcao_tools.consultar_despesas_por_funcao(
+        filtros={"ano": 2025},
+        limite=1,
+        campos=["funcao", "valor_pago"],
+    )
+
+    assert resultado["total"] == 2
+    assert resultado["mensagem"] == "Mostrando 1 de 2 registros encontrados."
+
+    session.close()
+
+
 def test_consultar_despesas_por_funcao_retorna_estagios_financeiros_por_padrao(
     monkeypatch,
 ) -> None:

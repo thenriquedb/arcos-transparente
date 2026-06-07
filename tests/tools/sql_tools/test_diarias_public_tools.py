@@ -96,6 +96,57 @@ def test_consultar_diarias_lista_por_beneficiario(monkeypatch) -> None:
     session.close()
 
 
+def test_consultar_diarias_preserva_mensagem_de_paginacao(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            DespesaDocumento(
+                tipo_origem="diaria",
+                arquivo_origem="diarias-camara-2025.csv",
+                sequencia_origem=1,
+                origem="camara",
+                exercicio=2025,
+                unidade_gestora="CAMARA MUNICIPAL",
+                numero_documento="DIARIA-2025-00001",
+                data_documento=date(2025, 12, 31),
+                periodo_referencia_inicio=date(2025, 1, 1),
+                periodo_referencia_fim=date(2025, 12, 31),
+                categoria_documento="DIARIAS",
+                credor="EDISON DOS SANTOS",
+                valor_pago=Decimal("22800.47"),
+            ),
+            DespesaDocumento(
+                tipo_origem="diaria",
+                arquivo_origem="diarias-camara-2025.csv",
+                sequencia_origem=2,
+                origem="camara",
+                exercicio=2025,
+                unidade_gestora="CAMARA MUNICIPAL",
+                numero_documento="DIARIA-2025-00002",
+                data_documento=date(2025, 12, 30),
+                periodo_referencia_inicio=date(2025, 1, 1),
+                periodo_referencia_fim=date(2025, 12, 30),
+                categoria_documento="DIARIAS",
+                credor="ALEX GRACIERES RIBEIRO",
+                valor_pago=Decimal("4128.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = diarias_tools.consultar_diarias(
+        filtros={"ano": 2025},
+        limite=1,
+        campos=["beneficiario", "valor_pago"],
+    )
+
+    assert resultado["total"] == 2
+    assert resultado["mensagem"] == "Mostrando 1 de 2 diarias encontradas."
+
+    session.close()
+
+
 def test_agregar_diarias_por_beneficiario(monkeypatch) -> None:
     session = _build_session()
     session.add_all(

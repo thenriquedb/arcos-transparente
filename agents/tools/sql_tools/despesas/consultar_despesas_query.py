@@ -5,10 +5,15 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
-from pydantic import ValidationError
 from sqlalchemy.orm import selectinload
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_collection_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import DespesaDocumento
 from shared.utils.decimal_to_float import decimal_to_float
@@ -131,40 +136,26 @@ def load_filtered_despesas(
     return registros
 
 
-def sort_despesas(
-    registros: list[DespesaDocumento],
-    ordenar_por: str,
-    ordem: str,
-) -> list[DespesaDocumento]:
-    reverse = ordem == "desc"
-
-    def key(registro: DespesaDocumento) -> Any:
-        mapping = {
-            "data": registro.data_documento,
-            "valor_documento": registro.valor_documento or Decimal("0"),
-            "valor_empenhado": registro.valor_empenhado or Decimal("0"),
-            "valor_pago": registro.valor_pago or Decimal("0"),
-            "credor": registro.credor or "",
-            "numero": registro.numero_documento or "",
-        }
-        return mapping[ordenar_por]
-
-    return sorted(registros, key=key, reverse=reverse)
+SORT_FIELD_GETTERS = {
+    "data": lambda registro: registro.data_documento,
+    "valor_documento": lambda registro: registro.valor_documento or Decimal("0"),
+    "valor_empenhado": lambda registro: registro.valor_empenhado or Decimal("0"),
+    "valor_pago": lambda registro: registro.valor_pago or Decimal("0"),
+    "credor": lambda registro: registro.credor or "",
+    "numero": lambda registro: registro.numero_documento or "",
+}
 
 
-def project_despesas(
-    registros: list[DespesaDocumento],
+def project_despesa_fields(
+    registro: DespesaDocumento,
     campos: list[str],
-) -> list[dict[str, Any]]:
+) -> dict[str, Any]:
     selected = campos or list(ALLOWED_DESPESA_FIELDS)
-    return [
-        {
-            campo: value
-            for campo, value in _row_to_public_dict(registro).items()
-            if campo in selected
-        }
-        for registro in registros
-    ]
+    return {
+        campo: value
+        for campo, value in _row_to_public_dict(registro).items()
+        if campo in selected
+    }
 
 
 @register(
@@ -237,37 +228,42 @@ def consultar_despesas(
         - `mensagem`: aviso quando a resposta estiver paginada.
         - `sugestao`: dica quando nenhuma despesa for encontrada.
     """
-    try:
-        params = ConsultarDespesasParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarDespesasMetadata(
-            ordenar_por="data",
-            ordem="desc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarDespesasResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+        },
+        schema_type=ConsultarDespesasParams,
+        on_error=lambda exc: ConsultarDespesasResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarDespesasMetadata(
+                ordenar_por="data",
+                ordem="desc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_despesas(session, params.filtros)
-        total = len(registros)
-        ordenados = sort_despesas(registros, params.ordenar_por, params.ordem)
-        pagina = ordenados[params.offset : params.offset + params.limite]
-        resultados = project_despesas(pagina, params.campos)
+        total, pagina = execute_collection_lookup(
+            registros,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            offset=params.offset,
+            limite=params.limite,
+            sort_key_getters=SORT_FIELD_GETTERS,
+        )
 
     metadata = ConsultarDespesasMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -278,21 +274,19 @@ def consultar_despesas(
         campos=params.campos or list(ALLOWED_DESPESA_FIELDS),
     )
 
-    if not resultados:
-        return ConsultarDespesasResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao="Nenhuma despesa encontrada com os filtros.",
-        ).model_dump(mode="json")
-
-    mensagem = None
-    if total > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} despesas encontradas."
-
-    return ConsultarDespesasResponse(
-        total=total,
-        resultados=resultados,
+    return build_lookup_response(
+        response_type=ConsultarDespesasResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=LookupExecutionResult(
+            total=total,
+            rows=pagina,
+            suggestion=(
+                "Nenhuma despesa encontrada com os filtros." if not pagina else None
+            ),
+        ),
+        project_row=project_despesa_fields,
+        campos=params.campos,
+        pagination_message_builder=lambda shown, total: (
+            f"Mostrando {shown} de {total} despesas encontradas."
+        ),
+    )

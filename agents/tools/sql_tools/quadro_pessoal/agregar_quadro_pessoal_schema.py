@@ -6,13 +6,13 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
 from .consultar_quadro_pessoal_schema import (
     ALLOWED_ORDER_VALUES,
     QuadroPessoalFiltroSchema,
-    QuadroPessoalToolBaseSchema,
 )
 
 
@@ -25,7 +25,7 @@ ALLOWED_QUADRO_METRICS = {
 }
 
 
-class AgregarQuadroPessoalParams(QuadroPessoalToolBaseSchema):
+class AgregarQuadroPessoalParams(SqlToolBaseSchema):
     filtros: QuadroPessoalFiltroSchema = Field(
         default_factory=QuadroPessoalFiltroSchema
     )
@@ -91,7 +91,7 @@ class AgregarQuadroPessoalParams(QuadroPessoalToolBaseSchema):
         return self
 
 
-class AgregarQuadroPessoalMetadata(QuadroPessoalToolBaseSchema):
+class AgregarQuadroPessoalMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -100,7 +100,7 @@ class AgregarQuadroPessoalMetadata(QuadroPessoalToolBaseSchema):
     limite: int
 
 
-class AgregarQuadroPessoalResponse(QuadroPessoalToolBaseSchema):
+class AgregarQuadroPessoalResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarQuadroPessoalMetadata

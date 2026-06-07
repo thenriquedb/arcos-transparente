@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_collection_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import QuadroPessoal
 from shared.utils.text import matches_text_query
@@ -65,40 +69,26 @@ def load_filtered_quadro_pessoal(
     return registros
 
 
-def sort_quadro_pessoal(
-    registros: list[QuadroPessoal],
-    ordenar_por: str,
-    ordem: str,
-) -> list[QuadroPessoal]:
-    reverse = ordem == "desc"
-
-    def key(registro: QuadroPessoal) -> Any:
-        mapping = {
-            "mes_de_referencia": registro.competencia_referencia,
-            "origem": registro.origem,
-            "regime": registro.regime_contratacao,
-            "vagas_criadas": registro.vagas_criadas or 0,
-            "vagas_preenchidas": registro.vagas_preenchidas or 0,
-            "saldo_vagas": _saldo_vagas(registro) or 0,
-        }
-        return mapping[ordenar_por]
-
-    return sorted(registros, key=key, reverse=reverse)
+SORT_FIELD_GETTERS = {
+    "mes_de_referencia": lambda registro: registro.competencia_referencia,
+    "origem": lambda registro: registro.origem,
+    "regime": lambda registro: registro.regime_contratacao,
+    "vagas_criadas": lambda registro: registro.vagas_criadas or 0,
+    "vagas_preenchidas": lambda registro: registro.vagas_preenchidas or 0,
+    "saldo_vagas": lambda registro: _saldo_vagas(registro) or 0,
+}
 
 
-def project_quadro_pessoal(
-    registros: list[QuadroPessoal],
+def project_quadro_pessoal_fields(
+    registro: QuadroPessoal,
     campos: list[str],
-) -> list[dict[str, Any]]:
+) -> dict[str, Any]:
     selected = campos or list(ALLOWED_QUADRO_FIELDS)
-    return [
-        {
-            campo: value
-            for campo, value in _row_to_public_dict(registro).items()
-            if campo in selected
-        }
-        for registro in registros
-    ]
+    return {
+        campo: value
+        for campo, value in _row_to_public_dict(registro).items()
+        if campo in selected
+    }
 
 
 @register(
@@ -158,37 +148,42 @@ def consultar_quadro_pessoal(
         - `mensagem`: aviso quando a resposta estiver paginada.
         - `sugestao`: dica quando nenhum registro for encontrado.
     """
-    try:
-        params = ConsultarQuadroPessoalParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarQuadroPessoalMetadata(
-            ordenar_por="mes_de_referencia",
-            ordem="asc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarQuadroPessoalResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+        },
+        schema_type=ConsultarQuadroPessoalParams,
+        on_error=lambda exc: ConsultarQuadroPessoalResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarQuadroPessoalMetadata(
+                ordenar_por="mes_de_referencia",
+                ordem="asc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_quadro_pessoal(session, params.filtros)
-        total = len(registros)
-        ordenados = sort_quadro_pessoal(registros, params.ordenar_por, params.ordem)
-        pagina = ordenados[params.offset : params.offset + params.limite]
-        resultados = project_quadro_pessoal(pagina, params.campos)
+        total, pagina = execute_collection_lookup(
+            registros,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            offset=params.offset,
+            limite=params.limite,
+            sort_key_getters=SORT_FIELD_GETTERS,
+        )
 
     metadata = ConsultarQuadroPessoalMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -199,21 +194,18 @@ def consultar_quadro_pessoal(
         campos=params.campos or list(ALLOWED_QUADRO_FIELDS),
     )
 
-    if not resultados:
-        return ConsultarQuadroPessoalResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao="Nenhum registro de quadro de pessoal encontrado.",
-        ).model_dump(mode="json")
-
-    mensagem = None
-    if total > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} registros encontrados."
-
-    return ConsultarQuadroPessoalResponse(
-        total=total,
-        resultados=resultados,
+    return build_lookup_response(
+        response_type=ConsultarQuadroPessoalResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=LookupExecutionResult(
+            total=total,
+            rows=pagina,
+            suggestion=(
+                "Nenhum registro de quadro de pessoal encontrado."
+                if not pagina
+                else None
+            ),
+        ),
+        project_row=project_quadro_pessoal_fields,
+        campos=params.campos,
+    )

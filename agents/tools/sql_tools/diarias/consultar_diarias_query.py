@@ -6,9 +6,13 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_collection_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import DespesaDocumento
 from shared.utils.decimal_to_float import decimal_to_float
@@ -90,39 +94,25 @@ def load_filtered_diarias(
     return registros
 
 
-def sort_diarias(
-    registros: list[DespesaDocumento],
-    ordenar_por: str,
-    ordem: str,
-) -> list[DespesaDocumento]:
-    reverse = ordem == "desc"
-
-    def key(registro: DespesaDocumento) -> Any:
-        mapping = {
-            "periodo_fim": _period_end(registro),
-            "valor_empenhado": registro.valor_empenhado or Decimal("0"),
-            "valor_liquidado": registro.valor_liquidado or Decimal("0"),
-            "valor_pago": registro.valor_pago or Decimal("0"),
-            "beneficiario": registro.credor or "",
-        }
-        return mapping[ordenar_por]
-
-    return sorted(registros, key=key, reverse=reverse)
+SORT_FIELD_GETTERS = {
+    "periodo_fim": lambda registro: _period_end(registro),
+    "valor_empenhado": lambda registro: registro.valor_empenhado or Decimal("0"),
+    "valor_liquidado": lambda registro: registro.valor_liquidado or Decimal("0"),
+    "valor_pago": lambda registro: registro.valor_pago or Decimal("0"),
+    "beneficiario": lambda registro: registro.credor or "",
+}
 
 
-def project_diarias(
-    registros: list[DespesaDocumento],
+def project_diaria_fields(
+    registro: DespesaDocumento,
     campos: list[str],
-) -> list[dict[str, Any]]:
+) -> dict[str, Any]:
     selected = campos or list(ALLOWED_DIARIAS_FIELDS)
-    return [
-        {
-            campo: value
-            for campo, value in _row_to_public_dict(registro).items()
-            if campo in selected
-        }
-        for registro in registros
-    ]
+    return {
+        campo: value
+        for campo, value in _row_to_public_dict(registro).items()
+        if campo in selected
+    }
 
 
 @register(
@@ -174,37 +164,42 @@ def consultar_diarias(
         campos: Lista opcional com qualquer subconjunto dos campos publicos
             retornados por diaria.
     """
-    try:
-        params = ConsultarDiariasParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarDiariasMetadata(
-            ordenar_por="periodo_fim",
-            ordem="desc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarDiariasResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+        },
+        schema_type=ConsultarDiariasParams,
+        on_error=lambda exc: ConsultarDiariasResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarDiariasMetadata(
+                ordenar_por="periodo_fim",
+                ordem="desc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_diarias(session, params.filtros)
-        total = len(registros)
-        ordenados = sort_diarias(registros, params.ordenar_por, params.ordem)
-        pagina = ordenados[params.offset : params.offset + params.limite]
-        resultados = project_diarias(pagina, params.campos)
+        total, pagina = execute_collection_lookup(
+            registros,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            offset=params.offset,
+            limite=params.limite,
+            sort_key_getters=SORT_FIELD_GETTERS,
+        )
 
     metadata = ConsultarDiariasMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -215,21 +210,19 @@ def consultar_diarias(
         campos=params.campos or list(ALLOWED_DIARIAS_FIELDS),
     )
 
-    if not resultados:
-        return ConsultarDiariasResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao="Nenhuma diaria encontrada com os filtros.",
-        ).model_dump(mode="json")
-
-    mensagem = None
-    if total > params.offset + len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} diarias encontradas."
-
-    return ConsultarDiariasResponse(
-        total=total,
-        resultados=resultados,
+    return build_lookup_response(
+        response_type=ConsultarDiariasResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=LookupExecutionResult(
+            total=total,
+            rows=pagina,
+            suggestion=(
+                "Nenhuma diaria encontrada com os filtros." if not pagina else None
+            ),
+        ),
+        project_row=project_diaria_fields,
+        campos=params.campos,
+        pagination_message_builder=lambda shown, total: (
+            f"Mostrando {shown} de {total} diarias encontradas."
+        ),
+    )

@@ -5,9 +5,13 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.aggregate import (
+    AggregateExecutionResult,
+    build_aggregate_response,
+    execute_collection_aggregate,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import DespesaDocumento
 
@@ -42,18 +46,31 @@ def _metric_to_json(value: Decimal | int) -> float | int:
     return value
 
 
-def _group_value(registro: DespesaDocumento, group: str) -> str | int | None:
-    mapping = {
-        "tipo": registro.tipo_origem,
-        "origem": registro.origem,
-        "ano": registro.exercicio,
-        "mes": registro.data_documento.month,
-        "unidade_responsavel": registro.unidade_gestora,
-        "area": registro.funcao,
-        "credor": registro.credor,
-        "conta_extra": registro.conta_extra_descricao,
-    }
-    return mapping[group]
+GROUP_FIELD_GETTERS = {
+    "tipo": lambda registro: registro.tipo_origem,
+    "origem": lambda registro: registro.origem,
+    "ano": lambda registro: registro.exercicio,
+    "mes": lambda registro: registro.data_documento.month,
+    "unidade_responsavel": lambda registro: registro.unidade_gestora,
+    "area": lambda registro: registro.funcao,
+    "credor": lambda registro: registro.credor,
+    "conta_extra": lambda registro: registro.conta_extra_descricao,
+}
+METRIC_FIELD_GETTERS = {
+    "soma_valor_documento": lambda registro: registro.valor_documento or Decimal("0"),
+    "soma_valor_empenhado": lambda registro: registro.valor_empenhado or Decimal("0"),
+    "soma_valor_pago": lambda registro: registro.valor_pago or Decimal("0"),
+    "soma_valor_anulado": lambda registro: registro.valor_anulado or Decimal("0"),
+}
+
+
+def _project_despesa_group(
+    group_value: Any,
+    metric_value: Any,
+    agrupar_por: str,
+    metrica: str,
+) -> dict[str, Any]:
+    return {agrupar_por: group_value, metrica: metric_value}
 
 
 @register(
@@ -129,30 +146,31 @@ def agregar_despesas(
         - `mensagem`: aviso quando so parte dos grupos for exibida.
         - `sugestao`: dica quando nenhuma despesa corresponder aos filtros.
     """
-    try:
-        params = AgregarDespesasParams.model_validate(
-            {
-                "filtros": filtros,
-                "agrupar_por": agrupar_por,
-                "metrica": metrica,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = AgregarDespesasMetadata(
-            metrica="soma_valor_pago",
-            ordenar_por="metrica",
-            ordem="desc",
-            limite=10,
-        )
-        return AgregarDespesasResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "agrupar_por": agrupar_por,
+            "metrica": metrica,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+        },
+        schema_type=AgregarDespesasParams,
+        on_error=lambda exc: AgregarDespesasResponse(
             total_grupos=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=AgregarDespesasMetadata(
+                metrica="soma_valor_pago",
+                ordenar_por="metrica",
+                ordem="desc",
+                limite=10,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_despesas(session, params.filtros)
@@ -166,52 +184,37 @@ def agregar_despesas(
         limite=params.limite,
     )
 
-    if params.agrupar_por is None:
-        valor_total = _metric_to_json(_metric(registros, params.metrica))
-        return AgregarDespesasResponse(
-            total_grupos=0,
-            resultados=[],
-            metadata=metadata,
-            valor_total=valor_total,
-            sugestao=(
-                "Nenhuma despesa encontrada com os filtros."
-                if not valor_total
-                else None
-            ),
-        ).model_dump(mode="json")
-
-    grupos: dict[str, list[DespesaDocumento]] = {}
-    for registro in registros:
-        valor = _group_value(registro, params.agrupar_por) or "nao_informado"
-        grupos.setdefault(str(valor), []).append(registro)
-
-    resultados = []
-    for group_value, group_rows in grupos.items():
-        resultados.append(
-            {
-                params.agrupar_por: group_value,
-                params.metrica: _metric_to_json(_metric(group_rows, params.metrica)),
-            }
+    execution = execute_collection_aggregate(
+        registros,
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica,
+        ordenar_por=params.ordenar_por,
+        ordem=params.ordem,
+        limite=params.limite,
+        group_key_getters=GROUP_FIELD_GETTERS,
+        metric_getters=METRIC_FIELD_GETTERS,
+        serialize_metric=_metric_to_json,
+    )
+    suggestion = (
+        "Nenhuma despesa encontrada com os filtros."
+        if (
+            (params.agrupar_por is None and not execution.valor_total)
+            or (params.agrupar_por is not None and not execution.rows)
         )
-
-    reverse = params.ordem == "desc"
-    if params.ordenar_por == "metrica":
-        resultados.sort(key=lambda item: item[params.metrica], reverse=reverse)
-    else:
-        resultados.sort(key=lambda item: item[params.agrupar_por], reverse=reverse)
-
-    total_grupos = len(resultados)
-    resultados = resultados[: params.limite]
-    mensagem = None
-    if total_grupos > len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total_grupos} grupos encontrados."
-
-    return AgregarDespesasResponse(
-        total_grupos=total_grupos,
-        resultados=resultados,
+        else None
+    )
+    return build_aggregate_response(
+        response_type=AgregarDespesasResponse,
         metadata=metadata,
-        mensagem=mensagem,
-        sugestao=(
-            "Nenhuma despesa encontrada com os filtros." if not resultados else None
+        execution=AggregateExecutionResult(
+            total_grupos=execution.total_grupos,
+            rows=execution.rows,
+            valor_total=execution.valor_total,
+            suggestion=suggestion,
         ),
-    ).model_dump(mode="json")
+        project_group=(
+            _project_despesa_group if params.agrupar_por is not None else None
+        ),
+        agrupar_por=params.agrupar_por,
+        metrica=params.metrica if params.agrupar_por is not None else None,
+    )

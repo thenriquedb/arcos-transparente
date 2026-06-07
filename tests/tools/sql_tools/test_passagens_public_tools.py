@@ -97,6 +97,57 @@ def test_consultar_passagens_lista_por_beneficiario(monkeypatch) -> None:
     session.close()
 
 
+def test_consultar_passagens_preserva_mensagem_de_paginacao(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            DespesaDocumento(
+                tipo_origem="passagem",
+                arquivo_origem="passagens-2026.csv",
+                sequencia_origem=1,
+                origem="camara",
+                exercicio=2026,
+                unidade_gestora="CAMARA MUNICIPAL",
+                numero_documento="PASSAGEM-2026-00001",
+                data_documento=date(2026, 6, 30),
+                periodo_referencia_inicio=date(2026, 1, 1),
+                periodo_referencia_fim=date(2026, 6, 30),
+                categoria_documento="PASSAGENS E DESPESAS COM LOCOMOCAO",
+                credor="EDISON DOS SANTOS",
+                valor_pago=Decimal("1500.09"),
+            ),
+            DespesaDocumento(
+                tipo_origem="passagem",
+                arquivo_origem="passagens-2026.csv",
+                sequencia_origem=2,
+                origem="camara",
+                exercicio=2026,
+                unidade_gestora="CAMARA MUNICIPAL",
+                numero_documento="PASSAGEM-2026-00002",
+                data_documento=date(2026, 6, 29),
+                periodo_referencia_inicio=date(2026, 1, 1),
+                periodo_referencia_fim=date(2026, 6, 29),
+                categoria_documento="PASSAGENS E DESPESAS COM LOCOMOCAO",
+                credor="RENATO GONCALVES MARCIANO",
+                valor_pago=Decimal("113.50"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = passagens_tools.consultar_passagens(
+        filtros={"ano": 2026},
+        limite=1,
+        campos=["beneficiario", "valor_pago"],
+    )
+
+    assert resultado["total"] == 2
+    assert resultado["mensagem"] == "Mostrando 1 de 2 passagens encontradas."
+
+    session.close()
+
+
 def test_agregar_passagens_por_beneficiario(monkeypatch) -> None:
     session = _build_session()
     session.add_all(

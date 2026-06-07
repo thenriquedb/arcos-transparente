@@ -50,11 +50,7 @@ ALLOWED_TIPOS = {
 }
 
 
-class DespesaToolBaseSchema(SqlToolBaseSchema):
-    pass
-
-
-class DespesaFiltroSchema(DespesaToolBaseSchema):
+class DespesaFiltroSchema(SqlToolBaseSchema):
     tipo: str | None = None
     origem: str | None = None
     ano: int | None = None
@@ -104,7 +100,7 @@ class DespesaFiltroSchema(DespesaToolBaseSchema):
         return parse_date(value)
 
 
-class ConsultarDespesasParams(DespesaToolBaseSchema):
+class ConsultarDespesasParams(SqlToolBaseSchema):
     filtros: DespesaFiltroSchema = Field(default_factory=DespesaFiltroSchema)
     ordenar_por: str = "data"
     ordem: str = "desc"
@@ -160,7 +156,7 @@ class ConsultarDespesasParams(DespesaToolBaseSchema):
         )
 
 
-class ConsultarDespesasMetadata(DespesaToolBaseSchema):
+class ConsultarDespesasMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -169,7 +165,7 @@ class ConsultarDespesasMetadata(DespesaToolBaseSchema):
     campos: list[str] = Field(default_factory=lambda: list(ALLOWED_DESPESA_FIELDS))
 
 
-class ConsultarDespesasResponse(DespesaToolBaseSchema):
+class ConsultarDespesasResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarDespesasMetadata

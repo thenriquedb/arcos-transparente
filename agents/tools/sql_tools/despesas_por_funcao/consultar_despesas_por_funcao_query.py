@@ -5,9 +5,13 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_collection_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import DespesaPorFuncao
 from shared.utils.decimal_to_float import decimal_to_float
@@ -85,40 +89,26 @@ def load_filtered_despesas_por_funcao(
     return registros
 
 
-def sort_despesas_por_funcao(
-    registros: list[DespesaPorFuncao],
-    ordenar_por: str,
-    ordem: str,
-) -> list[DespesaPorFuncao]:
-    reverse = ordem == "desc"
-
-    def key(registro: DespesaPorFuncao) -> Any:
-        mapping = {
-            "periodo_fim": registro.periodo_fim,
-            "funcao": registro.funcao or "",
-            "dotacao_atualizada": registro.dotacao_atualizada or Decimal("0"),
-            "valor_empenhado": registro.valor_empenhado or Decimal("0"),
-            "valor_liquidado": registro.valor_liquidado or Decimal("0"),
-            "valor_pago": registro.valor_pago or Decimal("0"),
-        }
-        return mapping[ordenar_por]
-
-    return sorted(registros, key=key, reverse=reverse)
+SORT_FIELD_GETTERS = {
+    "periodo_fim": lambda registro: registro.periodo_fim,
+    "funcao": lambda registro: registro.funcao or "",
+    "dotacao_atualizada": lambda registro: registro.dotacao_atualizada or Decimal("0"),
+    "valor_empenhado": lambda registro: registro.valor_empenhado or Decimal("0"),
+    "valor_liquidado": lambda registro: registro.valor_liquidado or Decimal("0"),
+    "valor_pago": lambda registro: registro.valor_pago or Decimal("0"),
+}
 
 
-def project_despesas_por_funcao(
-    registros: list[DespesaPorFuncao],
+def project_despesas_por_funcao_fields(
+    registro: DespesaPorFuncao,
     campos: list[str],
-) -> list[dict[str, Any]]:
+) -> dict[str, Any]:
     selected = campos or list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)
-    return [
-        {
-            campo: value
-            for campo, value in _row_to_public_dict(registro).items()
-            if campo in selected
-        }
-        for registro in registros
-    ]
+    return {
+        campo: value
+        for campo, value in _row_to_public_dict(registro).items()
+        if campo in selected
+    }
 
 
 def _field_explanations(campos: list[str]) -> dict[str, str]:
@@ -191,41 +181,42 @@ def consultar_despesas_por_funcao(
         - `mensagem`: aviso quando a resposta estiver paginada.
         - `sugestao`: dica quando nenhuma linha for encontrada.
     """
-    try:
-        params = ConsultarDespesasPorFuncaoParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarDespesasPorFuncaoMetadata(
-            ordenar_por="periodo_fim",
-            ordem="desc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarDespesasPorFuncaoResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+        },
+        schema_type=ConsultarDespesasPorFuncaoParams,
+        on_error=lambda exc: ConsultarDespesasPorFuncaoResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarDespesasPorFuncaoMetadata(
+                ordenar_por="periodo_fim",
+                ordem="desc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_despesas_por_funcao(session, params.filtros)
-        total = len(registros)
-        ordenados = sort_despesas_por_funcao(
+        total, pagina = execute_collection_lookup(
             registros,
-            params.ordenar_por,
-            params.ordem,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            offset=params.offset,
+            limite=params.limite,
+            sort_key_getters=SORT_FIELD_GETTERS,
         )
-        pagina = ordenados[params.offset : params.offset + params.limite]
-        resultados = project_despesas_por_funcao(pagina, params.campos)
 
     campos_retorno = params.campos or list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)
 
@@ -244,23 +235,18 @@ def consultar_despesas_por_funcao(
         orientacao_gasto_amplo=DESPESAS_POR_FUNCAO_BROAD_SPEND_GUIDANCE,
     )
 
-    if not resultados:
-        return ConsultarDespesasPorFuncaoResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao=(
-                "Nenhum registro de despesas por funcao encontrado com os filtros."
-            ),
-        ).model_dump(mode="json")
-
-    mensagem = None
-    if total > params.offset + len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} registros encontrados."
-
-    return ConsultarDespesasPorFuncaoResponse(
-        total=total,
-        resultados=resultados,
+    return build_lookup_response(
+        response_type=ConsultarDespesasPorFuncaoResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=LookupExecutionResult(
+            total=total,
+            rows=pagina,
+            suggestion=(
+                "Nenhum registro de despesas por funcao encontrado com os filtros."
+                if not pagina
+                else None
+            ),
+        ),
+        project_row=project_despesas_por_funcao_fields,
+        campos=params.campos,
+    )

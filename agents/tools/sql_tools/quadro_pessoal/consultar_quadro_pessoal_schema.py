@@ -33,11 +33,7 @@ ALLOWED_QUADRO_SORT_FIELDS = {
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
-class QuadroPessoalToolBaseSchema(SqlToolBaseSchema):
-    pass
-
-
-class QuadroPessoalFiltroSchema(QuadroPessoalToolBaseSchema):
+class QuadroPessoalFiltroSchema(SqlToolBaseSchema):
     origem: str | None = None
     ano: int | None = None
     mes: int | None = None
@@ -54,7 +50,7 @@ class QuadroPessoalFiltroSchema(QuadroPessoalToolBaseSchema):
         return parse_int(value)
 
 
-class ConsultarQuadroPessoalParams(QuadroPessoalToolBaseSchema):
+class ConsultarQuadroPessoalParams(SqlToolBaseSchema):
     filtros: QuadroPessoalFiltroSchema = Field(
         default_factory=QuadroPessoalFiltroSchema
     )
@@ -112,7 +108,7 @@ class ConsultarQuadroPessoalParams(QuadroPessoalToolBaseSchema):
         )
 
 
-class ConsultarQuadroPessoalMetadata(QuadroPessoalToolBaseSchema):
+class ConsultarQuadroPessoalMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -121,7 +117,7 @@ class ConsultarQuadroPessoalMetadata(QuadroPessoalToolBaseSchema):
     campos: list[str] = Field(default_factory=lambda: list(ALLOWED_QUADRO_FIELDS))
 
 
-class ConsultarQuadroPessoalResponse(QuadroPessoalToolBaseSchema):
+class ConsultarQuadroPessoalResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarQuadroPessoalMetadata

@@ -6,9 +6,13 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
-from pydantic import ValidationError
-
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.lookup import (
+    LookupExecutionResult,
+    build_lookup_response,
+    execute_collection_lookup,
+)
+from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import EmendaParlamentar, TransferenciaFinanceiraMovimento
 from shared.utils.decimal_to_float import decimal_to_float
@@ -180,34 +184,25 @@ def load_filtered_transferencias_financeiras(
     return registros
 
 
-def sort_transferencias_financeiras(
-    registros: list[dict[str, Any]],
-    ordenar_por: str,
-    ordem: str,
-) -> list[dict[str, Any]]:
-    reverse = ordem == "desc"
-
-    def key(registro: dict[str, Any]) -> Any:
-        if ordenar_por == "data":
-            return registro.get("data") or ""
-        if ordenar_por == "valor":
-            return Decimal(str(registro.get("valor") or 0))
-        if ordenar_por == "ano":
-            return registro.get("ano") or 0
-        return registro.get(ordenar_por) or ""
-
-    return sorted(registros, key=key, reverse=reverse)
+SORT_FIELD_GETTERS = {
+    "ano": lambda registro: registro.get("ano") or 0,
+    "data": lambda registro: registro.get("data") or "",
+    "valor": lambda registro: Decimal(str(registro.get("valor") or 0)),
+    "tipo_registro": lambda registro: registro.get("tipo_registro") or "",
+    "unidade_recebedora": lambda registro: registro.get("unidade_recebedora") or "",
+    "tipo_movimento": lambda registro: registro.get("tipo_movimento") or "",
+    "autor": lambda registro: registro.get("autor") or "",
+    "funcao": lambda registro: registro.get("funcao") or "",
+    "ano_numero": lambda registro: registro.get("ano_numero") or "",
+}
 
 
-def project_transferencias_financeiras(
-    registros: list[dict[str, Any]],
+def project_transferencia_financeira_fields(
+    registro: dict[str, Any],
     campos: list[str],
-) -> list[dict[str, Any]]:
+) -> dict[str, Any]:
     selected = campos or list(ALLOWED_TRANSFERENCIAS_FIELDS)
-    return [
-        {campo: valor for campo, valor in registro.items() if campo in selected}
-        for registro in registros
-    ]
+    return {campo: valor for campo, valor in registro.items() if campo in selected}
 
 
 @register(
@@ -249,41 +244,42 @@ def consultar_transferencias_financeiras(
     NAO use para totais, contagens ou rankings agregados; para isso use
     `agregar_transferencias_financeiras`.
     """
-    try:
-        params = ConsultarTransferenciasFinanceirasParams.model_validate(
-            {
-                "filtros": filtros,
-                "ordenar_por": ordenar_por,
-                "ordem": ordem,
-                "limite": limite,
-                "offset": offset,
-                "campos": campos,
-            }
-        )
-    except ValidationError as exc:
-        fallback_metadata = ConsultarTransferenciasFinanceirasMetadata(
-            ordenar_por="data",
-            ordem="desc",
-            limite=10,
-            offset=0,
-        )
-        return ConsultarTransferenciasFinanceirasResponse(
+    validated = validate_tool_params(
+        {
+            "filtros": filtros,
+            "ordenar_por": ordenar_por,
+            "ordem": ordem,
+            "limite": limite,
+            "offset": offset,
+            "campos": campos,
+        },
+        schema_type=ConsultarTransferenciasFinanceirasParams,
+        on_error=lambda exc: ConsultarTransferenciasFinanceirasResponse(
             total=0,
             resultados=[],
-            metadata=fallback_metadata,
+            metadata=ConsultarTransferenciasFinanceirasMetadata(
+                ordenar_por="data",
+                ordem="desc",
+                limite=10,
+                offset=0,
+            ),
             mensagem=f"Parametros invalidos: {exc}",
-        ).model_dump(mode="json")
+        ).model_dump(mode="json"),
+    )
+    if isinstance(validated, dict):
+        return validated
+    params = validated
 
     with session_manager.get_session() as session:
         registros = load_filtered_transferencias_financeiras(session, params.filtros)
-        total = len(registros)
-        ordenados = sort_transferencias_financeiras(
+        total, pagina = execute_collection_lookup(
             registros,
-            params.ordenar_por,
-            params.ordem,
+            ordenar_por=params.ordenar_por,
+            ordem=params.ordem,
+            offset=params.offset,
+            limite=params.limite,
+            sort_key_getters=SORT_FIELD_GETTERS,
         )
-        pagina = ordenados[params.offset : params.offset + params.limite]
-        resultados = project_transferencias_financeiras(pagina, params.campos)
 
     metadata = ConsultarTransferenciasFinanceirasMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -294,23 +290,18 @@ def consultar_transferencias_financeiras(
         campos=params.campos or list(ALLOWED_TRANSFERENCIAS_FIELDS),
     )
 
-    if not resultados:
-        return ConsultarTransferenciasFinanceirasResponse(
-            total=0,
-            resultados=[],
-            metadata=metadata,
-            sugestao=(
-                "Nenhum registro de transferencias financeiras encontrado com os filtros."
-            ),
-        ).model_dump(mode="json")
-
-    mensagem = None
-    if total > params.offset + len(resultados):
-        mensagem = f"Mostrando {len(resultados)} de {total} registros encontrados."
-
-    return ConsultarTransferenciasFinanceirasResponse(
-        total=total,
-        resultados=resultados,
+    return build_lookup_response(
+        response_type=ConsultarTransferenciasFinanceirasResponse,
         metadata=metadata,
-        mensagem=mensagem,
-    ).model_dump(mode="json")
+        execution=LookupExecutionResult(
+            total=total,
+            rows=pagina,
+            suggestion=(
+                "Nenhum registro de transferencias financeiras encontrado com os filtros."
+                if not pagina
+                else None
+            ),
+        ),
+        project_row=project_transferencia_financeira_fields,
+        campos=params.campos,
+    )

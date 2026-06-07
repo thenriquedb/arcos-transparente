@@ -6,13 +6,13 @@ from typing import Any
 
 from pydantic import Field, field_validator, model_validator
 
+from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 from agents.tools.sql_tools.shared.normalization import normalize_model_input
 from shared.utils.validation import clean_text, normalize_limit
 
 from .consultar_despesas_schema import (
     ALLOWED_ORDER_VALUES,
     DespesaFiltroSchema,
-    DespesaToolBaseSchema,
 )
 
 
@@ -35,7 +35,7 @@ ALLOWED_DESPESA_METRICS = {
 }
 
 
-class AgregarDespesasParams(DespesaToolBaseSchema):
+class AgregarDespesasParams(SqlToolBaseSchema):
     filtros: DespesaFiltroSchema = Field(default_factory=DespesaFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_valor_pago"
@@ -99,7 +99,7 @@ class AgregarDespesasParams(DespesaToolBaseSchema):
         return self
 
 
-class AgregarDespesasMetadata(DespesaToolBaseSchema):
+class AgregarDespesasMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -108,7 +108,7 @@ class AgregarDespesasMetadata(DespesaToolBaseSchema):
     limite: int
 
 
-class AgregarDespesasResponse(DespesaToolBaseSchema):
+class AgregarDespesasResponse(SqlToolBaseSchema):
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarDespesasMetadata

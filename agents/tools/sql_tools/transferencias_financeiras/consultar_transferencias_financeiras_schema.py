@@ -50,11 +50,7 @@ ALLOWED_TRANSFERENCIAS_SORT_FIELDS = {
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
-class TransferenciasFinanceirasToolBaseSchema(SqlToolBaseSchema):
-    pass
-
-
-class TransferenciasFinanceirasFiltroSchema(TransferenciasFinanceirasToolBaseSchema):
+class TransferenciasFinanceirasFiltroSchema(SqlToolBaseSchema):
     tipo_registro: str | None = None
     ano: int | None = None
     data_inicio: date | None = None
@@ -111,7 +107,7 @@ class TransferenciasFinanceirasFiltroSchema(TransferenciasFinanceirasToolBaseSch
         return parse_date(value)
 
 
-class ConsultarTransferenciasFinanceirasParams(TransferenciasFinanceirasToolBaseSchema):
+class ConsultarTransferenciasFinanceirasParams(SqlToolBaseSchema):
     filtros: TransferenciasFinanceirasFiltroSchema = Field(
         default_factory=TransferenciasFinanceirasFiltroSchema
     )
@@ -172,9 +168,7 @@ class ConsultarTransferenciasFinanceirasParams(TransferenciasFinanceirasToolBase
         )
 
 
-class ConsultarTransferenciasFinanceirasMetadata(
-    TransferenciasFinanceirasToolBaseSchema
-):
+class ConsultarTransferenciasFinanceirasMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -185,9 +179,7 @@ class ConsultarTransferenciasFinanceirasMetadata(
     )
 
 
-class ConsultarTransferenciasFinanceirasResponse(
-    TransferenciasFinanceirasToolBaseSchema
-):
+class ConsultarTransferenciasFinanceirasResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarTransferenciasFinanceirasMetadata

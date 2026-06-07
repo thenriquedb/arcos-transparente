@@ -148,6 +148,7 @@ def build_aggregate_response(
     metadata: MetadataT,
     execution: AggregateExecutionResult,
     item_model: type[ItemModelT] | None = None,
+    project_group: Callable[[Any, Any, str, str], dict[str, Any]] | None = None,
     agrupar_por: str | None = None,
     metrica: str | None = None,
     serialize_group_value: Callable[[Any], Any] = lambda value: value,
@@ -176,18 +177,29 @@ def build_aggregate_response(
             sugestao=execution.suggestion,
         ).model_dump(mode="json")
 
-    assert item_model is not None
     assert metrica is not None
 
-    resultados = [
-        item_model.model_validate(
-            {
-                agrupar_por: serialize_group_value(group_value),
-                metrica: serialize_metric(metric_value),
-            }
-        ).model_dump(mode="json", exclude_none=True)
-        for group_value, metric_value in execution.rows
-    ]
+    if project_group is not None:
+        resultados = [
+            project_group(
+                serialize_group_value(group_value),
+                serialize_metric(metric_value),
+                agrupar_por,
+                metrica,
+            )
+            for group_value, metric_value in execution.rows
+        ]
+    else:
+        assert item_model is not None
+        resultados = [
+            item_model.model_validate(
+                {
+                    agrupar_por: serialize_group_value(group_value),
+                    metrica: serialize_metric(metric_value),
+                }
+            ).model_dump(mode="json", exclude_none=True)
+            for group_value, metric_value in execution.rows
+        ]
     if execution.total_grupos > len(resultados):
         messages.append(
             f"Mostrando {len(resultados)} de {execution.total_grupos} grupos encontrados."

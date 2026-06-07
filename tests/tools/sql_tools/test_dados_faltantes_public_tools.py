@@ -55,6 +55,22 @@ def test_consultar_e_agregar_despesas_filtram_diarias(monkeypatch) -> None:
                 valor_pago=Decimal("18.00"),
             ),
             DespesaDocumento(
+                tipo_origem="empenho",
+                arquivo_origem="empenhos-2025.xml",
+                sequencia_origem=2,
+                origem="camara",
+                exercicio=2025,
+                unidade_gestora="CÂMARA MUNICIPAL",
+                numero_documento="000332",
+                data_documento=date(2025, 9, 18),
+                credor="MARIA DE SOUZA",
+                funcao="Legislativa",
+                descricao_acao="Pagamento de diaria para reuniao externa",
+                valor_documento=Decimal("24.00"),
+                valor_empenhado=Decimal("24.00"),
+                valor_pago=Decimal("24.00"),
+            ),
+            DespesaDocumento(
                 tipo_origem="documento_extra",
                 arquivo_origem="documentos-extras-prefeitura-2025.xml",
                 sequencia_origem=1,
@@ -74,6 +90,9 @@ def test_consultar_e_agregar_despesas_filtram_diarias(monkeypatch) -> None:
 
     consulta = despesas_tools.consultar_despesas(
         filtros={"descricao": "diaria", "ano": 2025},
+        ordenar_por="valor_pago",
+        ordem="desc",
+        limite=1,
         campos=["numero", "credor", "valor_pago"],
     )
     agregacao = despesas_tools.agregar_despesas(
@@ -81,11 +100,12 @@ def test_consultar_e_agregar_despesas_filtram_diarias(monkeypatch) -> None:
         metrica="soma_valor_pago",
     )
 
-    assert consulta["total"] == 1
+    assert consulta["total"] == 2
     assert consulta["resultados"] == [
-        {"numero": "000331", "credor": "EDISON DOS SANTOS", "valor_pago": 18.0}
+        {"numero": "000332", "credor": "MARIA DE SOUZA", "valor_pago": 24.0}
     ]
-    assert agregacao["valor_total"] == 18.0
+    assert consulta["mensagem"] == "Mostrando 1 de 2 despesas encontradas."
+    assert agregacao["valor_total"] == 42.0
 
     session.close()
 
@@ -106,6 +126,16 @@ def test_consultar_e_agregar_patrimonios_por_localizacao(monkeypatch) -> None:
             ),
             Patrimonio(
                 unidade_gestora="PREFEITURA MUNICIPAL",
+                placa="27984",
+                descricao_item="FOGAO INDUSTRIAL",
+                localizacao="L005 - SEC. MUNIC. DE EDUCAÇÃO",
+                status="Normal",
+                tipo_ingresso="Compra",
+                data_aquisicao=date(2025, 3, 8),
+                valor_atualizado=Decimal("500.00"),
+            ),
+            Patrimonio(
+                unidade_gestora="PREFEITURA MUNICIPAL",
                 placa="27983",
                 descricao_item="CADEIRA",
                 localizacao="L004 - SEC. MUNIC. DE FAZENDA",
@@ -121,6 +151,9 @@ def test_consultar_e_agregar_patrimonios_por_localizacao(monkeypatch) -> None:
 
     consulta = patrimonios_tools.consultar_patrimonios(
         filtros={"localizacao": "educacao"},
+        ordenar_por="valor_atualizado",
+        ordem="desc",
+        limite=1,
         campos=["placa", "descricao", "valor_atualizado"],
     )
     agregacao = patrimonios_tools.agregar_patrimonios(
@@ -128,11 +161,12 @@ def test_consultar_e_agregar_patrimonios_por_localizacao(monkeypatch) -> None:
         metrica="soma_valor_atualizado",
     )
 
-    assert consulta["total"] == 1
+    assert consulta["total"] == 2
     assert consulta["resultados"] == [
         {"placa": "27982", "descricao": "REFRIGERADOR", "valor_atualizado": 1995.0}
     ]
-    assert agregacao["valor_total"] == 1995.0
+    assert consulta["mensagem"] == "Mostrando 1 de 2 bens encontrados."
+    assert agregacao["valor_total"] == 2495.0
 
     session.close()
 
@@ -160,16 +194,45 @@ def test_agregar_quadro_pessoal_por_regime(monkeypatch) -> None:
     session.commit()
     _patch_session(monkeypatch, session)
 
+    consulta = quadro_tools.consultar_quadro_pessoal(
+        filtros={"origem": "prefeitura", "ano": 2025},
+        ordenar_por="vagas_preenchidas",
+        ordem="desc",
+        limite=1,
+        campos=["regime", "vagas_preenchidas"],
+    )
     resultado = quadro_tools.agregar_quadro_pessoal(
         filtros={"origem": "prefeitura", "ano": 2025},
         agrupar_por="regime",
         metrica="soma_vagas_preenchidas",
     )
 
+    assert consulta["total"] == 2
+    assert consulta["resultados"] == [{"regime": "Efetivo", "vagas_preenchidas": 843}]
+    assert consulta["mensagem"] == "Mostrando 1 de 2 registros encontrados."
     assert resultado["total_grupos"] == 2
     assert resultado["resultados"] == [
         {"regime": "Efetivo", "soma_vagas_preenchidas": 843},
         {"regime": "Comissionado", "soma_vagas_preenchidas": 77},
     ]
+
+    session.close()
+
+
+def test_tools_retorna_sugestoes_quando_nao_ha_resultados(monkeypatch) -> None:
+    session = _build_session()
+    _patch_session(monkeypatch, session)
+
+    despesas = despesas_tools.consultar_despesas(filtros={"credor": "inexistente"})
+    patrimonios = patrimonios_tools.consultar_patrimonios(
+        filtros={"localizacao": "inexistente"}
+    )
+    quadro = quadro_tools.consultar_quadro_pessoal(filtros={"origem": "inexistente"})
+
+    assert despesas["sugestao"] == "Nenhuma despesa encontrada com os filtros."
+    assert (
+        patrimonios["sugestao"] == "Nenhum bem patrimonial encontrado com os filtros."
+    )
+    assert quadro["sugestao"] == "Nenhum registro de quadro de pessoal encontrado."
 
     session.close()

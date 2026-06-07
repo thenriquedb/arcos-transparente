@@ -40,11 +40,7 @@ ALLOWED_PATRIMONIO_SORT_FIELDS = {
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
-class PatrimonioToolBaseSchema(SqlToolBaseSchema):
-    pass
-
-
-class PatrimonioFiltroSchema(PatrimonioToolBaseSchema):
+class PatrimonioFiltroSchema(SqlToolBaseSchema):
     unidade_responsavel: str | None = None
     placa: str | None = None
     descricao: str | None = None
@@ -77,7 +73,7 @@ class PatrimonioFiltroSchema(PatrimonioToolBaseSchema):
         return parse_date(value)
 
 
-class ConsultarPatrimoniosParams(PatrimonioToolBaseSchema):
+class ConsultarPatrimoniosParams(SqlToolBaseSchema):
     filtros: PatrimonioFiltroSchema = Field(default_factory=PatrimonioFiltroSchema)
     ordenar_por: str = "data_aquisicao"
     ordem: str = "desc"
@@ -133,7 +129,7 @@ class ConsultarPatrimoniosParams(PatrimonioToolBaseSchema):
         )
 
 
-class ConsultarPatrimoniosMetadata(PatrimonioToolBaseSchema):
+class ConsultarPatrimoniosMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -142,7 +138,7 @@ class ConsultarPatrimoniosMetadata(PatrimonioToolBaseSchema):
     campos: list[str] = Field(default_factory=lambda: list(ALLOWED_PATRIMONIO_FIELDS))
 
 
-class ConsultarPatrimoniosResponse(PatrimonioToolBaseSchema):
+class ConsultarPatrimoniosResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarPatrimoniosMetadata

@@ -39,11 +39,7 @@ ALLOWED_DIARIAS_SORT_FIELDS = {
 ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
-class DiariaToolBaseSchema(SqlToolBaseSchema):
-    pass
-
-
-class DiariaFiltroSchema(DiariaToolBaseSchema):
+class DiariaFiltroSchema(SqlToolBaseSchema):
     origem: str | None = None
     ano: int | None = None
     periodo_inicio: date | None = None
@@ -74,7 +70,7 @@ class DiariaFiltroSchema(DiariaToolBaseSchema):
         return parse_date(value)
 
 
-class ConsultarDiariasParams(DiariaToolBaseSchema):
+class ConsultarDiariasParams(SqlToolBaseSchema):
     filtros: DiariaFiltroSchema = Field(default_factory=DiariaFiltroSchema)
     ordenar_por: str = "periodo_fim"
     ordem: str = "desc"
@@ -130,7 +126,7 @@ class ConsultarDiariasParams(DiariaToolBaseSchema):
         )
 
 
-class ConsultarDiariasMetadata(DiariaToolBaseSchema):
+class ConsultarDiariasMetadata(SqlToolBaseSchema):
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -139,7 +135,7 @@ class ConsultarDiariasMetadata(DiariaToolBaseSchema):
     campos: list[str] = Field(default_factory=lambda: list(ALLOWED_DIARIAS_FIELDS))
 
 
-class ConsultarDiariasResponse(DiariaToolBaseSchema):
+class ConsultarDiariasResponse(SqlToolBaseSchema):
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarDiariasMetadata
