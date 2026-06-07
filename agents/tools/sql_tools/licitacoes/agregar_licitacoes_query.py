@@ -72,7 +72,8 @@ def _build_object_filter_execution(
 ) -> AggregateExecutionResult:
     if agrupar_por is None:
         return AggregateExecutionResult(
-            valor_total=_calculate_metric_from_rows(licitacoes, metrica)
+            valor_total=_calculate_metric_from_rows(licitacoes, metrica),
+            source_count=len(licitacoes),
         )
 
     grouped_rows: dict[str, list[Licitacao]] = {}
@@ -96,6 +97,7 @@ def _build_object_filter_execution(
     return AggregateExecutionResult(
         total_grupos=total_grupos,
         rows=resultados[:limite],
+        source_count=len(licitacoes),
     )
 
 
@@ -217,7 +219,7 @@ def agregar_licitacoes(
                 limite=params.limite,
             )
         elif params.agrupar_por is None:
-            _, valor_total = execute_statement_total(
+            total_match, valor_total = execute_statement_total(
                 session,
                 count_stmt=apply_licitacoes_filters(
                     select(func.count(Licitacao.id)),
@@ -228,7 +230,10 @@ def agregar_licitacoes(
                     params.filtros,
                 ),
             )
-            execution = AggregateExecutionResult(valor_total=valor_total)
+            execution = AggregateExecutionResult(
+                valor_total=valor_total,
+                source_count=total_match,
+            )
         else:
             group_column = GROUP_BY_COLUMNS[params.agrupar_por]
             grouped_stmt = apply_licitacoes_filters(
@@ -252,7 +257,7 @@ def agregar_licitacoes(
     suggestion = (
         "Nenhuma licitacao encontrada com os filtros informados."
         if (
-            (params.agrupar_por is None and not execution.valor_total)
+            (params.agrupar_por is None and execution.source_count == 0)
             or (params.agrupar_por is not None and not execution.rows)
         )
         else None
@@ -264,6 +269,7 @@ def agregar_licitacoes(
             total_grupos=execution.total_grupos,
             rows=execution.rows,
             valor_total=execution.valor_total,
+            source_count=execution.source_count,
             suggestion=suggestion,
         ),
         item_model=AgregacaoLicitacoesItem if params.agrupar_por is not None else None,

@@ -473,10 +473,18 @@ def test_shared_collection_aggregate_flow_supports_total_only_and_empty_results(
             ordem="desc",
             limite=10,
         ),
-        execution=AggregateExecutionResult(valor_total=total_execution.valor_total),
+        execution=AggregateExecutionResult(
+            valor_total=total_execution.valor_total,
+            source_count=total_execution.source_count,
+        ),
     )
 
     assert total_response["valor_total"] == 87000.0
+    assert total_response["mensagem"] == (
+        "Agregacao sem agrupamento: `valor_total` e o resultado final; "
+        "`resultados` vazio e `total_grupos` 0 sao esperados. "
+        "3 registros corresponderam aos filtros."
+    )
 
     empty_execution = execute_collection_aggregate(
         [],

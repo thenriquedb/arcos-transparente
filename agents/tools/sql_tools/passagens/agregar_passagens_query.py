@@ -161,7 +161,7 @@ def agregar_passagens(
     suggestion = (
         "Nenhuma passagem encontrada com os filtros."
         if (
-            (params.agrupar_por is None and not execution.valor_total)
+            (params.agrupar_por is None and execution.source_count == 0)
             or (params.agrupar_por is not None and not execution.rows)
         )
         else None
@@ -173,6 +173,7 @@ def agregar_passagens(
             total_grupos=execution.total_grupos,
             rows=execution.rows,
             valor_total=execution.valor_total,
+            source_count=execution.source_count,
             suggestion=suggestion,
         ),
         project_group=(

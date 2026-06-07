@@ -171,6 +171,7 @@ def agregar_servidores(
                 metadata=metadata,
                 execution=AggregateExecutionResult(
                     valor_total=decimal_or_int_to_json(valor_total),
+                    source_count=total_match,
                     suggestion=(
                         "Nenhum servidor encontrado com os filtros informados."
                         if total_match == 0

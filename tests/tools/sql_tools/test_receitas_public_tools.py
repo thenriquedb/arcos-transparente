@@ -357,6 +357,44 @@ def test_agregar_receitas_soma_valor_lancado_total(monkeypatch) -> None:
     session.close()
 
 
+def test_agregar_receitas_total_zero_mantem_correspondencia_sem_sugestao(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    natureza_iptu = _natureza(
+        identificacao="1.1.1.2",
+        nome="Imposto Predial e Territorial Urbano - Principal",
+    )
+    session.add(
+        _arrecadacao(
+            natureza=natureza_iptu,
+            mes="JANEIRO",
+            data_arrecadacao=date(2025, 1, 15),
+            unidade_gestora="PREFEITURA MUNICIPAL",
+            fonte_recurso="Recursos proprios",
+            valor_previsto_liquido="100.00",
+            valor_arrecadado_liquido="0.00",
+        )
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = receitas_tools.agregar_receitas(
+        filtros={"tipo_de_dado": "arrecadacao", "ano": 2025, "tema": "iptu"},
+        metrica="soma_valor_recebido",
+    )
+
+    assert resultado["valor_total"] == 0.0
+    assert resultado["sugestao"] is None
+    assert resultado["mensagem"] == (
+        "Agregacao sem agrupamento: `valor_total` e o resultado final; "
+        "`resultados` vazio e `total_grupos` 0 sao esperados. "
+        "1 registro correspondeu aos filtros."
+    )
+
+    session.close()
+
+
 def test_agregar_receitas_valida_periodo_de_mes_invalido() -> None:
     resultado = receitas_tools.agregar_receitas(
         filtros={"mes_inicio": 10, "mes_fim": 3},

@@ -307,6 +307,7 @@ def agregar_contratos(
                 metadata=metadata,
                 execution=AggregateExecutionResult(
                     valor_total=valor_total_json,
+                    source_count=total_match,
                     messages=mensagens,
                     suggestion=(
                         build_descricao_despesa_unavailable_message(params.filtros)

@@ -16,7 +16,7 @@ def build_scope_help_message() -> str:
         "- **Licitacoes e contratos**: `Quais licitacoes da prefeitura aconteceram em 2025?`\n"
         "- **Despesas, diarias e passagens**: `Quanto a prefeitura gastou com diarias em 2025?`\n"
         "- **Frota, veiculos e patrimonio**: `Quais veiculos fazem parte da frota municipal?`\n"
-        "- **Quadro de pessoal, planejamento e receitas**: `Quanto foi arrecadado em 2025?`\n"
+        "- **Quadro de pessoal, planejamento e receitas**: `Quanto a prefeitura arrecadou em 2025?`\n"
         "- **Transferencias, emendas e politicos eleitos**: `Quanto a prefeitura recebeu de emendas parlamentares em 2025?`\n"
         "- **Telefones uteis, estrutura organizacional e horarios de onibus**: `Qual e o telefone do Procon?`"
     )

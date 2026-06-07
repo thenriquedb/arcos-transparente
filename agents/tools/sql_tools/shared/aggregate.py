@@ -24,6 +24,7 @@ class AggregateExecutionResult:
     total_grupos: int = 0
     rows: Sequence[tuple[Any, Any]] = field(default_factory=tuple)
     valor_total: Any = None
+    source_count: int | None = None
     messages: Sequence[str | None] = field(default_factory=tuple)
     suggestion: str | None = None
 
@@ -98,13 +99,14 @@ def execute_collection_aggregate(
 
     if agrupar_por is None:
         return AggregateExecutionResult(
+            source_count=len(rows),
             valor_total=serialize_metric(
                 calculate_collection_metric(
                     rows,
                     metrica=metrica,
                     metric_getters=metric_getters,
                 )
-            )
+            ),
         )
 
     grouped_rows: dict[Any, list[RowT]] = {}
@@ -139,6 +141,17 @@ def execute_collection_aggregate(
     return AggregateExecutionResult(
         total_grupos=total_grupos,
         rows=resultados[:limite],
+        source_count=len(rows),
+    )
+
+
+def _build_total_only_message(source_count: int) -> str:
+    registro_label = "registro" if source_count == 1 else "registros"
+    verb_label = "correspondeu" if source_count == 1 else "corresponderam"
+    return (
+        "Agregacao sem agrupamento: `valor_total` e o resultado final; "
+        "`resultados` vazio e `total_grupos` 0 sao esperados. "
+        f"{source_count} {registro_label} {verb_label} aos filtros."
     )
 
 
@@ -159,6 +172,8 @@ def build_aggregate_response(
     messages = list(execution.messages)
 
     if agrupar_por is None:
+        if execution.source_count is not None and execution.source_count > 0:
+            messages.append(_build_total_only_message(execution.source_count))
         return response_type(
             total_grupos=0,
             resultados=[],
