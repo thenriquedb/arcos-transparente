@@ -16,40 +16,31 @@ from agents.chatbot.observability import (
     ObservabilityProvider,
     build_event_payload,
 )
-from agents.router import route_user_query
+from agents.routing.compatibility import route_public_compatibility_query
+from agents.routing.conversation import (
+    looks_like_confirmation_text,
+    normalize_conversation_terms,
+    normalize_conversation_text,
+)
 from agents.routing.constants import (
     DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS,
     DESPESAS_DOMAIN_KEYWORDS,
     DIARIAS_DOMAIN_KEYWORDS,
     PASSAGENS_DOMAIN_KEYWORDS,
 )
-from agents.routing.extractors import _extract_licitacoes_objeto, _normalize
+from agents.routing.extractors import _extract_licitacoes_objeto
 from agents.tools.registry import (
     PublicToolCatalogEntry,
     get_public_tool_catalog,
     get_public_tools,
     get_public_tools_by_name,
 )
-from shared.utils.text import normalize_search_text
 
 SelectorAction = Literal["allow", "clarify", "block"]
 SelectorConfidence = Literal["high", "medium", "low"]
 
 _MAX_SELECTOR_CANDIDATES = 4
 _CONTEXT_WINDOW = 6
-_CONFIRMATION_TOKENS = frozenset(
-    {
-        "sim",
-        "isso",
-        "isso mesmo",
-        "exato",
-        "correto",
-        "confirmo",
-        "confirmado",
-        "pode ser",
-        "pode",
-    }
-)
 _CONTACT_QUERY_TERMS = (
     "contato",
     "contatos",
@@ -378,6 +369,43 @@ def _fallback_selection(
     )
 
 
+def _build_named_candidate_selection(
+    candidate_tool_names: Sequence[str],
+    *,
+    reason_code: str,
+    confidence: SelectorConfidence = "high",
+) -> HybridToolSelection | None:
+    candidate_names = _normalize_candidate_names(candidate_tool_names)
+    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
+    if len(candidate_tools) != len(candidate_names):
+        return None
+
+    return HybridToolSelection(
+        action="allow",
+        candidate_tools=candidate_tools,
+        candidate_tool_names=tuple(candidate_names),
+        confidence=confidence,
+        reason_code=reason_code,
+    )
+
+
+def _select_from_compatibility_route(
+    question: str,
+    *,
+    allowed_tool_names: Sequence[str],
+    reason_code: str,
+    route_filter: Callable[[object], bool] | None = None,
+) -> HybridToolSelection | None:
+    route = route_public_compatibility_query(question)
+    if not route.confident or route.tool_name not in allowed_tool_names:
+        return None
+    if route_filter is not None and not route_filter(route):
+        return None
+    if route.tool_name is None:
+        return None
+    return _build_named_candidate_selection([route.tool_name], reason_code=reason_code)
+
+
 def _select_with_heuristics(
     question: str,
     *,
@@ -403,21 +431,11 @@ def _select_with_heuristics(
             return estoques_selection
         return None
 
-    candidate_names = _normalize_candidate_names(
+    return _build_named_candidate_selection(
         [
             "consultar_eleitos",
             "consultar_conhecimento_municipal",
-        ]
-    )
-    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
-    if len(candidate_tools) != len(candidate_names):
-        return None
-
-    return HybridToolSelection(
-        action="allow",
-        candidate_tools=candidate_tools,
-        candidate_tool_names=tuple(candidate_names),
-        confidence="high",
+        ],
         reason_code="heuristic_elected_contacts",
     )
 
@@ -425,23 +443,9 @@ def _select_with_heuristics(
 def _select_salary_history_with_router(
     question: str,
 ) -> HybridToolSelection | None:
-    route = route_user_query(question)
-    if (
-        not route.confident
-        or route.tool_name != "buscar_historico_de_pagamentos_do_servidor"
-    ):
-        return None
-
-    candidate_names = _normalize_candidate_names([route.tool_name])
-    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
-    if len(candidate_tools) != len(candidate_names):
-        return None
-
-    return HybridToolSelection(
-        action="allow",
-        candidate_tools=candidate_tools,
-        candidate_tool_names=tuple(candidate_names),
-        confidence="high",
+    return _select_from_compatibility_route(
+        question,
+        allowed_tool_names=("buscar_historico_de_pagamentos_do_servidor",),
         reason_code="heuristic_salary_history_query",
     )
 
@@ -449,7 +453,7 @@ def _select_salary_history_with_router(
 def _select_event_spend_query(
     question: str,
 ) -> HybridToolSelection | None:
-    normalized_question = _normalize(question)
+    normalized_question = normalize_conversation_text(question)
     if not normalized_question:
         return None
     if not any(signal in normalized_question for signal in _EVENT_SPEND_SIGNAL_TERMS):
@@ -457,22 +461,12 @@ def _select_event_spend_query(
     if _extract_licitacoes_objeto(normalized_question) is None:
         return None
 
-    candidate_names = _normalize_candidate_names(
+    return _build_named_candidate_selection(
         [
             "consultar_licitacoes",
             "consultar_contratos",
             "consultar_despesas",
-        ]
-    )
-    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
-    if len(candidate_tools) != len(candidate_names):
-        return None
-
-    return HybridToolSelection(
-        action="allow",
-        candidate_tools=candidate_tools,
-        candidate_tool_names=tuple(candidate_names),
-        confidence="high",
+        ],
         reason_code="heuristic_event_spend_query",
     )
 
@@ -484,7 +478,7 @@ def _select_broad_spend_query(
     if event_spend_selection is not None:
         return event_spend_selection
 
-    normalized_question = _normalize(question)
+    normalized_question = normalize_conversation_text(question)
     if not normalized_question:
         return None
     if not any(signal in normalized_question for signal in _EVENT_SPEND_SIGNAL_TERMS):
@@ -492,7 +486,7 @@ def _select_broad_spend_query(
     if _is_explicit_aggregate_spend_request(normalized_question):
         return None
 
-    route = route_user_query(question)
+    route = route_public_compatibility_query(question)
     direct_domain_candidate_names = _select_direct_spend_candidate_names(
         normalized_question,
         route_tool_name=route.tool_name if route.confident else None,
@@ -500,16 +494,8 @@ def _select_broad_spend_query(
     if direct_domain_candidate_names is None:
         return None
 
-    candidate_names = _normalize_candidate_names(direct_domain_candidate_names)
-    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
-    if len(candidate_tools) != len(candidate_names):
-        return None
-
-    return HybridToolSelection(
-        action="allow",
-        candidate_tools=candidate_tools,
-        candidate_tool_names=tuple(candidate_names),
-        confidence="high",
+    return _build_named_candidate_selection(
+        direct_domain_candidate_names,
         reason_code="heuristic_broad_spend_query",
     )
 
@@ -568,77 +554,38 @@ def _select_direct_spend_candidate_names(
 def _select_emenda_query_with_router(
     question: str,
 ) -> HybridToolSelection | None:
-    route = route_user_query(question)
-    if not route.confident or route.tool_name not in (
-        "agregar_transferencias_financeiras",
-        "consultar_transferencias_financeiras",
-    ):
-        return None
-
-    filtros = route.tool_kwargs.get("filtros", {})
-    if not isinstance(filtros, dict) or filtros.get("tipo_registro") != "emenda":
-        return None
-
-    candidate_names = _normalize_candidate_names([route.tool_name])
-    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
-    if len(candidate_tools) != len(candidate_names):
-        return None
-
-    return HybridToolSelection(
-        action="allow",
-        candidate_tools=candidate_tools,
-        candidate_tool_names=tuple(candidate_names),
-        confidence="high",
+    return _select_from_compatibility_route(
+        question,
+        allowed_tool_names=(
+            "agregar_transferencias_financeiras",
+            "consultar_transferencias_financeiras",
+        ),
         reason_code="heuristic_emenda_query",
+        route_filter=_route_has_emenda_filter,
     )
 
 
 def _select_contract_value_ranking_with_router(
     question: str,
 ) -> HybridToolSelection | None:
-    route = route_user_query(question)
-    if (
-        not route.confident
-        or route.tool_name != "consultar_contratos"
-        or route.tool_kwargs.get("ordenar_por") != "valor"
-    ):
-        return None
-
-    candidate_names = _normalize_candidate_names(["consultar_contratos"])
-    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
-    if len(candidate_tools) != len(candidate_names):
-        return None
-
-    return HybridToolSelection(
-        action="allow",
-        candidate_tools=candidate_tools,
-        candidate_tool_names=tuple(candidate_names),
-        confidence="high",
+    return _select_from_compatibility_route(
+        question,
+        allowed_tool_names=("consultar_contratos",),
         reason_code="heuristic_contract_value_ranking",
+        route_filter=lambda route: route.tool_kwargs.get("ordenar_por") == "valor",
     )
 
 
 def _select_estoques_query_with_router(
     question: str,
 ) -> HybridToolSelection | None:
-    route = route_user_query(question)
-    if not route.confident or route.tool_name not in (
-        "agregar_estoques",
-        "consultar_estoques",
-        "consultar_movimentacoes_de_estoque",
-    ):
-        return None
-
-    candidate_names = _normalize_candidate_names([route.tool_name])
-    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
-    if len(candidate_tools) != len(candidate_names):
-        return None
-
-    return HybridToolSelection(
-        action="allow",
-        candidate_tools=candidate_tools,
-        candidate_tool_names=tuple(candidate_names),
-        confidence="high",
+    return _select_from_compatibility_route(
+        question,
+        allowed_tool_names=(
+            "agregar_estoques",
+            "consultar_estoques",
+            "consultar_movimentacoes_de_estoque",
+        ),
         reason_code="heuristic_estoques_query",
     )
 
@@ -688,7 +635,7 @@ def _is_elected_contact_query(
     *,
     history: Sequence[HistoryMessage],
 ) -> bool:
-    normalized_question = _normalize_selector_text(question)
+    normalized_question = normalize_conversation_terms(question)
     if not normalized_question:
         return False
 
@@ -704,14 +651,14 @@ def _is_elected_contact_query(
         return True
 
     history_text = " ".join(
-        _normalize_selector_text(message.content)
+        normalize_conversation_terms(message.content)
         for message in history[-_CONTEXT_WINDOW:]
         if str(message.content).strip()
     ).strip()
     if not history_text:
         return False
 
-    if normalized_question in _CONFIRMATION_TOKENS:
+    if looks_like_confirmation_text(normalize_conversation_terms(question)):
         return _has_any_term(history_text, _CONTACT_QUERY_TERMS) and _has_any_term(
             history_text,
             _ELECTED_QUERY_TERMS,
@@ -726,9 +673,9 @@ def _is_elected_contact_query(
     return False
 
 
-def _normalize_selector_text(text: str) -> str:
-    normalized = normalize_search_text(text)
-    return " ".join(re.findall(r"[a-z0-9-]+", normalized))
+def _route_has_emenda_filter(route: object) -> bool:
+    filtros = getattr(route, "tool_kwargs", {}).get("filtros", {})
+    return isinstance(filtros, dict) and filtros.get("tipo_registro") == "emenda"
 
 
 def _has_any_term(text: str, terms: Sequence[str]) -> bool:

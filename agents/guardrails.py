@@ -6,6 +6,10 @@ from collections.abc import Sequence
 import re
 
 from agents.chatbot.help_messages import build_scope_help_message
+from agents.routing.conversation import (
+    looks_like_confirmation_reply,
+    normalize_conversation_text,
+)
 from agents.routing.constants import (
     SUPPORTED_SCOPE_STRONG_KEYWORDS,
     SUPPORTED_SCOPE_WEAK_KEYWORDS,
@@ -27,7 +31,6 @@ from agents.routing.extractors import (
     _extract_receitas_unidade,
     _extract_secretaria,
     _extract_year,
-    _normalize,
 )
 from agents.routing.models import GuardrailDecision, RouteDecision
 
@@ -120,28 +123,6 @@ _SHORT_RANKING_STOPWORDS = frozenset(
         "delas",
     }
 )
-_CONFIRMATION_TOKENS = frozenset(
-    {
-        "sim",
-        "isso",
-        "exato",
-        "correto",
-        "confirmo",
-        "confirmado",
-        "pode ser",
-        "pode",
-    }
-)
-_CONFIRMATION_REPLY_PATTERN = re.compile(
-    r"^(?:"
-    r"sim|"
-    r"isso(?:\s+mesmo)?|"
-    r"exato|"
-    r"correto|"
-    r"confirm(?:o|ado|a|ar)?|"
-    r"pode(?:\s+ser|\s+confirmar)?"
-    r")$"
-)
 
 
 def evaluate_public_query_guardrails(
@@ -154,7 +135,7 @@ def evaluate_public_query_guardrails(
 ) -> GuardrailDecision:
     """Aplica bloqueios hard-coded antes da execução do modelo."""
 
-    normalized_text = _normalize(query)
+    normalized_text = normalize_conversation_text(query)
 
     if not normalized_text:
         return GuardrailDecision(
@@ -268,7 +249,7 @@ def _has_public_context_anchor(prior_user_queries: Sequence[str]) -> bool:
     """Aceita follow-up curto apenas quando ele continua uma trilha pública válida."""
 
     for prior_query in reversed(prior_user_queries):
-        normalized_prior_query = _normalize(prior_query)
+        normalized_prior_query = normalize_conversation_text(prior_query)
         if not normalized_prior_query:
             continue
         if _query_establishes_public_context(normalized_prior_query):
@@ -285,7 +266,7 @@ def _has_public_context_anchor_from_messages(
     """Usa o historico completo para preservar follow-ups apos clarificacoes."""
 
     for role, content, guardrail_triggered in reversed(prior_messages):
-        normalized_content = _normalize(content)
+        normalized_content = normalize_conversation_text(content)
         if not normalized_content:
             continue
         if guardrail_triggered:
@@ -362,41 +343,10 @@ def _looks_like_confirmation_reply(
     normalized_text: str,
     prior_messages: Sequence[tuple[str, str, bool]],
 ) -> bool:
-    if not _looks_like_confirmation_text(normalized_text):
-        return False
-
-    for role, content, guardrail_triggered in reversed(prior_messages):
-        if guardrail_triggered:
-            return False
-        if role != "assistant":
-            continue
-
-        normalized_content = _normalize(content)
-        if not normalized_content:
-            return False
-        if "?" in content:
-            return True
-        return any(
-            hint in normalized_content
-            for hint in (
-                "voce quer",
-                "voce gostaria",
-                "pode ser",
-                "confirma",
-                "confirmar",
-                "ano especifico",
-                "qual periodo",
-                "qual ano",
-            )
-        )
-
-    return False
-
-
-def _looks_like_confirmation_text(normalized_text: str) -> bool:
-    if normalized_text in _CONFIRMATION_TOKENS:
-        return True
-    return _CONFIRMATION_REPLY_PATTERN.fullmatch(normalized_text) is not None
+    return looks_like_confirmation_reply(
+        normalized_text,
+        prior_messages=prior_messages,
+    )
 
 
 def _has_public_filter_hint(normalized_text: str) -> bool:

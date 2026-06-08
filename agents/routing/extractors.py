@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import re
-import unicodedata
 from typing import Any
 
+from agents.routing.conversation import normalize_conversation_text
 from agents.tools.sql_tools.planejamento.shared.entities import (
     extract_planejamento_entidade_alias,
 )
@@ -68,11 +68,7 @@ REFERENTIAL_NAME_TOKENS = {
 def _normalize(text: str) -> str:
     """Remove acentos e normaliza caixa para simplificar match por texto."""
 
-    normalized = unicodedata.normalize("NFD", text)
-    without_accents = "".join(
-        char for char in normalized if unicodedata.category(char) != "Mn"
-    )
-    return without_accents.lower().strip()
+    return normalize_conversation_text(text)
 
 
 def _contains_any(normalized_text: str, keywords: tuple[str, ...]) -> bool:
