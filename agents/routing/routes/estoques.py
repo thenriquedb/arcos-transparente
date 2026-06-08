@@ -1,4 +1,4 @@
-e"""Regras de roteamento para o dominio de estoques."""
+"""Regras de roteamento para o dominio de estoques."""
 
 from __future__ import annotations
 
