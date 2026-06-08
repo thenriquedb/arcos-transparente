@@ -3,10 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-import os
-from pathlib import Path
 
-from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import InMemorySaver
@@ -18,20 +15,19 @@ from agents.chatbot.observability import (
     load_observability_config_from_env,
 )
 from agents.tools.registry import get_public_tools
-
-load_dotenv()
+from shared.runtime_config import (
+    get_chatbot_system_prompt_path,
+    load_project_env,
+    read_required_env,
+)
 
 SUPPORTED_LLM_PROVIDER = "openai"
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SYSTEM_PROMPT_PATH = PROJECT_ROOT / "docs" / "agent-system-prompt.md"
+SYSTEM_PROMPT_PATH = get_chatbot_system_prompt_path()
 CHECKPOINTER = InMemorySaver()
 
 
 def _read_required_env(var_name: str) -> str:
-    value = os.getenv(var_name)
-    if value is None or not value.strip():
-        raise ValueError(f"{var_name} deve ser informado no ambiente ou no .env.")
-    return value.strip()
+    return read_required_env(var_name)
 
 
 def obter_configuracao_llm() -> dict[str, str]:
@@ -53,6 +49,7 @@ def obter_configuracao_llm() -> dict[str, str]:
 
 
 def obter_configuracao_observabilidade() -> ObservabilityConfig:
+    load_project_env()
     return load_observability_config_from_env()
 
 

@@ -3,18 +3,17 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-import os
 from pathlib import Path
 import unicodedata
 from typing import Generator
 
-from dotenv import load_dotenv
 from sqlalchemy.engine import make_url
 from sqlalchemy import Engine, create_engine, event
 from sqlalchemy.orm import Session, sessionmaker
+from shared.runtime_config import get_database_url
 
-load_dotenv()
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///database/transparencia.db")
+
+DATABASE_URL = get_database_url()
 
 
 def _ensure_sqlite_storage_directory(database_url: str) -> None:

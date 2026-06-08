@@ -29,9 +29,7 @@ def project_public_dict(
         return dict(payload)
 
     if order == "requested":
-        return {
-            campo: payload[campo] for campo in default_fields if campo in payload
-        }
+        return {campo: payload[campo] for campo in default_fields if campo in payload}
     selected = set(default_fields)
     return {campo: valor for campo, valor in payload.items() if campo in selected}
 

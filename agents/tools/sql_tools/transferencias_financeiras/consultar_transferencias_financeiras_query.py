@@ -6,6 +6,8 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy import select
+
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
@@ -78,12 +80,14 @@ def _emenda_to_public_dict(registro: EmendaParlamentar) -> dict[str, Any]:
 
 
 def _load_movimentacoes(session) -> list[dict[str, Any]]:
-    registros = session.query(TransferenciaFinanceiraMovimento).all()
+    registros = list(
+        session.execute(select(TransferenciaFinanceiraMovimento)).scalars()
+    )
     return [_movement_to_public_dict(registro) for registro in registros]
 
 
 def _load_emendas(session) -> list[dict[str, Any]]:
-    registros = session.query(EmendaParlamentar).all()
+    registros = list(session.execute(select(EmendaParlamentar)).scalars())
     return [_emenda_to_public_dict(registro) for registro in registros]
 
 

@@ -6,6 +6,8 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy import select
+
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
@@ -49,7 +51,7 @@ def _row_to_public_dict(registro: Patrimonio) -> dict[str, Any]:
 def load_filtered_patrimonios(
     session, filtros: PatrimonioFiltroSchema
 ) -> list[Patrimonio]:
-    registros = session.query(Patrimonio).all()
+    registros = list(session.execute(select(Patrimonio)).scalars())
 
     if filtros.unidade_responsavel:
         registros = [

@@ -5,6 +5,8 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy import select
+
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
@@ -51,7 +53,7 @@ def load_filtered_despesas_por_funcao(
     session,
     filtros: DespesasPorFuncaoFiltroSchema,
 ) -> list[DespesaPorFuncao]:
-    registros = session.query(DespesaPorFuncao).all()
+    registros = list(session.execute(select(DespesaPorFuncao)).scalars())
 
     if filtros.origem:
         registros = [

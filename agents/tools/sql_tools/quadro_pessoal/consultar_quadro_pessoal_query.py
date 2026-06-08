@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from sqlalchemy import select
+
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
@@ -45,7 +47,7 @@ def load_filtered_quadro_pessoal(
     session,
     filtros: QuadroPessoalFiltroSchema,
 ) -> list[QuadroPessoal]:
-    registros = session.query(QuadroPessoal).all()
+    registros = list(session.execute(select(QuadroPessoal)).scalars())
 
     if filtros.origem:
         registros = [

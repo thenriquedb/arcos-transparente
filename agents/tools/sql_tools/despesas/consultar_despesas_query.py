@@ -5,6 +5,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
@@ -78,10 +79,8 @@ def load_filtered_despesas(
     session,
     filtros: DespesaFiltroSchema,
 ) -> list[DespesaDocumento]:
-    query = session.query(DespesaDocumento).options(
-        selectinload(DespesaDocumento.itens)
-    )
-    registros = query.all()
+    stmt = select(DespesaDocumento).options(selectinload(DespesaDocumento.itens))
+    registros = list(session.execute(stmt).scalars())
 
     if filtros.tipo:
         registros = [r for r in registros if r.tipo_origem == filtros.tipo]

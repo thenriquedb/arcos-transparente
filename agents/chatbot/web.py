@@ -14,11 +14,13 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from agents.chatbot import ChatbotAgentBackend, ChatSession, ChatbotApplication  # noqa: E402
+from shared.runtime_config import get_chatbot_system_prompt_path, get_project_root  # noqa: E402
 
 APP_TITLE = "Arcos Transparente"
 INPUT_PLACEHOLDER = "Pergunte sobre servidores, folha, frota, contratos, receitas..."
+PROJECT_ROOT = get_project_root()
 BACKEND_CACHE_FILES = (
-    PROJECT_ROOT / "docs" / "agent-system-prompt.md",
+    get_chatbot_system_prompt_path(),
     PROJECT_ROOT / "agents" / "chatbot" / "agent.py",
 )
 BACKEND_CACHE_DIRS = (PROJECT_ROOT / "agents" / "tools" / "sql_tools",)

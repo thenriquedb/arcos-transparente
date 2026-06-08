@@ -5,6 +5,8 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy import select
+
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
@@ -50,7 +52,7 @@ def load_filtered_estoque_movimentacoes(
     session,
     filtros: EstoqueMovimentacaoFiltroSchema,
 ) -> list[EstoqueMovimentacao]:
-    registros = session.query(EstoqueMovimentacao).all()
+    registros = list(session.execute(select(EstoqueMovimentacao)).scalars())
 
     if filtros.origem:
         registros = [

@@ -17,6 +17,7 @@ from langchain_core.embeddings import Embeddings
 from langchain_openai import OpenAIEmbeddings
 
 from .config import RagConfig, get_rag_config
+from shared.runtime_config import get_env_value
 
 _HEADING_PATTERN = re.compile(r"^(#{1,6})\s+(.*\S)\s*$")
 _MARKDOWN_SEPARATORS = [
@@ -469,7 +470,7 @@ def _prepare_chroma_runtime_environment() -> None:
 def _build_embeddings(config: RagConfig) -> Embeddings:
     if not config.embedding_model:
         raise KnowledgeIndexError("RAG_EMBEDDING_MODEL deve ser informado.")
-    if not os.getenv("OPENAI_API_KEY"):
+    if not get_env_value("OPENAI_API_KEY"):
         raise KnowledgeIndexError(
             "OPENAI_API_KEY nao configurada. Configure a chave antes de rodar "
             "`uv run python cli.py rag index`."

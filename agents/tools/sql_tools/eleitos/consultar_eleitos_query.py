@@ -6,6 +6,7 @@ import re
 from typing import Any
 
 from pydantic import ValidationError
+from sqlalchemy import select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.projection import project_public_rows
@@ -80,7 +81,7 @@ def _row_to_public_dict(registro: Eleito) -> dict[str, Any]:
 
 
 def _load_filtered_eleitos(session, filtros: EleitoFiltroSchema) -> list[Eleito]:
-    registros = session.query(Eleito).all()
+    registros = list(session.execute(select(Eleito)).scalars())
     tipo_politico_resolvido = filtros.tipo_politico or _resolve_tipo_politico_alias(
         filtros.cargo
     )

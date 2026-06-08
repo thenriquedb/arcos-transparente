@@ -6,6 +6,8 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy import select
+
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
@@ -60,10 +62,10 @@ def load_filtered_passagens(
     session,
     filtros: PassagemFiltroSchema,
 ) -> list[DespesaDocumento]:
-    registros = (
-        session.query(DespesaDocumento)
-        .filter(DespesaDocumento.tipo_origem == "passagem")
-        .all()
+    registros = list(
+        session.execute(
+            select(DespesaDocumento).where(DespesaDocumento.tipo_origem == "passagem")
+        ).scalars()
     )
 
     if filtros.origem:
