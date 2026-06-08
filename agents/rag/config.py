@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass
 from pathlib import Path
+from shared.runtime_config import (
+    get_env_value,
+    get_env_with_default,
+    get_rag_persist_directory,
+    get_rag_source_directory,
+)
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_RAG_SOURCE_DIRECTORY = PROJECT_ROOT / "data" / "rag"
-DEFAULT_RAG_PERSIST_DIRECTORY = PROJECT_ROOT / "vector_store" / "knowledge_markdown"
 DEFAULT_RAG_COLLECTION_NAME = "municipal_knowledge_markdown"
 DEFAULT_RAG_EMBEDDING_MODEL = "text-embedding-3-small"
 DEFAULT_RAG_CHUNK_SIZE = 1_000
@@ -32,16 +34,12 @@ class RagConfig:
 
 
 def get_rag_config() -> RagConfig:
-    source_directory = _resolve_project_path(
-        os.getenv("RAG_SOURCE_DIRECTORY"),
-        DEFAULT_RAG_SOURCE_DIRECTORY,
-    )
-    persist_directory = _resolve_project_path(
-        os.getenv("RAG_PERSIST_DIRECTORY"),
-        DEFAULT_RAG_PERSIST_DIRECTORY,
-    )
-    collection_name = (
-        os.getenv("RAG_COLLECTION_NAME") or DEFAULT_RAG_COLLECTION_NAME
+    source_directory = get_rag_source_directory()
+    persist_directory = get_rag_persist_directory()
+    collection_name = get_env_with_default(
+        "RAG_COLLECTION_NAME",
+        DEFAULT_RAG_COLLECTION_NAME,
+        treat_blank_as_missing=True,
     ).strip()
     manifest_path = persist_directory / "manifest.json"
 
@@ -50,34 +48,31 @@ def get_rag_config() -> RagConfig:
         persist_directory=persist_directory,
         collection_name=collection_name or DEFAULT_RAG_COLLECTION_NAME,
         manifest_path=manifest_path,
-        embedding_model=(
-            os.getenv("RAG_EMBEDDING_MODEL") or DEFAULT_RAG_EMBEDDING_MODEL
+        embedding_model=get_env_with_default(
+            "RAG_EMBEDDING_MODEL",
+            DEFAULT_RAG_EMBEDDING_MODEL,
+            treat_blank_as_missing=True,
         ).strip(),
-        embedding_dimensions=_parse_optional_int(os.getenv("RAG_EMBEDDING_DIMENSIONS")),
+        embedding_dimensions=_parse_optional_int(
+            get_env_value("RAG_EMBEDDING_DIMENSIONS")
+        ),
         chunk_size=_parse_positive_int(
-            os.getenv("RAG_CHUNK_SIZE"),
+            get_env_value("RAG_CHUNK_SIZE"),
             DEFAULT_RAG_CHUNK_SIZE,
         ),
         chunk_overlap=_parse_non_negative_int(
-            os.getenv("RAG_CHUNK_OVERLAP"),
+            get_env_value("RAG_CHUNK_OVERLAP"),
             DEFAULT_RAG_CHUNK_OVERLAP,
         ),
         retrieval_k=_parse_positive_int(
-            os.getenv("RAG_RETRIEVAL_K"),
+            get_env_value("RAG_RETRIEVAL_K"),
             DEFAULT_RAG_RETRIEVAL_K,
         ),
         relevance_threshold=_parse_float_between_zero_and_one(
-            os.getenv("RAG_RELEVANCE_THRESHOLD"),
+            get_env_value("RAG_RELEVANCE_THRESHOLD"),
             DEFAULT_RAG_RELEVANCE_THRESHOLD,
         ),
     )
-
-
-def _resolve_project_path(value: str | None, default: Path) -> Path:
-    candidate = Path(value).expanduser() if value else default
-    if not candidate.is_absolute():
-        candidate = PROJECT_ROOT / candidate
-    return candidate.resolve()
 
 
 def _parse_positive_int(value: str | None, default: int) -> int:

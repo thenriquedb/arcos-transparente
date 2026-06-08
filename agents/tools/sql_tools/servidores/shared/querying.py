@@ -9,6 +9,7 @@ from sqlalchemy import func
 
 from database.session import _normalizar_texto
 from database.models import FolhaServidor
+from agents.tools.sql_tools.shared.projection import project_public_fields
 from shared.utils.decimal_to_float import decimal_to_float
 
 from .filters import ServidoresFiltroSchema
@@ -79,10 +80,12 @@ def project_servidor_fields(
     servidor: FolhaServidor,
     campos: list[str],
 ) -> dict[str, Any]:
-    serialized = serializar_servidor(servidor)
-    if not campos:
-        return serialized
-    return {campo: serialized[campo] for campo in campos}
+    return project_public_fields(
+        servidor,
+        campos,
+        serializer=serializar_servidor,
+        order="requested",
+    )
 
 
 def decimal_or_int_to_json(value: Decimal | int | None) -> float | int | None:

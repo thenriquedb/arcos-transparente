@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from database.models import ReceitaArrecadacao, ReceitaLancamento
+from agents.tools.sql_tools.shared.projection import project_public_dict
 from shared.utils.decimal_to_float import decimal_to_float
 from shared.utils.validation import parse_month
 
@@ -68,6 +69,4 @@ def serializar_receita_lancamento(registro: ReceitaLancamento) -> dict[str, Any]
 def project_receita_fields(
     registro: dict[str, Any], campos: list[str]
 ) -> dict[str, Any]:
-    if not campos:
-        return registro
-    return {campo: registro[campo] for campo in campos}
+    return project_public_dict(registro, campos, order="requested")

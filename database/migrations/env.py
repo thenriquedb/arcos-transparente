@@ -3,20 +3,18 @@
 from __future__ import annotations
 
 from logging.config import fileConfig
-import os
 
 from alembic import context
-from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 
 from database.models import Base
+from shared.runtime_config import get_database_url
 
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-load_dotenv()
-database_url = os.getenv("DATABASE_URL", "sqlite:///database/transparencia.db")
+database_url = get_database_url()
 config.set_main_option("sqlalchemy.url", database_url)
 
 target_metadata = Base.metadata

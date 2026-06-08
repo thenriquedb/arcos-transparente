@@ -6,6 +6,7 @@ import cli
 from agents.rag.indexing import KnowledgeIndexError, KnowledgeIndexStatus
 from ingestion.loaders.sql_loader import LoadResult
 import pytest
+from shared.runtime_config import get_cli_data_directory
 
 
 def test_configure_import_logging_usa_erro_por_padrao(monkeypatch) -> None:
@@ -53,6 +54,8 @@ def test_configure_import_logging_usa_info_em_modo_verbose(monkeypatch) -> None:
 
 
 def test_importar_configura_logging_verbose_e_emite_resumo(monkeypatch) -> None:
+    data_dirs: list[str] = []
+
     class FakeProgress:
         def __enter__(self) -> FakeProgress:
             return self
@@ -68,6 +71,7 @@ def test_importar_configura_logging_verbose_e_emite_resumo(monkeypatch) -> None:
 
     class FakePipeline:
         def __init__(self, data_dir: str) -> None:
+            data_dirs.append(data_dir)
             self.data_dir = data_dir
 
         def _arquivos_por_tipo(self, _tipo: str, _ano: int | None) -> list[str]:
@@ -103,6 +107,7 @@ def test_importar_configura_logging_verbose_e_emite_resumo(monkeypatch) -> None:
 
     cli.importar(tipo="servidores", ano=2025, force=False, verbose=True)
 
+    assert data_dirs == [str(get_cli_data_directory())]
     assert configuracoes == [True]
     assert any("Base recriada com sucesso" in texto for texto in impressoes)
     assert any("Total -> inseridos=2" in texto for texto in impressoes)

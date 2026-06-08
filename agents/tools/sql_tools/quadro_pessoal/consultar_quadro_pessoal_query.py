@@ -4,12 +4,14 @@ from __future__ import annotations
 
 from typing import Any
 
+from sqlalchemy import select
+
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
-    LookupExecutionResult,
     build_lookup_response,
-    execute_collection_lookup,
+    execute_collection_lookup_result,
 )
+from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import QuadroPessoal
@@ -45,7 +47,7 @@ def load_filtered_quadro_pessoal(
     session,
     filtros: QuadroPessoalFiltroSchema,
 ) -> list[QuadroPessoal]:
-    registros = session.query(QuadroPessoal).all()
+    registros = list(session.execute(select(QuadroPessoal)).scalars())
 
     if filtros.origem:
         registros = [
@@ -83,12 +85,12 @@ def project_quadro_pessoal_fields(
     registro: QuadroPessoal,
     campos: list[str],
 ) -> dict[str, Any]:
-    selected = campos or list(ALLOWED_QUADRO_FIELDS)
-    return {
-        campo: value
-        for campo, value in _row_to_public_dict(registro).items()
-        if campo in selected
-    }
+    return project_public_fields(
+        registro,
+        campos,
+        serializer=_row_to_public_dict,
+        default_fields=ALLOWED_QUADRO_FIELDS,
+    )
 
 
 @register(
@@ -176,13 +178,14 @@ def consultar_quadro_pessoal(
 
     with session_manager.get_session() as session:
         registros = load_filtered_quadro_pessoal(session, params.filtros)
-        total, pagina = execute_collection_lookup(
+        execution = execute_collection_lookup_result(
             registros,
             ordenar_por=params.ordenar_por,
             ordem=params.ordem,
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
+            empty_suggestion="Nenhum registro de quadro de pessoal encontrado.",
         )
 
     metadata = ConsultarQuadroPessoalMetadata(
@@ -197,15 +200,7 @@ def consultar_quadro_pessoal(
     return build_lookup_response(
         response_type=ConsultarQuadroPessoalResponse,
         metadata=metadata,
-        execution=LookupExecutionResult(
-            total=total,
-            rows=pagina,
-            suggestion=(
-                "Nenhum registro de quadro de pessoal encontrado."
-                if not pagina
-                else None
-            ),
-        ),
+        execution=execution,
         project_row=project_quadro_pessoal_fields,
         campos=params.campos,
     )

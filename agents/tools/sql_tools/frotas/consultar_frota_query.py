@@ -6,8 +6,10 @@ from decimal import Decimal
 from typing import Any
 
 from pydantic import ValidationError
+from sqlalchemy import select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.projection import project_public_rows
 from database import session as session_manager
 from database.models import FrotaVeiculo
 from shared.utils.decimal_to_float import decimal_to_float
@@ -56,7 +58,7 @@ def load_filtered_frota(
     session,
     filtros: FrotaFiltroSchema,
 ) -> list[FrotaVeiculo]:
-    registros = session.query(FrotaVeiculo).all()
+    registros = list(session.execute(select(FrotaVeiculo)).scalars())
 
     if filtros.unidade_responsavel:
         registros = [
@@ -147,15 +149,12 @@ def project_frota(
     registros: list[FrotaVeiculo],
     campos: list[str],
 ) -> list[dict[str, Any]]:
-    selected = campos or list(ALLOWED_FROTA_FIELDS)
-    return [
-        {
-            campo: value
-            for campo, value in _row_to_public_dict(registro).items()
-            if campo in selected
-        }
-        for registro in registros
-    ]
+    return project_public_rows(
+        registros,
+        campos,
+        serializer=_row_to_public_dict,
+        default_fields=ALLOWED_FROTA_FIELDS,
+    )
 
 
 @register(

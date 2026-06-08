@@ -6,12 +6,14 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy import select
+
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
-    LookupExecutionResult,
     build_lookup_response,
-    execute_collection_lookup,
+    execute_collection_lookup_result,
 )
+from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import DespesaDocumento
@@ -60,10 +62,10 @@ def load_filtered_passagens(
     session,
     filtros: PassagemFiltroSchema,
 ) -> list[DespesaDocumento]:
-    registros = (
-        session.query(DespesaDocumento)
-        .filter(DespesaDocumento.tipo_origem == "passagem")
-        .all()
+    registros = list(
+        session.execute(
+            select(DespesaDocumento).where(DespesaDocumento.tipo_origem == "passagem")
+        ).scalars()
     )
 
     if filtros.origem:
@@ -114,12 +116,12 @@ def project_passagem_fields(
     registro: DespesaDocumento,
     campos: list[str],
 ) -> dict[str, Any]:
-    selected = campos or list(ALLOWED_PASSAGENS_FIELDS)
-    return {
-        campo: value
-        for campo, value in _row_to_public_dict(registro).items()
-        if campo in selected
-    }
+    return project_public_fields(
+        registro,
+        campos,
+        serializer=_row_to_public_dict,
+        default_fields=ALLOWED_PASSAGENS_FIELDS,
+    )
 
 
 @register(
@@ -187,13 +189,14 @@ def consultar_passagens(
 
     with session_manager.get_session() as session:
         registros = load_filtered_passagens(session, params.filtros)
-        total, pagina = execute_collection_lookup(
+        execution = execute_collection_lookup_result(
             registros,
             ordenar_por=params.ordenar_por,
             ordem=params.ordem,
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
+            empty_suggestion="Nenhuma passagem encontrada com os filtros.",
         )
 
     metadata = ConsultarPassagensMetadata(
@@ -208,13 +211,7 @@ def consultar_passagens(
     return build_lookup_response(
         response_type=ConsultarPassagensResponse,
         metadata=metadata,
-        execution=LookupExecutionResult(
-            total=total,
-            rows=pagina,
-            suggestion=(
-                "Nenhuma passagem encontrada com os filtros." if not pagina else None
-            ),
-        ),
+        execution=execution,
         project_row=project_passagem_fields,
         campos=params.campos,
         pagination_message_builder=lambda shown, total: (

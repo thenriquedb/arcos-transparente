@@ -48,6 +48,7 @@ from database.models import (
 )
 from database.session import engine, get_session
 from ingestion.pipeline import IngestionPipeline
+from shared.runtime_config import get_cli_data_directory
 
 app = typer.Typer()
 db_app = typer.Typer()
@@ -211,7 +212,7 @@ def importar(
 ) -> None:
     """Recria a base e importa XMLs para o banco com relatório consolidado."""
     tipos = [tipo] if tipo else None
-    pipeline = IngestionPipeline(data_dir="data/xml")
+    pipeline = IngestionPipeline(data_dir=str(get_cli_data_directory()))
     _configure_import_logging(verbose=verbose)
 
     if force:

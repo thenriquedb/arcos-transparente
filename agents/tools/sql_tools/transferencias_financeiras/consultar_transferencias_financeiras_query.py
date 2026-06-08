@@ -6,12 +6,14 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy import select
+
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
-    LookupExecutionResult,
     build_lookup_response,
-    execute_collection_lookup,
+    execute_collection_lookup_result,
 )
+from agents.tools.sql_tools.shared.projection import project_public_dict
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import EmendaParlamentar, TransferenciaFinanceiraMovimento
@@ -78,12 +80,14 @@ def _emenda_to_public_dict(registro: EmendaParlamentar) -> dict[str, Any]:
 
 
 def _load_movimentacoes(session) -> list[dict[str, Any]]:
-    registros = session.query(TransferenciaFinanceiraMovimento).all()
+    registros = list(
+        session.execute(select(TransferenciaFinanceiraMovimento)).scalars()
+    )
     return [_movement_to_public_dict(registro) for registro in registros]
 
 
 def _load_emendas(session) -> list[dict[str, Any]]:
-    registros = session.query(EmendaParlamentar).all()
+    registros = list(session.execute(select(EmendaParlamentar)).scalars())
     return [_emenda_to_public_dict(registro) for registro in registros]
 
 
@@ -201,8 +205,11 @@ def project_transferencia_financeira_fields(
     registro: dict[str, Any],
     campos: list[str],
 ) -> dict[str, Any]:
-    selected = campos or list(ALLOWED_TRANSFERENCIAS_FIELDS)
-    return {campo: valor for campo, valor in registro.items() if campo in selected}
+    return project_public_dict(
+        registro,
+        campos,
+        default_fields=ALLOWED_TRANSFERENCIAS_FIELDS,
+    )
 
 
 @register(
@@ -272,13 +279,16 @@ def consultar_transferencias_financeiras(
 
     with session_manager.get_session() as session:
         registros = load_filtered_transferencias_financeiras(session, params.filtros)
-        total, pagina = execute_collection_lookup(
+        execution = execute_collection_lookup_result(
             registros,
             ordenar_por=params.ordenar_por,
             ordem=params.ordem,
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
+            empty_suggestion=(
+                "Nenhum registro de transferencias financeiras encontrado com os filtros."
+            ),
         )
 
     metadata = ConsultarTransferenciasFinanceirasMetadata(
@@ -293,15 +303,7 @@ def consultar_transferencias_financeiras(
     return build_lookup_response(
         response_type=ConsultarTransferenciasFinanceirasResponse,
         metadata=metadata,
-        execution=LookupExecutionResult(
-            total=total,
-            rows=pagina,
-            suggestion=(
-                "Nenhum registro de transferencias financeiras encontrado com os filtros."
-                if not pagina
-                else None
-            ),
-        ),
+        execution=execution,
         project_row=project_transferencia_financeira_fields,
         campos=params.campos,
     )

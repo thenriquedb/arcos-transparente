@@ -5,14 +5,15 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
-    LookupExecutionResult,
     build_lookup_response,
-    execute_collection_lookup,
+    execute_collection_lookup_result,
 )
+from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import DespesaDocumento
@@ -78,10 +79,8 @@ def load_filtered_despesas(
     session,
     filtros: DespesaFiltroSchema,
 ) -> list[DespesaDocumento]:
-    query = session.query(DespesaDocumento).options(
-        selectinload(DespesaDocumento.itens)
-    )
-    registros = query.all()
+    stmt = select(DespesaDocumento).options(selectinload(DespesaDocumento.itens))
+    registros = list(session.execute(stmt).scalars())
 
     if filtros.tipo:
         registros = [r for r in registros if r.tipo_origem == filtros.tipo]
@@ -150,12 +149,12 @@ def project_despesa_fields(
     registro: DespesaDocumento,
     campos: list[str],
 ) -> dict[str, Any]:
-    selected = campos or list(ALLOWED_DESPESA_FIELDS)
-    return {
-        campo: value
-        for campo, value in _row_to_public_dict(registro).items()
-        if campo in selected
-    }
+    return project_public_fields(
+        registro,
+        campos,
+        serializer=_row_to_public_dict,
+        default_fields=ALLOWED_DESPESA_FIELDS,
+    )
 
 
 @register(
@@ -256,13 +255,14 @@ def consultar_despesas(
 
     with session_manager.get_session() as session:
         registros = load_filtered_despesas(session, params.filtros)
-        total, pagina = execute_collection_lookup(
+        execution = execute_collection_lookup_result(
             registros,
             ordenar_por=params.ordenar_por,
             ordem=params.ordem,
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
+            empty_suggestion="Nenhuma despesa encontrada com os filtros.",
         )
 
     metadata = ConsultarDespesasMetadata(
@@ -277,13 +277,7 @@ def consultar_despesas(
     return build_lookup_response(
         response_type=ConsultarDespesasResponse,
         metadata=metadata,
-        execution=LookupExecutionResult(
-            total=total,
-            rows=pagina,
-            suggestion=(
-                "Nenhuma despesa encontrada com os filtros." if not pagina else None
-            ),
-        ),
+        execution=execution,
         project_row=project_despesa_fields,
         campos=params.campos,
         pagination_message_builder=lambda shown, total: (

@@ -61,7 +61,12 @@ from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
     build_lookup_response,
     execute_collection_lookup,
+    execute_collection_lookup_result,
     execute_statement_lookup,
+)
+from agents.tools.sql_tools.shared.projection import (
+    project_public_dict,
+    project_public_fields,
 )
 from database.models import Base, FolhaServidor, Licitacao
 
@@ -229,6 +234,45 @@ def test_shared_collection_lookup_flow_preserves_order_projection_and_pagination
     assert response["mensagem"] == "Mostrando 1 de 3 registros encontrados."
 
 
+def test_shared_collection_lookup_result_adds_empty_suggestion_only_when_page_is_empty() -> (
+    None
+):
+    execution = execute_collection_lookup_result(
+        [],
+        ordenar_por="valor",
+        ordem="desc",
+        offset=0,
+        limite=10,
+        sort_key_getters={"valor": lambda row: row.get("valor") or 0},
+        empty_suggestion="Nenhum registro encontrado.",
+    )
+
+    assert execution.total == 0
+    assert list(execution.rows) == []
+    assert execution.suggestion == "Nenhum registro encontrado."
+
+
+def test_shared_projection_helpers_preserve_payload_or_requested_order() -> None:
+    payload = {"origem": "camara", "ano": 2026, "valor": 552500.0}
+
+    assert project_public_dict(
+        payload,
+        ["valor", "origem"],
+        order="payload",
+    ) == {"origem": "camara", "valor": 552500.0}
+    assert project_public_dict(
+        payload,
+        ["valor", "origem"],
+        order="requested",
+    ) == {"valor": 552500.0, "origem": "camara"}
+    assert project_public_fields(
+        payload,
+        ["ano", "origem"],
+        serializer=lambda row: row,
+        order="requested",
+    ) == {"ano": 2026, "origem": "camara"}
+
+
 def test_shared_lookup_flow_supports_response_supplements_and_row_decoration() -> None:
     session = _build_session()
     session.add_all(
@@ -345,7 +389,7 @@ def test_shared_lookup_flow_supports_mixed_record_collection_adopters() -> None:
         },
     ]
 
-    total, rows = execute_collection_lookup(
+    execution = execute_collection_lookup_result(
         registros,
         ordenar_por="valor",
         ordem="desc",
@@ -362,7 +406,7 @@ def test_shared_lookup_flow_supports_mixed_record_collection_adopters() -> None:
             offset=1,
             campos=["tipo_registro", "autor", "valor"],
         ),
-        execution=LookupExecutionResult(total=total, rows=rows),
+        execution=execution,
         project_row=project_transferencia_financeira_fields,
         campos=["tipo_registro", "autor", "valor"],
     )

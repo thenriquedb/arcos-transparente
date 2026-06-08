@@ -7,12 +7,12 @@ from dataclasses import dataclass, field
 import re
 from typing import Any, Literal, Protocol
 
-from agents.guardrails import (
-    _looks_like_confirmation_text,
-    evaluate_public_query_guardrails,
+from agents.guardrails import evaluate_public_query_guardrails
+from agents.routing.compatibility import route_public_compatibility_query
+from agents.routing.conversation import (
+    looks_like_confirmation_text,
+    normalize_conversation_text,
 )
-from agents.router import route_user_query
-from agents.routing.extractors import _normalize
 
 PolicyAction = Literal["allow", "block", "clarify"]
 
@@ -24,19 +24,6 @@ _PROTECTED_ACRONYMS = {
     "CREAS": "Centro de Referencia Especializado de Assistencia Social",
     "FUMUSA": "Fundação Municipal de Saúde e Assistência",
 }
-_CONFIRMATION_TOKENS = frozenset(
-    {
-        "sim",
-        "isso",
-        "isso mesmo",
-        "exato",
-        "correto",
-        "confirmo",
-        "confirmado",
-        "pode ser",
-        "pode",
-    }
-)
 _PUBLIC_CLARIFICATION_HINTS = (
     "confirma",
     "confirmar",
@@ -212,7 +199,7 @@ def _evaluate_guardrail_for_policy_question(
     prior_user_queries: Sequence[str],
     prior_messages: Sequence[tuple[str, str, bool]],
 ):
-    compatibility_route = route_user_query(question)
+    compatibility_route = route_public_compatibility_query(question)
     return evaluate_public_query_guardrails(
         question,
         compatibility_route=compatibility_route,
@@ -231,7 +218,7 @@ def _resolve_pending_protected_acronym_reply(
     if pending is None:
         return None
 
-    normalized_reply = _normalize(question)
+    normalized_reply = normalize_conversation_text(question)
     expansion = str(pending["expansion"])
     acronym = str(pending["acronym"])
     if not _reply_confirms_protected_acronym(
@@ -275,8 +262,8 @@ def _resolve_pending_public_clarification_reply(
     if pending is None:
         return None
 
-    normalized_reply = _normalize(question)
-    if not _looks_like_confirmation_text(normalized_reply):
+    normalized_reply = normalize_conversation_text(question)
+    if not looks_like_confirmation_text(normalized_reply):
         if not _looks_like_public_clarification_answer(
             normalized_reply,
             assistant_clarification=pending["assistant_clarification"],
@@ -395,12 +382,12 @@ def _reply_confirms_protected_acronym(
     acronym: str,
     expansion: str,
 ) -> bool:
-    if _looks_like_confirmation_text(normalized_reply):
+    if looks_like_confirmation_text(normalized_reply):
         return True
     if not normalized_reply:
         return False
 
-    normalized_expansion = _normalize(expansion)
+    normalized_expansion = normalize_conversation_text(expansion)
     acronym_pattern = re.compile(rf"\b{re.escape(acronym.lower())}\b")
     return normalized_expansion in normalized_reply or (
         acronym_pattern.search(normalized_reply) is not None
@@ -411,7 +398,7 @@ def _looks_like_public_clarification_prompt(content: str) -> bool:
     if "?" not in content:
         return False
 
-    normalized_content = _normalize(content)
+    normalized_content = normalize_conversation_text(content)
     if not normalized_content:
         return False
     if any(
@@ -445,7 +432,9 @@ def _looks_like_public_clarification_answer(
     if not meaningful_reply_tokens:
         return False
 
-    clarification_tokens = _content_tokens(_normalize(assistant_clarification))
+    clarification_tokens = _content_tokens(
+        normalize_conversation_text(assistant_clarification)
+    )
     return any(token in clarification_tokens for token in meaningful_reply_tokens)
 
 
@@ -499,14 +488,14 @@ def _detect_pending_protected_acronym(
     *,
     confirmed_acronyms: Mapping[str, str],
 ) -> tuple[str, str] | None:
-    normalized_question = _normalize(question)
+    normalized_question = normalize_conversation_text(question)
     for acronym, expansion in _PROTECTED_ACRONYMS.items():
         acronym_pattern = re.compile(rf"\b{re.escape(acronym.lower())}\b")
         if acronym_pattern.search(normalized_question) is None:
             continue
         if acronym in confirmed_acronyms:
             continue
-        if _normalize(expansion) in normalized_question:
+        if normalize_conversation_text(expansion) in normalized_question:
             continue
         return acronym, expansion
     return None

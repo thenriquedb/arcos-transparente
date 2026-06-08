@@ -14,9 +14,11 @@ from .lookup import (
     build_lookup_response,
     compose_message,
     execute_collection_lookup,
+    execute_collection_lookup_result,
     execute_statement_lookup,
 )
 from .normalization import normalize_model_input, normalize_selected_fields
+from .projection import project_public_dict, project_public_fields, project_public_rows
 from .validation import validate_tool_params
 
 __all__ = [
@@ -29,10 +31,14 @@ __all__ = [
     "compose_message",
     "execute_collection_aggregate",
     "execute_collection_lookup",
+    "execute_collection_lookup_result",
     "execute_statement_grouped",
     "execute_statement_lookup",
     "execute_statement_total",
     "normalize_model_input",
     "normalize_selected_fields",
+    "project_public_dict",
+    "project_public_fields",
+    "project_public_rows",
     "validate_tool_params",
 ]
