@@ -22,6 +22,8 @@ from database.models import (
     DespesaDocumentoComprobatorio,
     DespesaDocumentoItem,
     DespesaPorFuncao,
+    EstoqueMaterial,
+    EstoqueMovimentacao,
     EmendaParlamentar,
     Eleito,
     Fornecedor,
@@ -127,6 +129,13 @@ def db_status() -> None:
         tabela.add_row("fornecedores", str(session.query(Fornecedor).count()))
         tabela.add_row("frota_veiculos", str(session.query(FrotaVeiculo).count()))
         tabela.add_row("frota_despesas", str(session.query(FrotaDespesa).count()))
+        tabela.add_row(
+            "estoque_materiais", str(session.query(EstoqueMaterial).count())
+        )
+        tabela.add_row(
+            "estoque_movimentacoes",
+            str(session.query(EstoqueMovimentacao).count()),
+        )
         tabela.add_row("receita_naturezas", str(session.query(ReceitaNatureza).count()))
         tabela.add_row(
             "receita_arrecadacoes", str(session.query(ReceitaArrecadacao).count())
@@ -189,7 +198,7 @@ def importar(
         default=None,
         help=(
             "Tipo: contratos|licitacoes|frotas|receitas|folha_pagamento|"
-            "servidores|planejamentos|despesas|patrimonios|quadro_pessoal|"
+            "servidores|planejamentos|despesas|estoques|patrimonios|quadro_pessoal|"
             "eleitos|transferencias_financeiras"
         ),
     ),
@@ -219,6 +228,7 @@ def importar(
         "contratos",
         "licitacoes",
         "frotas",
+        "estoques",
         "receitas",
         "folha_pagamento",
         "servidores",

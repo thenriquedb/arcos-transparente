@@ -113,6 +113,8 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     assert "consultar_contratos" in nomes
     assert "consultar_diarias" in nomes
     assert "consultar_passagens" in nomes
+    assert "consultar_estoques" in nomes
+    assert "consultar_movimentacoes_de_estoque" in nomes
     assert "consultar_transferencias_financeiras" in nomes
     assert "consultar_conhecimento_municipal" in nomes
 
@@ -256,6 +258,15 @@ def test_system_prompt_orienta_gastos_amplos_com_lista_detalhada() -> None:
     assert "explique em linguagem simples o que significa cada campo" in prompt
     assert "não escolha silenciosamente só `valor_pago`" in prompt
     assert "`valor_em_liquidacao`" in prompt
+
+
+def test_system_prompt_orienta_consultas_de_estoque() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "`consultar_estoques`" in prompt
+    assert "`agregar_estoques`" in prompt
+    assert "`consultar_movimentacoes_de_estoque`" in prompt
+    assert "almoxarifado" in prompt
 
 
 def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:

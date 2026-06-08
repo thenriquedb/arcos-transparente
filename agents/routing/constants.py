@@ -99,6 +99,13 @@ SUPPORTED_SCOPE_STRONG_KEYWORDS = (
     "diarias",
     "passagem",
     "passagens",
+    "estoque",
+    "estoques",
+    "almoxarifado",
+    "saldo em estoque",
+    "saldo de material",
+    "movimentacao de estoque",
+    "movimentacoes de estoque",
     "locomocao",
     "despesas com locomocao",
     "transferencia",
@@ -227,6 +234,16 @@ PASSAGENS_DOMAIN_KEYWORDS = (
     "passagens",
     "locomocao",
     "despesas com locomocao",
+)
+
+ESTOQUES_DOMAIN_KEYWORDS = (
+    "estoque",
+    "estoques",
+    "almoxarifado",
+    "saldo em estoque",
+    "saldo de material",
+    "movimentacao de estoque",
+    "movimentacoes de estoque",
 )
 
 DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS = (

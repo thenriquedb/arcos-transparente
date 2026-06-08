@@ -62,6 +62,7 @@ python cli.py importar --tipo licitacoes
 python cli.py importar --tipo servidores
 python cli.py importar --tipo planejamentos
 python cli.py importar --tipo despesas
+python cli.py importar --tipo estoques
 python cli.py importar --tipo patrimonios
 python cli.py importar --tipo quadro_pessoal
 python cli.py importar --tipo transferencias_financeiras
@@ -102,6 +103,7 @@ python cli.py importar --force
 ## Fontes atualmente suportadas
 
 - XMLs administrativos e de transparência já consolidados do projeto
+- XMLs dedicados de `estoques` em `data/xml/administracao/estoques/estoque-*.xml`
 - CSVs dedicados de `diarias`
 - CSVs dedicados de `passagens`
 - CSVs dedicados de `despesas-por-funcao`

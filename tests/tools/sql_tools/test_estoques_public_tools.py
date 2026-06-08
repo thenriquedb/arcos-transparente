@@ -1,0 +1,209 @@
+from __future__ import annotations
+
+from contextlib import contextmanager
+from datetime import date
+from decimal import Decimal
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+import agents.tools.sql_tools.estoques as estoques_tools
+from agents.router import route_user_query, select_public_tools_for_query
+from agents.tools import registry as tools_registry
+from database import session as session_manager
+from database.models import Base, EstoqueMaterial, EstoqueMovimentacao
+
+
+def _build_session():
+    engine = create_engine("sqlite:///:memory:", future=True)
+    Base.metadata.create_all(bind=engine)
+    session_local = sessionmaker(
+        bind=engine,
+        autoflush=False,
+        autocommit=False,
+        future=True,
+    )
+    return session_local()
+
+
+def _patch_session(monkeypatch, session) -> None:
+    @contextmanager
+    def fake_get_session():
+        yield session
+
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+
+def _seed_estoques(session) -> None:
+    alcool = EstoqueMaterial(
+        arquivo_origem="estoque-prefeitura-2025.xml",
+        sequencia_material=1,
+        origem="prefeitura",
+        exercicio=2025,
+        material="ALCOOL 70",
+        unidade_medida="frasco",
+        periodo_inicio=date(2025, 1, 1),
+        periodo_fim=date(2025, 12, 31),
+        saldo_quantidade=Decimal("12.0000"),
+        saldo_valor=Decimal("120.0000"),
+        entrada_valor=Decimal("50.0000"),
+        saida_valor=Decimal("30.0000"),
+    )
+    luva = EstoqueMaterial(
+        arquivo_origem="estoque-prefeitura-2025.xml",
+        sequencia_material=2,
+        origem="prefeitura",
+        exercicio=2025,
+        material="LUVA DESCARTAVEL",
+        unidade_medida="caixa",
+        periodo_inicio=date(2025, 1, 1),
+        periodo_fim=date(2025, 12, 31),
+        saldo_quantidade=Decimal("12.0000"),
+        saldo_valor=Decimal("220.0000"),
+        entrada_valor=Decimal("300.0000"),
+        saida_valor=Decimal("80.0000"),
+    )
+    session.add_all([alcool, luva])
+    session.flush()
+    session.add_all(
+        [
+            EstoqueMovimentacao(
+                material_id=luva.id,
+                sequencia_movimentacao=1,
+                data_movimento=date(2025, 1, 10),
+                tipo_movimento="Nota Fiscal de Compra",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                almoxarifado="ALMOXARIFADO SAUDE",
+                localizacao="Geral",
+                classificacao="Material Hospitalar",
+                quantidade=Decimal("10.0000"),
+                valor_unitario=Decimal("4.00000000"),
+                valor_total=Decimal("40.0000"),
+                custo_medio=Decimal("4.00000000"),
+            ),
+            EstoqueMovimentacao(
+                material_id=luva.id,
+                sequencia_movimentacao=2,
+                data_movimento=date(2025, 1, 15),
+                tipo_movimento="Requisicao",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                almoxarifado="ALMOXARIFADO SAUDE",
+                localizacao="Geral",
+                classificacao="Material Hospitalar",
+                quantidade=Decimal("2.0000"),
+                valor_unitario=Decimal("4.00000000"),
+                valor_total=Decimal("-8.0000"),
+                custo_medio=Decimal("4.00000000"),
+            ),
+        ]
+    )
+    session.commit()
+
+
+def test_consultar_estoques_lista_por_material(monkeypatch) -> None:
+    session = _build_session()
+    _seed_estoques(session)
+    _patch_session(monkeypatch, session)
+
+    resultado = estoques_tools.consultar_estoques(
+        filtros={"material": "alcool", "ano": 2025},
+        campos=["material", "saldo_quantidade", "saldo_valor"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "material": "ALCOOL 70",
+            "saldo_quantidade": 12.0,
+            "saldo_valor": 120.0,
+        }
+    ]
+
+    session.close()
+
+
+def test_agregar_estoques_por_material(monkeypatch) -> None:
+    session = _build_session()
+    _seed_estoques(session)
+    _patch_session(monkeypatch, session)
+
+    resultado = estoques_tools.agregar_estoques(
+        filtros={"ano": 2025},
+        agrupar_por="material",
+        metrica="soma_saldo_valor",
+    )
+
+    assert resultado["total_grupos"] == 2
+    assert resultado["resultados"][0] == {
+        "material": "LUVA DESCARTAVEL",
+        "soma_saldo_valor": 220.0,
+    }
+
+    session.close()
+
+
+def test_consultar_movimentacoes_de_estoque_filtra_por_almoxarifado(monkeypatch) -> None:
+    session = _build_session()
+    _seed_estoques(session)
+    _patch_session(monkeypatch, session)
+
+    resultado = estoques_tools.consultar_movimentacoes_de_estoque(
+        filtros={"almoxarifado": "saude", "tipo_movimento": "requisicao"},
+        campos=["material", "tipo_movimento", "almoxarifado", "valor_total"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "material": "LUVA DESCARTAVEL",
+            "tipo_movimento": "Requisicao",
+            "almoxarifado": "ALMOXARIFADO SAUDE",
+            "valor_total": -8.0,
+        }
+    ]
+
+    session.close()
+
+
+def test_registry_expoe_tools_publicas_de_estoques() -> None:
+    tool_names = {
+        getattr(tool_obj, "name", "")
+        for tool_obj in tools_registry.get_public_tools(tags=["domain:estoques"])
+    }
+
+    assert "consultar_estoques" in tool_names
+    assert "agregar_estoques" in tool_names
+    assert "consultar_movimentacoes_de_estoque" in tool_names
+
+
+def test_query_de_estoques_rota_para_tool_publica_dedicada(monkeypatch) -> None:
+    session = _build_session()
+    _seed_estoques(session)
+    _patch_session(monkeypatch, session)
+
+    route = route_user_query("Qual o saldo total em estoque em 2025?")
+    tool = select_public_tools_for_query("Qual o saldo total em estoque em 2025?")[0]
+    resultado = tool.invoke(route.tool_kwargs)
+
+    assert route.tool_name == "agregar_estoques"
+    assert getattr(tool, "name", "") == "agregar_estoques"
+    assert resultado["valor_total"] == 340.0
+
+    session.close()
+
+
+def test_movimentacao_de_estoque_rota_para_lookup_dedicado(monkeypatch) -> None:
+    session = _build_session()
+    _seed_estoques(session)
+    _patch_session(monkeypatch, session)
+
+    query = "Liste as movimentacoes de estoque do almoxarifado saude em 2025."
+    route = route_user_query(query)
+    tool = select_public_tools_for_query(query)[0]
+    resultado = tool.invoke(route.tool_kwargs)
+
+    assert route.tool_name == "consultar_movimentacoes_de_estoque"
+    assert getattr(tool, "name", "") == "consultar_movimentacoes_de_estoque"
+    assert resultado["total"] == 2
+
+    session.close()

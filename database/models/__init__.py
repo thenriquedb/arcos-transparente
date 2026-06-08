@@ -20,6 +20,7 @@ from database.models.expenses import (
 )
 from database.models.elected import Eleito
 from database.models.fleet import FrotaDespesa, FrotaVeiculo
+from database.models.inventory import EstoqueMaterial, EstoqueMovimentacao
 from database.models.payroll import (
     FolhaCargo,
     FolhaLotacao,
@@ -57,6 +58,8 @@ __all__ = [
     "QuadroPessoal",
     "FrotaVeiculo",
     "FrotaDespesa",
+    "EstoqueMaterial",
+    "EstoqueMovimentacao",
     "ReceitaNatureza",
     "ReceitaArrecadacao",
     "ReceitaLancamento",
