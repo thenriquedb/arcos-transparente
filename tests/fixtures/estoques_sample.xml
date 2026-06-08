@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ESTOQUE>
+    <MATERIAL>
+        <Material>ALCOOL 70</Material>
+        <UnidadeMedida>frasco</UnidadeMedida>
+        <MOVIMENTACAOSUMARIZADA>
+            <Periodo>01/01/2025 a 31/12/2025</Periodo>
+            <SaldoAnteriorQuantidade>10.0000</SaldoAnteriorQuantidade>
+            <SaldoAnteriorValor>100.0000</SaldoAnteriorValor>
+            <EntradaQuantidade>5.0000</EntradaQuantidade>
+            <EntradaValor>50.0000</EntradaValor>
+            <SaidaQuantidade>3.0000</SaidaQuantidade>
+            <SaidaValor>30.0000</SaidaValor>
+            <SaldoQuantidade>12.0000</SaldoQuantidade>
+            <SaldoValor>120.0000</SaldoValor>
+        </MOVIMENTACAOSUMARIZADA>
+    </MATERIAL>
+    <MATERIAL>
+        <Material>LUVA DESCARTAVEL</Material>
+        <UnidadeMedida>caixa</UnidadeMedida>
+        <MOVIMENTACAOSUMARIZADA>
+            <Periodo>01/01/2025 a 31/12/2025</Periodo>
+            <SaldoAnteriorQuantidade>0.0000</SaldoAnteriorQuantidade>
+            <SaldoAnteriorValor>0.0000</SaldoAnteriorValor>
+            <EntradaQuantidade>20.0000</EntradaQuantidade>
+            <EntradaValor>300.0000</EntradaValor>
+            <SaidaQuantidade>8.0000</SaidaQuantidade>
+            <SaidaValor>80.0000</SaidaValor>
+            <SaldoQuantidade>12.0000</SaldoQuantidade>
+            <SaldoValor>220.0000</SaldoValor>
+        </MOVIMENTACAOSUMARIZADA>
+        <MOVIMENTACAODIARIA>
+            <MOVIMENTACAODIARIA>
+                <DataMovimento>10/01/2025</DataMovimento>
+                <TipoMovimento>Nota Fiscal de Compra</TipoMovimento>
+                <UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+                <Almoxarifado>ALMOXARIFADO SAUDE</Almoxarifado>
+                <Localizacao>Geral</Localizacao>
+                <Classificacao>Material Hospitalar</Classificacao>
+                <Quantidade>10.0000</Quantidade>
+                <ValorUnitario>4.00000000</ValorUnitario>
+                <ValorTotal>40.0000</ValorTotal>
+                <CustoMedio>4.00000000</CustoMedio>
+            </MOVIMENTACAODIARIA>
+            <MOVIMENTACAODIARIA>
+                <DataMovimento>15/01/2025</DataMovimento>
+                <TipoMovimento>Requisicao</TipoMovimento>
+                <UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+                <Almoxarifado>ALMOXARIFADO SAUDE</Almoxarifado>
+                <Localizacao>Geral</Localizacao>
+                <Classificacao>Material Hospitalar</Classificacao>
+                <Quantidade>2.0000</Quantidade>
+                <ValorUnitario>4.00000000</ValorUnitario>
+                <ValorTotal>-8.0000</ValorTotal>
+                <CustoMedio>4.00000000</CustoMedio>
+            </MOVIMENTACAODIARIA>
+            <MOVIMENTACAODIARIA>
+                <DataMovimento>16/01/2025</DataMovimento>
+                <TipoMovimento>Aplicacao Imediata</TipoMovimento>
+                <UnidadeGestora>PREFEITURA MUNICIPAL</UnidadeGestora>
+                <Almoxarifado>ALMOXARIFADO SAUDE</Almoxarifado>
+                <Localizacao>Geral</Localizacao>
+                <Classificacao>Material Hospitalar</Classificacao>
+                <Quantidade>6.0000</Quantidade>
+                <ValorUnitario>6.00000000</ValorUnitario>
+                <ValorTotal>-36.0000</ValorTotal>
+                <CustoMedio>6.00000000</CustoMedio>
+            </MOVIMENTACAODIARIA>
+        </MOVIMENTACAODIARIA>
+    </MATERIAL>
+</ESTOQUE>

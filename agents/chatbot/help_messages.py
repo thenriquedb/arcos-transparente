@@ -15,6 +15,7 @@ def build_scope_help_message() -> str:
         "- **Salarios-base e historico de pagamentos**: `Quanto João Silva recebe?`\n"
         "- **Licitacoes e contratos**: `Quais licitacoes da prefeitura aconteceram em 2025?`\n"
         "- **Despesas, diarias e passagens**: `Quanto a prefeitura gastou com diarias em 2025?`\n"
+        "- **Estoques e almoxarifado**: `Qual item tem a maior quantidade no estoque?` ou `Quais materiais tiveram mais saidas em maio de 2025?`\n"
         "- **Frota, veiculos e patrimonio**: `Quais veiculos fazem parte da frota municipal?`\n"
         "- **Quadro de pessoal, planejamento e receitas**: `Quanto a prefeitura arrecadou em 2025?`\n"
         "- **Transferencias, emendas e politicos eleitos**: `Quanto a prefeitura recebeu de emendas parlamentares em 2025?`\n"

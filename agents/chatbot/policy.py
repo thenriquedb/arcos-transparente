@@ -11,6 +11,7 @@ from agents.guardrails import (
     _looks_like_confirmation_text,
     evaluate_public_query_guardrails,
 )
+from agents.router import route_user_query
 from agents.routing.extractors import _normalize
 
 PolicyAction = Literal["allow", "block", "clarify"]
@@ -56,6 +57,31 @@ _PUBLIC_CLARIFICATION_EXCLUSION_HINTS = (
     "quer ver a lista completa",
     "deseja ver a lista completa",
 )
+_PUBLIC_CLARIFICATION_REPLY_STOPWORDS = frozenset(
+    {
+        "a",
+        "as",
+        "com",
+        "da",
+        "das",
+        "de",
+        "do",
+        "dos",
+        "e",
+        "em",
+        "na",
+        "nas",
+        "no",
+        "nos",
+        "o",
+        "os",
+        "ou",
+        "para",
+        "por",
+        "quero",
+        "saber",
+    }
+)
 
 
 class HistoryMessage(Protocol):
@@ -94,9 +120,47 @@ def evaluate_deterministic_policy(
         )
         for message in history
     )
-    guardrail = evaluate_public_query_guardrails(
+    if reply_resolution := _resolve_pending_protected_acronym_reply(
         question,
-        has_history=bool(history),
+        history=history,
+    ):
+        guardrail = _evaluate_guardrail_for_policy_question(
+            reply_resolution.resolved_question or question,
+            history=history,
+            prior_user_queries=prior_user_queries,
+            prior_messages=prior_messages,
+        )
+        if not guardrail.allowed:
+            return DeterministicPolicyDecision(
+                action="block",
+                category=guardrail.category,
+                message=guardrail.message,
+                assistant_metadata={"guardrail_category": guardrail.category},
+            )
+        return reply_resolution
+
+    if reply_resolution := _resolve_pending_public_clarification_reply(
+        question,
+        history=history,
+    ):
+        guardrail = _evaluate_guardrail_for_policy_question(
+            reply_resolution.resolved_question or question,
+            history=history,
+            prior_user_queries=prior_user_queries,
+            prior_messages=prior_messages,
+        )
+        if not guardrail.allowed:
+            return DeterministicPolicyDecision(
+                action="block",
+                category=guardrail.category,
+                message=guardrail.message,
+                assistant_metadata={"guardrail_category": guardrail.category},
+            )
+        return reply_resolution
+
+    guardrail = _evaluate_guardrail_for_policy_question(
+        question,
+        history=history,
         prior_user_queries=prior_user_queries,
         prior_messages=prior_messages,
     )
@@ -107,18 +171,6 @@ def evaluate_deterministic_policy(
             message=guardrail.message,
             assistant_metadata={"guardrail_category": guardrail.category},
         )
-
-    if reply_resolution := _resolve_pending_protected_acronym_reply(
-        question,
-        history=history,
-    ):
-        return reply_resolution
-
-    if reply_resolution := _resolve_pending_public_clarification_reply(
-        question,
-        history=history,
-    ):
-        return reply_resolution
 
     confirmed_acronyms = _collect_confirmed_acronyms(history)
     if pending_acronym := _detect_pending_protected_acronym(
@@ -150,6 +202,23 @@ def evaluate_deterministic_policy(
         category="allowed",
         resolved_question=rewritten_question,
         user_metadata=rewritten_metadata,
+    )
+
+
+def _evaluate_guardrail_for_policy_question(
+    question: str,
+    *,
+    history: Sequence[HistoryMessage],
+    prior_user_queries: Sequence[str],
+    prior_messages: Sequence[tuple[str, str, bool]],
+):
+    compatibility_route = route_user_query(question)
+    return evaluate_public_query_guardrails(
+        question,
+        compatibility_route=compatibility_route,
+        has_history=bool(history),
+        prior_user_queries=prior_user_queries,
+        prior_messages=prior_messages,
     )
 
 
@@ -208,7 +277,35 @@ def _resolve_pending_public_clarification_reply(
 
     normalized_reply = _normalize(question)
     if not _looks_like_confirmation_text(normalized_reply):
-        return None
+        if not _looks_like_public_clarification_answer(
+            normalized_reply,
+            assistant_clarification=pending["assistant_clarification"],
+        ):
+            return None
+
+        resolved_question = _build_public_clarification_answer_resolution(
+            original_question=pending["original_question"],
+            user_reply=question,
+        )
+        return DeterministicPolicyDecision(
+            action="allow",
+            category="allowed",
+            resolved_question=resolved_question,
+            user_metadata={
+                "resolved_public_clarification": {
+                    "original_question": pending["original_question"],
+                    "user_reply": question,
+                }
+            },
+            assistant_metadata={
+                "policy_action": "allow",
+                "policy_category": "public_clarification_answer",
+                "resolved_from_clarification": {
+                    "assistant_prompt": pending["assistant_clarification"],
+                    "user_reply": question,
+                },
+            },
+        )
 
     resolved_question = _build_public_clarification_resolution(
         original_question=pending["original_question"],
@@ -328,6 +425,30 @@ def _looks_like_public_clarification_prompt(content: str) -> bool:
     )
 
 
+def _looks_like_public_clarification_answer(
+    normalized_reply: str,
+    *,
+    assistant_clarification: str,
+) -> bool:
+    if not normalized_reply or "?" in normalized_reply:
+        return False
+
+    reply_tokens = _content_tokens(normalized_reply)
+    if not reply_tokens or len(reply_tokens) > 10:
+        return False
+
+    meaningful_reply_tokens = {
+        token
+        for token in reply_tokens
+        if token not in _PUBLIC_CLARIFICATION_REPLY_STOPWORDS
+    }
+    if not meaningful_reply_tokens:
+        return False
+
+    clarification_tokens = _content_tokens(_normalize(assistant_clarification))
+    return any(token in clarification_tokens for token in meaningful_reply_tokens)
+
+
 def _build_public_clarification_resolution(
     *,
     original_question: str,
@@ -339,6 +460,23 @@ def _build_public_clarification_resolution(
         "Considere a seguinte clarificacao ja confirmada pelo usuario para a "
         f"mesma pergunta: {normalized_clarification}"
     )
+
+
+def _build_public_clarification_answer_resolution(
+    *,
+    original_question: str,
+    user_reply: str,
+) -> str:
+    normalized_reply = " ".join(user_reply.split())
+    return (
+        f"{original_question}\n\n"
+        "Considere a seguinte preferencia ja informada pelo usuario para a "
+        f"mesma pergunta: {normalized_reply}"
+    )
+
+
+def _content_tokens(content: str) -> list[str]:
+    return re.findall(r"[a-z0-9]+", content)
 
 
 def _collect_confirmed_acronyms(

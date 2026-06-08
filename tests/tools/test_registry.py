@@ -33,6 +33,9 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
         "agregar_diarias",
         "consultar_passagens",
         "agregar_passagens",
+        "consultar_estoques",
+        "agregar_estoques",
+        "consultar_movimentacoes_de_estoque",
         "consultar_patrimonios",
         "agregar_patrimonios",
         "consultar_quadro_pessoal",
@@ -68,6 +71,9 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
         "agregar_diarias",
         "consultar_passagens",
         "agregar_passagens",
+        "consultar_estoques",
+        "agregar_estoques",
+        "consultar_movimentacoes_de_estoque",
         "consultar_patrimonios",
         "agregar_patrimonios",
         "consultar_quadro_pessoal",
@@ -109,7 +115,7 @@ def test_get_all_tools_nao_duplica_tools_em_chamadas_repetidas() -> None:
 def test_catalogo_publico_expoe_metadados_de_roteamento_para_todas_as_tools() -> None:
     catalog = get_public_tool_catalog()
 
-    assert len(catalog) == 28
+    assert len(catalog) == 31
     for entry in catalog:
         assert entry.routing.summary
         assert len(entry.routing.examples) >= 2

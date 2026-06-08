@@ -113,6 +113,8 @@ def test_criar_agente_chatbot_usa_configuracao_do_modulo(monkeypatch) -> None:
     assert "consultar_contratos" in nomes
     assert "consultar_diarias" in nomes
     assert "consultar_passagens" in nomes
+    assert "consultar_estoques" in nomes
+    assert "consultar_movimentacoes_de_estoque" in nomes
     assert "consultar_transferencias_financeiras" in nomes
     assert "consultar_conhecimento_municipal" in nomes
 
@@ -258,6 +260,23 @@ def test_system_prompt_orienta_gastos_amplos_com_lista_detalhada() -> None:
     assert "`valor_em_liquidacao`" in prompt
 
 
+def test_system_prompt_orienta_consultas_de_estoque() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "`consultar_estoques`" in prompt
+    assert "`agregar_estoques`" in prompt
+    assert "`consultar_movimentacoes_de_estoque`" in prompt
+    assert "almoxarifado" in prompt
+    assert "quantidade e o valor total por material" in prompt
+
+
+def test_scope_help_message_inclui_estoques() -> None:
+    help_message = build_scope_help_message()
+
+    assert "Estoques e almoxarifado" in help_message
+    assert "maior quantidade no estoque" in help_message
+
+
 def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
     prompt = chatbot_agent.carregar_system_prompt()
 
@@ -306,6 +325,36 @@ def test_chatbot_application_mantem_estado_da_sessao() -> None:
     ]
 
 
+def test_chatbot_application_permite_ranking_de_entradas_de_estoque_sem_bloqueio() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica de estoques deveria resolver a selecao")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-estoques-entradas"),
+        selector=selector,
+    )
+
+    response = app.ask("Quais materiais tiveram mais entradas em 2025?")
+
+    assert (
+        response.content
+        == "resposta para: Quais materiais tiveram mais entradas em 2025?"
+    )
+    assert response.guardrail_triggered is False
+    assert backend.calls == [
+        ("Quais materiais tiveram mais entradas em 2025?", "sessao-estoques-entradas")
+    ]
+    assert backend.selection_calls == [
+        (("agregar_estoques",), "sessao-estoques-entradas")
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_estoques_query"
+
+
 def test_chatbot_application_bloqueia_pergunta_vazia_sem_chamar_backend() -> None:
     backend = FakeBackend()
     app = ChatbotApplication(backend=backend)
@@ -331,9 +380,10 @@ def test_chatbot_application_stream_bloqueia_pergunta_vazia_sem_chamar_backend()
             "Envie uma pergunta sobre os dados públicos municipais disponíveis "
             "no sistema ou sobre o acervo municipal curado, como servidores, "
             "secretarias, salários-base, licitações, despesas, diárias, "
-            "passagens, frota e veículos, patrimônio, planejamento, receitas, "
-            "transferências financeiras, emendas parlamentares, políticos "
-            "eleitos, telefones úteis ou horários de ônibus."
+            "passagens, estoques e almoxarifado, frota e veículos, "
+            "patrimônio, planejamento, receitas, transferências "
+            "financeiras, emendas parlamentares, políticos eleitos, "
+            "telefones úteis ou horários de ônibus."
         )
     ]
     assert backend.calls == []
@@ -921,6 +971,64 @@ def test_chatbot_application_reaproveita_pode_confirmar_apos_clarificacao_public
         ),
         (pergunta_resolvida, "sessao-followup-pode-confirmar"),
     ]
+
+
+def test_chatbot_application_reaproveita_resposta_curta_apos_clarificacao_de_estoque() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica de estoques deveria resolver a selecao")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-followup-estoques-preferencia"),
+        selector=selector,
+    )
+
+    primeira_resposta = app.ask("Quais itens são mais comuns no almoxarifado?")
+    app.session.history.append(
+        ChatMessage(
+            role="assistant",
+            content=(
+                "Para identificar os itens mais comuns no almoxarifado, preciso "
+                "confirmar um detalhe: você quer saber os itens com maior "
+                "quantidade em estoque ou os que têm maior valor total em "
+                "estoque?"
+            ),
+        )
+    )
+
+    segunda_resposta = app.ask("Maior quantidade")
+    pergunta_resolvida = (
+        "Quais itens são mais comuns no almoxarifado?\n\n"
+        "Considere a seguinte preferencia ja informada pelo usuario para a "
+        "mesma pergunta: Maior quantidade"
+    )
+
+    assert (
+        primeira_resposta.content
+        == "resposta para: Quais itens são mais comuns no almoxarifado?"
+    )
+    assert segunda_resposta.content == f"resposta para: {pergunta_resolvida}"
+    assert backend.calls == [
+        (
+            "Quais itens são mais comuns no almoxarifado?",
+            "sessao-followup-estoques-preferencia",
+        ),
+        (pergunta_resolvida, "sessao-followup-estoques-preferencia"),
+    ]
+    assert backend.selection_calls == [
+        (("agregar_estoques",), "sessao-followup-estoques-preferencia"),
+        (("agregar_estoques",), "sessao-followup-estoques-preferencia"),
+    ]
+    assert app.session.history[-2].metadata == {
+        "resolved_public_clarification": {
+            "original_question": "Quais itens são mais comuns no almoxarifado?",
+            "user_reply": "Maior quantidade",
+        }
+    }
 
 
 def test_chatbot_application_permite_followup_curto_do_acervo_markdown() -> None:

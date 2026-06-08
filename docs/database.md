@@ -16,6 +16,7 @@ O schema está dividido em domínios:
 - licitações
 - fornecedores
 - frotas
+- estoques
 - receitas
 - transferências financeiras
 - servidores e folha de pagamento
@@ -68,6 +69,9 @@ receita_naturezas
 
 frota_veiculos
 └── frota_despesas
+
+estoque_materiais
+└── estoque_movimentacoes
 
 transferencias_financeiras_movimentos
 
@@ -614,6 +618,59 @@ Regras importantes:
 - filtros textuais nas tools ignoram diferenças de acento
 - importa os arquivos de planejamento da saúde e da prefeitura
 
+### `estoque_materiais`
+
+Saldos sumarizados de materiais importados dos XMLs de estoque.
+
+Campos principais:
+
+- `arquivo_origem` e `sequencia_material`: preservam a linhagem do material no XML
+- `origem`, `exercicio`
+- `material`, `unidade_medida`
+- `periodo_inicio` e `periodo_fim`
+- `saldo_anterior_quantidade`, `saldo_anterior_valor`
+- `entrada_quantidade`, `entrada_valor`
+- `saida_quantidade`, `saida_valor`
+- `saldo_quantidade`, `saldo_valor`
+
+Relacionamentos:
+
+- possui varias `estoque_movimentacoes`
+
+Regras importantes:
+
+- unicidade por `origem + arquivo_origem + sequencia_material`
+- materiais sem historico diario continuam persistidos no contrato sumarizado
+- esse contrato representa saldo e fluxo de almoxarifado, nao patrimonio, documento de despesa ou processo de compra
+
+### `estoque_movimentacoes`
+
+Historico diario de movimentacoes vinculado a um material de estoque.
+
+Campos principais:
+
+- `material_id`
+- `sequencia_movimentacao`
+- `data_movimento`
+- `tipo_movimento`
+- `unidade_gestora`
+- `almoxarifado`
+- `localizacao`
+- `classificacao`
+- `quantidade`
+- `valor_unitario`
+- `valor_total`
+- `custo_medio`
+
+Relacionamentos:
+
+- pertence a `estoque_materiais`
+
+Regras importantes:
+
+- unicidade por `material_id + sequencia_movimentacao`
+- a tabela guarda apenas movimentacoes realmente presentes no XML; nao inventa detalhes para materiais apenas sumarizados
+
 ### `despesas_por_funcao`
 
 Linhas agregadas do relatório CSV `despesas-por-funcao`.
@@ -698,6 +755,7 @@ Os relacionamentos abaixo são os mais úteis para queries e tools:
 - `folha_lotacoes -> folha_pagamentos`
 - `receita_naturezas -> receita_arrecadacoes`
 - `frota_veiculos -> frota_despesas`
+- `estoque_materiais -> estoque_movimentacoes`
 - `transferencias_financeiras_movimentos`
 - `emendas_parlamentares`
 - `despesa_documentos -> despesa_documento_itens`
@@ -777,6 +835,8 @@ Ao criar tools, vale pensar em contratos de entrada e saída que respeitem a est
   usar `consultar_transferencias_financeiras` ou `agregar_transferencias_financeiras`
 - consultar o relatório agregado por função:
   usar `consultar_despesas_por_funcao` ou `agregar_despesas_por_funcao`
+- consultar saldo e historico de estoque:
+  usar `consultar_estoques`, `agregar_estoques` e `consultar_movimentacoes_de_estoque`
 - analisar custos de frota:
   cruzar `frota_veiculos` e `frota_despesas`
 

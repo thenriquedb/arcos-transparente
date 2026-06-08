@@ -16,6 +16,7 @@ Domain = Literal[
     "despesas",
     "diarias",
     "passagens",
+    "estoques",
     "frotas",
     "patrimonios",
     "quadro_pessoal",

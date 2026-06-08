@@ -16,6 +16,8 @@ from database.models import (
     DespesaDocumentoComprobatorio,
     DespesaDocumentoItem,
     DespesaPorFuncao,
+    EstoqueMaterial,
+    EstoqueMovimentacao,
     EmendaParlamentar,
     Eleito,
     FolhaCargo,
@@ -60,6 +62,7 @@ from ingestion.parsers.xml.folha_pagamento_parser import FolhaPagamentoParser
 from ingestion.parsers.xml.planejamentos_parser import PlanejamentosParser
 from ingestion.parsers.xml.quadro_pessoal_parser import QuadroPessoalParser
 from ingestion.parsers.xml.eleitos_parser import EleitosParser
+from ingestion.parsers.xml.estoques_parser import EstoquesParser
 from ingestion.parsers.xml.transferencias_financeiras_parser import (
     TransferenciasFinanceirasParser,
 )
@@ -77,6 +80,7 @@ class IngestionPipeline:
             "contratos": (ContratosParser(), Contrato),
             "licitacoes": (LicitacoesParser(), Licitacao),
             "frotas": (FrotasParser(), FrotaVeiculo),
+            "estoques": (EstoquesParser(), EstoqueMaterial),
             "servidores": (ServidoresParser(), Servidor),
             "receitas": (ReceitasParser(), ReceitaArrecadacao),
             "folha_pagamento": (FolhaPagamentoParser(), FolhaPagamentoRegistro),
@@ -177,6 +181,10 @@ class IngestionPipeline:
                         )
                     elif tipo == "frotas":
                         resultado = self._load_frotas(
+                            session=session, registros=registros
+                        )
+                    elif tipo == "estoques":
+                        resultado = self._load_estoques(
                             session=session, registros=registros
                         )
                     elif tipo == "despesas" and csv_model is DespesaPorFuncao:
@@ -687,6 +695,90 @@ class IngestionPipeline:
                 resultado.erros += 1
         return resultado
 
+    def _load_estoques(self, session, registros: list[dict[str, Any]]) -> LoadResult:
+        """Carrega materiais de estoque e movimentacoes relacionadas."""
+        resultado = LoadResult()
+        for registro in registros:
+            registro = sanitize_xml_payload(registro)
+            try:
+                with session.begin():
+                    material = session.execute(
+                        select(EstoqueMaterial).where(
+                            and_(
+                                EstoqueMaterial.origem == registro["origem"],
+                                EstoqueMaterial.arquivo_origem
+                                == registro["arquivo_origem"],
+                                EstoqueMaterial.sequencia_material
+                                == registro["sequencia_material"],
+                            )
+                        )
+                    ).scalar_one_or_none()
+
+                    payload = dict(registro)
+                    movimentacoes = payload.pop("movimentacoes", [])
+
+                    if material is None:
+                        material = EstoqueMaterial(**payload)
+                        session.add(material)
+                        session.flush()
+                        for movimentacao in movimentacoes:
+                            session.add(
+                                EstoqueMovimentacao(
+                                    material_id=material.id,
+                                    **movimentacao,
+                                )
+                            )
+                        resultado.inseridos += 1
+                        continue
+
+                    alterou_material = False
+                    for campo, valor in payload.items():
+                        if getattr(material, campo) != valor:
+                            setattr(material, campo, valor)
+                            alterou_material = True
+
+                    movimentacoes_existentes = [
+                        {
+                            "sequencia_movimentacao": movimentacao.sequencia_movimentacao,
+                            "data_movimento": movimentacao.data_movimento,
+                            "tipo_movimento": movimentacao.tipo_movimento,
+                            "unidade_gestora": movimentacao.unidade_gestora,
+                            "almoxarifado": movimentacao.almoxarifado,
+                            "localizacao": movimentacao.localizacao,
+                            "classificacao": movimentacao.classificacao,
+                            "quantidade": movimentacao.quantidade,
+                            "valor_unitario": movimentacao.valor_unitario,
+                            "valor_total": movimentacao.valor_total,
+                            "custo_medio": movimentacao.custo_medio,
+                        }
+                        for movimentacao in sorted(
+                            material.movimentacoes,
+                            key=lambda row: row.sequencia_movimentacao,
+                        )
+                    ]
+                    alterou_movimentacoes = movimentacoes_existentes != movimentacoes
+
+                    if alterou_movimentacoes:
+                        session.query(EstoqueMovimentacao).filter(
+                            EstoqueMovimentacao.material_id == material.id
+                        ).delete()
+                        for movimentacao in movimentacoes:
+                            session.add(
+                                EstoqueMovimentacao(
+                                    material_id=material.id,
+                                    **movimentacao,
+                                )
+                            )
+
+                    if alterou_material or alterou_movimentacoes:
+                        resultado.atualizados += 1
+                    else:
+                        resultado.ignorados += 1
+            except Exception:
+                session.rollback()
+                resultado.erros += 1
+        return resultado
+
     def _load_transferencias_financeiras(
         self,
         session,
@@ -959,6 +1051,8 @@ class IngestionPipeline:
             )
         elif tipo == "patrimonios":
             arquivos = sorted(administracao_path.rglob("*patrimonio*.xml"))
+        elif tipo == "estoques":
+            arquivos = sorted(administracao_path.rglob("estoque-*.xml"))
         elif tipo == "quadro_pessoal":
             arquivos = sorted(servidores_path.rglob("*quadro-pessoal*.xml"))
         elif tipo == "eleitos":

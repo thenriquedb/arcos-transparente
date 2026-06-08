@@ -203,6 +203,76 @@ def test_hybrid_selector_prioriza_emendas_por_autor() -> None:
     assert selection.candidate_tool_names == ("agregar_transferencias_financeiras",)
 
 
+def test_hybrid_selector_prioriza_ranking_de_estoques_por_movimentacao() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver ranking de estoques")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Qual é o ranking dos materiais com maior movimentação?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_estoques_query"
+    assert selection.candidate_tool_names == ("agregar_estoques",)
+
+
+def test_hybrid_selector_prioriza_movimentacoes_de_estoque() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver movimentacoes de estoque")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Liste as movimentacoes de estoque do almoxarifado saude em 2025.",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_estoques_query"
+    assert selection.candidate_tool_names == ("consultar_movimentacoes_de_estoque",)
+
+
+def test_hybrid_selector_prioriza_agregacao_de_itens_mais_comuns_no_almoxarifado() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver agregacao de estoques")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quais itens são mais comuns no almoxarifado?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_estoques_query"
+    assert selection.candidate_tool_names == ("agregar_estoques",)
+
+
+def test_hybrid_selector_prioriza_agregacao_de_entradas_de_estoque() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver entradas de estoque")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quais materiais tiveram mais entradas em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_estoques_query"
+    assert selection.candidate_tool_names == ("agregar_estoques",)
+
+
 def test_hybrid_selector_prioriza_candidates_de_custo_de_evento() -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
         raise AssertionError("heuristica deveria resolver custo de evento")

@@ -73,6 +73,7 @@ uv run python cli.py rag status
 - **Licitações** - processos licitatorios, vencedores e valores estimados
 - **Planejamento** - planejamento orcamentario da saude e da prefeitura
 - **Despesas** - empenhos, restos a pagar, documentos extras, itens e comprovantes
+- **Estoques** - saldos sumarizados de materiais e movimentacoes diarias de almoxarifado
 - **Patrimônios** - bens patrimoniais, localização, situação e valores
 - **Quadro de pessoal** - vagas criadas e preenchidas por regime de contratação
 - **Folha de Pagamento** - historico mensal de pagamentos por servidor
