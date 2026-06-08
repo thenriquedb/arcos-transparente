@@ -293,6 +293,9 @@ def _select_with_heuristics(
         )
         if contract_ranking_selection is not None:
             return contract_ranking_selection
+        estoques_selection = _select_estoques_query_with_router(question)
+        if estoques_selection is not None:
+            return estoques_selection
         return None
 
     candidate_names = _normalize_candidate_names(
@@ -507,6 +510,31 @@ def _select_contract_value_ranking_with_router(
         candidate_tool_names=tuple(candidate_names),
         confidence="high",
         reason_code="heuristic_contract_value_ranking",
+    )
+
+
+def _select_estoques_query_with_router(
+    question: str,
+) -> HybridToolSelection | None:
+    route = route_user_query(question)
+    if not route.confident or route.tool_name not in (
+        "agregar_estoques",
+        "consultar_estoques",
+        "consultar_movimentacoes_de_estoque",
+    ):
+        return None
+
+    candidate_names = _normalize_candidate_names([route.tool_name])
+    candidate_tools = tuple(get_public_tools_by_name(candidate_names))
+    if len(candidate_tools) != len(candidate_names):
+        return None
+
+    return HybridToolSelection(
+        action="allow",
+        candidate_tools=candidate_tools,
+        candidate_tool_names=tuple(candidate_names),
+        confidence="high",
+        reason_code="heuristic_estoques_query",
     )
 
 

@@ -90,8 +90,12 @@ def test_pipeline_importa_e_reimporta_estoques_sem_duplicar(
     atualizado = (
         (FIXTURES_DIR / "estoques_sample.xml")
         .read_text(encoding="utf-8")
-        .replace("<SaldoValor>220.0000</SaldoValor>", "<SaldoValor>250.0000</SaldoValor>", 1)
-        .replace("<ValorTotal>40.0000</ValorTotal>", "<ValorTotal>45.0000</ValorTotal>", 1)
+        .replace(
+            "<SaldoValor>220.0000</SaldoValor>", "<SaldoValor>250.0000</SaldoValor>", 1
+        )
+        .replace(
+            "<ValorTotal>40.0000</ValorTotal>", "<ValorTotal>45.0000</ValorTotal>", 1
+        )
     )
     arquivo.write_text(atualizado, encoding="ISO-8859-1")
 

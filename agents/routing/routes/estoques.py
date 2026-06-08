@@ -1,12 +1,20 @@
-"""Regras de roteamento para o dominio de estoques."""
+e"""Regras de roteamento para o dominio de estoques."""
 
 from __future__ import annotations
 
+import calendar
+from datetime import date
 import re
 
 from agents.routing.constants import ESTOQUES_DOMAIN_KEYWORDS
-from agents.routing.extractors import _contains_any, _extract_limit, _extract_year
+from agents.routing.extractors import (
+    _contains_any,
+    _contains_term,
+    _extract_limit,
+    _extract_year,
+)
 from agents.routing.models import RouteDecision
+from shared.utils.validation import parse_month
 
 
 _ESTOQUES_MOVEMENT_KEYWORDS = (
@@ -22,20 +30,98 @@ _ESTOQUES_AGGREGATION_KEYWORDS = (
     "quanto",
     "total",
     "totais",
+    "comum",
+    "comuns",
+    "frequente",
+    "frequentes",
     "maior",
     "maiores",
+    "mais",
     "ranking",
     "quantas",
     "quantos",
 )
+_ESTOQUES_ENTITY_TERMS = (
+    "material",
+    "materiais",
+    "item",
+    "itens",
+    "produto",
+    "produtos",
+)
+_ESTOQUES_GENERIC_SIGNAL_TERMS = (
+    "saldo",
+    "entrada",
+    "entradas",
+    "saida",
+    "saidas",
+    "movimentacao",
+    "movimentacoes",
+    "almoxarifado",
+)
+_ESTOQUES_VALUE_SIGNAL_TERMS = (
+    "valor",
+    "valores",
+    "custo",
+    "custos",
+    "financeiro",
+    "financeira",
+    "reais",
+)
+_MONTH_RANGE_PATTERN = re.compile(
+    r"\b(?:em|no\s+mes\s+de|durante)\s+"
+    r"(janeiro|fevereiro|marco|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)"
+    r"\s+de\s+(\d{4})\b"
+)
 
 
 def _is_estoques_query(normalized_text: str) -> bool:
-    return _contains_any(normalized_text, ESTOQUES_DOMAIN_KEYWORDS)
+    if _contains_any(normalized_text, ESTOQUES_DOMAIN_KEYWORDS):
+        return True
+
+    has_entity = any(
+        _contains_term(normalized_text, term) for term in _ESTOQUES_ENTITY_TERMS
+    )
+    has_stock_signal = any(
+        _contains_term(normalized_text, term) for term in _ESTOQUES_GENERIC_SIGNAL_TERMS
+    )
+    return has_entity and has_stock_signal
 
 
-def _is_estoques_movement_query(normalized_text: str) -> bool:
-    return any(keyword in normalized_text for keyword in _ESTOQUES_MOVEMENT_KEYWORDS)
+def _has_estoques_aggregate_intent(normalized_text: str) -> bool:
+    return any(keyword in normalized_text for keyword in _ESTOQUES_AGGREGATION_KEYWORDS)
+
+
+def _is_estoques_movement_history_query(normalized_text: str) -> bool:
+    if any(
+        keyword in normalized_text
+        for keyword in (
+            "requisicao",
+            "requisicoes",
+            "aplicacao imediata",
+            "nota fiscal de compra",
+        )
+    ):
+        return True
+    if "historico" in normalized_text:
+        return True
+    if any(keyword in normalized_text for keyword in _ESTOQUES_MOVEMENT_KEYWORDS):
+        return not _has_estoques_aggregate_intent(normalized_text)
+    return False
+
+
+def _extract_month_date_range(normalized_text: str) -> tuple[date, date] | None:
+    match = _MONTH_RANGE_PATTERN.search(normalized_text)
+    if match is None:
+        return None
+
+    month = parse_month(match.group(1))
+    year = int(match.group(2))
+    if month is None:
+        return None
+
+    last_day = calendar.monthrange(year, month)[1]
+    return date(year, month, 1), date(year, month, last_day)
 
 
 def _extract_material_query(normalized_text: str) -> str | None:
@@ -71,6 +157,18 @@ def _extract_estoques_filters(normalized_text: str) -> dict[str, object]:
     filtros: dict[str, object] = {}
     if year := _extract_year(normalized_text):
         filtros["ano"] = year
+    if any(
+        signal in normalized_text
+        for signal in (
+            "entrada",
+            "entradas",
+            "saida",
+            "saidas",
+            "movimentacao",
+            "movimentacoes",
+        )
+    ) and (month_range := _extract_month_date_range(normalized_text)):
+        filtros["data_movimento_inicio"], filtros["data_movimento_fim"] = month_range
     if ("saude" in normalized_text or "fumusa" in normalized_text) and (
         "almoxarifado" not in normalized_text
     ):
@@ -105,16 +203,55 @@ def _extract_estoques_filters(normalized_text: str) -> dict[str, object]:
 def _try_route_estoques_agregacao(normalized_text: str) -> RouteDecision | None:
     if not _is_estoques_query(normalized_text):
         return None
-    if _is_estoques_movement_query(normalized_text):
+    if _is_estoques_movement_history_query(normalized_text):
         return None
-    if not any(keyword in normalized_text for keyword in _ESTOQUES_AGGREGATION_KEYWORDS):
+    if not _has_estoques_aggregate_intent(normalized_text):
         return None
 
     filtros = _extract_estoques_filters(normalized_text)
+    has_movement_scope = any(
+        key in filtros
+        for key in (
+            "data_movimento_inicio",
+            "data_movimento_fim",
+            "tipo_movimento",
+            "unidade_gestora",
+            "almoxarifado",
+            "localizacao",
+            "classificacao",
+        )
+    )
+    aggregate_ranking_intent = any(
+        token in normalized_text for token in ("maior", "maiores", "ranking", "mais")
+    )
+    mentions_material_entity = any(
+        _contains_term(normalized_text, term) for term in _ESTOQUES_ENTITY_TERMS
+    )
+    mentions_value = any(
+        _contains_term(normalized_text, term) for term in _ESTOQUES_VALUE_SIGNAL_TERMS
+    )
+    mentions_quantity = any(
+        _contains_term(normalized_text, term)
+        for term in ("quantidade", "quantidades", "itens", "item", "unidades")
+    )
+
     if "quantas" in normalized_text or "quantos" in normalized_text:
         metrica = "contagem"
+    elif "movimentacao" in normalized_text or "movimentacoes" in normalized_text:
+        metrica = (
+            "soma_movimentacao_valor"
+            if mentions_value
+            else "soma_movimentacao_quantidade"
+        )
     elif "entrada" in normalized_text and any(
         token in normalized_text for token in ("quantidade", "itens", "unidades")
+    ):
+        metrica = "soma_entrada_quantidade"
+    elif (
+        "entrada" in normalized_text
+        and aggregate_ranking_intent
+        and mentions_material_entity
+        and not mentions_value
     ):
         metrica = "soma_entrada_quantidade"
     elif "entrada" in normalized_text:
@@ -123,12 +260,26 @@ def _try_route_estoques_agregacao(normalized_text: str) -> RouteDecision | None:
         token in normalized_text for token in ("quantidade", "itens", "unidades")
     ):
         metrica = "soma_saida_quantidade"
+    elif (
+        "saida" in normalized_text
+        and aggregate_ranking_intent
+        and mentions_material_entity
+        and not mentions_value
+    ):
+        metrica = "soma_saida_quantidade"
     elif "saida" in normalized_text:
         metrica = "soma_saida_valor"
-    elif any(token in normalized_text for token in ("quantidade", "itens", "unidades")):
+    elif mentions_quantity:
         metrica = "soma_saldo_quantidade"
     else:
         metrica = "soma_saldo_valor"
+
+    if has_movement_scope and metrica in {"soma_saldo_quantidade", "soma_saldo_valor"}:
+        metrica = (
+            "soma_movimentacao_valor"
+            if metrica == "soma_saldo_valor"
+            else "soma_movimentacao_quantidade"
+        )
 
     if "por origem" in normalized_text:
         agrupar_por = "origem"
@@ -137,7 +288,7 @@ def _try_route_estoques_agregacao(normalized_text: str) -> RouteDecision | None:
     elif "por ano" in normalized_text or "por exercicio" in normalized_text:
         agrupar_por = "ano"
     elif "por material" in normalized_text or any(
-        token in normalized_text for token in ("maior", "maiores", "ranking")
+        token in normalized_text for token in ("maior", "maiores", "ranking", "mais")
     ):
         agrupar_por = "material"
     else:
@@ -148,7 +299,7 @@ def _try_route_estoques_agregacao(normalized_text: str) -> RouteDecision | None:
         operation_type="agregacao_ranking",
         tool_name="agregar_estoques",
         tool_kwargs={
-            "filtros": {k: v for k, v in filtros.items() if k != "almoxarifado" and k != "tipo_movimento"},
+            "filtros": filtros,
             "agrupar_por": agrupar_por,
             "metrica": metrica,
             "ordenar_por": "metrica",
@@ -165,7 +316,7 @@ def _try_route_estoques_lista(normalized_text: str) -> RouteDecision | None:
         return None
 
     filtros = _extract_estoques_filters(normalized_text)
-    if _is_estoques_movement_query(normalized_text):
+    if _is_estoques_movement_history_query(normalized_text):
         return RouteDecision(
             domain="estoques",
             operation_type="consulta_lista",
@@ -187,9 +338,15 @@ def _try_route_estoques_lista(normalized_text: str) -> RouteDecision | None:
         operation_type="consulta_lista",
         tool_name="consultar_estoques",
         tool_kwargs={
-            "filtros": {k: v for k, v in filtros.items() if k != "almoxarifado" and k != "tipo_movimento"},
+            "filtros": {
+                k: v
+                for k, v in filtros.items()
+                if k != "almoxarifado" and k != "tipo_movimento"
+            },
             "ordenar_por": "saldo_valor"
-            if any(keyword in normalized_text for keyword in ("maior", "maiores", "saldo"))
+            if any(
+                keyword in normalized_text for keyword in ("maior", "maiores", "saldo")
+            )
             else "periodo_fim",
             "ordem": "desc",
             "limite": 100

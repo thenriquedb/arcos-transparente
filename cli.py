@@ -129,9 +129,7 @@ def db_status() -> None:
         tabela.add_row("fornecedores", str(session.query(Fornecedor).count()))
         tabela.add_row("frota_veiculos", str(session.query(FrotaVeiculo).count()))
         tabela.add_row("frota_despesas", str(session.query(FrotaDespesa).count()))
-        tabela.add_row(
-            "estoque_materiais", str(session.query(EstoqueMaterial).count())
-        )
+        tabela.add_row("estoque_materiais", str(session.query(EstoqueMaterial).count()))
         tabela.add_row(
             "estoque_movimentacoes",
             str(session.query(EstoqueMovimentacao).count()),

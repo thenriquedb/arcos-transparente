@@ -105,7 +105,9 @@ def render_header() -> None:
     title_col, action_col = st.columns([0.72, 0.28], vertical_alignment="center")
     with title_col:
         st.title(APP_TITLE)
-        st.caption("Chat local conectado ao agente e aos dados públicos importados.")
+        st.caption(
+            "Chatbot para consultas aos dados municipais de transparência e ao acervo local."
+        )
     with action_col:
         if st.button("Nova conversa", use_container_width=True):
             reset_chat_session()

@@ -12,7 +12,12 @@ from agents.tools.sql_tools.shared.normalization import (
     normalize_model_input,
     normalize_selected_fields,
 )
-from shared.utils.validation import clean_text, parse_date, parse_int, validate_date_period
+from shared.utils.validation import (
+    clean_text,
+    parse_date,
+    parse_int,
+    validate_date_period,
+)
 
 
 DEFAULT_ESTOQUE_MOVEMENT_FIELDS = (

@@ -164,9 +164,10 @@ def evaluate_public_query_guardrails(
                 "Envie uma pergunta sobre os dados públicos municipais disponíveis "
                 "no sistema ou sobre o acervo municipal curado, como servidores, "
                 "secretarias, salários-base, licitações, despesas, diárias, "
-                "passagens, frota e veículos, patrimônio, planejamento, "
-                "receitas, transferências financeiras, emendas parlamentares, "
-                "políticos eleitos, telefones úteis ou horários de ônibus."
+                "passagens, estoques e almoxarifado, frota e veículos, "
+                "patrimônio, planejamento, receitas, transferências "
+                "financeiras, emendas parlamentares, políticos eleitos, "
+                "telefones úteis ou horários de ônibus."
             ),
         )
 

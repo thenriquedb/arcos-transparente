@@ -8,6 +8,8 @@ compatível de tools.
 
 from __future__ import annotations
 
+from datetime import date
+
 import pytest
 
 from agents.router import (
@@ -163,6 +165,69 @@ def test_route_user_query_reconhece_movimentacao_de_estoque() -> None:
         "ano": 2025,
         "almoxarifado": "saude",
     }
+
+
+def test_route_user_query_reconhece_ranking_de_materiais_por_movimentacao() -> None:
+    decision = route_user_query(
+        "Qual é o ranking dos materiais com maior movimentação?"
+    )
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_estoques"
+    assert decision.tool_kwargs["agrupar_por"] == "material"
+    assert decision.tool_kwargs["metrica"] == "soma_movimentacao_quantidade"
+
+
+def test_route_user_query_reconhece_saidas_por_material_em_mes_especifico() -> None:
+    decision = route_user_query("Quais materiais tiveram mais saidas em maio de 2025?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_estoques"
+    assert decision.tool_kwargs["agrupar_por"] == "material"
+    assert decision.tool_kwargs["metrica"] == "soma_saida_quantidade"
+    assert decision.tool_kwargs["filtros"] == {
+        "ano": 2025,
+        "data_movimento_inicio": date(2025, 5, 1),
+        "data_movimento_fim": date(2025, 5, 31),
+    }
+
+
+def test_route_user_query_reconhece_entradas_por_material_em_ano_especifico() -> None:
+    decision = route_user_query("Quais materiais tiveram mais entradas em 2025?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_estoques"
+    assert decision.tool_kwargs["agrupar_por"] == "material"
+    assert decision.tool_kwargs["metrica"] == "soma_entrada_quantidade"
+    assert decision.tool_kwargs["filtros"] == {"ano": 2025}
+
+
+def test_route_user_query_reconhece_item_com_maior_quantidade_em_estoque() -> None:
+    decision = route_user_query("Qual item tem a maior quantidade no estoque?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_estoques"
+    assert decision.tool_kwargs["agrupar_por"] == "material"
+    assert decision.tool_kwargs["metrica"] == "soma_saldo_quantidade"
+
+
+def test_route_user_query_reconhece_itens_mais_comuns_no_almoxarifado() -> None:
+    decision = route_user_query("Quais itens são mais comuns no almoxarifado?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_estoques"
+    assert decision.tool_kwargs["agrupar_por"] == "material"
+    assert decision.tool_kwargs["metrica"] == "soma_saldo_quantidade"
+
+
+def test_route_user_query_preserva_filtro_de_almoxarifado_em_agregacao() -> None:
+    decision = route_user_query("Quais itens são mais comuns no almoxarifado saude?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_estoques"
+    assert decision.tool_kwargs["agrupar_por"] == "material"
+    assert decision.tool_kwargs["metrica"] == "soma_movimentacao_quantidade"
+    assert decision.tool_kwargs["filtros"] == {"almoxarifado": "saude"}
 
 
 @pytest.mark.parametrize(

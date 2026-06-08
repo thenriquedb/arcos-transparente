@@ -123,9 +123,7 @@ class EstoqueMovimentacao(Base):
     sequencia_movimentacao: Mapped[int] = mapped_column(Integer, nullable=False)
     data_movimento: Mapped[date] = mapped_column(Date, nullable=False, index=True)
     tipo_movimento: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
-    unidade_gestora: Mapped[Optional[str]] = mapped_column(
-        String(255), nullable=True
-    )
+    unidade_gestora: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     almoxarifado: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     localizacao: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     classificacao: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
