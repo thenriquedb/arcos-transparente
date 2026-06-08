@@ -7,10 +7,10 @@ from typing import Any
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
-    LookupExecutionResult,
     build_lookup_response,
-    execute_collection_lookup,
+    execute_collection_lookup_result,
 )
+from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import EstoqueMovimentacao
@@ -124,12 +124,12 @@ def project_estoque_movimentacao_fields(
     registro: EstoqueMovimentacao,
     campos: list[str],
 ) -> dict[str, Any]:
-    selected = campos or list(DEFAULT_ESTOQUE_MOVEMENT_FIELDS)
-    return {
-        campo: value
-        for campo, value in _row_to_public_dict(registro).items()
-        if campo in selected
-    }
+    return project_public_fields(
+        registro,
+        campos,
+        serializer=_row_to_public_dict,
+        default_fields=DEFAULT_ESTOQUE_MOVEMENT_FIELDS,
+    )
 
 
 @register(
@@ -195,13 +195,16 @@ def consultar_movimentacoes_de_estoque(
 
     with session_manager.get_session() as session:
         registros = load_filtered_estoque_movimentacoes(session, params.filtros)
-        total, pagina = execute_collection_lookup(
+        execution = execute_collection_lookup_result(
             registros,
             ordenar_por=params.ordenar_por,
             ordem=params.ordem,
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
+            empty_suggestion=(
+                "Nenhuma movimentacao de estoque encontrada com os filtros."
+            ),
         )
 
     metadata = ConsultarMovimentacoesDeEstoqueMetadata(
@@ -216,15 +219,7 @@ def consultar_movimentacoes_de_estoque(
     return build_lookup_response(
         response_type=ConsultarMovimentacoesDeEstoqueResponse,
         metadata=metadata,
-        execution=LookupExecutionResult(
-            total=total,
-            rows=pagina,
-            suggestion=(
-                "Nenhuma movimentacao de estoque encontrada com os filtros."
-                if not pagina
-                else None
-            ),
-        ),
+        execution=execution,
         project_row=project_estoque_movimentacao_fields,
         campos=params.campos,
         pagination_message_builder=lambda shown, total: (

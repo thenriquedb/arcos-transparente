@@ -85,6 +85,35 @@ def execute_collection_lookup(
     return total, ordered[offset : offset + limite]
 
 
+def execute_collection_lookup_result(
+    rows: Sequence[RowT],
+    *,
+    ordenar_por: str,
+    ordem: str,
+    offset: int,
+    limite: int,
+    sort_key_getters: Mapping[str, Callable[[RowT], Any]],
+    tie_breaker_getters: Sequence[Callable[[RowT], Any]] = (),
+    empty_suggestion: str | None = None,
+) -> LookupExecutionResult:
+    """Executa lookup em coleção e devolve o envelope normalizado do runtime."""
+
+    total, pagina = execute_collection_lookup(
+        rows,
+        ordenar_por=ordenar_por,
+        ordem=ordem,
+        offset=offset,
+        limite=limite,
+        sort_key_getters=sort_key_getters,
+        tie_breaker_getters=tie_breaker_getters,
+    )
+    return LookupExecutionResult(
+        total=total,
+        rows=pagina,
+        suggestion=empty_suggestion if not pagina else None,
+    )
+
+
 def build_lookup_response(
     *,
     response_type: type[ResponseT],

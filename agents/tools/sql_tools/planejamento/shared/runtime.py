@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from agents.tools.sql_tools.shared.projection import project_public_fields
 from database.models import PlanejamentoDespesa
 from shared.utils.decimal_to_float import decimal_to_float
 
@@ -41,7 +42,9 @@ def project_planejamento_fields(
     registro: PlanejamentoDespesa,
     campos: list[str],
 ) -> dict[str, Any]:
-    serialized = serializar_planejamento(registro)
-    if not campos:
-        return serialized
-    return {campo: serialized[campo] for campo in campos}
+    return project_public_fields(
+        registro,
+        campos,
+        serializer=serializar_planejamento,
+        order="requested",
+    )

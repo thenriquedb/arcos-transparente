@@ -8,6 +8,7 @@ from typing import Any
 from pydantic import ValidationError
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.projection import project_public_rows
 from database import session as session_manager
 from database.models import Eleito
 from shared.utils.text import matches_text_query, normalize_search_text
@@ -162,15 +163,12 @@ def _project_eleitos(
     registros: list[Eleito],
     campos: list[str],
 ) -> list[dict[str, Any]]:
-    selected = campos or list(ALLOWED_ELEITO_FIELDS)
-    return [
-        {
-            campo: value
-            for campo, value in _row_to_public_dict(registro).items()
-            if campo in selected
-        }
-        for registro in registros
-    ]
+    return project_public_rows(
+        registros,
+        campos,
+        serializer=_row_to_public_dict,
+        default_fields=ALLOWED_ELEITO_FIELDS,
+    )
 
 
 @register(
