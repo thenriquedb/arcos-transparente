@@ -11,6 +11,12 @@ from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import InMemorySaver
 
+from agents.chatbot.observability import (
+    ObservabilityConfig,
+    ObservabilityProvider,
+    build_observability_provider,
+    load_observability_config_from_env,
+)
 from agents.tools.registry import get_public_tools
 
 load_dotenv()
@@ -44,6 +50,14 @@ def obter_configuracao_llm() -> dict[str, str]:
         "model_name": model_name,
         "api_key": api_key,
     }
+
+
+def obter_configuracao_observabilidade() -> ObservabilityConfig:
+    return load_observability_config_from_env()
+
+
+def criar_provider_observabilidade() -> ObservabilityProvider:
+    return build_observability_provider(obter_configuracao_observabilidade())
 
 
 def criar_modelo_llm():

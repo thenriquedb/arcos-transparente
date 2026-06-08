@@ -8,13 +8,21 @@ from __future__ import annotations
 
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
+import inspect
 import re
 from typing import Any, Protocol
 from uuid import uuid4
 
-from agents.chatbot.agent import criar_agente_chatbot
+from agents.chatbot.agent import criar_agente_chatbot, criar_provider_observabilidade
 from agents.chatbot.help_messages import build_scope_help_message
 from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
+from agents.chatbot.observability import (
+    NoOpObservabilityProvider,
+    ObservabilityProvider,
+    build_error_payload,
+    build_event_payload,
+    use_observability_provider,
+)
 from agents.chatbot.policy import evaluate_deterministic_policy
 from agents.tools.registry import get_public_tools
 
@@ -59,9 +67,13 @@ class ChatbotAgentBackend:
     def __init__(
         self,
         agent_factory: Callable[..., Any] = criar_agente_chatbot,
+        observability_provider: ObservabilityProvider | None = None,
     ) -> None:
         self._agent_factory = agent_factory
         self._agents: dict[tuple[str, ...], Any] = {}
+        self._observability_provider = (
+            observability_provider or NoOpObservabilityProvider()
+        )
 
     def _get_agent(self, candidate_tools: tuple[object, ...] | None = None):
         normalized_tools = self._normalize_candidate_tools(candidate_tools)
@@ -85,6 +97,12 @@ class ChatbotAgentBackend:
             return list(get_public_tools())
         return list(candidate_tools)
 
+    def set_observability_provider(
+        self,
+        provider: ObservabilityProvider,
+    ) -> None:
+        self._observability_provider = provider
+
     def answer(self, question: str, session_id: str) -> ChatResponse:
         return self.answer_with_selection(question, session_id=session_id)
 
@@ -99,20 +117,54 @@ class ChatbotAgentBackend:
             selection.candidate_tools if selection is not None else None
         )
 
-        result = agent.invoke(
-            {"messages": [question]},
-            {"configurable": {"thread_id": session_id}},
-        )
-        content = _extract_last_message_content(result)
+        with self._observability_provider.span(
+            "chatbot.agent.invoke",
+            inputs=build_event_payload(
+                {
+                    "session_id": session_id,
+                    "backend_question": question,
+                    "selected_tool_names": (
+                        list(selection.candidate_tool_names) if selection else []
+                    ),
+                }
+            ),
+            metadata=build_event_payload({"surface": "backend_answer"}),
+            tags=("chatbot", "backend"),
+        ) as span:
+            try:
+                result = agent.invoke(
+                    {"messages": [question]},
+                    {"configurable": {"thread_id": session_id}},
+                )
+            except Exception as exc:
+                span.set_metadata(
+                    build_error_payload(
+                        exc,
+                        extra={"session_id": session_id, "status": "error"},
+                    )
+                )
+                raise
 
-        return ChatResponse(
-            content=content,
-            guardrail_triggered=bool(result.get("guardrail_triggered", False)),
-            metadata={
-                "guardrail_category": result.get("guardrail_category"),
-            },
-            raw_result=result,
-        )
+            content = _extract_last_message_content(result)
+            response = ChatResponse(
+                content=content,
+                guardrail_triggered=bool(result.get("guardrail_triggered", False)),
+                metadata={
+                    "guardrail_category": result.get("guardrail_category"),
+                },
+                raw_result=result,
+            )
+            span.set_outputs(
+                build_event_payload(
+                    {
+                        "session_id": session_id,
+                        "status": "completed",
+                        "response_preview": content,
+                        "guardrail_triggered": response.guardrail_triggered,
+                    }
+                )
+            )
+            return response
 
     def stream_answer(self, question: str, session_id: str) -> Iterator[str]:
         return self.stream_answer_with_selection(question, session_id=session_id)
@@ -129,43 +181,110 @@ class ChatbotAgentBackend:
         agent = self._get_agent(
             selection.candidate_tools if selection is not None else None
         )
-        stream = getattr(agent, "stream", None)
-        if stream is None:
-            yield self.answer_with_selection(
-                question,
-                session_id=session_id,
-                selection=selection,
-            ).content
-            return
+        with self._observability_provider.span(
+            "chatbot.agent.stream",
+            inputs=build_event_payload(
+                {
+                    "session_id": session_id,
+                    "backend_question": question,
+                    "selected_tool_names": (
+                        list(selection.candidate_tool_names) if selection else []
+                    ),
+                    "streaming": True,
+                }
+            ),
+            metadata=build_event_payload({"surface": "backend_stream"}),
+            tags=("chatbot", "backend", "stream"),
+        ) as span:
+            stream = getattr(agent, "stream", None)
+            if stream is None:
+                span.set_outputs(
+                    build_event_payload(
+                        {
+                            "session_id": session_id,
+                            "status": "fallback",
+                            "fallback_used": True,
+                            "reason_code": "stream_not_supported",
+                        }
+                    )
+                )
+                yield self.answer_with_selection(
+                    question,
+                    session_id=session_id,
+                    selection=selection,
+                ).content
+                return
 
-        try:
-            events = stream(
-                {"messages": [question]},
-                {"configurable": {"thread_id": session_id}},
-                stream_mode="messages",
+            try:
+                events = stream(
+                    {"messages": [question]},
+                    {"configurable": {"thread_id": session_id}},
+                    stream_mode="messages",
+                )
+            except TypeError:
+                span.set_outputs(
+                    build_event_payload(
+                        {
+                            "session_id": session_id,
+                            "status": "fallback",
+                            "fallback_used": True,
+                            "reason_code": "stream_type_error",
+                        }
+                    )
+                )
+                yield self.answer_with_selection(
+                    question,
+                    session_id=session_id,
+                    selection=selection,
+                ).content
+                return
+            except Exception as exc:
+                span.set_metadata(
+                    build_error_payload(
+                        exc,
+                        extra={"session_id": session_id, "status": "error"},
+                    )
+                )
+                raise
+
+            yielded = False
+            chunks: list[str] = []
+            for event in events:
+                content = _extract_stream_chunk_content(event)
+                if not content:
+                    continue
+                yielded = True
+                chunks.append(content)
+                yield content
+
+            if not yielded:
+                span.set_outputs(
+                    build_event_payload(
+                        {
+                            "session_id": session_id,
+                            "status": "fallback",
+                            "fallback_used": True,
+                            "reason_code": "empty_stream",
+                        }
+                    )
+                )
+                yield self.answer_with_selection(
+                    question,
+                    session_id=session_id,
+                    selection=selection,
+                ).content
+                return
+
+            span.set_outputs(
+                build_event_payload(
+                    {
+                        "session_id": session_id,
+                        "status": "completed",
+                        "streaming": True,
+                        "response_preview": "".join(chunks),
+                    }
+                )
             )
-        except TypeError:
-            yield self.answer_with_selection(
-                question,
-                session_id=session_id,
-                selection=selection,
-            ).content
-            return
-
-        yielded = False
-        for event in events:
-            content = _extract_stream_chunk_content(event)
-            if not content:
-                continue
-            yielded = True
-            yield content
-
-        if not yielded:
-            yield self.answer_with_selection(
-                question,
-                session_id=session_id,
-                selection=selection,
-            ).content
 
 
 class ChatbotApplication:
@@ -176,88 +295,233 @@ class ChatbotApplication:
         backend: AgentBackend | None = None,
         session: ChatSession | None = None,
         selector: HybridToolSelector | None = None,
+        observability_provider: ObservabilityProvider | None = None,
     ) -> None:
-        self.backend = backend or ChatbotAgentBackend()
+        provider = observability_provider or criar_provider_observabilidade()
+        self.observability_provider = provider
+        self.backend = backend or ChatbotAgentBackend(observability_provider=provider)
+        if isinstance(self.backend, ChatbotAgentBackend):
+            self.backend.set_observability_provider(provider)
         self.session = session or ChatSession()
-        self.selector = selector or _build_default_selector(self.backend)
+        self.selector = selector or _build_default_selector(
+            self.backend,
+            observability_provider=provider,
+        )
+        if hasattr(self.selector, "set_observability_provider"):
+            self.selector.set_observability_provider(provider)
 
     def ask(self, question: str) -> ChatResponse:
         normalized_question = _normalize_question(question)
-        prepared = _prepare_runtime_request(
-            normalized_question,
-            history=self.session.history,
-            selector=self.selector,
-        )
-        if prepared.immediate_response is not None:
-            response = prepared.immediate_response
-        else:
-            response = _answer_backend_with_selection(
-                self.backend,
-                question=prepared.backend_question or normalized_question,
-                session_id=self.session.id,
-                selection=prepared.selection,
-            )
-            response = _merge_response_metadata(
-                response,
-                _selection_metadata(prepared.selection),
-            )
+        request_id = str(uuid4())
+        with use_observability_provider(self.observability_provider):
+            with self.observability_provider.span(
+                "chatbot.request",
+                inputs=build_event_payload(
+                    {
+                        "request_id": request_id,
+                        "session_id": self.session.id,
+                        "question": normalized_question,
+                        "history_size": len(self.session.history),
+                    }
+                ),
+                metadata=build_event_payload(
+                    {
+                        "surface": "ask",
+                        "provider": self.observability_provider.name,
+                    }
+                ),
+                tags=("chatbot", "request"),
+            ) as request_span:
+                try:
+                    prepared = _prepare_runtime_request(
+                        normalized_question,
+                        history=self.session.history,
+                        selector=self.selector,
+                        observability_provider=self.observability_provider,
+                        request_id=request_id,
+                        session_id=self.session.id,
+                    )
+                    if prepared.immediate_response is not None:
+                        response = prepared.immediate_response
+                    else:
+                        response = _answer_backend_with_selection(
+                            self.backend,
+                            question=prepared.backend_question or normalized_question,
+                            session_id=self.session.id,
+                            selection=prepared.selection,
+                        )
+                        response = _merge_response_metadata(
+                            response,
+                            _selection_metadata(prepared.selection),
+                        )
 
-        self._record_exchange(
-            normalized_question,
-            response.content,
-            user_metadata=prepared.user_metadata,
-            metadata=response.metadata,
-            guardrail_triggered=response.guardrail_triggered,
-        )
-
-        return response
+                    self._record_exchange(
+                        normalized_question,
+                        response.content,
+                        user_metadata=prepared.user_metadata,
+                        metadata=response.metadata,
+                        guardrail_triggered=response.guardrail_triggered,
+                    )
+                    request_span.set_outputs(
+                        _build_request_completion_payload(
+                            request_id=request_id,
+                            session_id=self.session.id,
+                            response=response,
+                            selection=prepared.selection,
+                            status=(
+                                "blocked"
+                                if response.guardrail_triggered
+                                else _infer_request_status(prepared, response)
+                            ),
+                        )
+                    )
+                    return response
+                except Exception as exc:
+                    request_span.set_metadata(
+                        build_error_payload(
+                            exc,
+                            extra={
+                                "request_id": request_id,
+                                "session_id": self.session.id,
+                                "status": "error",
+                            },
+                        )
+                    )
+                    raise
 
     def stream(self, question: str) -> Iterator[str]:
         """Responde uma pergunta em streaming, preservando o contrato de historico."""
 
         normalized_question = _normalize_question(question)
-        prepared = _prepare_runtime_request(
-            normalized_question,
-            history=self.session.history,
-            selector=self.selector,
-        )
-        if prepared.immediate_response is not None:
-            self._record_exchange(
-                normalized_question,
-                prepared.immediate_response.content,
-                user_metadata=prepared.user_metadata,
-                metadata=prepared.immediate_response.metadata,
-                guardrail_triggered=prepared.immediate_response.guardrail_triggered,
-            )
-            return iter([prepared.immediate_response.content])
+        request_id = str(uuid4())
 
-        stream_answer = getattr(self.backend, "stream_answer", None)
-        if stream_answer is None:
-            response = _answer_backend_with_selection(
-                self.backend,
-                question=prepared.backend_question or normalized_question,
-                session_id=self.session.id,
-                selection=prepared.selection,
-            )
-            response = _merge_response_metadata(
-                response,
-                _selection_metadata(prepared.selection),
-            )
-            self._record_exchange(
-                normalized_question,
-                response.content,
-                user_metadata=prepared.user_metadata,
-                metadata=response.metadata,
-            )
-            return iter([response.content])
+        def response_stream() -> Iterator[str]:
+            with use_observability_provider(self.observability_provider):
+                with self.observability_provider.span(
+                    "chatbot.request",
+                    inputs=build_event_payload(
+                        {
+                            "request_id": request_id,
+                            "session_id": self.session.id,
+                            "question": normalized_question,
+                            "history_size": len(self.session.history),
+                            "streaming": True,
+                        }
+                    ),
+                    metadata=build_event_payload(
+                        {
+                            "surface": "stream",
+                            "provider": self.observability_provider.name,
+                        }
+                    ),
+                    tags=("chatbot", "request", "stream"),
+                ) as request_span:
+                    try:
+                        prepared = _prepare_runtime_request(
+                            normalized_question,
+                            history=self.session.history,
+                            selector=self.selector,
+                            observability_provider=self.observability_provider,
+                            request_id=request_id,
+                            session_id=self.session.id,
+                        )
+                        if prepared.immediate_response is not None:
+                            self._record_exchange(
+                                normalized_question,
+                                prepared.immediate_response.content,
+                                user_metadata=prepared.user_metadata,
+                                metadata=prepared.immediate_response.metadata,
+                                guardrail_triggered=prepared.immediate_response.guardrail_triggered,
+                            )
+                            request_span.set_outputs(
+                                _build_request_completion_payload(
+                                    request_id=request_id,
+                                    session_id=self.session.id,
+                                    response=prepared.immediate_response,
+                                    selection=prepared.selection,
+                                    status=(
+                                        "blocked"
+                                        if prepared.immediate_response.guardrail_triggered
+                                        else _infer_request_status(
+                                            prepared,
+                                            prepared.immediate_response,
+                                        )
+                                    ),
+                                    streaming=True,
+                                )
+                            )
+                            yield prepared.immediate_response.content
+                            return
 
-        return self._stream_backend_response(
-            normalized_question,
-            prepared.backend_question or normalized_question,
-            prepared.user_metadata,
-            _selection_metadata(prepared.selection),
-            prepared.selection,
-        )
+                        stream_answer = getattr(self.backend, "stream_answer", None)
+                        if stream_answer is None:
+                            response = _answer_backend_with_selection(
+                                self.backend,
+                                question=prepared.backend_question
+                                or normalized_question,
+                                session_id=self.session.id,
+                                selection=prepared.selection,
+                            )
+                            response = _merge_response_metadata(
+                                response,
+                                _selection_metadata(prepared.selection),
+                            )
+                            self._record_exchange(
+                                normalized_question,
+                                response.content,
+                                user_metadata=prepared.user_metadata,
+                                metadata=response.metadata,
+                            )
+                            request_span.set_outputs(
+                                _build_request_completion_payload(
+                                    request_id=request_id,
+                                    session_id=self.session.id,
+                                    response=response,
+                                    selection=prepared.selection,
+                                    status="completed",
+                                    streaming=True,
+                                )
+                            )
+                            yield response.content
+                            return
+
+                        final_content = yield from self._stream_backend_response(
+                            normalized_question,
+                            prepared.backend_question or normalized_question,
+                            prepared.user_metadata,
+                            _selection_metadata(prepared.selection),
+                            prepared.selection,
+                        )
+                        request_span.set_outputs(
+                            build_event_payload(
+                                {
+                                    "request_id": request_id,
+                                    "session_id": self.session.id,
+                                    "status": "completed",
+                                    "streaming": True,
+                                    "selected_tool_names": (
+                                        list(prepared.selection.candidate_tool_names)
+                                        if prepared.selection
+                                        else []
+                                    ),
+                                    "response_preview": final_content,
+                                }
+                            )
+                        )
+                    except Exception as exc:
+                        request_span.set_metadata(
+                            build_error_payload(
+                                exc,
+                                extra={
+                                    "request_id": request_id,
+                                    "session_id": self.session.id,
+                                    "status": "error",
+                                },
+                            )
+                        )
+                        raise
+
+        return response_stream()
 
     def reset(self, session_id: str | None = None) -> ChatSession:
         self.session = ChatSession(id=session_id or str(uuid4()))
@@ -341,6 +605,7 @@ class ChatbotApplication:
             user_metadata=user_metadata,
             metadata=assistant_metadata,
         )
+        return final_content
 
 
 def _extract_last_message_content(result: dict[str, Any]) -> str:
@@ -452,12 +717,54 @@ def _prepare_runtime_request(
     *,
     history: list[ChatMessage],
     selector: HybridToolSelector,
+    observability_provider: ObservabilityProvider,
+    request_id: str,
+    session_id: str,
 ) -> PreparedRuntimeRequest:
     local_response = _build_local_response(question)
     if local_response is not None:
+        observability_provider.emit_event(
+            "chatbot.local_response",
+            inputs=build_event_payload(
+                {
+                    "request_id": request_id,
+                    "session_id": session_id,
+                    "question": question,
+                    "history_size": len(history),
+                }
+            ),
+            outputs=build_event_payload(
+                {
+                    "status": "local_response",
+                    "local_response": local_response.metadata.get("local_response"),
+                    "response_preview": local_response.content,
+                }
+            ),
+            tags=("chatbot", "policy", "local"),
+        )
         return PreparedRuntimeRequest(immediate_response=local_response)
 
     policy = evaluate_deterministic_policy(question, history=history)
+    observability_provider.emit_event(
+        "chatbot.policy",
+        inputs=build_event_payload(
+            {
+                "request_id": request_id,
+                "session_id": session_id,
+                "question": question,
+                "history_size": len(history),
+            }
+        ),
+        outputs=build_event_payload(
+            {
+                "policy_action": policy.action,
+                "policy_category": policy.category,
+                "resolved_question": policy.resolved_question,
+                "status": policy.action,
+            }
+        ),
+        tags=("chatbot", "policy"),
+    )
     if policy.action == "block":
         return PreparedRuntimeRequest(
             immediate_response=ChatResponse(
@@ -480,7 +787,13 @@ def _prepare_runtime_request(
         )
 
     backend_question = policy.resolved_question or question
-    selection = selector.select(backend_question, history=history)
+    selection = _select_with_runtime_context(
+        selector,
+        backend_question,
+        history=history,
+        request_id=request_id,
+        session_id=session_id,
+    )
     if selection.action != "allow":
         return PreparedRuntimeRequest(
             immediate_response=ChatResponse(
@@ -488,6 +801,7 @@ def _prepare_runtime_request(
                 metadata=_selection_metadata(selection),
             ),
             user_metadata=policy.user_metadata,
+            selection=selection,
         )
 
     return PreparedRuntimeRequest(
@@ -579,10 +893,36 @@ def _merge_response_metadata(
     )
 
 
-def _build_default_selector(backend: AgentBackend) -> HybridToolSelector:
+def _build_default_selector(
+    backend: AgentBackend,
+    *,
+    observability_provider: ObservabilityProvider,
+) -> HybridToolSelector:
     if isinstance(backend, ChatbotAgentBackend):
-        return HybridToolSelector()
-    return HybridToolSelector(runner=_non_agent_backend_selector_runner)
+        return HybridToolSelector(observability_provider=observability_provider)
+    return HybridToolSelector(
+        runner=_non_agent_backend_selector_runner,
+        observability_provider=observability_provider,
+    )
+
+
+def _select_with_runtime_context(
+    selector: HybridToolSelector,
+    question: str,
+    *,
+    history: list[ChatMessage],
+    request_id: str,
+    session_id: str,
+) -> HybridToolSelection:
+    select_signature = inspect.signature(selector.select)
+    if "request_id" in select_signature.parameters:
+        return selector.select(
+            question,
+            history=history,
+            request_id=request_id,
+            session_id=session_id,
+        )
+    return selector.select(question, history=history)
 
 
 def _non_agent_backend_selector_runner(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
@@ -592,6 +932,42 @@ def _non_agent_backend_selector_runner(*_args: Any, **_kwargs: Any) -> dict[str,
         "confidence": "low",
         "reason_code": "backend_without_selector_support",
     }
+
+
+def _build_request_completion_payload(
+    *,
+    request_id: str,
+    session_id: str,
+    response: ChatResponse,
+    selection: HybridToolSelection | None,
+    status: str,
+    streaming: bool = False,
+) -> dict[str, Any]:
+    payload = {
+        "request_id": request_id,
+        "session_id": session_id,
+        "status": status,
+        "response_preview": response.content,
+        "guardrail_triggered": response.guardrail_triggered,
+        "streaming": streaming,
+    }
+    payload.update(_selection_metadata(selection))
+    return build_event_payload(payload)
+
+
+def _infer_request_status(
+    prepared: PreparedRuntimeRequest,
+    response: ChatResponse,
+) -> str:
+    if prepared.selection is not None and prepared.selection.action != "allow":
+        return prepared.selection.action
+    if response.metadata.get("policy_action") == "clarify":
+        return "clarify"
+    if response.metadata.get("local_response"):
+        return "local_response"
+    if prepared.immediate_response is not None:
+        return "completed"
+    return "completed"
 
 
 def _tool_name(tool_obj: object) -> str:

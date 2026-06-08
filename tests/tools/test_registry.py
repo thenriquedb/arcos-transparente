@@ -1,5 +1,13 @@
 from __future__ import annotations
 
+from collections.abc import Iterator, Mapping, Sequence
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+
+import pytest
+
+import agents.tools.registry as registry
+from agents.chatbot.observability import use_observability_provider
 from agents.tools.registry import (
     get_all_tools,
     get_public_tool_catalog,
@@ -9,6 +17,63 @@ from agents.tools.registry import (
 
 def _tool_name(tool_obj) -> str:
     return getattr(tool_obj, "name", getattr(tool_obj, "__name__", ""))
+
+
+@dataclass
+class _RecordedSpan:
+    name: str
+    inputs: dict[str, object]
+    metadata: dict[str, object]
+    outputs: dict[str, object] = field(default_factory=dict)
+    error_type: str | None = None
+
+
+class _RecordedSpanHandle:
+    def __init__(self, span: _RecordedSpan) -> None:
+        self._span = span
+
+    def set_outputs(self, outputs: Mapping[str, object] | None = None) -> None:
+        if outputs:
+            self._span.outputs.update(outputs)
+
+    def set_metadata(self, metadata: Mapping[str, object] | None = None) -> None:
+        if metadata:
+            self._span.metadata.update(metadata)
+
+    def record_error(self, error: BaseException) -> None:
+        self._span.error_type = error.__class__.__name__
+
+
+class _RecordingProvider:
+    name = "recording"
+
+    def __init__(self) -> None:
+        self.completed_spans: list[_RecordedSpan] = []
+
+    @contextmanager
+    def span(
+        self,
+        name: str,
+        *,
+        run_type: str = "tool",
+        inputs: Mapping[str, object] | None = None,
+        metadata: Mapping[str, object] | None = None,
+        tags: Sequence[str] | None = None,
+    ) -> Iterator[_RecordedSpanHandle]:
+        _ = (run_type, tags)
+        span = _RecordedSpan(
+            name=name,
+            inputs=dict(inputs or {}),
+            metadata=dict(metadata or {}),
+        )
+        handle = _RecordedSpanHandle(span)
+        try:
+            yield handle
+        except Exception as exc:
+            handle.record_error(exc)
+            raise
+        finally:
+            self.completed_spans.append(span)
 
 
 def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None:
@@ -172,3 +237,55 @@ def test_descricoes_de_contratos_e_licitacoes_orientam_encadeamento() -> None:
     assert "resultado vazio" in descricao_licitacoes
     assert "consultar_contratos" in descricao_licitacoes
     assert "valor estimado R$ 0,00" in descricao_licitacoes
+
+
+def test_wrapper_publico_emite_observabilidade_com_argumentos_sanitizados() -> None:
+    provider = _RecordingProvider()
+
+    def consultar_demo(termo: str, api_key: str) -> dict[str, object]:
+        return {
+            "termo": termo,
+            "api_key": api_key,
+        }
+
+    consultar_demo._tool_name = "consultar_demo"
+
+    wrapped = registry._wrap_public_tool_with_observability(consultar_demo)
+
+    with use_observability_provider(provider):
+        result = wrapped("alcool", api_key="super-secret")
+
+    assert result["termo"] == "alcool"
+    span = provider.completed_spans[-1]
+
+    assert span.name == "chatbot.tool"
+    assert span.inputs["tool_name"] == "consultar_demo"
+    assert span.inputs["tool_arguments"]["api_key"] == "[REDACTED]"
+    assert span.outputs["status"] == "completed"
+    assert span.outputs["output_summary"]["kind"] == "mapping"
+
+
+def test_wrapper_publico_registra_falha_sem_quebrar_contrato() -> None:
+    provider = _RecordingProvider()
+
+    def consultar_demo() -> dict[str, object]:
+        raise RuntimeError("falha na tool")
+
+    consultar_demo._tool_name = "consultar_demo"
+
+    wrapped = registry._wrap_public_tool_with_observability(consultar_demo)
+
+    with (
+        use_observability_provider(provider),
+        pytest.raises(
+            RuntimeError,
+            match="falha na tool",
+        ),
+    ):
+        wrapped()
+
+    span = provider.completed_spans[-1]
+
+    assert span.metadata["status"] == "error"
+    assert span.metadata["error_type"] == "RuntimeError"
+    assert span.error_type == "RuntimeError"

@@ -11,6 +11,11 @@ from typing import Any, Literal, Protocol
 from pydantic import BaseModel, Field, ValidationError
 
 from agents.chatbot.agent import criar_modelo_llm
+from agents.chatbot.observability import (
+    NoOpObservabilityProvider,
+    ObservabilityProvider,
+    build_event_payload,
+)
 from agents.router import route_user_query
 from agents.routing.constants import (
     DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS,
@@ -154,22 +159,49 @@ class HybridToolSelector:
         catalog_factory: Callable[[], list[PublicToolCatalogEntry]] = (
             get_public_tool_catalog
         ),
+        observability_provider: ObservabilityProvider | None = None,
     ) -> None:
         self._runner = runner or _run_model_selector
         self._catalog_factory = catalog_factory
+        self._observability_provider = (
+            observability_provider or NoOpObservabilityProvider()
+        )
+
+    def set_observability_provider(
+        self,
+        provider: ObservabilityProvider,
+    ) -> None:
+        self._observability_provider = provider
 
     def select(
         self,
         question: str,
         *,
         history: Sequence[HistoryMessage],
+        request_id: str | None = None,
+        session_id: str | None = None,
     ) -> HybridToolSelection:
         catalog = tuple(self._catalog_factory())
         if not catalog:
-            return _fallback_selection(reason_code="empty_catalog")
+            selection = _fallback_selection(reason_code="empty_catalog")
+            self._emit_selection_observation(
+                question,
+                history=history,
+                selection=selection,
+                request_id=request_id,
+                session_id=session_id,
+            )
+            return selection
 
         heuristic_selection = _select_with_heuristics(question, history=history)
         if heuristic_selection is not None:
+            self._emit_selection_observation(
+                question,
+                history=history,
+                selection=heuristic_selection,
+                request_id=request_id,
+                session_id=session_id,
+            )
             return heuristic_selection
 
         all_public_tools = tuple(entry.tool for entry in catalog)
@@ -177,41 +209,114 @@ class HybridToolSelector:
         try:
             raw_decision = self._runner(question, history, catalog)
         except Exception:
-            return _fallback_selection(
+            selection = _fallback_selection(
                 tools=all_public_tools,
                 tool_names=all_tool_names,
                 reason_code="selector_error",
             )
+            self._emit_selection_observation(
+                question,
+                history=history,
+                selection=selection,
+                request_id=request_id,
+                session_id=session_id,
+            )
+            return selection
 
         decision = _coerce_selector_payload(raw_decision)
         if decision is None:
-            return _fallback_selection(
+            selection = _fallback_selection(
                 tools=all_public_tools,
                 tool_names=all_tool_names,
                 reason_code="invalid_selector_output",
             )
+            self._emit_selection_observation(
+                question,
+                history=history,
+                selection=selection,
+                request_id=request_id,
+                session_id=session_id,
+            )
+            return selection
 
         if decision.action == "allow":
-            return _resolve_allow_selection(
+            selection = _resolve_allow_selection(
                 decision,
                 fallback_tools=all_public_tools,
                 fallback_tool_names=all_tool_names,
             )
+            self._emit_selection_observation(
+                question,
+                history=history,
+                selection=selection,
+                request_id=request_id,
+                session_id=session_id,
+            )
+            return selection
 
         if not decision.user_message:
-            return _fallback_selection(
+            selection = _fallback_selection(
                 tools=all_public_tools,
                 tool_names=all_tool_names,
                 reason_code="missing_selector_message",
             )
+            self._emit_selection_observation(
+                question,
+                history=history,
+                selection=selection,
+                request_id=request_id,
+                session_id=session_id,
+            )
+            return selection
 
-        return HybridToolSelection(
+        selection = HybridToolSelection(
             action=decision.action,
             candidate_tools=(),
             candidate_tool_names=(),
             confidence=decision.confidence,
             message=decision.user_message,
             reason_code=decision.reason_code,
+        )
+        self._emit_selection_observation(
+            question,
+            history=history,
+            selection=selection,
+            request_id=request_id,
+            session_id=session_id,
+        )
+        return selection
+
+    def _emit_selection_observation(
+        self,
+        question: str,
+        *,
+        history: Sequence[HistoryMessage],
+        selection: HybridToolSelection,
+        request_id: str | None,
+        session_id: str | None,
+    ) -> None:
+        self._observability_provider.emit_event(
+            "chatbot.selection",
+            inputs=build_event_payload(
+                {
+                    "request_id": request_id,
+                    "session_id": session_id,
+                    "question": question,
+                    "history_size": len(history),
+                }
+            ),
+            outputs=build_event_payload(
+                {
+                    "selection_action": selection.action,
+                    "selection_confidence": selection.confidence,
+                    "selection_reason_code": selection.reason_code,
+                    "selection_fallback": selection.used_fallback,
+                    "selected_tool_names": list(selection.candidate_tool_names),
+                    "candidate_tool_names": list(selection.candidate_tool_names),
+                    "status": selection.action,
+                }
+            ),
+            tags=("chatbot", "selection"),
         )
 
 

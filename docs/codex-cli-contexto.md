@@ -29,6 +29,7 @@ O estado real do codigo neste momento e:
 - tools SQL publicas em `agents/tools/sql_tools/`
 - indexacao e retrieval markdown-first em `agents/rag/`
 - bootstrap principal do agente em `agents/chatbot/agent.py`
+- camada de observabilidade do runtime em `agents/chatbot/observability/`
 
 Nao ha, no codigo ativo, uma API web de producao pronta, mas agora existe uma integracao local de RAG/Chroma para o corpus markdown curado em `data/rag/**/*.md`.
 
@@ -40,6 +41,7 @@ Nao ha, no codigo ativo, uma API web de producao pronta, mas agora existe uma in
 - SQLAlchemy 2 + Alembic para banco e migrations
 - Pydantic 2 para validacao de schemas
 - LangChain + LangGraph + OpenAI para o agente
+- LangSmith opcional via camada local de observabilidade pluggable do chatbot
 - Chroma local para o indice vetorial markdown
 - SQLite local como banco principal
 
@@ -196,7 +198,27 @@ O bootstrap principal em `agents/chatbot/agent.py` usa:
 
 Hoje o provider real implementado no bootstrap principal e `ChatOpenAI`.
 
-### 6.1 Contrato de metadata para tools publicas selecionaveis
+### 6.1 Observabilidade e opt-in e pluggable
+
+O runtime do chatbot agora resolve observabilidade por uma fronteira propria em
+`agents/chatbot/observability/`.
+
+Contrato atual:
+
+- `OBSERVABILITY_ENABLED` controla se o runtime sai do caminho `noop`
+- `OBSERVABILITY_PROVIDER` aceita `noop` ou `langsmith`
+- `LANGSMITH_API_KEY` e `LANGSMITH_PROJECT` so sao exigidos quando
+  `OBSERVABILITY_ENABLED=true` e `OBSERVABILITY_PROVIDER=langsmith`
+- `LANGSMITH_ENDPOINT` e opcional
+
+Implicacao pratica:
+
+- `core.py`, `hybrid_selection.py` e o registry dependem apenas do contrato do
+  runtime
+- trocar LangSmith por outro backend futuro, como Langfuse, deve exigir um novo
+  adapter e registro na factory, nao uma reescrita das tools ou do fluxo de chat
+
+### 6.2 Contrato de metadata para tools publicas selecionaveis
 
 Cada tool publica precisa declarar no proprio `@register(...)`:
 

@@ -29,6 +29,21 @@ OPENAI_API_KEY=sua_chave_aqui
 ja traz um modelo OpenAI recomendado; altere `OPENAI_MODEL` apenas se quiser
 usar outro modelo OpenAI suportado.
 
+Observabilidade e opcional e desabilitada por padrao. O runtime usa um provider
+`noop` enquanto `OBSERVABILITY_ENABLED` estiver ausente ou `false`. Para ativar
+LangSmith sem acoplar o fluxo principal do chatbot ao provider, use:
+
+```env
+OBSERVABILITY_ENABLED=true
+OBSERVABILITY_PROVIDER=langsmith
+LANGSMITH_API_KEY=sua_chave_langsmith
+LANGSMITH_PROJECT=arcos-transparente
+# LANGSMITH_ENDPOINT=https://api.smith.langchain.com
+```
+
+Nesta fase os valores suportados para `OBSERVABILITY_PROVIDER` sao `noop` e
+`langsmith`.
+
 ### 3. Inicializar banco de dados
 
 ```bash

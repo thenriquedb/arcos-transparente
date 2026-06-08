@@ -1,9 +1,16 @@
 import importlib
 import inspect
 import pkgutil
+import functools
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
 
+from agents.chatbot.observability import (
+    build_error_payload,
+    build_event_payload,
+    get_current_observability_provider,
+    summarize_result,
+)
 from langchain.tools import tool as build_tool
 
 TOOLS_PACKAGES = (
@@ -110,7 +117,13 @@ def _to_langchain_tool(func: Callable):
         return cached_tool
 
     tool_name = getattr(func, "_tool_name", func.__name__)
-    langchain_tool = build_tool(tool_name)(func)
+    tool_scope = getattr(func, "_tool_scope", INTERNAL_SCOPE)
+    langchain_callable = (
+        _wrap_public_tool_with_observability(func)
+        if tool_scope == PUBLIC_SCOPE
+        else func
+    )
+    langchain_tool = build_tool(tool_name)(langchain_callable)
     tags = list(getattr(func, "_tags", []))
     if tags:
         langchain_tool.tags = tags
@@ -255,6 +268,66 @@ def _normalize_routing_metadata(
         hints=hints,
         exclusions=exclusions,
     )
+
+
+def _wrap_public_tool_with_observability(func: Callable) -> Callable:
+    signature = inspect.signature(func)
+    tool_name = getattr(func, "_tool_name", func.__name__)
+
+    @functools.wraps(func)
+    def wrapped(*args, **kwargs):
+        provider = get_current_observability_provider()
+        bound_arguments = _bind_tool_arguments(signature, *args, **kwargs)
+        with provider.span(
+            "chatbot.tool",
+            run_type="tool",
+            inputs=build_event_payload(
+                {
+                    "tool_name": tool_name,
+                    "tool_arguments": bound_arguments,
+                }
+            ),
+            metadata=build_event_payload({"tool_name": tool_name}),
+            tags=("chatbot", "tool", tool_name),
+        ) as span:
+            try:
+                result = func(*args, **kwargs)
+            except Exception as exc:
+                span.set_metadata(
+                    build_error_payload(
+                        exc,
+                        extra={"tool_name": tool_name, "status": "error"},
+                    )
+                )
+                raise
+
+            span.set_outputs(
+                build_event_payload(
+                    {
+                        "tool_name": tool_name,
+                        "status": "completed",
+                        "output_summary": summarize_result(result),
+                    }
+                )
+            )
+            return result
+
+    wrapped.__signature__ = signature
+    return wrapped
+
+
+def _bind_tool_arguments(
+    signature: inspect.Signature,
+    *args,
+    **kwargs,
+) -> dict[str, object]:
+    try:
+        return dict(signature.bind_partial(*args, **kwargs).arguments)
+    except TypeError:
+        return {
+            "args": list(args),
+            "kwargs": dict(kwargs),
+        }
 
 
 def _tool_name(tool_obj: object) -> str:

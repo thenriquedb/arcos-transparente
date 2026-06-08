@@ -76,6 +76,19 @@ OPENAI_MODEL=gpt-4.1-mini
 OPENAI_API_KEY=sua_chave_openai_aqui
 ```
 
+Observabilidade continua opt-in dentro do mesmo fluxo:
+
+```env
+OBSERVABILITY_ENABLED=true
+OBSERVABILITY_PROVIDER=langsmith
+LANGSMITH_API_KEY=sua_chave_langsmith
+LANGSMITH_PROJECT=arcos-transparente
+# LANGSMITH_ENDPOINT=https://api.smith.langchain.com
+```
+
+Se essas variaveis nao forem definidas, o runtime usa o provider `noop` e nao
+envia spans para fora do container.
+
 No Docker, o `compose.yaml` injeta defaults seguros para o runtime stateful sem
 exigir que voce troque o `DATABASE_URL` local do seu `.env`:
 

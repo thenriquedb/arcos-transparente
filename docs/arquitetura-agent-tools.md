@@ -208,12 +208,19 @@ Responsabilidades:
 - receber do runtime principal apenas as tools candidatas selecionadas para cada pergunta
 - deixar a orquestração de consultas permitidas a cargo do prompt e dos contratos das tools depois da fase de seleção
 - carregar o provider e o modelo do ambiente, com OpenAI como caminho oficial desta fase
+- resolver a camada de observabilidade pluggable do runtime, com `noop` como
+  default e `langsmith` como primeiro adapter concreto
 
 Configuração atual do agente:
 
 - `LLM_PROVIDER=openai`
 - `OPENAI_MODEL` definido explicitamente no ambiente ou no `.env`
 - `OPENAI_API_KEY` obrigatoria para criar o agente
+- `OBSERVABILITY_ENABLED` e `OBSERVABILITY_PROVIDER` controlam se o runtime fica
+  em `noop` ou ativa o adapter `langsmith`
+- `LANGSMITH_API_KEY` e `LANGSMITH_PROJECT` so sao obrigatorios quando
+  `OBSERVABILITY_ENABLED=true` e `OBSERVABILITY_PROVIDER=langsmith`
+- `LANGSMITH_ENDPOINT` permanece opcional
 - `.env.example` documenta o contrato canonico usado no bootstrap
 
 Com isso, o runtime cidadão deixa de depender do router para decidir o fluxo de perguntas permitidas.
@@ -230,6 +237,26 @@ Esse contrato vive junto do decorator `@register(...)` de cada tool pública.
 Adicionar uma nova tool pública selecionável não exige editar uma cadeia central
 de palavras-chave do router; basta registrar a tool com `scope=PUBLIC_SCOPE`,
 tags coerentes e metadata de roteamento suficiente para o seletor híbrido.
+
+### Observabilidade do runtime
+
+Arquivo: `agents/chatbot/observability/`
+
+O runtime agora tem uma fronteira propria de observabilidade para evitar
+acoplamento direto com APIs do LangSmith dentro de `core.py`,
+`hybrid_selection.py` ou das tools de dominio.
+
+Regras atuais:
+
+- o contrato compartilhado pertence ao runtime do chatbot, nao ao provider
+- `NoOpObservabilityProvider` e o caminho padrao quando observabilidade esta
+  desabilitada
+- `LangSmithObservabilityProvider` traduz o evento sanitizado do runtime para o
+  provider atual
+- o registry envolve tools publicas no bootstrap, entao novas tools herdarem
+  spans de execucao sem editar cada modulo SQL ou RAG
+- os payloads emitidos sao allowlisted e sanitizados para evitar vazamento de
+  credenciais, tokens ou objetos arbitrarios do runtime
 
 ### 4. Tools públicas amplas
 

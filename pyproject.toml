@@ -17,6 +17,7 @@ dependencies = [
     "langchain-openai>=1.2.2",
     "langchain-core>=1.4.0",
     "langchain-text-splitters>=0.3.11",
+    "langsmith>=0.8.5",
     "langgraph>=1.2.1",
     "opentelemetry-exporter-otlp-proto-grpc>=1.42.1",
     "streamlit>=1.41.0",
