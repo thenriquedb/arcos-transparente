@@ -150,6 +150,61 @@ def test_consultar_servidores_busca_nome_por_multiplos_termos(monkeypatch) -> No
     session.close()
 
 
+def test_consultar_servidores_filtra_saude_por_lotacoes_especificas(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            Servidor(
+                nome="Ana Clara",
+                cargo="Enfermeira",
+                secretaria="Hospital Municipal Sao Jose",
+                salario_base=2500,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Bruno Costa",
+                cargo="Psicologo",
+                secretaria="CAPS",
+                salario_base=4200,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Carla Sousa",
+                cargo="Dentista",
+                secretaria="Odontologia",
+                salario_base=3900,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Daniel Lima",
+                cargo="Engenheiro",
+                secretaria="Secretaria de Obras",
+                salario_base=7600,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = servidores_tools.consultar_servidores(
+        filtros={"secretaria": "saude"},
+        ordenar_por="nome",
+        campos=["nome", "secretaria"],
+    )
+
+    assert resultado["total"] == 3
+    assert resultado["resultados"] == [
+        {"nome": "Ana Clara", "secretaria": "Hospital Municipal Sao Jose"},
+        {"nome": "Bruno Costa", "secretaria": "CAPS"},
+        {"nome": "Carla Sousa", "secretaria": "Odontologia"},
+    ]
+
+    session.close()
+
+
 def test_consultar_servidores_ignora_diferenca_de_acentos_no_nome(
     monkeypatch,
 ) -> None:
@@ -478,6 +533,86 @@ def test_agregar_servidores_ranqueia_secretarias(monkeypatch) -> None:
     assert resultado["resultados"] == [
         {"secretaria": "Secretaria de Educacao", "contagem": 3},
         {"secretaria": "Secretaria de Saude", "contagem": 2},
+    ]
+
+    session.close()
+
+
+def test_agregar_servidores_saude_por_lotacao_retorna_total_geral(
+    monkeypatch,
+) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            Servidor(
+                nome="Ana Clara",
+                cargo="Enfermeira",
+                secretaria="Hospital Municipal Sao Jose",
+                salario_base=2500,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Bruno Costa",
+                cargo="Psicologo",
+                secretaria="CAPS",
+                salario_base=4200,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Carla Sousa",
+                cargo="Dentista",
+                secretaria="Odontologia",
+                salario_base=3900,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Debora Lima",
+                cargo="Terapeuta",
+                secretaria="CAPS",
+                salario_base=4000,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Fabio Souza",
+                cargo="Terapeuta",
+                secretaria="CAPS",
+                salario_base=4100,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Gabriela Rocha",
+                cargo="Enfermeira",
+                secretaria="Hospital Municipal Sao Jose",
+                salario_base=2700,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+            Servidor(
+                nome="Eduardo Rocha",
+                cargo="Professor",
+                secretaria="Secretaria de Educacao",
+                salario_base=3300,
+                competencia_referencia=date(2025, 2, 1),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = servidores_tools.agregar_servidores(
+        filtros={"secretaria": "saude"},
+        agrupar_por="secretaria",
+        metrica="contagem",
+        ordenar_por="metrica",
+        ordem="desc",
+        limite=10,
+    )
+
+    assert resultado["total_grupos"] == 3
+    assert resultado["valor_total"] == 6
+    assert resultado["resultados"] == [
+        {"secretaria": "CAPS", "contagem": 3},
+        {"secretaria": "Hospital Municipal Sao Jose", "contagem": 2},
+        {"secretaria": "Odontologia", "contagem": 1},
     ]
 
     session.close()

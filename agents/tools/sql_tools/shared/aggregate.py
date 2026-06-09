@@ -224,6 +224,7 @@ def build_aggregate_response(
         total_grupos=execution.total_grupos,
         resultados=resultados,
         metadata=metadata,
+        valor_total=execution.valor_total,
         mensagem=compose_message(messages),
         sugestao=execution.suggestion,
     ).model_dump(mode="json")

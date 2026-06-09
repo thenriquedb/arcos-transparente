@@ -42,6 +42,22 @@ def _try_route_agregacao(normalized_text: str) -> RouteDecision | None:
     ):
         secretaria = _extract_secretaria(normalized_text)
         if secretaria:
+            if secretaria == "saude":
+                return RouteDecision(
+                    domain="servidores",
+                    operation_type="agregacao_ranking",
+                    tool_name="agregar_servidores",
+                    tool_kwargs={
+                        "filtros": {"secretaria": secretaria},
+                        "agrupar_por": "secretaria",
+                        "metrica": "contagem",
+                        "ordenar_por": "metrica",
+                        "ordem": "desc",
+                        "limite": 100,
+                    },
+                    tags=["scope:public", "domain:servidores", "shape:aggregate"],
+                    confident=True,
+                )
             return RouteDecision(
                 domain="servidores",
                 operation_type="agregacao_ranking",

@@ -5,7 +5,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 from database.session import _normalizar_texto
 from database.models import FolhaServidor
@@ -14,6 +14,22 @@ from shared.utils.decimal_to_float import decimal_to_float
 
 from .filters import ServidoresFiltroSchema
 from .runtime import obter_mes_de_referencia_mais_recente, serializar_servidor
+
+_SECRETARIA_THEME_ALIASES: dict[str, tuple[str, ...]] = {
+    "saude": (
+        "saude",
+        "fumusa",
+        "hospital municipal",
+        "caps",
+        "psf",
+        "odontologia",
+        "laboratorio",
+        "regula",
+        "vigilancia sanitaria",
+        "ubs",
+        "upa",
+    ),
+}
 
 
 def resolve_mes_de_referencia_padrao(
@@ -57,9 +73,7 @@ def apply_servidores_filters(
         for term in (_normalizar_texto(filtros.nome) or "").split():
             stmt = _apply_text_contains_filter(stmt, FolhaServidor.nome, term)
     if filtros.secretaria:
-        stmt = _apply_text_contains_filter(
-            stmt, FolhaServidor.secretaria, filtros.secretaria
-        )
+        stmt = _apply_secretaria_filter(stmt, filtros.secretaria)
     if filtros.cargo:
         stmt = _apply_text_contains_filter(stmt, FolhaServidor.cargo, filtros.cargo)
     if filtros.salario_min is not None:
@@ -67,6 +81,25 @@ def apply_servidores_filters(
     if filtros.salario_max is not None:
         stmt = stmt.where(FolhaServidor.salario_base <= filtros.salario_max)
     return stmt
+
+
+def _apply_secretaria_filter(stmt, value: str):
+    normalized = _normalizar_texto(value)
+    if not normalized:
+        return stmt
+
+    aliases = _SECRETARIA_THEME_ALIASES.get(normalized)
+    if not aliases:
+        return _apply_text_contains_filter(stmt, FolhaServidor.secretaria, value)
+
+    return stmt.where(
+        or_(
+            *[
+                func.normalizar(FolhaServidor.secretaria).like(f"%{alias}%")
+                for alias in aliases
+            ]
+        )
+    )
 
 
 def _apply_text_contains_filter(stmt, column, value: str):

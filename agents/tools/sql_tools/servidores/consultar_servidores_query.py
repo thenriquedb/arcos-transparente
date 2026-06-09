@@ -87,7 +87,9 @@ def consultar_servidores(
         filtros: Objeto com filtros opcionais. Campos aceitos: `nome`, `secretaria`,
             `cargo`, `mes_de_referencia`, `mes_de_referencia_inicio`,
             `mes_de_referencia_fim`, `salario_min` e `salario_max`.
-            Datas em `YYYY-MM-DD`.
+            Datas em `YYYY-MM-DD`. O filtro `secretaria="saude"` tambem cobre
+            lotacoes especificas da rede, como hospital municipal, CAPS, PSF,
+            odontologia, laboratorio, regulacao e vigilancia sanitaria.
         ordenar_por: Campo de ordenacao. Aceita `nome`, `cargo`, `secretaria`,
             `salario_base` ou `mes_de_referencia`.
         ordem: Direcao da ordenacao: `asc` ou `desc`.

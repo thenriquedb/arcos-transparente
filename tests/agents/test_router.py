@@ -96,6 +96,21 @@ def test_try_route_agregacao_isolado_permanece_disponivel() -> None:
     assert decision.confident is True
 
 
+def test_try_route_agregacao_desmembra_saude_por_area() -> None:
+    decision = _try_route_agregacao(_normalize("quantas pessoas trabalham na saude?"))
+
+    assert decision is not None
+    assert decision.tool_name == "agregar_servidores"
+    assert decision.tool_kwargs == {
+        "filtros": {"secretaria": "saude"},
+        "agrupar_por": "secretaria",
+        "metrica": "contagem",
+        "ordenar_por": "metrica",
+        "ordem": "desc",
+        "limite": 100,
+    }
+
+
 def test_route_user_query_extrai_autor_e_ano_em_emendas_por_autor() -> None:
     decision = route_user_query(
         "quanto o cleitinho enviou de emendas para a prefeitura em 2025?"
