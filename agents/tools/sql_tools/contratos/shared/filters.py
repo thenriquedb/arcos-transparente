@@ -62,6 +62,10 @@ class ContratosFiltroSchema(SqlToolBaseSchema):
     data_inicio: date | None = None
     data_inicio_inicio: date | None = None
     data_inicio_fim: date | None = None
+    data_fim: date | None = None
+    data_fim_inicio: date | None = None
+    data_fim_fim: date | None = None
+    vigente_em: date | None = None
     valor_min: Decimal | None = None
     valor_max: Decimal | None = None
 
@@ -82,6 +86,10 @@ class ContratosFiltroSchema(SqlToolBaseSchema):
         "data_inicio",
         "data_inicio_inicio",
         "data_inicio_fim",
+        "data_fim",
+        "data_fim_inicio",
+        "data_fim_fim",
+        "vigente_em",
         mode="before",
     )
     @classmethod
@@ -108,6 +116,20 @@ class ContratosFiltroSchema(SqlToolBaseSchema):
                     "data_inicio_inicio e data_inicio_fim devem ser informadas juntas"
                 )
             validate_date_period(self.data_inicio_inicio, self.data_inicio_fim)
+
+        if self.data_fim is not None and (
+            self.data_fim_inicio is not None or self.data_fim_fim is not None
+        ):
+            raise ValueError(
+                "data_fim nao pode ser usada junto com data_fim_inicio ou data_fim_fim"
+            )
+
+        if self.data_fim_inicio is not None or self.data_fim_fim is not None:
+            if self.data_fim_inicio is None or self.data_fim_fim is None:
+                raise ValueError(
+                    "data_fim_inicio e data_fim_fim devem ser informadas juntas"
+                )
+            validate_date_period(self.data_fim_inicio, self.data_fim_fim)
 
         if (
             self.valor_min is not None

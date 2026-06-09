@@ -71,6 +71,21 @@ def test_try_route_historico_reconhece_formato_quanto_nome_recebe() -> None:
     assert decision.tool_kwargs == {"nome": "lincoln manuel correa"}
 
 
+def test_try_route_historico_ignora_verbos_genericos_de_busca() -> None:
+    # "Busque os contratos da saúde" não deve virar busca de servidor.
+    assert _try_route_historico(_normalize("Busque os contratos da saude")) is None
+    assert _try_route_historico(_normalize("Pesquise as licitacoes abertas")) is None
+    assert _try_route_historico(_normalize("Procure as despesas com educacao")) is None
+
+
+def test_try_route_historico_preserva_pista_real_de_salario() -> None:
+    decision = _try_route_historico(_normalize("Salario do Joao Silva"))
+
+    assert decision is not None
+    assert decision.tool_name == "buscar_historico_de_pagamentos_do_servidor"
+    assert decision.tool_kwargs == {"nome": "joao silva"}
+
+
 def test_try_route_agregacao_isolado_permanece_disponivel() -> None:
     decision = _try_route_agregacao(
         _normalize("quais os 10 maiores salarios da prefeitura?")
@@ -212,19 +227,16 @@ def test_route_user_query_extrai_descricao_nominal_de_contrato() -> None:
     }
 
 
-def test_route_user_query_agrega_ranking_de_fornecedor_ativo_no_ano_corrente() -> (
+def test_route_user_query_agrega_ranking_de_fornecedor_ativo_por_vigencia() -> (
     None
 ):
-    current_year = date.today().year
-
     decision = route_user_query("Qual fornecedor tem mais contratos ativos hoje?")
 
     assert decision.confident is True
     assert decision.tool_name == "agregar_contratos"
     assert decision.tool_kwargs == {
         "filtros": {
-            "data_inicio_inicio": f"{current_year}-01-01",
-            "data_inicio_fim": f"{current_year}-12-31",
+            "vigente_em": date.today().isoformat(),
         },
         "agrupar_por": "fornecedor",
         "metrica": "contagem",
@@ -234,19 +246,16 @@ def test_route_user_query_agrega_ranking_de_fornecedor_ativo_no_ano_corrente() -
     }
 
 
-def test_route_user_query_agrega_ranking_de_categoria_atual_no_ano_corrente() -> (
+def test_route_user_query_agrega_ranking_de_categoria_atual_por_vigencia() -> (
     None
 ):
-    current_year = date.today().year
-
     decision = route_user_query("Qual categoria tem mais contratos atualmente?")
 
     assert decision.confident is True
     assert decision.tool_name == "agregar_contratos"
     assert decision.tool_kwargs == {
         "filtros": {
-            "data_inicio_inicio": f"{current_year}-01-01",
-            "data_inicio_fim": f"{current_year}-12-31",
+            "vigente_em": date.today().isoformat(),
         },
         "agrupar_por": "categoria",
         "metrica": "contagem",
@@ -269,6 +278,18 @@ def test_route_user_query_agrega_ranking_de_secretaria_sem_reduzir_empates() -> 
         "ordem": "desc",
         "limite": 5,
     }
+
+
+def test_route_user_query_preserva_festival_nomeado_e_ano_informado() -> None:
+    decision = route_user_query(
+        "Houve licitacao para o festival de musica em 2024?"
+    )
+
+    assert decision.confident is True
+    assert decision.tool_name == "consultar_licitacoes"
+    assert decision.tool_kwargs["filtros"]["objeto"] == "festival de musica"
+    assert decision.tool_kwargs["filtros"]["data_abertura_inicio"] == "2024-01-01"
+    assert decision.tool_kwargs["filtros"]["data_abertura_fim"] == "2024-12-31"
 
 
 def test_route_user_query_ano_explicito_vence_marcador_de_ativo_em_contratos() -> None:

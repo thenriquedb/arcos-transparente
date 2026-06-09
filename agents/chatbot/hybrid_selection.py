@@ -99,6 +99,10 @@ _SPEND_AGGREGATION_TERMS = (
     "quantas",
     "quantos",
 )
+_GENERIC_TRAVEL_TERMS = (
+    "viagem",
+    "viagens",
+)
 _SPEND_GROUPING_TERMS = (
     "por beneficiario",
     "por origem",
@@ -427,6 +431,9 @@ def _select_with_heuristics(
         spend_selection = _select_broad_spend_query(question)
         if spend_selection is not None:
             return spend_selection
+        function_spend_selection = _select_function_spend_breakdown_query(question)
+        if function_spend_selection is not None:
+            return function_spend_selection
         emenda_selection = _select_emenda_query_with_router(question)
         if emenda_selection is not None:
             return emenda_selection
@@ -496,7 +503,10 @@ def _select_travel_spend_query(
 
     has_diarias = _has_any_term(normalized_question, DIARIAS_DOMAIN_KEYWORDS)
     has_passagens = _has_any_term(normalized_question, PASSAGENS_DOMAIN_KEYWORDS)
-    if not (has_diarias and has_passagens):
+    has_generic_travel = _has_any_term(normalized_question, _GENERIC_TRAVEL_TERMS)
+    # "Viagem/viagens" genérico cobre diárias + passagens (o custo de viagem do
+    # cidadão inclui ambos), além do caso em que os dois domínios são citados.
+    if not (has_diarias and has_passagens) and not has_generic_travel:
         return None
 
     candidate_tool_names = (
@@ -536,6 +546,33 @@ def _select_broad_spend_query(
     return _build_named_candidate_selection(
         direct_domain_candidate_names,
         reason_code="heuristic_broad_spend_query",
+    )
+
+
+def _select_function_spend_breakdown_query(
+    question: str,
+) -> HybridToolSelection | None:
+    """Mantém a regra dos quatro estágios para gasto amplo por função de governo.
+
+    Um "total gasto com [função]" não deve colapsar em um único `valor_pago`
+    agregado: roteia para `consultar_despesas_por_funcao`, que expõe
+    `valor_empenhado`, `valor_em_liquidacao`, `valor_liquidado` e `valor_pago`.
+    """
+
+    route = route_public_compatibility_query(question)
+    if not route.confident or route.tool_name != "agregar_despesas_por_funcao":
+        return None
+
+    tool_kwargs = getattr(route, "tool_kwargs", {})
+    # Agrupamento ou métrica de estágio explícita é um agregado legítimo.
+    if tool_kwargs.get("agrupar_por") is not None:
+        return None
+    if tool_kwargs.get("metrica") != "soma_valor_pago":
+        return None
+
+    return _build_named_candidate_selection(
+        ["consultar_despesas_por_funcao"],
+        reason_code="heuristic_function_spend_breakdown",
     )
 
 

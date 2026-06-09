@@ -211,6 +211,64 @@ def test_consultar_contratos_filtra_por_secretaria_e_ordena_por_data(
     session.close()
 
 
+def test_consultar_contratos_filtra_por_vigencia_na_data(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _contrato(
+                numero="001/2024",
+                fornecedor="Fornecedor Plurianual",
+                cnpj="123",
+                valor=50000,
+                data_inicio=date(2024, 5, 1),
+                data_fim=date(2027, 4, 30),
+                categoria="Servico",
+                secretaria="Secretaria de Saude",
+                descricao="Contrato plurianual em vigencia",
+            ),
+            _contrato(
+                numero="002/2026",
+                fornecedor="Fornecedor Encerrado",
+                cnpj="456",
+                valor=8000,
+                data_inicio=date(2026, 1, 10),
+                data_fim=date(2026, 3, 31),
+                categoria="Servico",
+                secretaria="Secretaria de Educacao",
+                descricao="Contrato ja encerrado",
+            ),
+            _contrato(
+                numero="003/2025",
+                fornecedor="Fornecedor Aberto",
+                cnpj="789",
+                valor=12000,
+                data_inicio=date(2025, 2, 1),
+                data_fim=None,
+                categoria="Servico",
+                secretaria="Secretaria de Obras",
+                descricao="Contrato com fim em aberto",
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.consultar_contratos(
+        filtros={"vigente_em": "2026-06-09"},
+        ordenar_por="numero",
+        ordem="asc",
+        campos=["numero"],
+    )
+
+    # Plurianual (2024-2027) e fim em aberto contam; o encerrado em mar/2026 nao.
+    assert [item["numero"] for item in resultado["resultados"]] == [
+        "001/2024",
+        "003/2025",
+    ]
+
+    session.close()
+
+
 def test_consultar_contratos_suporta_ranking_por_valor(monkeypatch) -> None:
     session = _build_session()
     session.add_all(

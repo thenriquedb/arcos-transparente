@@ -162,6 +162,24 @@ def apply_contratos_filters(
                 filtros.data_inicio_fim,
             )
         )
+    if filtros.data_fim is not None:
+        stmt = stmt.where(Contrato.data_fim == filtros.data_fim)
+    elif filtros.data_fim_inicio is not None and filtros.data_fim_fim is not None:
+        stmt = stmt.where(
+            Contrato.data_fim.between(
+                filtros.data_fim_inicio,
+                filtros.data_fim_fim,
+            )
+        )
+    if filtros.vigente_em is not None:
+        # Vigência: começou até a data e ainda não terminou (fim em aberto vale).
+        stmt = stmt.where(Contrato.data_inicio <= filtros.vigente_em)
+        stmt = stmt.where(
+            or_(
+                Contrato.data_fim.is_(None),
+                Contrato.data_fim >= filtros.vigente_em,
+            )
+        )
     if filtros.valor_min is not None:
         stmt = stmt.where(Contrato.valor >= filtros.valor_min)
     if filtros.valor_max is not None:

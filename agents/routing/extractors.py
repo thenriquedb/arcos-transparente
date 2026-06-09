@@ -65,6 +65,55 @@ REFERENTIAL_NAME_TOKENS = {
     "prefeita",
 }
 
+# Substantivos de domínio que NUNCA são nome de servidor. Quando o objeto
+# extraído para histórico de folha começa com um destes, a pergunta é sobre
+# um domínio público (contratos, licitações, despesas…), não sobre salário.
+_HISTORICO_NAO_NOME_INICIAIS = frozenset(
+    {
+        "contrato",
+        "contratos",
+        "licitacao",
+        "licitacoes",
+        "pregao",
+        "pregoes",
+        "edital",
+        "editais",
+        "despesa",
+        "despesas",
+        "diaria",
+        "diarias",
+        "passagem",
+        "passagens",
+        "repasse",
+        "repasses",
+        "transferencia",
+        "transferencias",
+        "emenda",
+        "emendas",
+        "evento",
+        "eventos",
+        "show",
+        "shows",
+        "festival",
+        "festivais",
+        "gasto",
+        "gastos",
+        "servico",
+        "servicos",
+    }
+)
+
+# Objetos públicos curtos (eventos/shows) específicos o suficiente para acionar
+# o fan-out de gasto-com-evento, mesmo quando aparecem isolados.
+_EVENT_SHOW_OBJECT_TOKENS = frozenset(
+    {
+        "evento",
+        "eventos",
+        "show",
+        "shows",
+    }
+)
+
 _KNOWN_PUBLIC_OBJECT_ALIASES: tuple[tuple[str, str], ...] = (
     ("festival gastronomico", "festival gastronomico"),
     ("festival de gastronomia", "festival gastronomia"),
@@ -316,10 +365,7 @@ def _is_scope_or_department_object(candidate: str) -> bool:
 
 
 def _is_too_generic_public_object(candidate: str) -> bool:
-    """Rejeita frases vagas como `evento` que pioram o roteamento."""
-
-    if candidate == "shows e eventos":
-        return False
+    """Rejeita frases vagas como `gasto` que pioram o roteamento."""
 
     tokens = tuple(re.findall(r"[a-z0-9]+", candidate))
     if not tokens:
@@ -332,6 +378,11 @@ def _is_too_generic_public_object(candidate: str) -> bool:
     )
     if not meaningful_tokens:
         return True
+
+    # Objetos formados apenas por eventos/shows (ex.: "eventos", "shows e
+    # eventos") são específicos o bastante para o fan-out de gasto-com-evento.
+    if all(token in _EVENT_SHOW_OBJECT_TOKENS for token in meaningful_tokens):
+        return False
 
     return all(token in _GENERIC_PUBLIC_OBJECT_TOKENS for token in meaningful_tokens)
 
@@ -346,12 +397,6 @@ def _extract_public_object_candidate(
     for alias, canonical_value in _KNOWN_PUBLIC_OBJECT_ALIASES:
         if alias in normalized_text:
             return canonical_value
-
-    if re.search(r"\bshows?\b", normalized_text) and re.search(
-        r"\beventos?\b",
-        normalized_text,
-    ):
-        return "shows e eventos"
 
     for context_name, pattern in _PUBLIC_OBJECT_EXTRACTION_PATTERNS:
         if context_name not in contexts:
@@ -369,9 +414,25 @@ def _extract_public_object_candidate(
             continue
         return candidate
 
-    if "festival" in normalized_text:
-        return "festival"
-    return None
+    return _extract_festival_object(normalized_text)
+
+
+def _extract_festival_object(normalized_text: str) -> str | None:
+    """Preserva a frase específica de festival; só o `festival` cru cai no default."""
+
+    if "festival" not in normalized_text:
+        return None
+
+    match = re.search(r"\bfestival\b", normalized_text)
+    if match is None:
+        return None
+
+    phrase_match = re.match(
+        r"festival(?:\s+(?:de|do|da)\s+[a-z]+(?:\s+[a-z]+){0,2})?",
+        normalized_text[match.start() :],
+    )
+    phrase = phrase_match.group(0) if phrase_match else "festival"
+    return " ".join(phrase.split())
 
 
 def _extract_limit(normalized_text: str, default: int = 10) -> int:
@@ -411,6 +472,8 @@ def _extract_secretaria(normalized_text: str) -> str | None:
 def _extract_nome_para_historico(normalized_text: str) -> str | None:
     """Extrai nomes em perguntas sobre salário ou histórico de pagamentos."""
 
+    # Verbos genéricos de busca (pesquise/busque/procure) NÃO geram nome de
+    # histórico de folha: só pistas reais de salário/pagamento qualificam.
     patterns = [
         r"salario\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
         r"salario\s+([a-z\s]+?)(?:\?|$)",
@@ -418,7 +481,6 @@ def _extract_nome_para_historico(normalized_text: str) -> str | None:
         r"quanto\s+(?:recebe|recebeu|ganha|ganhou)\s+([a-z\s]+?)(?:\?|$)",
         r"(?:quanto\s+e\s+)?(?:o\s+)?salario\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
         r"pagamentos\s+(?:do|da|de)\s+([a-z\s]+?)(?:\?|$)",
-        r"(?:pesquise|busque|procure|pesquisar|buscar|procurar)\s+(?:por\s+)?([a-z\s]+?)(?:\?|$)",
     ]
     for pattern in patterns:
         match = re.search(pattern, normalized_text)
@@ -430,7 +492,11 @@ def _extract_nome_para_historico(normalized_text: str) -> str | None:
             match.group(1).strip(),
         )
         nome = re.sub(r"^(?:do|da|de|o|a)\s+", "", nome)
-        if set(nome.split()).issubset(REFERENTIAL_NAME_TOKENS):
+        nome_tokens = nome.split()
+        if set(nome_tokens).issubset(REFERENTIAL_NAME_TOKENS):
+            continue
+        # Objeto que começa com substantivo de domínio não é nome de pessoa.
+        if nome_tokens and nome_tokens[0] in _HISTORICO_NAO_NOME_INICIAIS:
             continue
         if nome:
             return nome
@@ -583,21 +649,21 @@ def _is_contratos_singular_dimension_ranking_query(
     return any(cue in normalized_text for cue in singular_cues)
 
 
-def _extract_contratos_active_year_filters(
+def _extract_contratos_active_vigencia_filters(
     normalized_text: str,
 ) -> dict[str, str] | None:
-    """Traduz `ativos hoje/atualmente` para o ano corrente quando nao houver ano explicito."""
+    """Traduz `ativos hoje/atualmente` para vigência na data atual.
+
+    Um contrato está em vigência hoje quando começou até hoje e ainda não
+    terminou (`data_inicio <= hoje <= data_fim`, ou `data_fim` em aberto).
+    """
 
     if _extract_year(normalized_text) is not None:
         return None
     if not _contains_any_term(normalized_text, _CONTRATOS_ACTIVITY_TERMS):
         return None
 
-    current_year = date.today().year
-    return {
-        "data_inicio_inicio": f"{current_year}-01-01",
-        "data_inicio_fim": f"{current_year}-12-31",
-    }
+    return {"vigente_em": date.today().isoformat()}
 
 
 def _extract_receitas_tipo_de_dado(normalized_text: str) -> str:
@@ -829,10 +895,10 @@ def _build_contratos_filters_from_query(normalized_text: str) -> dict[str, Any]:
     if year := _extract_year(normalized_text):
         filtros["data_inicio_inicio"] = f"{year}-01-01"
         filtros["data_inicio_fim"] = f"{year}-12-31"
-    elif current_year_filters := _extract_contratos_active_year_filters(
+    elif vigencia_filters := _extract_contratos_active_vigencia_filters(
         normalized_text
     ):
-        filtros.update(current_year_filters)
+        filtros.update(vigencia_filters)
     return filtros
 
 

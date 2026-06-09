@@ -90,7 +90,7 @@ def test_hybrid_selector_retorna_clarificacao_estruturada() -> None:
         }
     )
 
-    selection = selector.select("Quais gastos do evento?", history=[])
+    selection = selector.select("Quais informacoes voce tem?", history=[])
 
     assert selection.action == "clarify"
     assert selection.message == "Voce quer contratos ou licitacoes?"
@@ -362,6 +362,85 @@ def test_hybrid_selector_prioriza_candidates_de_shows_e_eventos() -> None:
         "consultar_contratos",
         "consultar_despesas",
     )
+
+
+def test_hybrid_selector_roteia_eventos_isolados_para_fan_out() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver gasto com eventos")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quanto foi gasto com eventos em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_event_spend_query"
+    assert selection.candidate_tool_names == (
+        "consultar_licitacoes",
+        "consultar_contratos",
+        "consultar_despesas",
+    )
+
+
+def test_hybrid_selector_roteia_shows_isolados_para_fan_out() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver gasto com shows")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quanto foi gasto com shows em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_event_spend_query"
+    assert selection.candidate_tool_names == (
+        "consultar_licitacoes",
+        "consultar_contratos",
+        "consultar_despesas",
+    )
+
+
+def test_hybrid_selector_combina_diarias_e_passagens_para_viagens_genericas() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria combinar diarias e passagens")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quanto a prefeitura gastou com viagens em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_travel_spend_query"
+    assert selection.candidate_tool_names == (
+        "consultar_diarias",
+        "consultar_passagens",
+    )
+
+
+def test_hybrid_selector_total_por_funcao_preserva_quatro_estagios() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria preservar os quatro estagios")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Qual o total gasto com saude em 2025?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_function_spend_breakdown"
+    assert selection.candidate_tool_names == ("consultar_despesas_por_funcao",)
 
 
 def test_hybrid_selector_prioriza_fontes_de_viagem_por_mes() -> None:
