@@ -212,6 +212,92 @@ def test_route_user_query_extrai_descricao_nominal_de_contrato() -> None:
     }
 
 
+def test_route_user_query_agrega_ranking_de_fornecedor_ativo_no_ano_corrente() -> (
+    None
+):
+    current_year = date.today().year
+
+    decision = route_user_query("Qual fornecedor tem mais contratos ativos hoje?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_contratos"
+    assert decision.tool_kwargs == {
+        "filtros": {
+            "data_inicio_inicio": f"{current_year}-01-01",
+            "data_inicio_fim": f"{current_year}-12-31",
+        },
+        "agrupar_por": "fornecedor",
+        "metrica": "contagem",
+        "ordenar_por": "metrica",
+        "ordem": "desc",
+        "limite": 5,
+    }
+
+
+def test_route_user_query_agrega_ranking_de_categoria_atual_no_ano_corrente() -> (
+    None
+):
+    current_year = date.today().year
+
+    decision = route_user_query("Qual categoria tem mais contratos atualmente?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_contratos"
+    assert decision.tool_kwargs == {
+        "filtros": {
+            "data_inicio_inicio": f"{current_year}-01-01",
+            "data_inicio_fim": f"{current_year}-12-31",
+        },
+        "agrupar_por": "categoria",
+        "metrica": "contagem",
+        "ordenar_por": "metrica",
+        "ordem": "desc",
+        "limite": 5,
+    }
+
+
+def test_route_user_query_agrega_ranking_de_secretaria_sem_reduzir_empates() -> None:
+    decision = route_user_query("Qual secretaria tem mais contratos?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_contratos"
+    assert decision.tool_kwargs == {
+        "filtros": {},
+        "agrupar_por": "secretaria",
+        "metrica": "contagem",
+        "ordenar_por": "metrica",
+        "ordem": "desc",
+        "limite": 5,
+    }
+
+
+def test_route_user_query_ano_explicito_vence_marcador_de_ativo_em_contratos() -> None:
+    decision = route_user_query("Qual fornecedor tem mais contratos ativos em 2025?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_contratos"
+    assert decision.tool_kwargs["filtros"] == {
+        "data_inicio_inicio": "2025-01-01",
+        "data_inicio_fim": "2025-12-31",
+    }
+
+
+def test_route_user_query_preserva_ranking_de_contratos_individuais_por_valor() -> (
+    None
+):
+    decision = route_user_query("Liste os 10 maiores contratos de 2025.")
+
+    assert decision.confident is True
+    assert decision.tool_name == "consultar_contratos"
+    assert decision.tool_kwargs["filtros"] == {
+        "data_inicio_inicio": "2025-01-01",
+        "data_inicio_fim": "2025-12-31",
+    }
+    assert decision.tool_kwargs["ordenar_por"] == "valor"
+    assert decision.tool_kwargs["ordem"] == "desc"
+    assert decision.tool_kwargs["limite"] == 10
+
+
 def test_route_user_query_reconhece_saldo_total_de_estoque() -> None:
     decision = route_user_query("Qual o saldo total em estoque em 2025?")
 
@@ -331,6 +417,7 @@ def test_route_user_query_cobre_dominios_representativos(
     ("pergunta", "expected_tool_names"),
     [
         ("Liste os 10 maiores contratos de 2025.", ["consultar_contratos"]),
+        ("Qual fornecedor tem mais contratos ativos hoje?", ["agregar_contratos"]),
         ("Quais as 10 maiores licitacoes?", ["consultar_licitacoes"]),
         ("Qual o total contratado pela educacao?", ["agregar_contratos"]),
         (

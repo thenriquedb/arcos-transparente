@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import date
 import re
 from typing import Any
 
@@ -196,6 +197,66 @@ _PUBLIC_OBJECT_EXTRACTION_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ),
 )
 
+_CONTRATOS_RANKING_DIMENSION_CUES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    (
+        "fornecedor",
+        (
+            "qual fornecedor",
+            "quais fornecedores",
+            "qual empresa",
+            "quais empresas",
+            "por fornecedor",
+            "por fornecedores",
+            "por empresa",
+            "por empresas",
+        ),
+    ),
+    (
+        "secretaria",
+        (
+            "qual secretaria",
+            "quais secretarias",
+            "por secretaria",
+            "por secretarias",
+        ),
+    ),
+    (
+        "categoria",
+        (
+            "qual categoria",
+            "quais categorias",
+            "por categoria",
+            "por categorias",
+        ),
+    ),
+)
+
+_CONTRATOS_RANKING_DIMENSION_PLURAL_ALIASES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("fornecedor", ("fornecedores", "empresas")),
+    ("secretaria", ("secretarias",)),
+    ("categoria", ("categorias",)),
+)
+
+_CONTRATOS_DIMENSION_COUNT_SIGNAL_PATTERNS = (
+    "mais contratos",
+    "mais contrato",
+    "maior quantidade de contratos",
+    "maior numero de contratos",
+    "maiores quantidades de contratos",
+    "maiores numeros de contratos",
+    "quantos contratos",
+    "quantas contratos",
+)
+
+_CONTRATOS_ACTIVITY_TERMS = (
+    "ativo",
+    "ativos",
+    "atual",
+    "atuais",
+    "hoje",
+    "atualmente",
+)
+
 
 def _normalize(text: str) -> str:
     """Remove acentos e normaliza caixa para simplificar match por texto."""
@@ -240,7 +301,10 @@ def _normalize_public_object_candidate(raw_object: str) -> str | None:
     if not tokens:
         return None
 
-    return " ".join(tokens).strip(" .,-/") or None
+    normalized_candidate = " ".join(tokens).strip(" .,-/")
+    if re.fullmatch(r"20\d{2}", normalized_candidate):
+        return None
+    return normalized_candidate or None
 
 
 def _is_scope_or_department_object(candidate: str) -> bool:
@@ -433,6 +497,12 @@ def _extract_contrato_numero(normalized_text: str) -> str | None:
 def _extract_contrato_fornecedor(normalized_text: str) -> str | None:
     """Extrai um nome de fornecedor em perguntas focadas em contratos."""
 
+    if (
+        _extract_contratos_ranking_dimension(normalized_text) == "fornecedor"
+        and _has_contratos_dimension_count_signal(normalized_text)
+    ):
+        return None
+
     patterns = [
         r"\bfornecedor\b\s+([a-z0-9 .&/-]+?)(?=\s+\b(?:em|com)\b\s+\d{4}\b|\?|$)",
         r"\bempresa\b\s+([a-z0-9 .&/-]+?)(?=\s+\b(?:em|com)\b\s+\d{4}\b|\?|$)",
@@ -454,6 +524,80 @@ def _extract_year(normalized_text: str) -> int | None:
     if match is None:
         return None
     return int(match.group(1))
+
+
+def _extract_contratos_ranking_dimension(normalized_text: str) -> str | None:
+    """Identifica quando o usuario quer agrupar contratos por uma dimensao."""
+
+    for dimension, cues in _CONTRATOS_RANKING_DIMENSION_CUES:
+        if any(cue in normalized_text for cue in cues):
+            return dimension
+
+    if not any(term in normalized_text for term in ("ranking", "top")):
+        return None
+
+    for dimension, aliases in _CONTRATOS_RANKING_DIMENSION_PLURAL_ALIASES:
+        if _contains_any_term(normalized_text, aliases):
+            return dimension
+    return None
+
+
+def _has_contratos_dimension_count_signal(normalized_text: str) -> bool:
+    """Diferencia ranking por contagem de ranking de contratos individuais."""
+
+    if any(
+        pattern in normalized_text
+        for pattern in _CONTRATOS_DIMENSION_COUNT_SIGNAL_PATTERNS
+    ):
+        return True
+    if any(term in normalized_text for term in ("valor", "media", "soma", "total")):
+        return False
+    return any(term in normalized_text for term in ("ranking", "top"))
+
+
+def _is_contratos_dimension_count_ranking_query(normalized_text: str) -> bool:
+    """Reconhece perguntas de ranking/contagem por dimensao no dominio de contratos."""
+
+    if not _is_contratos_query(normalized_text):
+        return False
+    if _extract_contratos_ranking_dimension(normalized_text) is None:
+        return False
+    return _has_contratos_dimension_count_signal(normalized_text)
+
+
+def _is_contratos_singular_dimension_ranking_query(
+    normalized_text: str,
+    *,
+    dimension: str | None = None,
+) -> bool:
+    """Detecta formulacoes singulares para ampliar o limite e preservar empates."""
+
+    resolved_dimension = dimension or _extract_contratos_ranking_dimension(
+        normalized_text
+    )
+    singular_cues = {
+        "fornecedor": ("qual fornecedor", "qual empresa"),
+        "secretaria": ("qual secretaria",),
+        "categoria": ("qual categoria",),
+    }.get(resolved_dimension, ())
+    return any(cue in normalized_text for cue in singular_cues)
+
+
+def _extract_contratos_active_year_filters(
+    normalized_text: str,
+) -> dict[str, str] | None:
+    """Traduz `ativos hoje/atualmente` para o ano corrente quando nao houver ano explicito."""
+
+    if _extract_year(normalized_text) is not None:
+        return None
+    if not _contains_any_term(normalized_text, _CONTRATOS_ACTIVITY_TERMS):
+        return None
+
+    current_year = date.today().year
+    return {
+        "data_inicio_inicio": f"{current_year}-01-01",
+        "data_inicio_fim": f"{current_year}-12-31",
+    }
 
 
 def _extract_receitas_tipo_de_dado(normalized_text: str) -> str:
@@ -685,6 +829,10 @@ def _build_contratos_filters_from_query(normalized_text: str) -> dict[str, Any]:
     if year := _extract_year(normalized_text):
         filtros["data_inicio_inicio"] = f"{year}-01-01"
         filtros["data_inicio_fim"] = f"{year}-12-31"
+    elif current_year_filters := _extract_contratos_active_year_filters(
+        normalized_text
+    ):
+        filtros.update(current_year_filters)
     return filtros
 
 

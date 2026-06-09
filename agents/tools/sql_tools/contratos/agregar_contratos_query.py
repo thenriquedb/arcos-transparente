@@ -165,12 +165,16 @@ def _execute_fallback_aggregate(
         examples=[
             "Qual o total contratado pela educacao?",
             "Quais fornecedores concentram maior valor contratado?",
+            "Qual fornecedor tem mais contratos ativos hoje?",
         ],
         hints=[
             "contrato",
             "total contratado",
             "ranking",
             "fornecedor",
+            "categoria",
+            "secretaria",
+            "contratos ativos",
             "media",
         ],
     ),
@@ -188,6 +192,8 @@ def agregar_contratos(
 
     Use esta tool quando a pergunta pedir valor total contratado, media de valor
     ou comparacao entre secretarias, categorias, fornecedores e anos de inicio.
+    Ela tambem cobre rankings por contagem, como "qual fornecedor tem mais
+    contratos ativos hoje?" ou "qual secretaria tem mais contratos?".
     NAO use para listar contratos individuais; para isso use `consultar_contratos`.
     NAO use para somar ou contar licitacoes; para isso use `agregar_licitacoes`.
 

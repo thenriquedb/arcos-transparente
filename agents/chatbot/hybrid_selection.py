@@ -430,6 +430,11 @@ def _select_with_heuristics(
         emenda_selection = _select_emenda_query_with_router(question)
         if emenda_selection is not None:
             return emenda_selection
+        contract_count_ranking_selection = (
+            _select_contract_count_ranking_with_router(question)
+        )
+        if contract_count_ranking_selection is not None:
+            return contract_count_ranking_selection
         contract_ranking_selection = _select_contract_value_ranking_with_router(
             question
         )
@@ -607,6 +612,23 @@ def _select_contract_value_ranking_with_router(
         allowed_tool_names=("consultar_contratos",),
         reason_code="heuristic_contract_value_ranking",
         route_filter=lambda route: route.tool_kwargs.get("ordenar_por") == "valor",
+    )
+
+
+def _select_contract_count_ranking_with_router(
+    question: str,
+) -> HybridToolSelection | None:
+    return _select_from_compatibility_route(
+        question,
+        allowed_tool_names=("agregar_contratos",),
+        reason_code="heuristic_contract_count_ranking",
+        route_filter=lambda route: (
+            route.tool_kwargs.get("metrica") == "contagem"
+            and route.tool_kwargs.get("agrupar_por")
+            in {"fornecedor", "secretaria", "categoria"}
+            and route.tool_kwargs.get("ordenar_por") == "metrica"
+            and route.tool_kwargs.get("ordem") == "desc"
+        ),
     )
 
 

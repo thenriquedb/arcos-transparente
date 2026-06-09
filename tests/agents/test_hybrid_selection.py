@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+import pytest
+
 from agents.chatbot.hybrid_selection import HybridToolSelector
 from agents.tools.registry import get_public_tools
 
@@ -184,6 +186,32 @@ def test_hybrid_selector_prioriza_ranking_de_maiores_contratos() -> None:
     assert selection.used_fallback is False
     assert selection.reason_code == "heuristic_contract_value_ranking"
     assert selection.candidate_tool_names == ("consultar_contratos",)
+
+
+@pytest.mark.parametrize(
+    "pergunta",
+    [
+        "Qual fornecedor tem mais contratos ativos hoje?",
+        "Qual secretaria tem mais contratos?",
+        "Qual categoria tem mais contratos atualmente?",
+    ],
+)
+def test_hybrid_selector_prioriza_ranking_de_contratos_por_dimensao(
+    pergunta: str,
+) -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError(
+            "heuristica deveria resolver ranking agregado de contratos"
+        )
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(pergunta, history=[])
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_contract_count_ranking"
+    assert selection.candidate_tool_names == ("agregar_contratos",)
 
 
 def test_hybrid_selector_prioriza_emendas_por_autor() -> None:

@@ -299,6 +299,15 @@ def test_system_prompt_orienta_ranking_de_contratos_por_valor_e_ano() -> None:
     assert "Nunca troque esse pedido por um total" in prompt
 
 
+def test_system_prompt_orienta_ranking_agregado_de_contratos_por_dimensao() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "qual fornecedor tem mais contratos ativos hoje?" in prompt.lower()
+    assert "`agregar_contratos`" in prompt
+    assert 'metrica="contagem"' in prompt
+    assert "ano corrente" in prompt
+
+
 def test_system_prompt_orienta_emendas_por_autor_com_ou_sem_ano() -> None:
     prompt = chatbot_agent.carregar_system_prompt()
 
@@ -598,6 +607,34 @@ def test_chatbot_application_entrega_tools_selecionadas_ao_backend() -> None:
     assert response.content == "resposta para: Quais contratos da saude?"
     assert selector.calls == [("Quais contratos da saude?", ())]
     assert backend.selection_calls == [(("consultar_contratos",), "sessao-candidatos")]
+
+
+def test_chatbot_application_prioriza_ranking_agregado_de_contratos() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError(
+            "heuristica deveria resolver ranking agregado de contratos"
+        )
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-ranking-contratos"),
+        selector=selector,
+    )
+
+    response = app.ask("Qual fornecedor tem mais contratos ativos hoje?")
+
+    assert (
+        response.content
+        == "resposta para: Qual fornecedor tem mais contratos ativos hoje?"
+    )
+    assert backend.selection_calls == [
+        (("agregar_contratos",), "sessao-ranking-contratos")
+    ]
+    assert response.metadata["selection_reason_code"] == (
+        "heuristic_contract_count_ranking"
+    )
 
 
 def test_chatbot_application_permite_conjunto_multidominio_de_candidatas() -> None:

@@ -866,3 +866,122 @@ def test_agregar_contratos_ranking_por_secretaria(monkeypatch) -> None:
     ]
 
     session.close()
+
+
+def test_agregar_contratos_ranking_por_fornecedor_no_ano_corrente(monkeypatch) -> None:
+    current_year = date.today().year
+    session = _build_session()
+    session.add_all(
+        [
+            _contrato(
+                numero=f"001/{current_year}",
+                fornecedor="Fornecedor Alfa",
+                cnpj="123",
+                valor=10000,
+                data_inicio=date(current_year, 1, 10),
+                data_fim=None,
+                categoria="Servico",
+                secretaria="Secretaria de Saude",
+                descricao="Locacao de estrutura",
+            ),
+            _contrato(
+                numero=f"002/{current_year}",
+                fornecedor="Fornecedor Alfa",
+                cnpj="123",
+                valor=5000,
+                data_inicio=date(current_year, 4, 5),
+                data_fim=None,
+                categoria="Compra",
+                secretaria="Secretaria de Educacao",
+                descricao="Material escolar",
+            ),
+            _contrato(
+                numero=f"003/{current_year}",
+                fornecedor="Fornecedor Beta",
+                cnpj="456",
+                valor=9000,
+                data_inicio=date(current_year, 6, 8),
+                data_fim=None,
+                categoria="Compra",
+                secretaria="Secretaria de Educacao",
+                descricao="Uniformes",
+            ),
+            _contrato(
+                numero=f"004/{current_year - 1}",
+                fornecedor="Fornecedor Gama",
+                cnpj="789",
+                valor=7000,
+                data_inicio=date(current_year - 1, 12, 20),
+                data_fim=None,
+                categoria="Servico",
+                secretaria="Secretaria de Obras",
+                descricao="Contrato anterior",
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.agregar_contratos(
+        filtros={
+            "data_inicio_inicio": f"{current_year}-01-01",
+            "data_inicio_fim": f"{current_year}-12-31",
+        },
+        agrupar_por="fornecedor",
+        metrica="contagem",
+        ordenar_por="metrica",
+        ordem="desc",
+    )
+
+    assert resultado["total_grupos"] == 2
+    assert resultado["resultados"] == [
+        {"fornecedor": "Fornecedor Alfa", "contagem": 2},
+        {"fornecedor": "Fornecedor Beta", "contagem": 1},
+    ]
+
+    session.close()
+
+
+def test_agregar_contratos_limite_cinco_preserva_empates_de_ranking(monkeypatch) -> (
+    None
+):
+    current_year = date.today().year
+    session = _build_session()
+    contratos = []
+    for indice in range(1, 7):
+        for sequencia in range(1, 3):
+            contratos.append(
+                _contrato(
+                    numero=f"{indice:03d}-{sequencia}/{current_year}",
+                    fornecedor=f"Fornecedor {indice}",
+                    cnpj=f"{indice:03d}",
+                    valor=1000 * indice,
+                    data_inicio=date(current_year, sequencia, min(10 + indice, 28)),
+                    data_fim=None,
+                    categoria="Servico",
+                    secretaria="Secretaria de Saude",
+                    descricao="Contrato empatado",
+                )
+            )
+    session.add_all(contratos)
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = contratos_tools.agregar_contratos(
+        filtros={
+            "data_inicio_inicio": f"{current_year}-01-01",
+            "data_inicio_fim": f"{current_year}-12-31",
+        },
+        agrupar_por="fornecedor",
+        metrica="contagem",
+        ordenar_por="metrica",
+        ordem="desc",
+        limite=5,
+    )
+
+    assert resultado["total_grupos"] == 6
+    assert len(resultado["resultados"]) == 5
+    assert all(item["contagem"] == 2 for item in resultado["resultados"])
+    assert resultado["mensagem"] == "Mostrando 5 de 6 grupos encontrados."
+
+    session.close()
