@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import date
 from decimal import Decimal
 from typing import Any
 
@@ -46,9 +47,16 @@ def _metric_to_json(value: Decimal | int) -> float | int:
     return value
 
 
+def _period_end(registro: DespesaDocumento) -> date:
+    return registro.periodo_referencia_fim or registro.data_documento
+
+
 GROUP_FIELD_GETTERS = {
     "origem": lambda registro: registro.origem,
     "ano": lambda registro: registro.exercicio,
+    "mes": lambda registro: (
+        _period_end(registro).month if _period_end(registro) else None
+    ),
     "beneficiario": lambda registro: registro.credor,
     "unidade_gestora": lambda registro: registro.unidade_gestora,
 }
@@ -77,6 +85,7 @@ def _project_diaria_group(
         examples=[
             "Quanto foi pago em diarias em 2025?",
             "Quais colaboradores mais gastaram com diarias?",
+            "Quanto a prefeitura gasta por mes com diarias?",
         ],
         hints=[
             "diaria",
@@ -84,6 +93,7 @@ def _project_diaria_group(
             "ranking",
             "beneficiario",
             "viagem",
+            "por mes",
         ],
     ),
 )
@@ -100,7 +110,7 @@ def agregar_diarias(
 
     Use esta tool quando a pergunta pedir total pago, total empenhado,
     quantidade de beneficiarios ou rankings de diarias por beneficiario, origem
-    ou unidade gestora.
+    unidade gestora ou mes.
     Se a pergunta usar linguagem ampla de gasto e houver interesse em ver os
     registros que compoem o valor, consulte primeiro `consultar_diarias` e use
     esta tool apenas como resumo complementar ou quando o usuario pedir

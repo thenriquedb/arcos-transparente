@@ -19,6 +19,7 @@ from .consultar_passagens_schema import (
 ALLOWED_PASSAGENS_GROUP_FIELDS = {
     "origem",
     "ano",
+    "mes",
     "beneficiario",
     "unidade_gestora",
     "categoria",

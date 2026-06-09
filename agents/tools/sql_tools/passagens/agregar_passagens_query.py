@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import date
 from decimal import Decimal
 from typing import Any
 
@@ -46,9 +47,16 @@ def _metric_to_json(value: Decimal | int) -> float | int:
     return value
 
 
+def _period_end(registro: DespesaDocumento) -> date:
+    return registro.periodo_referencia_fim or registro.data_documento
+
+
 GROUP_FIELD_GETTERS = {
     "origem": lambda registro: registro.origem,
     "ano": lambda registro: registro.exercicio,
+    "mes": lambda registro: (
+        _period_end(registro).month if _period_end(registro) else None
+    ),
     "beneficiario": lambda registro: registro.credor,
     "unidade_gestora": lambda registro: registro.unidade_gestora,
     "categoria": lambda registro: registro.categoria_documento,
@@ -78,13 +86,16 @@ def _project_passagem_group(
         examples=[
             "Quanto foi pago em passagens em 2026?",
             "Quais beneficiarios receberam mais passagens?",
+            "Quanto a prefeitura gasta por mes com viagens?",
         ],
         hints=[
             "passagem",
+            "viagem",
             "total pago",
             "ranking",
             "beneficiario",
             "locomocao",
+            "por mes",
         ],
     ),
 )
@@ -101,7 +112,9 @@ def agregar_passagens(
 
     Use esta tool quando a pergunta pedir total pago, total empenhado,
     quantidade de beneficiarios ou rankings de passagens por beneficiario,
-    origem, unidade gestora ou categoria.
+    origem, unidade gestora, categoria ou mes. Trate "viagens" como sinonimo
+    de passagens quando a pergunta estiver falando de gasto publico com
+    deslocamento.
     Se a pergunta usar linguagem ampla de gasto e houver interesse em ver os
     registros que compoem o valor, consulte primeiro `consultar_passagens` e
     use esta tool apenas como resumo complementar ou quando o usuario pedir

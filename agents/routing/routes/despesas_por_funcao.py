@@ -33,19 +33,38 @@ _FUNCOES_DE_GOVERNO_ALIASES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("gestao ambiental", ("gestao ambiental", "meio ambiente", "ambiental")),
     ("previdencia social", ("previdencia social", "previdencia")),
     ("seguranca publica", ("seguranca publica", "seguranca")),
-    ("urbanismo", ("urbanismo",)),
+    (
+        "urbanismo",
+        (
+            "urbanismo",
+            "obra",
+            "obras",
+            "pavimentacao",
+            "pavimentacoes",
+            "calcamento",
+            "infraestrutura urbana",
+        ),
+    ),
     ("administracao", ("administracao",)),
     ("agricultura", ("agricultura",)),
     ("cultura", ("cultura",)),
-    ("educacao", ("educacao",)),
+    ("educacao", ("educacao", "ensino")),
     ("energia", ("energia",)),
-    ("habitacao", ("habitacao",)),
+    ("habitacao", ("habitacao", "moradia", "moradias")),
     ("legislativa", ("legislativa", "legislativo")),
     ("saude", ("saude",)),
-    ("saneamento", ("saneamento",)),
-    ("trabalho", ("trabalho",)),
-    ("transporte", ("transporte",)),
+    ("saneamento", ("saneamento", "esgoto")),
+    ("trabalho", ("trabalho", "emprego", "empregos")),
+    ("transporte", ("transporte", "mobilidade", "transito")),
 )
+
+
+def _extract_funcao_de_governo_alias(normalized_text: str) -> str | None:
+    for funcao, aliases in _FUNCOES_DE_GOVERNO_ALIASES:
+        for alias in aliases:
+            if re.search(rf"\b{re.escape(alias)}\b", normalized_text):
+                return funcao
+    return None
 
 
 def _extract_funcao_de_governo(normalized_text: str) -> str | None:
@@ -119,7 +138,7 @@ def _extract_despesas_por_funcao_filters(normalized_text: str) -> dict[str, obje
             and "despesas por funcao" not in valor
             and re.fullmatch(r"(?:em\s+)?\d{4}", valor_sem_pontuacao) is None
         ):
-            filtros["funcao"] = valor
+            filtros["funcao"] = _extract_funcao_de_governo_alias(valor) or valor
     elif funcao := _extract_funcao_de_governo(normalized_text):
         filtros["funcao"] = funcao
 

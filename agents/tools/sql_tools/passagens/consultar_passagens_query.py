@@ -132,9 +132,11 @@ def project_passagem_fields(
         examples=[
             "Quem recebeu passagens em 2026?",
             "Liste despesas com locomocao para Brasilia.",
+            "Quais gastos com viagens a prefeitura teve em 2025?",
         ],
         hints=[
             "passagem",
+            "viagem",
             "locomocao",
             "beneficiario",
             "destino",

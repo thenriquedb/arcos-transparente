@@ -64,6 +64,138 @@ REFERENTIAL_NAME_TOKENS = {
     "prefeita",
 }
 
+_KNOWN_PUBLIC_OBJECT_ALIASES: tuple[tuple[str, str], ...] = (
+    ("festival gastronomico", "festival gastronomico"),
+    ("festival de gastronomia", "festival gastronomia"),
+)
+
+_GENERIC_PUBLIC_OBJECT_TOKENS = frozenset(
+    {
+        "evento",
+        "eventos",
+        "festival",
+        "festivais",
+        "show",
+        "shows",
+        "servico",
+        "servicos",
+        "objeto",
+        "licitacao",
+        "licitacoes",
+        "pregao",
+        "pregoes",
+        "contrato",
+        "contratos",
+        "gasto",
+        "gastos",
+        "custo",
+        "custos",
+        "valor",
+        "valores",
+        "pago",
+        "pagos",
+    }
+)
+
+_PUBLIC_SCOPE_OBJECT_EXCLUSIONS = frozenset(
+    {
+        "administracao",
+        "agricultura",
+        "assistencia",
+        "assistencia social",
+        "camara",
+        "cidadania",
+        "cultura",
+        "despesa",
+        "despesas",
+        "despesas por funcao",
+        "diaria",
+        "diarias",
+        "educacao",
+        "energia",
+        "gestao ambiental",
+        "habitacao",
+        "legislativo",
+        "legislativa",
+        "meio ambiente",
+        "passagem",
+        "passagens",
+        "prefeitura",
+        "previdencia",
+        "previdencia social",
+        "relatorio de despesas por funcao",
+        "saude",
+        "saneamento",
+        "seguranca",
+        "seguranca publica",
+        "trabalho",
+        "transporte",
+        "urbanismo",
+    }
+)
+
+_LEADING_PUBLIC_OBJECT_ARTICLES = frozenset(
+    {
+        "a",
+        "as",
+        "da",
+        "das",
+        "de",
+        "do",
+        "dos",
+        "na",
+        "nas",
+        "no",
+        "nos",
+        "o",
+        "os",
+        "um",
+        "uma",
+        "umas",
+        "uns",
+    }
+)
+
+_LEADING_PUBLIC_OBJECT_LABELS = frozenset({"evento", "eventos", "show", "shows"})
+
+_PUBLIC_OBJECT_EXTRACTION_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
+    (
+        "licitacoes",
+        re.compile(
+            r"\b(?:licitac(?:ao|oes)|preg(?:ao|oes)|edital(?:is)?)\s+"
+            r"(?P<prep>para|de|do|da|sobre)\s+"
+            r"(?P<object>[a-z0-9][a-z0-9\s.&/-]{1,80}?)"
+            r"(?=\s+\b(?:em|de|do|da)\b\s+20\d{2}\b|\?|$)"
+        ),
+    ),
+    (
+        "contratos",
+        re.compile(
+            r"\b(?:contrato|contratos|contratad[oa]s?)\s+"
+            r"(?P<prep>para|de|do|da|sobre)\s+"
+            r"(?P<object>[a-z0-9][a-z0-9\s.&/-]{1,80}?)"
+            r"(?=\s+\b(?:em|de|do|da)\b\s+20\d{2}\b|\?|$)"
+        ),
+    ),
+    (
+        "spend",
+        re.compile(
+            r"\b(?:gastos?|gastou|custos?|custou|valor gasto|valor pago|pagos?)\s+"
+            r"(?P<prep>com|de|do|da|no|na)\s+"
+            r"(?P<object>[a-z0-9][a-z0-9\s.&/-]{1,80}?)"
+            r"(?=\s+\b(?:em|de|do|da)\b\s+20\d{2}\b|\?|$)"
+        ),
+    ),
+    (
+        "relation",
+        re.compile(
+            r"\b(?:relacionad[oa]s?\s+a|sobre)\s+"
+            r"(?P<object>[a-z0-9][a-z0-9\s.&/-]{1,80}?)"
+            r"(?=\s+\b(?:em|de|do|da)\b\s+20\d{2}\b|\?|$)"
+        ),
+    ),
+)
+
 
 def _normalize(text: str) -> str:
     """Remove acentos e normaliza caixa para simplificar match por texto."""
@@ -87,6 +219,95 @@ def _contains_any_term(normalized_text: str, terms: tuple[str, ...]) -> bool:
     """Versão por termo completo de `_contains_any`."""
 
     return any(_contains_term(normalized_text, term) for term in terms)
+
+
+def _normalize_public_object_candidate(raw_object: str) -> str | None:
+    """Limpa um objeto textual antes de usá-lo como filtro público."""
+
+    candidate = " ".join(raw_object.split()).strip(" .,-/")
+    candidate = re.sub(r"\s+\b(?:em|de|do|da)\b\s+20\d{2}\b$", "", candidate).strip()
+    if not candidate:
+        return None
+
+    tokens = candidate.split()
+    while tokens and tokens[0] in _LEADING_PUBLIC_OBJECT_ARTICLES:
+        tokens = tokens[1:]
+    while len(tokens) > 1 and tokens[0] in _LEADING_PUBLIC_OBJECT_LABELS:
+        tokens = tokens[1:]
+        while tokens and tokens[0] in _LEADING_PUBLIC_OBJECT_ARTICLES:
+            tokens = tokens[1:]
+
+    if not tokens:
+        return None
+
+    return " ".join(tokens).strip(" .,-/") or None
+
+
+def _is_scope_or_department_object(candidate: str) -> bool:
+    """Evita confundir secretaria/area publica com objeto contratual."""
+
+    return candidate.startswith("secretaria de ") or (
+        candidate in _PUBLIC_SCOPE_OBJECT_EXCLUSIONS
+    )
+
+
+def _is_too_generic_public_object(candidate: str) -> bool:
+    """Rejeita frases vagas como `evento` que pioram o roteamento."""
+
+    if candidate == "shows e eventos":
+        return False
+
+    tokens = tuple(re.findall(r"[a-z0-9]+", candidate))
+    if not tokens:
+        return True
+
+    meaningful_tokens = tuple(
+        token
+        for token in tokens
+        if token not in _LEADING_PUBLIC_OBJECT_ARTICLES and token != "e"
+    )
+    if not meaningful_tokens:
+        return True
+
+    return all(token in _GENERIC_PUBLIC_OBJECT_TOKENS for token in meaningful_tokens)
+
+
+def _extract_public_object_candidate(
+    normalized_text: str,
+    *,
+    contexts: tuple[str, ...],
+) -> str | None:
+    """Extrai um objeto contratual nominal quando o contexto textual é forte."""
+
+    for alias, canonical_value in _KNOWN_PUBLIC_OBJECT_ALIASES:
+        if alias in normalized_text:
+            return canonical_value
+
+    if re.search(r"\bshows?\b", normalized_text) and re.search(
+        r"\beventos?\b",
+        normalized_text,
+    ):
+        return "shows e eventos"
+
+    for context_name, pattern in _PUBLIC_OBJECT_EXTRACTION_PATTERNS:
+        if context_name not in contexts:
+            continue
+        match = pattern.search(normalized_text)
+        if match is None:
+            continue
+
+        candidate = _normalize_public_object_candidate(match.group("object"))
+        if candidate is None:
+            continue
+        if _is_scope_or_department_object(candidate):
+            continue
+        if _is_too_generic_public_object(candidate):
+            continue
+        return candidate
+
+    if "festival" in normalized_text:
+        return "festival"
+    return None
 
 
 def _extract_limit(normalized_text: str, default: int = 10) -> int:
@@ -416,33 +637,19 @@ def _extract_planejamento_metric(normalized_text: str) -> str:
 def _extract_licitacoes_objeto(normalized_text: str) -> str | None:
     """Extrai alguns objetos recorrentes de licitações com alto valor prático."""
 
-    if "festival gastronomico" in normalized_text:
-        return "festival gastronomico"
-    if "festival de gastronomia" in normalized_text:
-        return "festival gastronomia"
-    if "festival" in normalized_text:
-        return "festival"
-    return None
+    return _extract_public_object_candidate(
+        normalized_text,
+        contexts=("licitacoes", "spend"),
+    )
 
 
 def _extract_contratos_descricao(normalized_text: str) -> str | None:
     """Extrai termos de descrição de contrato para alguns eventos recorrentes."""
 
-    if objeto := _extract_licitacoes_objeto(normalized_text):
-        return objeto
-
-    patterns = [
-        r"\brelacionad[oa]s?\s+a\s+([a-z0-9\s.&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
-        r"\bsobre\s+([a-z0-9\s.&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
-    ]
-    for pattern in patterns:
-        match = re.search(pattern, normalized_text)
-        if match is None:
-            continue
-        descricao = " ".join(match.group(1).split())
-        if descricao:
-            return descricao
-    return None
+    return _extract_public_object_candidate(
+        normalized_text,
+        contexts=("contratos", "spend", "relation"),
+    )
 
 
 def _build_licitacoes_filters_from_query(normalized_text: str) -> dict[str, Any]:

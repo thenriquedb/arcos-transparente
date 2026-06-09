@@ -19,6 +19,7 @@ from .consultar_diarias_schema import (
 ALLOWED_DIARIAS_GROUP_FIELDS = {
     "origem",
     "ano",
+    "mes",
     "beneficiario",
     "unidade_gestora",
 }

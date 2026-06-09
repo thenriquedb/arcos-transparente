@@ -136,6 +136,7 @@ def _financial_stage_explanations() -> dict[str, str]:
         examples=[
             "Liste o relatorio de despesas por funcao de 2025.",
             "Quais valores pagos aparecem na funcao Saude no relatorio de despesas por funcao?",
+            "Quanto foi investido em obras e pavimentacao em 2025?",
         ],
         hints=[
             "despesas por funcao",
@@ -143,6 +144,9 @@ def _financial_stage_explanations() -> dict[str, str]:
             "dotacao inicial",
             "valor pago",
             "dotacao atualizada",
+            "urbanismo",
+            "obras",
+            "pavimentacao",
         ],
     ),
 )
@@ -159,7 +163,9 @@ def consultar_despesas_por_funcao(
 
     Use esta tool quando a pergunta vier em linguagem ampla de gasto por
     funcao de governo, como "gastos da saude", "quanto foi gasto com
-    educacao" ou "quanto a prefeitura gastou em urbanismo".
+    educacao", "quanto a prefeitura gastou em urbanismo" ou
+    "quanto foi investido em obras e pavimentacao" quando esses termos
+    apontarem para a funcao `urbanismo`.
     Em perguntas como "qual foi o gasto com saude em 2025?", nao reduza a
     resposta a `valor_pago`: mostre tambem `valor_empenhado`,
     `valor_em_liquidacao`, `valor_liquidado` e explique a diferenca.

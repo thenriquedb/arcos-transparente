@@ -69,8 +69,14 @@ _EVENT_SPEND_SIGNAL_TERMS = (
     "gasto",
     "gastos",
     "gastou",
+    "gasta",
+    "gastam",
     "custo",
     "custou",
+    "investido",
+    "investida",
+    "investimento",
+    "investimentos",
     "valor gasto",
 )
 _SPEND_AGGREGATION_TERMS = (
@@ -415,6 +421,9 @@ def _select_with_heuristics(
         salary_history_selection = _select_salary_history_with_router(question)
         if salary_history_selection is not None:
             return salary_history_selection
+        travel_spend_selection = _select_travel_spend_query(question)
+        if travel_spend_selection is not None:
+            return travel_spend_selection
         spend_selection = _select_broad_spend_query(question)
         if spend_selection is not None:
             return spend_selection
@@ -468,6 +477,31 @@ def _select_event_spend_query(
             "consultar_despesas",
         ],
         reason_code="heuristic_event_spend_query",
+    )
+
+
+def _select_travel_spend_query(
+    question: str,
+) -> HybridToolSelection | None:
+    normalized_question = normalize_conversation_text(question)
+    if not normalized_question:
+        return None
+    if not any(signal in normalized_question for signal in _EVENT_SPEND_SIGNAL_TERMS):
+        return None
+
+    has_diarias = _has_any_term(normalized_question, DIARIAS_DOMAIN_KEYWORDS)
+    has_passagens = _has_any_term(normalized_question, PASSAGENS_DOMAIN_KEYWORDS)
+    if not (has_diarias and has_passagens):
+        return None
+
+    candidate_tool_names = (
+        ["agregar_diarias", "agregar_passagens"]
+        if _is_explicit_aggregate_spend_request(normalized_question)
+        else ["consultar_diarias", "consultar_passagens"]
+    )
+    return _build_named_candidate_selection(
+        candidate_tool_names,
+        reason_code="heuristic_travel_spend_query",
     )
 
 

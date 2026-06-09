@@ -57,6 +57,8 @@ def _try_route_diarias_agregacao(normalized_text: str) -> RouteDecision | None:
 
     if "por beneficiario" in normalized_text or "maiores" in normalized_text:
         agrupar_por = "beneficiario"
+    elif "por mes" in normalized_text or "mes a mes" in normalized_text:
+        agrupar_por = "mes"
     elif "por origem" in normalized_text:
         agrupar_por = "origem"
     elif "por unidade" in normalized_text or "por unidade gestora" in normalized_text:

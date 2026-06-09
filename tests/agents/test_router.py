@@ -134,6 +134,49 @@ def test_route_user_query_reconhece_gasto_amplo_por_funcao_de_governo() -> None:
     assert decision.tool_kwargs["metrica"] == "soma_valor_pago"
 
 
+def test_route_user_query_agrupar_diarias_por_mes() -> None:
+    decision = route_user_query("Quanto a prefeitura gasta por mes com diarias?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_diarias"
+    assert decision.tool_kwargs["filtros"] == {"origem": "prefeitura"}
+    assert decision.tool_kwargs["agrupar_por"] == "mes"
+    assert decision.tool_kwargs["metrica"] == "soma_valor_pago"
+
+
+def test_route_user_query_reconhece_viagens_como_passagens_por_mes() -> None:
+    decision = route_user_query("Quanto foi pago em viagens por mes em 2026?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_passagens"
+    assert decision.tool_kwargs["filtros"] == {"ano": 2026}
+    assert decision.tool_kwargs["agrupar_por"] == "mes"
+    assert decision.tool_kwargs["metrica"] == "soma_valor_pago"
+
+
+@pytest.mark.parametrize(
+    ("pergunta", "funcao_esperada"),
+    [
+        ("Quanto foi investido em obras e pavimentacao em 2025?", "urbanismo"),
+        ("Quanto foi investido em mobilidade em 2025?", "transporte"),
+        ("Quanto foi investido em ensino em 2025?", "educacao"),
+    ],
+)
+def test_route_user_query_reconhece_sinonimos_de_funcao_de_governo_em_investimento(
+    pergunta: str,
+    funcao_esperada: str,
+) -> None:
+    decision = route_user_query(pergunta)
+
+    assert decision.confident is True
+    assert decision.tool_name == "agregar_despesas_por_funcao"
+    assert decision.tool_kwargs["filtros"] == {
+        "ano": 2025,
+        "funcao": funcao_esperada,
+    }
+    assert decision.tool_kwargs["metrica"] == "soma_valor_pago"
+
+
 def test_route_user_query_lista_despesas_por_funcao_em_qual_foi_o_gasto() -> None:
     decision = route_user_query("Qual foi o gasto com saude em 2025?")
 
@@ -142,6 +185,30 @@ def test_route_user_query_lista_despesas_por_funcao_em_qual_foi_o_gasto() -> Non
     assert decision.tool_kwargs["filtros"] == {
         "ano": 2025,
         "funcao": "saude",
+    }
+
+
+def test_route_user_query_extrai_objeto_nominal_de_licitacao() -> None:
+    decision = route_user_query("Houve licitacao para o Natal Fest em 2025?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "consultar_licitacoes"
+    assert decision.tool_kwargs["filtros"] == {
+        "objeto": "natal fest",
+        "data_abertura_inicio": "2025-01-01",
+        "data_abertura_fim": "2025-12-31",
+    }
+
+
+def test_route_user_query_extrai_descricao_nominal_de_contrato() -> None:
+    decision = route_user_query("Quais contratos do Natal Fest em 2025?")
+
+    assert decision.confident is True
+    assert decision.tool_name == "consultar_contratos"
+    assert decision.tool_kwargs["filtros"] == {
+        "descricao": "natal fest",
+        "data_inicio_inicio": "2025-01-01",
+        "data_inicio_fim": "2025-12-31",
     }
 
 
