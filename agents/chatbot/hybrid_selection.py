@@ -28,7 +28,7 @@ from agents.routing.constants import (
     DIARIAS_DOMAIN_KEYWORDS,
     PASSAGENS_DOMAIN_KEYWORDS,
 )
-from agents.routing.extractors import _extract_licitacoes_objeto
+from agents.routing.reading import read_query
 from agents.tools.registry import (
     PublicToolCatalogEntry,
     get_public_tool_catalog,
@@ -474,12 +474,14 @@ def _select_salary_history_with_router(
 def _select_event_spend_query(
     question: str,
 ) -> HybridToolSelection | None:
-    normalized_question = normalize_conversation_text(question)
-    if not normalized_question:
+    reading = read_query(question)
+    if not reading.normalized_text:
         return None
-    if not any(signal in normalized_question for signal in _EVENT_SPEND_SIGNAL_TERMS):
+    if not any(
+        signal in reading.normalized_text for signal in _EVENT_SPEND_SIGNAL_TERMS
+    ):
         return None
-    if _extract_licitacoes_objeto(normalized_question) is None:
+    if reading.licitacoes_objeto is None:
         return None
 
     return _build_named_candidate_selection(
