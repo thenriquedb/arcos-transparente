@@ -202,6 +202,62 @@ def test_agregar_passagens_por_beneficiario(monkeypatch) -> None:
     session.close()
 
 
+def test_agregar_passagens_por_mes(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            DespesaDocumento(
+                tipo_origem="passagem",
+                arquivo_origem="passagens-prefeitura-2025.csv",
+                sequencia_origem=1,
+                origem="prefeitura",
+                exercicio=2025,
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                numero_documento="PASSAGEM-2025-00001",
+                data_documento=date(2025, 1, 31),
+                periodo_referencia_inicio=date(2025, 1, 1),
+                periodo_referencia_fim=date(2025, 1, 31),
+                categoria_documento="PASSAGENS E DESPESAS COM LOCOMOCAO",
+                credor="ALFA",
+                valor_pago=Decimal("75.00"),
+            ),
+            DespesaDocumento(
+                tipo_origem="passagem",
+                arquivo_origem="passagens-prefeitura-2025.csv",
+                sequencia_origem=2,
+                origem="prefeitura",
+                exercicio=2025,
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                numero_documento="PASSAGEM-2025-00002",
+                data_documento=date(2025, 2, 28),
+                periodo_referencia_inicio=date(2025, 2, 1),
+                periodo_referencia_fim=date(2025, 2, 28),
+                categoria_documento="PASSAGENS E DESPESAS COM LOCOMOCAO",
+                credor="BETA",
+                valor_pago=Decimal("125.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = passagens_tools.agregar_passagens(
+        filtros={"ano": 2025, "origem": "prefeitura"},
+        agrupar_por="mes",
+        metrica="soma_valor_pago",
+        ordenar_por="mes",
+        ordem="asc",
+    )
+
+    assert resultado["total_grupos"] == 2
+    assert resultado["resultados"] == [
+        {"mes": 1, "soma_valor_pago": 75.0},
+        {"mes": 2, "soma_valor_pago": 125.0},
+    ]
+
+    session.close()
+
+
 def test_registry_expoe_tools_publicas_de_passagens() -> None:
     tool_names = {
         getattr(tool_obj, "name", "")
@@ -243,3 +299,10 @@ def test_query_de_passagens_rota_para_tool_publica_dedicada(monkeypatch) -> None
     assert resultado["valor_total"] == 1500.09
 
     session.close()
+
+
+def test_query_de_viagens_rota_para_passagens_por_mes() -> None:
+    route = route_user_query("Quanto foi pago em viagens por mes em 2026?")
+
+    assert route.tool_name == "agregar_passagens"
+    assert route.tool_kwargs["agrupar_por"] == "mes"

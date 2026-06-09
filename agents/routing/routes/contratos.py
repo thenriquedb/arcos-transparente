@@ -4,10 +4,45 @@ from __future__ import annotations
 
 from agents.routing.extractors import (
     _build_contratos_filters_from_query,
+    _extract_contratos_ranking_dimension,
     _extract_limit,
+    _is_contratos_dimension_count_ranking_query,
     _is_contratos_query,
+    _is_contratos_singular_dimension_ranking_query,
 )
 from agents.routing.models import RouteDecision
+
+
+def _build_contratos_dimension_ranking_kwargs(
+    normalized_text: str,
+    *,
+    filtros: dict[str, object],
+) -> dict[str, object] | None:
+    """Monta a agregacao por dimensao para rankings de quantidade de contratos."""
+
+    if not _is_contratos_dimension_count_ranking_query(normalized_text):
+        return None
+
+    agrupar_por = _extract_contratos_ranking_dimension(normalized_text)
+    if agrupar_por is None:
+        return None
+
+    limite = (
+        5
+        if _is_contratos_singular_dimension_ranking_query(
+            normalized_text,
+            dimension=agrupar_por,
+        )
+        else _extract_limit(normalized_text, default=10)
+    )
+    return {
+        "filtros": filtros,
+        "agrupar_por": agrupar_por,
+        "metrica": "contagem",
+        "ordenar_por": "metrica",
+        "ordem": "desc",
+        "limite": limite,
+    }
 
 
 def _try_route_contratos_agregacao(normalized_text: str) -> RouteDecision | None:
@@ -29,18 +64,15 @@ def _try_route_contratos_agregacao(normalized_text: str) -> RouteDecision | None
 
     filtros = _build_contratos_filters_from_query(normalized_text)
 
-    if "qual secretaria" in normalized_text and "mais contrato" in normalized_text:
+    if ranking_kwargs := _build_contratos_dimension_ranking_kwargs(
+        normalized_text,
+        filtros=filtros,
+    ):
         return RouteDecision(
             domain="contratos",
             operation_type="agregacao_ranking",
             tool_name="agregar_contratos",
-            tool_kwargs={
-                "agrupar_por": "secretaria",
-                "metrica": "contagem",
-                "ordenar_por": "metrica",
-                "ordem": "desc",
-                "limite": 1,
-            },
+            tool_kwargs=ranking_kwargs,
             tags=["scope:public", "domain:contratos", "shape:aggregate"],
             confident=True,
         )

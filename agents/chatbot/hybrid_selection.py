@@ -69,8 +69,14 @@ _EVENT_SPEND_SIGNAL_TERMS = (
     "gasto",
     "gastos",
     "gastou",
+    "gasta",
+    "gastam",
     "custo",
     "custou",
+    "investido",
+    "investida",
+    "investimento",
+    "investimentos",
     "valor gasto",
 )
 _SPEND_AGGREGATION_TERMS = (
@@ -92,6 +98,10 @@ _SPEND_AGGREGATION_TERMS = (
     "menores",
     "quantas",
     "quantos",
+)
+_GENERIC_TRAVEL_TERMS = (
+    "viagem",
+    "viagens",
 )
 _SPEND_GROUPING_TERMS = (
     "por beneficiario",
@@ -415,12 +425,23 @@ def _select_with_heuristics(
         salary_history_selection = _select_salary_history_with_router(question)
         if salary_history_selection is not None:
             return salary_history_selection
+        travel_spend_selection = _select_travel_spend_query(question)
+        if travel_spend_selection is not None:
+            return travel_spend_selection
         spend_selection = _select_broad_spend_query(question)
         if spend_selection is not None:
             return spend_selection
+        function_spend_selection = _select_function_spend_breakdown_query(question)
+        if function_spend_selection is not None:
+            return function_spend_selection
         emenda_selection = _select_emenda_query_with_router(question)
         if emenda_selection is not None:
             return emenda_selection
+        contract_count_ranking_selection = (
+            _select_contract_count_ranking_with_router(question)
+        )
+        if contract_count_ranking_selection is not None:
+            return contract_count_ranking_selection
         contract_ranking_selection = _select_contract_value_ranking_with_router(
             question
         )
@@ -471,6 +492,34 @@ def _select_event_spend_query(
     )
 
 
+def _select_travel_spend_query(
+    question: str,
+) -> HybridToolSelection | None:
+    normalized_question = normalize_conversation_text(question)
+    if not normalized_question:
+        return None
+    if not any(signal in normalized_question for signal in _EVENT_SPEND_SIGNAL_TERMS):
+        return None
+
+    has_diarias = _has_any_term(normalized_question, DIARIAS_DOMAIN_KEYWORDS)
+    has_passagens = _has_any_term(normalized_question, PASSAGENS_DOMAIN_KEYWORDS)
+    has_generic_travel = _has_any_term(normalized_question, _GENERIC_TRAVEL_TERMS)
+    # "Viagem/viagens" genérico cobre diárias + passagens (o custo de viagem do
+    # cidadão inclui ambos), além do caso em que os dois domínios são citados.
+    if not (has_diarias and has_passagens) and not has_generic_travel:
+        return None
+
+    candidate_tool_names = (
+        ["agregar_diarias", "agregar_passagens"]
+        if _is_explicit_aggregate_spend_request(normalized_question)
+        else ["consultar_diarias", "consultar_passagens"]
+    )
+    return _build_named_candidate_selection(
+        candidate_tool_names,
+        reason_code="heuristic_travel_spend_query",
+    )
+
+
 def _select_broad_spend_query(
     question: str,
 ) -> HybridToolSelection | None:
@@ -497,6 +546,33 @@ def _select_broad_spend_query(
     return _build_named_candidate_selection(
         direct_domain_candidate_names,
         reason_code="heuristic_broad_spend_query",
+    )
+
+
+def _select_function_spend_breakdown_query(
+    question: str,
+) -> HybridToolSelection | None:
+    """Mantém a regra dos quatro estágios para gasto amplo por função de governo.
+
+    Um "total gasto com [função]" não deve colapsar em um único `valor_pago`
+    agregado: roteia para `consultar_despesas_por_funcao`, que expõe
+    `valor_empenhado`, `valor_em_liquidacao`, `valor_liquidado` e `valor_pago`.
+    """
+
+    route = route_public_compatibility_query(question)
+    if not route.confident or route.tool_name != "agregar_despesas_por_funcao":
+        return None
+
+    tool_kwargs = getattr(route, "tool_kwargs", {})
+    # Agrupamento ou métrica de estágio explícita é um agregado legítimo.
+    if tool_kwargs.get("agrupar_por") is not None:
+        return None
+    if tool_kwargs.get("metrica") != "soma_valor_pago":
+        return None
+
+    return _build_named_candidate_selection(
+        ["consultar_despesas_por_funcao"],
+        reason_code="heuristic_function_spend_breakdown",
     )
 
 
@@ -573,6 +649,23 @@ def _select_contract_value_ranking_with_router(
         allowed_tool_names=("consultar_contratos",),
         reason_code="heuristic_contract_value_ranking",
         route_filter=lambda route: route.tool_kwargs.get("ordenar_por") == "valor",
+    )
+
+
+def _select_contract_count_ranking_with_router(
+    question: str,
+) -> HybridToolSelection | None:
+    return _select_from_compatibility_route(
+        question,
+        allowed_tool_names=("agregar_contratos",),
+        reason_code="heuristic_contract_count_ranking",
+        route_filter=lambda route: (
+            route.tool_kwargs.get("metrica") == "contagem"
+            and route.tool_kwargs.get("agrupar_por")
+            in {"fornecedor", "secretaria", "categoria"}
+            and route.tool_kwargs.get("ordenar_por") == "metrica"
+            and route.tool_kwargs.get("ordem") == "desc"
+        ),
     )
 
 

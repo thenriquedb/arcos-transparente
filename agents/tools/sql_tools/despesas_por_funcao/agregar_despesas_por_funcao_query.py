@@ -85,6 +85,7 @@ def _project_despesas_por_funcao_group(
         examples=[
             "Qual foi o total pago no relatorio de despesas por funcao em 2025?",
             "Quais funcoes tiveram maior valor pago no relatorio de despesas por funcao?",
+            "Qual foi o total investido em obras e pavimentacao em 2025?",
         ],
         hints=[
             "despesas por funcao",
@@ -92,6 +93,7 @@ def _project_despesas_por_funcao_group(
             "dotacao atualizada",
             "creditos adicionais",
             "valor pago",
+            "urbanismo",
         ],
     ),
 )

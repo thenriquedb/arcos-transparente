@@ -299,6 +299,15 @@ def test_system_prompt_orienta_ranking_de_contratos_por_valor_e_ano() -> None:
     assert "Nunca troque esse pedido por um total" in prompt
 
 
+def test_system_prompt_orienta_ranking_agregado_de_contratos_por_dimensao() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "qual fornecedor tem mais contratos ativos hoje?" in prompt.lower()
+    assert "`agregar_contratos`" in prompt
+    assert 'metrica="contagem"' in prompt
+    assert "ano corrente" in prompt
+
+
 def test_system_prompt_orienta_emendas_por_autor_com_ou_sem_ano() -> None:
     prompt = chatbot_agent.carregar_system_prompt()
 
@@ -600,6 +609,34 @@ def test_chatbot_application_entrega_tools_selecionadas_ao_backend() -> None:
     assert backend.selection_calls == [(("consultar_contratos",), "sessao-candidatos")]
 
 
+def test_chatbot_application_prioriza_ranking_agregado_de_contratos() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError(
+            "heuristica deveria resolver ranking agregado de contratos"
+        )
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-ranking-contratos"),
+        selector=selector,
+    )
+
+    response = app.ask("Qual fornecedor tem mais contratos ativos hoje?")
+
+    assert (
+        response.content
+        == "resposta para: Qual fornecedor tem mais contratos ativos hoje?"
+    )
+    assert backend.selection_calls == [
+        (("agregar_contratos",), "sessao-ranking-contratos")
+    ]
+    assert response.metadata["selection_reason_code"] == (
+        "heuristic_contract_count_ranking"
+    )
+
+
 def test_chatbot_application_permite_conjunto_multidominio_de_candidatas() -> None:
     backend = SelectionAwareBackend()
     selector = StubSelector(_selection(["consultar_licitacoes", "consultar_contratos"]))
@@ -647,6 +684,33 @@ def test_chatbot_application_prioriza_lista_detalhada_de_diarias_em_gasto_amplo(
         (("consultar_diarias",), "sessao-gasto-amplo-diarias")
     ]
     assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
+
+
+def test_chatbot_application_prioriza_fontes_de_viagem_por_mes() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver diarias e viagens")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-diarias-viagens-por-mes"),
+        selector=selector,
+    )
+
+    response = app.ask("Quanto a prefeitura gasta por mes com diarias e viagens?")
+
+    assert (
+        response.content
+        == "resposta para: Quanto a prefeitura gasta por mes com diarias e viagens?"
+    )
+    assert backend.selection_calls == [
+        (
+            ("agregar_diarias", "agregar_passagens"),
+            "sessao-diarias-viagens-por-mes",
+        )
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_travel_spend_query"
 
 
 def test_chatbot_application_prioriza_lista_de_despesas_por_funcao_em_gasto_amplo() -> (
@@ -705,6 +769,37 @@ def test_chatbot_application_prioriza_lista_de_despesas_por_funcao_em_urbanismo(
     assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
 
 
+def test_chatbot_application_prioriza_lista_de_despesas_por_funcao_em_investimento_por_alias() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError(
+            "heuristica deveria resolver investimento amplo de despesas por funcao"
+        )
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-investimento-obras-pavimentacao"),
+        selector=selector,
+    )
+
+    response = app.ask("Quanto foi investido em obras e pavimentacao em 2025?")
+
+    assert (
+        response.content
+        == "resposta para: Quanto foi investido em obras e pavimentacao em 2025?"
+    )
+    assert backend.selection_calls == [
+        (
+            ("consultar_despesas_por_funcao",),
+            "sessao-investimento-obras-pavimentacao",
+        )
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
+
+
 def test_chatbot_application_prioriza_fontes_multifonte_em_gasto_de_evento() -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
         raise AssertionError("heuristica deveria resolver gasto multi-fonte")
@@ -731,6 +826,69 @@ def test_chatbot_application_prioriza_fontes_multifonte_em_gasto_de_evento() -> 
                 "consultar_despesas",
             ),
             "sessao-gasto-amplo-evento",
+        )
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_event_spend_query"
+
+
+def test_chatbot_application_prioriza_fontes_multifonte_em_objeto_contratual_nominal() -> (
+    None
+):
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver objeto contratual nominal")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-natal-fest"),
+        selector=selector,
+    )
+
+    response = app.ask("Quanto foi gasto com o Natal Fest em 2025?")
+
+    assert (
+        response.content == "resposta para: Quanto foi gasto com o Natal Fest em 2025?"
+    )
+    assert backend.selection_calls == [
+        (
+            (
+                "consultar_licitacoes",
+                "consultar_contratos",
+                "consultar_despesas",
+            ),
+            "sessao-gasto-natal-fest",
+        )
+    ]
+    assert response.metadata["selection_reason_code"] == "heuristic_event_spend_query"
+
+
+def test_chatbot_application_prioriza_fontes_multifonte_em_shows_e_eventos() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver shows e eventos")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-shows-eventos"),
+        selector=selector,
+    )
+
+    response = app.ask("Quanto foi gasto com shows e eventos em 2025?")
+
+    assert (
+        response.content
+        == "resposta para: Quanto foi gasto com shows e eventos em 2025?"
+    )
+    assert backend.selection_calls == [
+        (
+            (
+                "consultar_licitacoes",
+                "consultar_contratos",
+                "consultar_despesas",
+            ),
+            "sessao-gasto-shows-eventos",
         )
     ]
     assert response.metadata["selection_reason_code"] == "heuristic_event_spend_query"

@@ -232,6 +232,8 @@ DIARIAS_DOMAIN_KEYWORDS = (
 PASSAGENS_DOMAIN_KEYWORDS = (
     "passagem",
     "passagens",
+    "viagem",
+    "viagens",
     "locomocao",
     "despesas com locomocao",
 )
