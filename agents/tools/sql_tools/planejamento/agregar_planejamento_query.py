@@ -164,9 +164,7 @@ def agregar_planejamento(
             source_count=execution.source_count,
             suggestion=suggestion,
         ),
-        item_model=(
-            AgregacaoPlanejamentoItem if params.agrupar_por is not None else None
-        ),
+        item_model=(AgregacaoPlanejamentoItem if params.agrupar_por is not None else None),
         agrupar_por=params.agrupar_por,
         metrica=params.metrica if params.agrupar_por is not None else None,
     )

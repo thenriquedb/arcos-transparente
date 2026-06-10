@@ -9,9 +9,7 @@ from database.models import InstrumentoContratual, Licitacao, MateriaInstrumento
 from shared.utils.decimal_to_float import decimal_to_float
 
 
-def _decimal_to_json(
-    value: Decimal | None, *, default: float | None = None
-) -> float | None:
+def _decimal_to_json(value: Decimal | None, *, default: float | None = None) -> float | None:
     if value is None:
         return default
     return decimal_to_float(value)
@@ -86,10 +84,7 @@ def serializar_licitacao(
                 for vencedor in vencedores
             ],
             "total_instrumentos": len(licitacao.instrumentos_contratuais),
-            "instrumentos": [
-                serializar_instrumento(instrumento, max_itens=max_itens)
-                for instrumento in instrumentos
-            ],
+            "instrumentos": [serializar_instrumento(instrumento, max_itens=max_itens) for instrumento in instrumentos],
         }
     )
     return payload

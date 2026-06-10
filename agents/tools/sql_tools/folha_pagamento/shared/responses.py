@@ -10,6 +10,8 @@ from .base import FolhaPagamentoToolBaseSchema
 
 
 class PagamentoMensalItem(FolhaPagamentoToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     ano: int
     mes_num: int
     mes_nome: str
@@ -24,6 +26,8 @@ class PagamentoMensalItem(FolhaPagamentoToolBaseSchema):
 
 
 class HistoricoPagamentosServidorItem(FolhaPagamentoToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     folha_servidor_id: int
     nome: str
     cargo_atual: str | None = None
@@ -45,6 +49,8 @@ class FolhaServidorCandidato(FolhaPagamentoToolBaseSchema):
 
 
 class HistoricoPagamentosServidorResponse(FolhaPagamentoToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     query: str | None = None
     total: int
     resultados: list[HistoricoPagamentosServidorItem] = Field(default_factory=list)

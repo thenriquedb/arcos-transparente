@@ -53,6 +53,8 @@ class FrotaToolBaseSchema(SqlToolBaseSchema):
 
 
 class FrotaFiltroSchema(FrotaToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     unidade_responsavel: str | None = None
     placa: str | None = None
     descricao: str | None = None
@@ -86,6 +88,8 @@ class FrotaFiltroSchema(FrotaToolBaseSchema):
 
 
 class ConsultarFrotaParams(FrotaToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: FrotaFiltroSchema = Field(default_factory=FrotaFiltroSchema)
     ordenar_por: str = "codigo_veiculo"
     ordem: str = "asc"
@@ -142,6 +146,8 @@ class ConsultarFrotaParams(FrotaToolBaseSchema):
 
 
 class ConsultarFrotaMetadata(FrotaToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -151,6 +157,8 @@ class ConsultarFrotaMetadata(FrotaToolBaseSchema):
 
 
 class ConsultarFrotaResponse(FrotaToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarFrotaMetadata

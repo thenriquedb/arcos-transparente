@@ -40,6 +40,8 @@ ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
 class DiariaFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     origem: str | None = None
     ano: int | None = None
     periodo_inicio: date | None = None
@@ -71,6 +73,8 @@ class DiariaFiltroSchema(SqlToolBaseSchema):
 
 
 class ConsultarDiariasParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: DiariaFiltroSchema = Field(default_factory=DiariaFiltroSchema)
     ordenar_por: str = "periodo_fim"
     ordem: str = "desc"
@@ -127,6 +131,8 @@ class ConsultarDiariasParams(SqlToolBaseSchema):
 
 
 class ConsultarDiariasMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -136,6 +142,8 @@ class ConsultarDiariasMetadata(SqlToolBaseSchema):
 
 
 class ConsultarDiariasResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarDiariasMetadata

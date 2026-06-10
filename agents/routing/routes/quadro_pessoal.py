@@ -37,10 +37,7 @@ def _try_route_quadro_pessoal_agregacao(
 ) -> RouteDecision | None:
     if not _is_quadro_pessoal_query(normalized_text):
         return None
-    if not any(
-        keyword in normalized_text
-        for keyword in ("quantas", "quantos", "total", "por ", "maior", "maiores")
-    ):
+    if not any(keyword in normalized_text for keyword in ("quantas", "quantos", "total", "por ", "maior", "maiores")):
         return None
 
     if "criadas" in normalized_text:

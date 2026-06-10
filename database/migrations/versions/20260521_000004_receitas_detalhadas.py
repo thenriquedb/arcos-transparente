@@ -36,9 +36,7 @@ def upgrade() -> None:
         sa.Column("identificacao_superior", sa.String(length=40), nullable=True),
         sa.UniqueConstraint("identificacao", name="uq_receita_natureza_identificacao"),
     )
-    op.create_index(
-        "ix_receita_naturezas_identificacao", "receita_naturezas", ["identificacao"]
-    )
+    op.create_index("ix_receita_naturezas_identificacao", "receita_naturezas", ["identificacao"])
     op.create_index("ix_receita_naturezas_nome", "receita_naturezas", ["nome"])
     op.create_index(
         "ix_receita_naturezas_identificacao_superior",
@@ -86,9 +84,7 @@ def upgrade() -> None:
             name="uq_receita_arrec_base",
         ),
     )
-    op.create_index(
-        "ix_receita_arrecadacoes_exercicio", "receita_arrecadacoes", ["exercicio"]
-    )
+    op.create_index("ix_receita_arrecadacoes_exercicio", "receita_arrecadacoes", ["exercicio"])
     op.create_index("ix_receita_arrecadacoes_mes", "receita_arrecadacoes", ["mes"])
     op.create_index(
         "ix_receita_arrecadacoes_data_arrecadacao",
@@ -100,9 +96,7 @@ def upgrade() -> None:
         "receita_arrecadacoes",
         ["unidade_gestora"],
     )
-    op.create_index(
-        "ix_receita_arrecadacoes_natureza_id", "receita_arrecadacoes", ["natureza_id"]
-    )
+    op.create_index("ix_receita_arrecadacoes_natureza_id", "receita_arrecadacoes", ["natureza_id"])
 
     op.create_table(
         "receita_lancamentos",
@@ -135,53 +129,33 @@ def upgrade() -> None:
             name="uq_receita_lanc_base",
         ),
     )
-    op.create_index(
-        "ix_receita_lancamentos_exercicio", "receita_lancamentos", ["exercicio"]
-    )
+    op.create_index("ix_receita_lancamentos_exercicio", "receita_lancamentos", ["exercicio"])
     op.create_index("ix_receita_lancamentos_mes", "receita_lancamentos", ["mes"])
     op.create_index(
         "ix_receita_lancamentos_data_lancamento",
         "receita_lancamentos",
         ["data_lancamento"],
     )
-    op.create_index(
-        "ix_receita_lancamentos_tipo_receita", "receita_lancamentos", ["tipo_receita"]
-    )
-    op.create_index(
-        "ix_receita_lancamentos_tributo", "receita_lancamentos", ["tributo"]
-    )
+    op.create_index("ix_receita_lancamentos_tipo_receita", "receita_lancamentos", ["tipo_receita"])
+    op.create_index("ix_receita_lancamentos_tributo", "receita_lancamentos", ["tributo"])
 
 
 def downgrade() -> None:
     op.drop_index("ix_receita_lancamentos_tributo", table_name="receita_lancamentos")
-    op.drop_index(
-        "ix_receita_lancamentos_tipo_receita", table_name="receita_lancamentos"
-    )
-    op.drop_index(
-        "ix_receita_lancamentos_data_lancamento", table_name="receita_lancamentos"
-    )
+    op.drop_index("ix_receita_lancamentos_tipo_receita", table_name="receita_lancamentos")
+    op.drop_index("ix_receita_lancamentos_data_lancamento", table_name="receita_lancamentos")
     op.drop_index("ix_receita_lancamentos_mes", table_name="receita_lancamentos")
     op.drop_index("ix_receita_lancamentos_exercicio", table_name="receita_lancamentos")
     op.drop_table("receita_lancamentos")
 
-    op.drop_index(
-        "ix_receita_arrecadacoes_natureza_id", table_name="receita_arrecadacoes"
-    )
-    op.drop_index(
-        "ix_receita_arrecadacoes_unidade_gestora", table_name="receita_arrecadacoes"
-    )
-    op.drop_index(
-        "ix_receita_arrecadacoes_data_arrecadacao", table_name="receita_arrecadacoes"
-    )
+    op.drop_index("ix_receita_arrecadacoes_natureza_id", table_name="receita_arrecadacoes")
+    op.drop_index("ix_receita_arrecadacoes_unidade_gestora", table_name="receita_arrecadacoes")
+    op.drop_index("ix_receita_arrecadacoes_data_arrecadacao", table_name="receita_arrecadacoes")
     op.drop_index("ix_receita_arrecadacoes_mes", table_name="receita_arrecadacoes")
-    op.drop_index(
-        "ix_receita_arrecadacoes_exercicio", table_name="receita_arrecadacoes"
-    )
+    op.drop_index("ix_receita_arrecadacoes_exercicio", table_name="receita_arrecadacoes")
     op.drop_table("receita_arrecadacoes")
 
-    op.drop_index(
-        "ix_receita_naturezas_identificacao_superior", table_name="receita_naturezas"
-    )
+    op.drop_index("ix_receita_naturezas_identificacao_superior", table_name="receita_naturezas")
     op.drop_index("ix_receita_naturezas_nome", table_name="receita_naturezas")
     op.drop_index("ix_receita_naturezas_identificacao", table_name="receita_naturezas")
     op.drop_table("receita_naturezas")

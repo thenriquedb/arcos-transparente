@@ -19,6 +19,8 @@ from .shared.filters import (
 
 
 class AgregarPlanejamentoParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: PlanejamentoFiltroSchema = Field(default_factory=PlanejamentoFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_orcamento_atualizado"
@@ -76,13 +78,13 @@ class AgregarPlanejamentoParams(SqlToolBaseSchema):
         if self.ordenar_por not in {"metrica", self.agrupar_por}:
             raise ValueError("ordenar_por deve ser 'metrica' ou igual a agrupar_por")
         if self.agrupar_por is None and self.ordenar_por != "metrica":
-            raise ValueError(
-                "ordenar_por deve ser 'metrica' quando agrupar_por nao for informado"
-            )
+            raise ValueError("ordenar_por deve ser 'metrica' quando agrupar_por nao for informado")
         return self
 
 
 class AgregarPlanejamentoMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -92,6 +94,8 @@ class AgregarPlanejamentoMetadata(SqlToolBaseSchema):
 
 
 class AgregacaoPlanejamentoItem(SqlToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     mes: str | None = None
     area: str | None = None
     subarea: str | None = None
@@ -110,6 +114,8 @@ class AgregacaoPlanejamentoItem(SqlToolBaseSchema):
 
 
 class AgregarPlanejamentoResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarPlanejamentoMetadata

@@ -23,9 +23,10 @@ from .agregar_servidores_schema import (
     AgregarServidoresParams,
     AgregarServidoresResponse,
 )
+from shared.utils.decimal_to_float import decimal_or_int_to_json
+
 from .shared.querying import (
     apply_servidores_filters,
-    decimal_or_int_to_json,
     resolve_mes_de_referencia_padrao,
 )
 
@@ -86,7 +87,9 @@ def agregar_servidores(
         filtros: Objeto com filtros opcionais. Campos aceitos: `nome`, `secretaria`,
             `cargo`, `mes_de_referencia`, `mes_de_referencia_inicio`,
             `mes_de_referencia_fim`, `salario_min` e `salario_max`.
-            Datas em `YYYY-MM-DD`.
+            Datas em `YYYY-MM-DD`. O filtro `secretaria="saude"` tambem cobre
+            lotacoes especificas da rede, como hospital municipal, CAPS, PSF,
+            odontologia, laboratorio, regulacao e vigilancia sanitaria.
         agrupar_por: Campo opcional de agrupamento. Aceita `secretaria`, `cargo`
             ou `mes_de_referencia`. Se nao for informado, a tool retorna um
             `valor_total`.
@@ -102,7 +105,8 @@ def agregar_servidores(
           metrica calculada.
         - `metadata`: filtros aplicados, configuracao da agregacao e o
           `mes_de_referencia_considerado`.
-        - `valor_total`: valor agregado quando `agrupar_por` nao for informado.
+        - `valor_total`: valor agregado total do recorte; em agrupamentos, funciona
+          como total geral complementar.
         - `mensagem`: aviso quando so parte dos grupos for exibida.
         - `sugestao`: dica quando nenhum resultado for encontrado.
     """
@@ -133,11 +137,9 @@ def agregar_servidores(
     params = validated
 
     with session_manager.get_session() as session:
-        mes_de_referencia_considerado, mes_padrao_aplicado = (
-            resolve_mes_de_referencia_padrao(
-                session,
-                params.filtros,
-            )
+        mes_de_referencia_considerado, mes_padrao_aplicado = resolve_mes_de_referencia_padrao(
+            session,
+            params.filtros,
         )
 
         metadata = AgregarServidoresMetadata(
@@ -172,11 +174,7 @@ def agregar_servidores(
                 execution=AggregateExecutionResult(
                     valor_total=decimal_or_int_to_json(valor_total),
                     source_count=total_match,
-                    suggestion=(
-                        "Nenhum servidor encontrado com os filtros informados."
-                        if total_match == 0
-                        else None
-                    ),
+                    suggestion=("Nenhum servidor encontrado com os filtros informados." if total_match == 0 else None),
                 ),
             )
 
@@ -196,6 +194,19 @@ def agregar_servidores(
             group_column=group_column,
             metric_expression=metric_expression,
         )
+        total_match, valor_total = execute_statement_total(
+            session,
+            count_stmt=apply_servidores_filters(
+                select(func.count()),
+                params.filtros,
+                mes_de_referencia_considerado=mes_de_referencia_considerado,
+            ),
+            value_stmt=apply_servidores_filters(
+                select(metric_expression),
+                params.filtros,
+                mes_de_referencia_considerado=mes_de_referencia_considerado,
+            ),
+        )
 
     return build_aggregate_response(
         response_type=AgregarServidoresResponse,
@@ -203,11 +214,9 @@ def agregar_servidores(
         execution=AggregateExecutionResult(
             total_grupos=total_grupos,
             rows=rows,
-            suggestion=(
-                "Nenhum servidor encontrado com os filtros informados."
-                if not rows
-                else None
-            ),
+            valor_total=decimal_or_int_to_json(valor_total),
+            source_count=total_match,
+            suggestion=("Nenhum servidor encontrado com os filtros informados." if not rows else None),
         ),
         item_model=AgregacaoServidoresItem,
         agrupar_por=params.agrupar_por,

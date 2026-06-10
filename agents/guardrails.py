@@ -10,28 +10,11 @@ from agents.routing.conversation import (
     looks_like_confirmation_reply,
     normalize_conversation_text,
 )
-from agents.routing.constants import (
-    SUPPORTED_SCOPE_STRONG_KEYWORDS,
-    SUPPORTED_SCOPE_WEAK_KEYWORDS,
-)
 from agents.rag.scope import (
     is_supported_knowledge_follow_up_fragment,
     is_supported_knowledge_query,
 )
-from agents.routing.extractors import (
-    _contains_prompt_injection,
-    _count_keyword_hits,
-    _extract_contrato_fornecedor,
-    _extract_contratos_descricao,
-    _extract_licitacoes_objeto,
-    _extract_nome_para_historico,
-    _extract_planejamento_area,
-    _extract_planejamento_entidade,
-    _extract_receitas_tema,
-    _extract_receitas_unidade,
-    _extract_secretaria,
-    _extract_year,
-)
+from agents.routing.reading import QueryReading, read_query
 from agents.routing.models import GuardrailDecision, RouteDecision
 
 _CONTEXTUAL_REFERENCE_PATTERN = re.compile(
@@ -45,9 +28,7 @@ _CONTEXTUAL_REFERENCE_PATTERN = re.compile(
     r"neste|nesta|nestes|nestas"
     r")\b"
 )
-_ELLIPTICAL_YEAR_FOLLOW_UP_PATTERN = re.compile(
-    r"^(?:e\s+)?(?:(?:o|a|os|as)\s+)?(?:(?:de|do|da|em)\s+)?20\d{2}\??$"
-)
+_ELLIPTICAL_YEAR_FOLLOW_UP_PATTERN = re.compile(r"^(?:e\s+)?(?:(?:o|a|os|as)\s+)?(?:(?:de|do|da|em)\s+)?20\d{2}\??$")
 _PUBLIC_SPEND_SIGNAL_TERMS = (
     "custo",
     "custos",
@@ -152,7 +133,9 @@ def evaluate_public_query_guardrails(
             ),
         )
 
-    if _contains_prompt_injection(normalized_text):
+    reading = read_query(normalized_text)
+
+    if reading.is_prompt_injection:
         return GuardrailDecision(
             allowed=False,
             category="prompt_injection",
@@ -163,22 +146,22 @@ def evaluate_public_query_guardrails(
             ),
         )
 
-    strong_hits = _count_keyword_hits(normalized_text, SUPPORTED_SCOPE_STRONG_KEYWORDS)
-    weak_hits = _count_keyword_hits(normalized_text, SUPPORTED_SCOPE_WEAK_KEYWORDS)
+    strong_hits = reading.scope_strong_hits
+    weak_hits = reading.scope_weak_hits
 
     has_public_context_anchor = (
         _has_public_context_anchor_from_messages(prior_messages)
         if prior_messages
         else _has_public_context_anchor(prior_user_queries)
     )
-    contextual_follow_up = _looks_like_contextual_follow_up(normalized_text)
+    contextual_follow_up = _looks_like_contextual_follow_up(reading)
     explicit_context_reference = _has_explicit_context_reference(normalized_text)
 
     if (
         has_history
         and explicit_context_reference
         and _has_inline_public_context_signal(
-            normalized_text,
+            reading,
             strong_hits=strong_hits,
             weak_hits=weak_hits,
         )
@@ -188,11 +171,7 @@ def evaluate_public_query_guardrails(
     if has_history and contextual_follow_up and has_public_context_anchor:
         return GuardrailDecision(allowed=True, category="allowed")
 
-    if (
-        has_history
-        and has_public_context_anchor
-        and _looks_like_confirmation_reply(normalized_text, prior_messages)
-    ):
+    if has_history and has_public_context_anchor and _looks_like_confirmation_reply(normalized_text, prior_messages):
         return GuardrailDecision(allowed=True, category="allowed")
 
     if compatibility_route is not None and compatibility_route.confident:
@@ -201,7 +180,7 @@ def evaluate_public_query_guardrails(
     if strong_hits >= 1 or weak_hits >= 2:
         return GuardrailDecision(allowed=True, category="allowed")
 
-    if _looks_like_public_spend_query(normalized_text):
+    if _looks_like_public_spend_query(reading):
         return GuardrailDecision(allowed=True, category="allowed")
 
     if is_supported_knowledge_query(query):
@@ -214,33 +193,34 @@ def evaluate_public_query_guardrails(
     )
 
 
-def _looks_like_contextual_follow_up(normalized_text: str) -> bool:
+def _looks_like_contextual_follow_up(reading: QueryReading) -> bool:
     """Permite continuação curta dependente de histórico sem forçar nova rota."""
 
+    normalized_text = reading.normalized_text
     if _has_explicit_context_reference(normalized_text):
         return True
     if _ELLIPTICAL_YEAR_FOLLOW_UP_PATTERN.fullmatch(normalized_text) is not None:
         return True
-    if _looks_like_short_public_filter_follow_up(normalized_text):
+    if _looks_like_short_public_filter_follow_up(reading):
         return True
     if _looks_like_short_ranking_follow_up(normalized_text):
         return True
     return False
 
 
-def _looks_like_public_spend_query(normalized_text: str) -> bool:
+def _looks_like_public_spend_query(reading: QueryReading) -> bool:
     """Permite perguntas de gasto/custo quando o objeto público é reconhecível."""
 
     has_spend_signal = any(
-        re.search(rf"\b{re.escape(term)}\b", normalized_text) is not None
+        re.search(rf"\b{re.escape(term)}\b", reading.normalized_text) is not None
         for term in _PUBLIC_SPEND_SIGNAL_TERMS
     )
     if not has_spend_signal:
         return False
 
-    if _extract_licitacoes_objeto(normalized_text) is not None:
+    if reading.licitacoes_objeto is not None:
         return True
-    if _extract_contratos_descricao(normalized_text) is not None:
+    if reading.contratos_descricao is not None:
         return True
     return False
 
@@ -249,12 +229,12 @@ def _has_public_context_anchor(prior_user_queries: Sequence[str]) -> bool:
     """Aceita follow-up curto apenas quando ele continua uma trilha pública válida."""
 
     for prior_query in reversed(prior_user_queries):
-        normalized_prior_query = normalize_conversation_text(prior_query)
-        if not normalized_prior_query:
+        reading = read_query(prior_query)
+        if not reading.normalized_text:
             continue
-        if _query_establishes_public_context(normalized_prior_query):
+        if _query_establishes_public_context(reading):
             return True
-        if _looks_like_contextual_follow_up(normalized_prior_query):
+        if _looks_like_contextual_follow_up(reading):
             continue
         return False
     return False
@@ -266,37 +246,35 @@ def _has_public_context_anchor_from_messages(
     """Usa o historico completo para preservar follow-ups apos clarificacoes."""
 
     for role, content, guardrail_triggered in reversed(prior_messages):
-        normalized_content = normalize_conversation_text(content)
-        if not normalized_content:
+        reading = read_query(content)
+        if not reading.normalized_text:
             continue
         if guardrail_triggered:
             return False
         if role == "user":
-            if _query_establishes_public_context(normalized_content):
+            if _query_establishes_public_context(reading):
                 return True
-            if _looks_like_contextual_follow_up(normalized_content):
+            if _looks_like_contextual_follow_up(reading):
                 continue
             return False
-        if _query_establishes_public_context(normalized_content):
+        if _query_establishes_public_context(reading):
             return True
     return False
 
 
-def _query_establishes_public_context(normalized_text: str) -> bool:
+def _query_establishes_public_context(reading: QueryReading) -> bool:
     """Reconhece uma pergunta que por si só já estabelece escopo público."""
 
-    if _contains_prompt_injection(normalized_text):
+    if reading.is_prompt_injection:
         return False
 
-    strong_hits = _count_keyword_hits(normalized_text, SUPPORTED_SCOPE_STRONG_KEYWORDS)
-    weak_hits = _count_keyword_hits(normalized_text, SUPPORTED_SCOPE_WEAK_KEYWORDS)
-    if strong_hits >= 1 or weak_hits >= 2:
+    if reading.scope_strong_hits >= 1 or reading.scope_weak_hits >= 2:
         return True
-    if _extract_nome_para_historico(normalized_text) is not None:
+    if reading.nome_historico is not None:
         return True
-    if is_supported_knowledge_query(normalized_text):
+    if is_supported_knowledge_query(reading.normalized_text):
         return True
-    return _looks_like_public_spend_query(normalized_text)
+    return _looks_like_public_spend_query(reading)
 
 
 def _has_explicit_context_reference(normalized_text: str) -> bool:
@@ -304,23 +282,23 @@ def _has_explicit_context_reference(normalized_text: str) -> bool:
 
 
 def _has_inline_public_context_signal(
-    normalized_text: str,
+    reading: QueryReading,
     *,
     strong_hits: int,
     weak_hits: int,
 ) -> bool:
     if strong_hits >= 1 or weak_hits >= 1:
         return True
-    if _looks_like_public_spend_query(normalized_text):
+    if _looks_like_public_spend_query(reading):
         return True
-    return _looks_like_short_ranking_follow_up(normalized_text)
+    return _looks_like_short_ranking_follow_up(reading.normalized_text)
 
 
-def _looks_like_short_public_filter_follow_up(normalized_text: str) -> bool:
-    tokens = _tokenize(normalized_text)
+def _looks_like_short_public_filter_follow_up(reading: QueryReading) -> bool:
+    tokens = _tokenize(reading.normalized_text)
     if not tokens or len(tokens) > 8:
         return False
-    if not _has_public_filter_hint(normalized_text):
+    if not _has_public_filter_hint(reading):
         return False
     if len(tokens) == 1:
         return True
@@ -333,10 +311,7 @@ def _looks_like_short_ranking_follow_up(normalized_text: str) -> bool:
         return False
     if not any(token in _SHORT_RANKING_TOKENS for token in tokens):
         return False
-    return all(
-        token in _SHORT_RANKING_TOKENS or token in _SHORT_RANKING_STOPWORDS
-        for token in tokens
-    )
+    return all(token in _SHORT_RANKING_TOKENS or token in _SHORT_RANKING_STOPWORDS for token in tokens)
 
 
 def _looks_like_confirmation_reply(
@@ -349,25 +324,26 @@ def _looks_like_confirmation_reply(
     )
 
 
-def _has_public_filter_hint(normalized_text: str) -> bool:
-    if _extract_year(normalized_text) is not None:
+def _has_public_filter_hint(reading: QueryReading) -> bool:
+    if reading.year is not None:
         return True
-    if _extract_secretaria(normalized_text) is not None:
+    if reading.secretaria is not None:
         return True
-    if _extract_planejamento_entidade(normalized_text) is not None:
+    if reading.planejamento_entidade is not None:
         return True
-    if _extract_planejamento_area(normalized_text) is not None:
+    if reading.planejamento_area is not None:
         return True
-    if _extract_receitas_tema(normalized_text) is not None:
+    if reading.receitas_tema is not None:
         return True
-    if _extract_receitas_unidade(normalized_text) is not None:
+    if reading.receitas_unidade is not None:
         return True
-    if _extract_licitacoes_objeto(normalized_text) is not None:
+    if reading.licitacoes_objeto is not None:
         return True
-    if _extract_contratos_descricao(normalized_text) is not None:
+    if reading.contratos_descricao is not None:
         return True
-    if _extract_contrato_fornecedor(normalized_text) is not None:
+    if reading.contrato_fornecedor is not None:
         return True
+    normalized_text = reading.normalized_text
     if _looks_like_named_text_filter(normalized_text):
         return True
     if is_supported_knowledge_follow_up_fragment(normalized_text):

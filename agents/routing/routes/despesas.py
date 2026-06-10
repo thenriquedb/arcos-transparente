@@ -51,10 +51,7 @@ def _extract_despesas_filters(normalized_text: str) -> dict[str, object]:
 def _try_route_despesas_agregacao(normalized_text: str) -> RouteDecision | None:
     if not _is_despesas_query(normalized_text):
         return None
-    if not any(
-        keyword in normalized_text
-        for keyword in ("quanto", "total", "maior", "maiores", "por ", "quantas")
-    ):
+    if not any(keyword in normalized_text for keyword in ("quanto", "total", "maior", "maiores", "por ", "quantas")):
         return None
 
     filtros = _extract_despesas_filters(normalized_text)

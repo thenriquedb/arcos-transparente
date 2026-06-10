@@ -8,6 +8,12 @@ from typing import Any
 from sqlalchemy import select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.filtering import (
+    apply_declared_filters,
+    equals_filter,
+    predicate_filter,
+    text_filter,
+)
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
     execute_collection_lookup_result,
@@ -17,7 +23,6 @@ from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import EstoqueMovimentacao
 from shared.utils.decimal_to_float import decimal_to_float
-from shared.utils.text import matches_text_query
 
 from .consultar_movimentacoes_de_estoque_schema import (
     ConsultarMovimentacoesDeEstoqueMetadata,
@@ -48,68 +53,28 @@ def _row_to_public_dict(registro: EstoqueMovimentacao) -> dict[str, Any]:
     }
 
 
+_MOVIMENTACOES_FILTER_CONDITIONS = (
+    text_filter("origem", lambda r: r.estoque_material.origem),
+    equals_filter("ano", lambda r: r.estoque_material.exercicio),
+    text_filter("material", lambda r: r.estoque_material.material),
+    predicate_filter("data_movimento_inicio", lambda r, v: r.data_movimento >= v),
+    predicate_filter("data_movimento_fim", lambda r, v: r.data_movimento <= v),
+    text_filter("tipo_movimento", lambda r: r.tipo_movimento),
+    text_filter("unidade_gestora", lambda r: r.unidade_gestora),
+    text_filter("almoxarifado", lambda r: r.almoxarifado),
+    text_filter("localizacao", lambda r: r.localizacao),
+    text_filter("classificacao", lambda r: r.classificacao),
+)
+
+
 def load_filtered_estoque_movimentacoes(
     session,
     filtros: EstoqueMovimentacaoFiltroSchema,
 ) -> list[EstoqueMovimentacao]:
+    """Carrega movimentações de estoque aplicando os filtros declarados."""
+
     registros = list(session.execute(select(EstoqueMovimentacao)).scalars())
-
-    if filtros.origem:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.estoque_material.origem, filtros.origem)
-        ]
-    if filtros.ano:
-        registros = [
-            r for r in registros if r.estoque_material.exercicio == filtros.ano
-        ]
-    if filtros.material:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.estoque_material.material, filtros.material)
-        ]
-    if filtros.data_movimento_inicio:
-        registros = [
-            r for r in registros if r.data_movimento >= filtros.data_movimento_inicio
-        ]
-    if filtros.data_movimento_fim:
-        registros = [
-            r for r in registros if r.data_movimento <= filtros.data_movimento_fim
-        ]
-    if filtros.tipo_movimento:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.tipo_movimento, filtros.tipo_movimento)
-        ]
-    if filtros.unidade_gestora:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.unidade_gestora, filtros.unidade_gestora)
-        ]
-    if filtros.almoxarifado:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.almoxarifado, filtros.almoxarifado)
-        ]
-    if filtros.localizacao:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.localizacao, filtros.localizacao)
-        ]
-    if filtros.classificacao:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.classificacao, filtros.classificacao)
-        ]
-
-    return registros
+    return apply_declared_filters(registros, filtros, _MOVIMENTACOES_FILTER_CONDITIONS)
 
 
 SORT_FIELD_GETTERS = {
@@ -126,6 +91,8 @@ def project_estoque_movimentacao_fields(
     registro: EstoqueMovimentacao,
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_fields(
         registro,
         campos,
@@ -204,9 +171,7 @@ def consultar_movimentacoes_de_estoque(
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
-            empty_suggestion=(
-                "Nenhuma movimentacao de estoque encontrada com os filtros."
-            ),
+            empty_suggestion=("Nenhuma movimentacao de estoque encontrada com os filtros."),
         )
 
     metadata = ConsultarMovimentacoesDeEstoqueMetadata(

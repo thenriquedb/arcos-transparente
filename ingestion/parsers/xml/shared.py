@@ -68,18 +68,14 @@ def read_xml_text(filepath: str | Path) -> str:
     except UnicodeDecodeError as exc:
         if resolution.source == "declaration":
             raise ValueError(
-                "Falha ao decodificar XML "
-                f"'{filepath}' com o encoding declarado "
-                f"'{resolution.declared_encoding}'."
+                f"Falha ao decodificar XML '{filepath}' com o encoding declarado '{resolution.declared_encoding}'."
             ) from exc
         if resolution.source == "bom":
             raise ValueError(
-                f"Falha ao decodificar XML '{filepath}' com o encoding detectado "
-                f"pelo BOM '{resolution.encoding}'."
+                f"Falha ao decodificar XML '{filepath}' com o encoding detectado pelo BOM '{resolution.encoding}'."
             ) from exc
         raise ValueError(
-            f"Falha ao decodificar XML '{filepath}' com o encoding de fallback "
-            f"'{resolution.encoding}'."
+            f"Falha ao decodificar XML '{filepath}' com o encoding de fallback '{resolution.encoding}'."
         ) from exc
 
     return sanitize_xml_text(text) or ""
@@ -122,9 +118,7 @@ def _resolve_xml_encoding(xml_bytes: bytes) -> XmlEncodingResolution:
     try:
         normalized_encoding = codecs.lookup(declared_encoding).name
     except LookupError as exc:
-        raise ValueError(
-            f"XML declara encoding nao suportado: '{declared_encoding}'."
-        ) from exc
+        raise ValueError(f"XML declara encoding nao suportado: '{declared_encoding}'.") from exc
 
     return XmlEncodingResolution(
         encoding=normalized_encoding,

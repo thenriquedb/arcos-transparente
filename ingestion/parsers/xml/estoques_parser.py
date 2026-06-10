@@ -40,22 +40,14 @@ class EstoquesParser:
             summary = node.find("./MOVIMENTACAOSUMARIZADA")
             if summary is None:
                 invalidos += 1
-                logger.warning(
-                    "Descartando material de estoque sem MOVIMENTACAOSUMARIZADA "
-                    f"em {filepath}"
-                )
+                logger.warning(f"Descartando material de estoque sem MOVIMENTACAOSUMARIZADA em {filepath}")
                 continue
 
             try:
-                periodo_inicio, periodo_fim = self._parse_period(
-                    self._txt(summary, "Periodo")
-                )
+                periodo_inicio, periodo_fim = self._parse_period(self._txt(summary, "Periodo"))
             except ValueError as exc:
                 invalidos += 1
-                logger.warning(
-                    "Descartando material de estoque com periodo invalido em "
-                    f"{filepath}: {exc}"
-                )
+                logger.warning(f"Descartando material de estoque com periodo invalido em {filepath}: {exc}")
                 continue
 
             movimentacoes = self._parse_movimentacoes(
@@ -72,9 +64,7 @@ class EstoquesParser:
                 "unidade_medida": self._txt(node, "UnidadeMedida"),
                 "periodo_inicio": periodo_inicio,
                 "periodo_fim": periodo_fim,
-                "saldo_anterior_quantidade": self._txt(
-                    summary, "SaldoAnteriorQuantidade"
-                ),
+                "saldo_anterior_quantidade": self._txt(summary, "SaldoAnteriorQuantidade"),
                 "saldo_anterior_valor": self._txt(summary, "SaldoAnteriorValor"),
                 "entrada_quantidade": self._txt(summary, "EntradaQuantidade"),
                 "entrada_valor": self._txt(summary, "EntradaValor"),
@@ -95,9 +85,7 @@ class EstoquesParser:
             registros.append(payload.model_dump(mode="python"))
 
         if invalidos:
-            logger.info(
-                f"Descartados {invalidos} registros invalidos de estoque em {filepath}"
-            )
+            logger.info(f"Descartados {invalidos} registros invalidos de estoque em {filepath}")
 
         return registros
 
@@ -132,8 +120,7 @@ class EstoquesParser:
                 payload = EstoqueMovimentacaoInSchema.model_validate(payload_raw)
             except ValidationError as exc:
                 logger.warning(
-                    "Descartando movimentacao invalida do material "
-                    f"{sequencia_material} em {filepath}: {exc}"
+                    f"Descartando movimentacao invalida do material {sequencia_material} em {filepath}: {exc}"
                 )
                 continue
 
@@ -146,9 +133,7 @@ class EstoquesParser:
         if not periodo:
             raise ValueError("Periodo obrigatorio ausente")
         if " a " in periodo:
-            inicio_txt, fim_txt = [
-                part.strip() for part in periodo.split(" a ", maxsplit=1)
-            ]
+            inicio_txt, fim_txt = [part.strip() for part in periodo.split(" a ", maxsplit=1)]
             inicio = parse_date(inicio_txt)
             fim = parse_date(fim_txt)
             if inicio is None or fim is None:

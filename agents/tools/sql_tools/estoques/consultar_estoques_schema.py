@@ -51,6 +51,8 @@ ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
 class EstoqueFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     origem: str | None = None
     ano: int | None = None
     material: str | None = None
@@ -109,16 +111,14 @@ class EstoqueFiltroSchema(SqlToolBaseSchema):
         for min_field, max_field in range_pairs:
             min_value = getattr(self, min_field)
             max_value = getattr(self, max_field)
-            if (
-                min_value is not None
-                and max_value is not None
-                and min_value > max_value
-            ):
+            if min_value is not None and max_value is not None and min_value > max_value:
                 raise ValueError(f"{min_field} deve ser menor ou igual a {max_field}")
         return self
 
 
 class ConsultarEstoquesParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: EstoqueFiltroSchema = Field(default_factory=EstoqueFiltroSchema)
     ordenar_por: str = "periodo_fim"
     ordem: str = "desc"
@@ -177,6 +177,8 @@ class ConsultarEstoquesParams(SqlToolBaseSchema):
 
 
 class ConsultarEstoquesMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -186,6 +188,8 @@ class ConsultarEstoquesMetadata(SqlToolBaseSchema):
 
 
 class ConsultarEstoquesResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarEstoquesMetadata

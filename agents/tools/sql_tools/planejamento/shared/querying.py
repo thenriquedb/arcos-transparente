@@ -11,7 +11,7 @@ from database.models import PlanejamentoDespesa
 from shared.utils.decimal_to_float import decimal_to_float
 from shared.utils.text import matches_text_query
 
-from .entities import get_planejamento_entidade_search_terms
+from shared.planejamento_entidades import get_planejamento_entidade_search_terms
 from .filters import PlanejamentoFiltroSchema
 
 
@@ -70,6 +70,8 @@ METRIC_FIELD_GETTERS = {
 
 
 def apply_planejamento_sql_filters(stmt, filtros: PlanejamentoFiltroSchema):
+    """Aplica os filtros publicos do dominio sobre a consulta."""
+
     if filtros.origem:
         stmt = stmt.where(PlanejamentoDespesa.origem == filtros.origem)
     if filtros.ano is not None:
@@ -77,9 +79,7 @@ def apply_planejamento_sql_filters(stmt, filtros: PlanejamentoFiltroSchema):
     if filtros.mes is not None:
         stmt = stmt.where(PlanejamentoDespesa.mes_num == filtros.mes)
     elif filtros.mes_inicio is not None and filtros.mes_fim is not None:
-        stmt = stmt.where(
-            PlanejamentoDespesa.mes_num.between(filtros.mes_inicio, filtros.mes_fim)
-        )
+        stmt = stmt.where(PlanejamentoDespesa.mes_num.between(filtros.mes_inicio, filtros.mes_fim))
     if filtros.valor_pago_min is not None:
         stmt = stmt.where(PlanejamentoDespesa.valor_pago >= filtros.valor_pago_min)
     if filtros.valor_pago_max is not None:
@@ -107,13 +107,11 @@ def matches_planejamento_text_filters(
 
 
 def load_filtered_planejamentos(session, filtros: PlanejamentoFiltroSchema):
+    """Carrega os registros do dominio aplicando os filtros publicos."""
+
     stmt = apply_planejamento_sql_filters(select(PlanejamentoDespesa), filtros)
     registros = session.execute(stmt).scalars().all()
-    return [
-        registro
-        for registro in registros
-        if matches_planejamento_text_filters(registro, filtros)
-    ]
+    return [registro for registro in registros if matches_planejamento_text_filters(registro, filtros)]
 
 
 def metric_to_json(value: int | Decimal) -> int | float:

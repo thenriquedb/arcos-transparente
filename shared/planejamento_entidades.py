@@ -1,4 +1,4 @@
-"""Aliases compartilhados para entidades do planejamento."""
+"""Aliases de entidades do planejamento, compartilhados entre routing e tools."""
 
 from __future__ import annotations
 

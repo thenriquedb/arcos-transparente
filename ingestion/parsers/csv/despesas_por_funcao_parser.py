@@ -62,9 +62,7 @@ class DespesasPorFuncaoCsvParser:
                 payload = DespesaPorFuncaoInSchema.model_validate(payload_raw)
             except ValidationError as exc:
                 invalidos += 1
-                logger.warning(
-                    f"Descartando linha invalida de despesas-por-funcao CSV: {exc}"
-                )
+                logger.warning(f"Descartando linha invalida de despesas-por-funcao CSV: {exc}")
                 continue
             registros.append(payload.model_dump(mode="python"))
 
@@ -97,16 +95,11 @@ class DespesasPorFuncaoCsvParser:
                     metadata[key] = value
 
         if header_index is None:
-            raise ValueError(
-                "Cabecalho de despesas-por-funcao CSV nao encontrado no arquivo "
-                f"'{filepath}'."
-            )
+            raise ValueError(f"Cabecalho de despesas-por-funcao CSV nao encontrado no arquivo '{filepath}'.")
 
         for required_key in ("exercicio", "periodo", "unidade gestora"):
             if not metadata.get(required_key):
-                raise ValueError(
-                    f"Metadata obrigatoria '{required_key}' ausente em '{filepath}'."
-                )
+                raise ValueError(f"Metadata obrigatoria '{required_key}' ausente em '{filepath}'.")
 
         return metadata, header_index
 
@@ -116,9 +109,7 @@ class DespesasPorFuncaoCsvParser:
         header_index: int,
     ) -> list[tuple[int, list[str]]]:
         data_rows: list[tuple[int, list[str]]] = []
-        for line_number, row in enumerate(
-            rows[header_index + 1 :], start=header_index + 2
-        ):
+        for line_number, row in enumerate(rows[header_index + 1 :], start=header_index + 2):
             cleaned_row = [value for value in row if value]
             if not cleaned_row:
                 continue
@@ -137,9 +128,7 @@ class DespesasPorFuncaoCsvParser:
         if not periodo:
             raise ValueError("Periodo obrigatorio ausente no relatorio")
         if " a " in periodo:
-            inicio_txt, fim_txt = [
-                part.strip() for part in periodo.split(" a ", maxsplit=1)
-            ]
+            inicio_txt, fim_txt = [part.strip() for part in periodo.split(" a ", maxsplit=1)]
             inicio = parse_date(inicio_txt)
             fim = parse_date(fim_txt)
             if inicio is None or fim is None:
@@ -168,7 +157,5 @@ class DespesasPorFuncaoCsvParser:
 
     @staticmethod
     def _is_header_row(row: list[str]) -> bool:
-        normalized = tuple(
-            normalize_search_text(value) for value in row[: len(_EXPECTED_HEADER)]
-        )
+        normalized = tuple(normalize_search_text(value) for value in row[: len(_EXPECTED_HEADER)])
         return normalized == _EXPECTED_HEADER

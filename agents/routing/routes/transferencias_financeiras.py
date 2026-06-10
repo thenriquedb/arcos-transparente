@@ -97,10 +97,7 @@ def _extract_transferencias_financeiras_group_by(
         return "ano"
 
     if emenda_query:
-        if any(
-            keyword in normalized_text
-            for keyword in ("por autor", "autores", "quem enviou", "quem destinou")
-        ):
+        if any(keyword in normalized_text for keyword in ("por autor", "autores", "quem enviou", "quem destinou")):
             return "autor"
         if "por funcao" in normalized_text:
             return "funcao"
@@ -108,15 +105,9 @@ def _extract_transferencias_financeiras_group_by(
             return "tipo_emenda"
         return None
 
-    if any(
-        keyword in normalized_text
-        for keyword in ("por unidade recebedora", "quem recebeu", "para quem")
-    ):
+    if any(keyword in normalized_text for keyword in ("por unidade recebedora", "quem recebeu", "para quem")):
         return "unidade_recebedora"
-    if any(
-        keyword in normalized_text
-        for keyword in ("por unidade concessora", "quem repassou", "quem transferiu")
-    ):
+    if any(keyword in normalized_text for keyword in ("por unidade concessora", "quem repassou", "quem transferiu")):
         return "unidade_concessora"
     if "por tipo" in normalized_text:
         return "tipo_movimento"
@@ -134,9 +125,7 @@ def _try_route_transferencias_financeiras_agregacao(
         return None
 
     emenda_query = _is_emenda_query(normalized_text)
-    if "maiores" in normalized_text and any(
-        keyword in normalized_text for keyword in ("quais", "liste", "mostre")
-    ):
+    if "maiores" in normalized_text and any(keyword in normalized_text for keyword in ("quais", "liste", "mostre")):
         return None
 
     if not any(
@@ -159,11 +148,7 @@ def _try_route_transferencias_financeiras_agregacao(
         normalized_text,
         emenda_query=emenda_query,
     )
-    metrica = (
-        "contagem"
-        if "quantos" in normalized_text or "quantas" in normalized_text
-        else "soma_valor"
-    )
+    metrica = "contagem" if "quantos" in normalized_text or "quantas" in normalized_text else "soma_valor"
 
     return RouteDecision(
         domain="transferencias_financeiras",
@@ -199,9 +184,7 @@ def _try_route_transferencias_financeiras_lista(
         tool_name="consultar_transferencias_financeiras",
         tool_kwargs={
             "filtros": filtros,
-            "ordenar_por": "valor"
-            if any(keyword in normalized_text for keyword in ("maior", "maiores"))
-            else "data",
+            "ordenar_por": "valor" if any(keyword in normalized_text for keyword in ("maior", "maiores")) else "data",
             "ordem": "desc",
             "limite": 100
             if any(keyword in normalized_text for keyword in ("todos", "todas"))

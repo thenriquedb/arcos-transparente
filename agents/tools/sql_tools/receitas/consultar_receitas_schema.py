@@ -20,6 +20,8 @@ from .shared.filters import (
 
 
 class ConsultarReceitasParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: ReceitaFiltroSchema = Field(default_factory=ReceitaFiltroSchema)
     ordenar_por: str = "data"
     ordem: str = "desc"
@@ -75,6 +77,8 @@ class ConsultarReceitasParams(SqlToolBaseSchema):
 
 
 class ConsultarReceitasMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -84,6 +88,8 @@ class ConsultarReceitasMetadata(SqlToolBaseSchema):
 
 
 class ConsultarReceitasResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarReceitasMetadata

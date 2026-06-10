@@ -123,9 +123,7 @@ def _try_route_receitas_lista(normalized_text: str) -> RouteDecision | None:
     tipo_de_dado = _extract_receitas_tipo_de_dado(normalized_text)
 
     if any(keyword in normalized_text for keyword in ("maiores", "maior", "top")):
-        ordenar_por = (
-            "valor_lancado" if tipo_de_dado == "lancamento" else "valor_recebido"
-        )
+        ordenar_por = "valor_lancado" if tipo_de_dado == "lancamento" else "valor_recebido"
         campos = (
             [
                 "ano",
@@ -161,15 +159,8 @@ def _try_route_receitas_lista(normalized_text: str) -> RouteDecision | None:
             confident=True,
         )
 
-    if filtros or any(
-        keyword in normalized_text
-        for keyword in ("lista", "liste", "quais", "mostre", "detalhe")
-    ):
-        limite = (
-            100
-            if any(keyword in normalized_text for keyword in ("todas", "todos"))
-            else 10
-        )
+    if filtros or any(keyword in normalized_text for keyword in ("lista", "liste", "quais", "mostre", "detalhe")):
+        limite = 100 if any(keyword in normalized_text for keyword in ("todas", "todos")) else 10
         return RouteDecision(
             domain="receitas",
             operation_type="consulta_lista",

@@ -128,11 +128,7 @@ def discover_markdown_files(config: RagConfig | None = None) -> list[Path]:
     source_directory = resolved_config.source_directory
     if not source_directory.exists():
         return []
-    return sorted(
-        path
-        for path in source_directory.rglob("*.md")
-        if path.is_file() and not path.name.startswith(".")
-    )
+    return sorted(path for path in source_directory.rglob("*.md") if path.is_file() and not path.name.startswith("."))
 
 
 def build_knowledge_index(
@@ -146,14 +142,8 @@ def build_knowledge_index(
 
     resolved_config = config or get_rag_config()
 
-    if (
-        not rebuild
-        and resolved_config.manifest_path.exists()
-        and resolved_config.persist_directory.exists()
-    ):
-        raise KnowledgeIndexError(
-            "O indice de conhecimento ja existe. Use `rag index --rebuild` para recria-lo."
-        )
+    if not rebuild and resolved_config.manifest_path.exists() and resolved_config.persist_directory.exists():
+        raise KnowledgeIndexError("O indice de conhecimento ja existe. Use `rag index --rebuild` para recria-lo.")
 
     if rebuild and resolved_config.persist_directory.exists():
         shutil.rmtree(resolved_config.persist_directory)
@@ -174,11 +164,7 @@ def build_knowledge_index(
 
     if documents:
         resolved_vectorstore_cls = vectorstore_cls or _get_chroma_class()
-        embeddings = (
-            embeddings_factory()
-            if embeddings_factory is not None
-            else _build_embeddings(resolved_config)
-        )
+        embeddings = embeddings_factory() if embeddings_factory is not None else _build_embeddings(resolved_config)
         resolved_vectorstore_cls.from_documents(
             documents=documents,
             embedding=embeddings,
@@ -256,15 +242,9 @@ def get_knowledge_index_status(
     )
     manifest_hashes = {source.path: source.sha256 for source in manifest.source_files}
     changed_files = tuple(
-        sorted(
-            path
-            for path, sha256 in current_hashes.items()
-            if manifest_hashes.get(path) not in (None, sha256)
-        )
+        sorted(path for path, sha256 in current_hashes.items() if manifest_hashes.get(path) not in (None, sha256))
     )
-    missing_files = tuple(
-        sorted(path for path in manifest_hashes if path not in current_hashes)
-    )
+    missing_files = tuple(sorted(path for path in manifest_hashes if path not in current_hashes))
     stale = bool(changed_files or missing_files)
     state = "stale" if stale else "ready"
 
@@ -323,9 +303,7 @@ def _build_documents_for_markdown(
         metadata = {
             "source_path": relative_path,
             "document_title": title,
-            "section_path": " > ".join(section.heading_path)
-            if section.heading_path
-            else "",
+            "section_path": " > ".join(section.heading_path) if section.heading_path else "",
             "section_heading": section.heading_path[-1] if section.heading_path else "",
             "section_index": section_index,
             "source_hash": source_hash,
@@ -472,8 +450,7 @@ def _build_embeddings(config: RagConfig) -> Embeddings:
         raise KnowledgeIndexError("RAG_EMBEDDING_MODEL deve ser informado.")
     if not get_env_value("OPENAI_API_KEY"):
         raise KnowledgeIndexError(
-            "OPENAI_API_KEY nao configurada. Configure a chave antes de rodar "
-            "`uv run python cli.py rag index`."
+            "OPENAI_API_KEY nao configurada. Configure a chave antes de rodar `uv run python cli.py rag index`."
         )
 
     kwargs: dict[str, Any] = {"model": config.embedding_model}

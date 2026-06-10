@@ -15,13 +15,9 @@ ENV_FILE_PATH: Final[Path] = PROJECT_ROOT / ".env"
 _ENV_LOADED = False
 DEFAULT_DATABASE_URL = "sqlite:///database/transparencia.db"
 DEFAULT_CLI_DATA_DIRECTORY: Final[Path] = PROJECT_ROOT / "data" / "xml"
-DEFAULT_CHATBOT_SYSTEM_PROMPT_PATH: Final[Path] = (
-    PROJECT_ROOT / "docs" / "agent-system-prompt.md"
-)
+DEFAULT_CHATBOT_SYSTEM_PROMPT_PATH: Final[Path] = PROJECT_ROOT / "docs" / "agent-system-prompt.md"
 DEFAULT_RAG_SOURCE_DIRECTORY: Final[Path] = PROJECT_ROOT / "data" / "rag"
-DEFAULT_RAG_PERSIST_DIRECTORY: Final[Path] = (
-    PROJECT_ROOT / "vector_store" / "knowledge_markdown"
-)
+DEFAULT_RAG_PERSIST_DIRECTORY: Final[Path] = PROJECT_ROOT / "vector_store" / "knowledge_markdown"
 DEFAULT_DOCKER_PORT = "8501"
 DEFAULT_DOCKER_DATABASE_URL = "sqlite:////app/runtime/database/transparencia.db"
 DEFAULT_DOCKER_RAG_PERSIST_DIRECTORY = "/app/runtime/vector_store/knowledge_markdown"

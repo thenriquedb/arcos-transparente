@@ -1,3 +1,5 @@
+"""Construcao de payloads de eventos de observabilidade do chatbot."""
+
 from __future__ import annotations
 
 from collections.abc import Mapping

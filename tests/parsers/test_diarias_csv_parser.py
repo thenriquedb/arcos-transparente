@@ -13,9 +13,7 @@ FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures"
 
 
 def test_diarias_csv_parser_parseia_linhas_com_metadata_e_valores() -> None:
-    registros = DiariasCsvParser().parse(
-        str(FIXTURES_DIR / "diarias_camara_sample.csv")
-    )
+    registros = DiariasCsvParser().parse(str(FIXTURES_DIR / "diarias_camara_sample.csv"))
 
     assert len(registros) == 2
     assert registros[0]["tipo_origem"] == "diaria"

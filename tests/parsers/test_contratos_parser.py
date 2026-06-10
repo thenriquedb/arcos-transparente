@@ -9,9 +9,7 @@ from ingestion.parsers.xml.contratos_parser import ContratosParser
 
 def test_parser_contratos_filtra_invalidos_sem_quebrar_lote() -> None:
     parser = ContratosParser()
-    fixture_path = (
-        Path(__file__).resolve().parents[1] / "fixtures" / "contratos_sample.xml"
-    )
+    fixture_path = Path(__file__).resolve().parents[1] / "fixtures" / "contratos_sample.xml"
 
     registros = parser.parse(str(fixture_path))
 
@@ -28,15 +26,9 @@ def test_parser_contratos_filtra_invalidos_sem_quebrar_lote() -> None:
     assert primeiro["possui_aditivo"] == "Nao"
     assert primeiro["descricao_despesa"] == "Festividades e Homenagens"
     assert "<InstrumentoContratual>" in primeiro["xml_original"]
-    assert (
-        "<DescricaoDespesa>Festividades e Homenagens</DescricaoDespesa>"
-        in primeiro["xml_original"]
-    )
+    assert "<DescricaoDespesa>Festividades e Homenagens</DescricaoDespesa>" in primeiro["xml_original"]
     assert len(primeiro["despesas_orcamentarias"]) == 2
-    assert (
-        primeiro["despesas_orcamentarias"][0]["natureza_despesa_rubrica"]
-        == "339039200000"
-    )
+    assert primeiro["despesas_orcamentarias"][0]["natureza_despesa_rubrica"] == "339039200000"
     assert primeiro["despesas_orcamentarias"][0]["valor_despesa"] == Decimal("7500.00")
     assert primeiro["itens_adquiridos"][0]["numero_item"] == "2"
     assert primeiro["itens_adquiridos"][0]["valor_total"] == Decimal("10500.00")

@@ -2,7 +2,68 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
+
+
+@dataclass(frozen=True, slots=True)
+class _TipoDiscoverySpec:
+    """Onde e com quais padroes procurar os arquivos de um tipo de importacao.
+
+    `fallback` e tentado apenas quando os padroes primarios nao encontram nada
+    (ex.: contratos antigos publicados sob o nome de licitacoes).
+    """
+
+    subdir: str | None
+    patterns: tuple[str, ...]
+    fallback: tuple[str | None, tuple[str, ...]] | None = None
+
+
+_DISCOVERY_SPECS: dict[str, _TipoDiscoverySpec] = {
+    "receitas": _TipoDiscoverySpec("receitas", ("*arrecadacao*.xml", "*lancamento*.xml")),
+    "folha_pagamento": _TipoDiscoverySpec("servidores", ("*folha-pagamento*.xml",)),
+    "planejamentos": _TipoDiscoverySpec(
+        "despesas",
+        ("*planejamento*.xml",),
+        fallback=(None, ("*planejamento*.xml",)),
+    ),
+    "despesas": _TipoDiscoverySpec(
+        "despesas",
+        (
+            "*empenhos*.xml",
+            "*documentos-extras*.xml",
+            "*restos-a-pagar*.xml",
+            "*despesas-por-funcao*.csv",
+            "*diarias*.csv",
+            "*passagens*.csv",
+        ),
+    ),
+    "patrimonios": _TipoDiscoverySpec("administracao", ("*patrimonio*.xml",)),
+    "estoques": _TipoDiscoverySpec("administracao", ("estoque-*.xml",)),
+    "quadro_pessoal": _TipoDiscoverySpec("servidores", ("*quadro-pessoal*.xml",)),
+    "eleitos": _TipoDiscoverySpec("camara", ("*eleitos*.xml",)),
+    "transferencias_financeiras": _TipoDiscoverySpec(
+        "transferencias-financeiras",
+        ("recebimentos-*.xml", "emendas-parlamentares-*.csv"),
+    ),
+    "servidores": _TipoDiscoverySpec("servidores", ("relacao-servidores*.json",)),
+    "contratos": _TipoDiscoverySpec(
+        "administracao",
+        ("*contrato*.xml",),
+        fallback=("administracao", ("*licitacoes*.xml",)),
+    ),
+}
+
+# Tipos cujos arquivos nao carregam o ano no nome e por isso nao sao filtrados.
+_YEAR_FILTER_EXEMPT_TIPOS = frozenset({"eleitos", "servidores"})
+
+
+def _collect(data_dir: Path, subdir: str | None, patterns: tuple[str, ...]) -> list[Path]:
+    base = data_dir / subdir if subdir is not None else data_dir
+    arquivos: list[Path] = []
+    for pattern in patterns:
+        arquivos.extend(sorted(base.rglob(pattern)))
+    return arquivos
 
 
 def discover_files_for_tipo(
@@ -12,54 +73,16 @@ def discover_files_for_tipo(
 ) -> list[Path]:
     """Discover input files for one tipo de importacao and optional year."""
 
-    administracao_path = data_dir / "administracao"
-    despesas_path = data_dir / "despesas"
-    receitas_path = data_dir / "receitas"
-    servidores_path = data_dir / "servidores"
-    camara_path = data_dir / "camara"
-    transferencias_path = data_dir / "transferencias-financeiras"
-
-    if tipo == "receitas":
-        arquivos = sorted(receitas_path.rglob("*arrecadacao*.xml")) + sorted(
-            receitas_path.rglob("*lancamento*.xml")
-        )
-    elif tipo == "folha_pagamento":
-        arquivos = sorted(servidores_path.rglob("*folha-pagamento*.xml"))
-    elif tipo == "planejamentos":
-        arquivos = sorted(despesas_path.rglob("*planejamento*.xml"))
-        if not arquivos:
-            arquivos = sorted(data_dir.rglob("*planejamento*.xml"))
-    elif tipo == "despesas":
-        arquivos = (
-            sorted(despesas_path.rglob("*empenhos*.xml"))
-            + sorted(despesas_path.rglob("*documentos-extras*.xml"))
-            + sorted(despesas_path.rglob("*restos-a-pagar*.xml"))
-            + sorted(despesas_path.rglob("*despesas-por-funcao*.csv"))
-            + sorted(despesas_path.rglob("*diarias*.csv"))
-            + sorted(despesas_path.rglob("*passagens*.csv"))
-        )
-    elif tipo == "patrimonios":
-        arquivos = sorted(administracao_path.rglob("*patrimonio*.xml"))
-    elif tipo == "estoques":
-        arquivos = sorted(administracao_path.rglob("estoque-*.xml"))
-    elif tipo == "quadro_pessoal":
-        arquivos = sorted(servidores_path.rglob("*quadro-pessoal*.xml"))
-    elif tipo == "eleitos":
-        arquivos = sorted(camara_path.rglob("*eleitos*.xml"))
-    elif tipo == "transferencias_financeiras":
-        arquivos = sorted(transferencias_path.rglob("recebimentos-*.xml")) + sorted(
-            transferencias_path.rglob("emendas-parlamentares-*.csv")
-        )
-    elif tipo == "servidores":
-        arquivos = sorted(servidores_path.rglob("relacao-servidores*.json"))
-    elif tipo == "contratos":
-        arquivos = sorted(administracao_path.rglob("*contrato*.xml"))
-        if not arquivos:
-            arquivos = sorted(administracao_path.rglob("*licitacoes*.xml"))
+    spec = _DISCOVERY_SPECS.get(tipo)
+    if spec is None:
+        arquivos = _collect(data_dir, None, (f"*{tipo}*.xml",))
     else:
-        arquivos = sorted(data_dir.rglob(f"*{tipo}*.xml"))
+        arquivos = _collect(data_dir, spec.subdir, spec.patterns)
+        if not arquivos and spec.fallback is not None:
+            fallback_subdir, fallback_patterns = spec.fallback
+            arquivos = _collect(data_dir, fallback_subdir, fallback_patterns)
 
-    if ano is None or tipo in {"eleitos", "servidores"}:
+    if ano is None or tipo in _YEAR_FILTER_EXEMPT_TIPOS:
         return arquivos
 
     marker = str(ano)

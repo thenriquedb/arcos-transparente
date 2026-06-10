@@ -36,17 +36,13 @@ class QuadroPessoalParser:
                 payload = QuadroPessoalInSchema.model_validate(payload_raw)
             except ValidationError as exc:
                 invalidos += 1
-                logger.warning(
-                    f"Descartando quadro de pessoal invalido #{ordem}: {exc}"
-                )
+                logger.warning(f"Descartando quadro de pessoal invalido #{ordem}: {exc}")
                 continue
 
             registros.append(payload.model_dump(mode="python"))
 
         if invalidos:
-            logger.info(
-                f"Descartados {invalidos} registros invalidos de quadro pessoal em {filepath}"
-            )
+            logger.info(f"Descartados {invalidos} registros invalidos de quadro pessoal em {filepath}")
 
         return registros
 

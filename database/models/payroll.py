@@ -1,3 +1,5 @@
+"""Modelos ORM de folha de pagamento (servidor, registros, snapshot)."""
+
 from __future__ import annotations
 
 from datetime import date, datetime
@@ -40,9 +42,7 @@ class FolhaServidor(Base):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -52,14 +52,10 @@ class FolhaServidor(Base):
     nome: Mapped[str] = mapped_column(String(255), nullable=False)
     cargo: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     secretaria: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
-    salario_base: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
+    salario_base: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
     competencia_referencia: Mapped[date] = mapped_column(Date, nullable=False)
 
-    pagamentos: Mapped[list["FolhaPagamentoRegistro"]] = relationship(
-        back_populates="servidor"
-    )
+    pagamentos: Mapped[list["FolhaPagamentoRegistro"]] = relationship(back_populates="servidor")
 
 
 class FolhaLotacao(Base):
@@ -67,9 +63,7 @@ class FolhaLotacao(Base):
     __table_args__ = (UniqueConstraint("nome", name="uq_folha_lotacao_nome"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -78,9 +72,7 @@ class FolhaLotacao(Base):
     )
     nome: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
 
-    pagamentos: Mapped[list["FolhaPagamentoRegistro"]] = relationship(
-        back_populates="lotacao"
-    )
+    pagamentos: Mapped[list["FolhaPagamentoRegistro"]] = relationship(back_populates="lotacao")
 
 
 class FolhaCargo(Base):
@@ -88,9 +80,7 @@ class FolhaCargo(Base):
     __table_args__ = (UniqueConstraint("nome", name="uq_folha_cargo_nome"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -99,9 +89,7 @@ class FolhaCargo(Base):
     )
     nome: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
 
-    pagamentos: Mapped[list["FolhaPagamentoRegistro"]] = relationship(
-        back_populates="cargo"
-    )
+    pagamentos: Mapped[list["FolhaPagamentoRegistro"]] = relationship(back_populates="cargo")
 
 
 class FolhaPagamentoRegistro(Base):
@@ -130,9 +118,7 @@ class FolhaPagamentoRegistro(Base):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -140,12 +126,8 @@ class FolhaPagamentoRegistro(Base):
         nullable=False,
     )
     competencia_ano: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
-    competencia_mes_num: Mapped[int] = mapped_column(
-        Integer, nullable=False, index=True
-    )
-    competencia_mes_nome: Mapped[str] = mapped_column(
-        String(20), nullable=False, index=True
-    )
+    competencia_mes_num: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    competencia_mes_nome: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
     servidor_id: Mapped[int] = mapped_column(
         ForeignKey("folha_servidores.id", ondelete="CASCADE"),
         nullable=False,
@@ -157,19 +139,13 @@ class FolhaPagamentoRegistro(Base):
     cargo_id: Mapped[int] = mapped_column(
         ForeignKey("folha_cargos.id", ondelete="SET NULL"), nullable=True, index=True
     )
-    salario_base: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
+    salario_base: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
     proventos: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
     vantagens: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
-    vencimentos_totais: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
+    vencimentos_totais: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
     descontos: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
     liquido: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
 
     servidor: Mapped["FolhaServidor"] = relationship(back_populates="pagamentos")
-    lotacao: Mapped[Optional["FolhaLotacao"]] = relationship(
-        back_populates="pagamentos"
-    )
+    lotacao: Mapped[Optional["FolhaLotacao"]] = relationship(back_populates="pagamentos")
     cargo: Mapped[Optional["FolhaCargo"]] = relationship(back_populates="pagamentos")

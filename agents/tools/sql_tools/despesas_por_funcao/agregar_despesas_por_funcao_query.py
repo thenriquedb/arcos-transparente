@@ -53,16 +53,10 @@ GROUP_FIELD_GETTERS = {
 }
 METRIC_FIELD_GETTERS = {
     "soma_dotacao_inicial": lambda registro: registro.dotacao_inicial or Decimal("0"),
-    "soma_creditos_adicionais": lambda registro: (
-        registro.creditos_adicionais or Decimal("0")
-    ),
-    "soma_dotacao_atualizada": lambda registro: (
-        registro.dotacao_atualizada or Decimal("0")
-    ),
+    "soma_creditos_adicionais": lambda registro: registro.creditos_adicionais or Decimal("0"),
+    "soma_dotacao_atualizada": lambda registro: registro.dotacao_atualizada or Decimal("0"),
     "soma_valor_empenhado": lambda registro: registro.valor_empenhado or Decimal("0"),
-    "soma_valor_em_liquidacao": lambda registro: (
-        registro.valor_em_liquidacao or Decimal("0")
-    ),
+    "soma_valor_em_liquidacao": lambda registro: registro.valor_em_liquidacao or Decimal("0"),
     "soma_valor_liquidado": lambda registro: registro.valor_liquidado or Decimal("0"),
     "soma_valor_pago": lambda registro: registro.valor_pago or Decimal("0"),
 }
@@ -190,11 +184,7 @@ def agregar_despesas_por_funcao(
             source_count=execution.source_count,
             suggestion=suggestion,
         ),
-        project_group=(
-            _project_despesas_por_funcao_group
-            if params.agrupar_por is not None
-            else None
-        ),
+        project_group=(_project_despesas_por_funcao_group if params.agrupar_por is not None else None),
         agrupar_por=params.agrupar_por,
         metrica=params.metrica if params.agrupar_por is not None else None,
     )

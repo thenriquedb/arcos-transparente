@@ -34,8 +34,7 @@ def obter_configuracao_llm() -> dict[str, str]:
     provider = _read_required_env("LLM_PROVIDER").lower()
     if provider != SUPPORTED_LLM_PROVIDER:
         raise ValueError(
-            f"Provider nao suportado pelo chatbot: {provider}. "
-            "Defina LLM_PROVIDER=openai no ambiente ou no .env."
+            f"Provider nao suportado pelo chatbot: {provider}. Defina LLM_PROVIDER=openai no ambiente ou no .env."
         )
 
     model_name = _read_required_env("OPENAI_MODEL")

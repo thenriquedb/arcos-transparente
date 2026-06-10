@@ -40,6 +40,8 @@ ALLOWED_ORDER_VALUES = ("asc", "desc")
 
 
 class ServidoresFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     nome: str | None = None
     secretaria: str | None = None
     cargo: str | None = None
@@ -72,35 +74,21 @@ class ServidoresFiltroSchema(SqlToolBaseSchema):
     @model_validator(mode="after")
     def _validate_ranges(self) -> "ServidoresFiltroSchema":
         if self.mes_de_referencia is not None and (
-            self.mes_de_referencia_inicio is not None
-            or self.mes_de_referencia_fim is not None
+            self.mes_de_referencia_inicio is not None or self.mes_de_referencia_fim is not None
         ):
             raise ValueError(
-                "mes_de_referencia nao pode ser usado junto com "
-                "mes_de_referencia_inicio ou mes_de_referencia_fim"
+                "mes_de_referencia nao pode ser usado junto com mes_de_referencia_inicio ou mes_de_referencia_fim"
             )
 
-        if (
-            self.mes_de_referencia_inicio is not None
-            or self.mes_de_referencia_fim is not None
-        ):
-            if (
-                self.mes_de_referencia_inicio is None
-                or self.mes_de_referencia_fim is None
-            ):
-                raise ValueError(
-                    "mes_de_referencia_inicio e mes_de_referencia_fim devem ser informados juntos"
-                )
+        if self.mes_de_referencia_inicio is not None or self.mes_de_referencia_fim is not None:
+            if self.mes_de_referencia_inicio is None or self.mes_de_referencia_fim is None:
+                raise ValueError("mes_de_referencia_inicio e mes_de_referencia_fim devem ser informados juntos")
             validate_date_period(
                 self.mes_de_referencia_inicio,
                 self.mes_de_referencia_fim,
             )
 
-        if (
-            self.salario_min is not None
-            and self.salario_max is not None
-            and self.salario_min > self.salario_max
-        ):
+        if self.salario_min is not None and self.salario_max is not None and self.salario_min > self.salario_max:
             raise ValueError("salario_min deve ser menor ou igual a salario_max")
         return self
 

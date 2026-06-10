@@ -1,3 +1,5 @@
+"""Modelo ORM de planejamento orcamentario de despesas."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -56,9 +58,7 @@ class PlanejamentoDespesa(Base):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -70,74 +70,32 @@ class PlanejamentoDespesa(Base):
     exercicio: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
     mes: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
     mes_num: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
-    unidade_gestora: Mapped[str] = mapped_column(
-        String(255), nullable=False, index=True
-    )
+    unidade_gestora: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     orgao: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
-    unidade: Mapped[Optional[str]] = mapped_column(
-        String(255), nullable=True, index=True
-    )
+    unidade: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
     departamento: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     funcao: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
-    subfuncao: Mapped[Optional[str]] = mapped_column(
-        String(160), nullable=True, index=True
-    )
-    programa: Mapped[Optional[str]] = mapped_column(
-        String(255), nullable=True, index=True
-    )
-    tipo_acao: Mapped[Optional[str]] = mapped_column(
-        String(80), nullable=True, index=True
-    )
+    subfuncao: Mapped[Optional[str]] = mapped_column(String(160), nullable=True, index=True)
+    programa: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
+    tipo_acao: Mapped[Optional[str]] = mapped_column(String(80), nullable=True, index=True)
     descricao_acao: Mapped[str] = mapped_column(Text, nullable=False)
-    fonte_recurso_identificacao: Mapped[Optional[str]] = mapped_column(
-        String(40), nullable=True, index=True
-    )
+    fonte_recurso_identificacao: Mapped[Optional[str]] = mapped_column(String(40), nullable=True, index=True)
     fonte_recurso_descricao: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    esfera_administrativa: Mapped[Optional[str]] = mapped_column(
-        String(80), nullable=True, index=True
-    )
-    categoria_economica_identificacao: Mapped[Optional[str]] = mapped_column(
-        String(40), nullable=True, index=True
-    )
-    categoria_economica_descricao: Mapped[Optional[str]] = mapped_column(
-        Text, nullable=True
-    )
-    grupo_despesa_identificacao: Mapped[Optional[str]] = mapped_column(
-        String(40), nullable=True, index=True
-    )
+    esfera_administrativa: Mapped[Optional[str]] = mapped_column(String(80), nullable=True, index=True)
+    categoria_economica_identificacao: Mapped[Optional[str]] = mapped_column(String(40), nullable=True, index=True)
+    categoria_economica_descricao: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    grupo_despesa_identificacao: Mapped[Optional[str]] = mapped_column(String(40), nullable=True, index=True)
     grupo_despesa_descricao: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    elemento_despesa_identificacao: Mapped[Optional[str]] = mapped_column(
-        String(40), nullable=True, index=True
-    )
-    elemento_despesa_descricao: Mapped[Optional[str]] = mapped_column(
-        Text, nullable=True
-    )
-    modalidade_aplicacao_identificacao: Mapped[Optional[str]] = mapped_column(
-        String(40), nullable=True
-    )
-    modalidade_aplicacao_descricao: Mapped[Optional[str]] = mapped_column(
-        Text, nullable=True
-    )
+    elemento_despesa_identificacao: Mapped[Optional[str]] = mapped_column(String(40), nullable=True, index=True)
+    elemento_despesa_descricao: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    modalidade_aplicacao_identificacao: Mapped[Optional[str]] = mapped_column(String(40), nullable=True)
+    modalidade_aplicacao_descricao: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
-    dotacao_inicial: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
-    creditos_adicionais: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
-    dotacao_atualizada: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
-    valor_empenhado: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
-    valor_liquidacao: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
-    valor_liquidado: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
+    dotacao_inicial: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    creditos_adicionais: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    dotacao_atualizada: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    valor_empenhado: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    valor_liquidacao: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    valor_liquidado: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
     valor_pago: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
-    valor_anulado: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
+    valor_anulado: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)

@@ -1,3 +1,5 @@
+"""Ponto de entrada `python -m agents.chatbot` para o CLI do chatbot."""
+
 from agents.chatbot.cli import main
 
 

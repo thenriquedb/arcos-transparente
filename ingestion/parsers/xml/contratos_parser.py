@@ -23,13 +23,10 @@ class ContratosParser:
 
         for node in root.findall(".//InstrumentoContratual"):
             payload_raw = {
-                "numero": self._txt(node, "NumeroInstrumentoContratual")
-                or self._txt(node, "NumeroLicitatorio"),
+                "numero": self._txt(node, "NumeroInstrumentoContratual") or self._txt(node, "NumeroLicitatorio"),
                 "numero_licitatorio": self._txt(node, "NumeroLicitatorio"),
                 "numero_instrumento": self._txt(node, "NumeroInstrumentoContratual"),
-                "tipo_instrumento_contratual": self._txt(
-                    node, "TipoInstrumentoContratual"
-                ),
+                "tipo_instrumento_contratual": self._txt(node, "TipoInstrumentoContratual"),
                 "fornecedor": self._txt(node, "NomeFornecedor"),
                 "cnpj": self._txt(node, "CNPJFornecedor"),
                 "valor": self._txt(node, "ValorInstrumentoContratual"),
@@ -40,9 +37,7 @@ class ContratosParser:
                 "possui_aditivo": self._txt(node, "PossuiAditivo"),
                 "descricao": self._txt(node, "Objeto"),
                 "descricao_despesa": self._join_unique_texts(
-                    node.findall(
-                        ".//DespesasOrcamentarias/DespesaOrcamentaria/DescricaoDespesa"
-                    )
+                    node.findall(".//DespesasOrcamentarias/DespesaOrcamentaria/DescricaoDespesa")
                 ),
                 "xml_original": serialize_xml_node(node),
                 "despesas_orcamentarias": self._parse_despesas_orcamentarias(node),
@@ -58,9 +53,7 @@ class ContratosParser:
             registros.append(payload.model_dump(mode="python"))
 
         if invalidos:
-            logger.info(
-                f"Descartados {invalidos} registros invalidos de contratos em {filepath}"
-            )
+            logger.info(f"Descartados {invalidos} registros invalidos de contratos em {filepath}")
 
         return registros
 
@@ -101,9 +94,7 @@ class ContratosParser:
                     "unidade": self._txt(item, "Unidade"),
                     "departamento": self._txt(item, "Departamento"),
                     "fonte_recurso": self._txt(item, "FonteRecurso"),
-                    "natureza_despesa_rubrica": self._txt(
-                        item, "NaturezaDespesaRubrica"
-                    ),
+                    "natureza_despesa_rubrica": self._txt(item, "NaturezaDespesaRubrica"),
                     "descricao_despesa": self._txt(item, "DescricaoDespesa"),
                     "valor_despesa": self._txt(item, "ValorDespesa"),
                 }

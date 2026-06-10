@@ -24,18 +24,10 @@ class ReceitasParser:
                 continue
             natureza_node = node.find("NaturezaCategoria")
             natureza = {
-                "identificacao": self._txt(natureza_node, "Identificacao")
-                if natureza_node is not None
-                else None,
-                "nome": self._txt(natureza_node, "Nome")
-                if natureza_node is not None
-                else None,
-                "nivel": self._int(natureza_node, "Nivel")
-                if natureza_node is not None
-                else None,
-                "identificacao_superior": self._txt(
-                    natureza_node, "IdentificacaoSuperior"
-                )
+                "identificacao": self._txt(natureza_node, "Identificacao") if natureza_node is not None else None,
+                "nome": self._txt(natureza_node, "Nome") if natureza_node is not None else None,
+                "nivel": self._int(natureza_node, "Nivel") if natureza_node is not None else None,
+                "identificacao_superior": self._txt(natureza_node, "IdentificacaoSuperior")
                 if natureza_node is not None
                 else None,
             }
@@ -49,16 +41,10 @@ class ReceitasParser:
                     "fonte_recurso": self._txt(node, "FonteRecurso"),
                     "valor_previsto_bruto": self._money(node, "ValorPrevistoBruto"),
                     "valor_arrecadado_bruto": self._money(node, "ValorArrecadadoBruto"),
-                    "valor_previsto_deducoes": self._money(
-                        node, "ValorPrevistoDeducoes"
-                    ),
-                    "valor_realizado_deducoes": self._money(
-                        node, "ValorRealizadoDeducoes"
-                    ),
+                    "valor_previsto_deducoes": self._money(node, "ValorPrevistoDeducoes"),
+                    "valor_realizado_deducoes": self._money(node, "ValorRealizadoDeducoes"),
                     "valor_previsto_liquido": self._money(node, "ValorPrevistoLiquido"),
-                    "valor_arrecadado_liquido": self._money(
-                        node, "ValorArrecadadoLiquido"
-                    ),
+                    "valor_arrecadado_liquido": self._money(node, "ValorArrecadadoLiquido"),
                 }
             )
         return registros
@@ -72,13 +58,7 @@ class ReceitasParser:
             data_lanc = self._date(node, "DataLancamento")
             tipo_receita = self._txt(node, "TipoReceita")
             tributo = self._txt(node, "Tributo")
-            if (
-                exercicio is None
-                or not mes
-                or not data_lanc
-                or not tipo_receita
-                or not tributo
-            ):
+            if exercicio is None or not mes or not data_lanc or not tipo_receita or not tributo:
                 continue
             registros.append(
                 {
@@ -87,15 +67,9 @@ class ReceitasParser:
                     "data_lancamento": data_lanc,
                     "tipo_receita": tipo_receita,
                     "tributo": tributo,
-                    "valor_lancado_exercicio": self._money(
-                        node, "ValorLancadoExercicio"
-                    ),
-                    "valor_lancado_divida_ativa": self._money(
-                        node, "ValorLancadoDividaAtiva"
-                    ),
-                    "valor_lancado_cobraca_judicial": self._money(
-                        node, "ValorLancadoCobracaJudicial"
-                    ),
+                    "valor_lancado_exercicio": self._money(node, "ValorLancadoExercicio"),
+                    "valor_lancado_divida_ativa": self._money(node, "ValorLancadoDividaAtiva"),
+                    "valor_lancado_cobraca_judicial": self._money(node, "ValorLancadoCobracaJudicial"),
                 }
             )
         return registros

@@ -447,9 +447,7 @@ def test_consultar_contratos_faz_fallback_de_fornecedor_para_descricao(
     ]
     assert "descricao" in resultado["mensagem"]
     assert resultado["metadata"]["filtros_aplicados"] == {"fornecedor": "Sigma 6"}
-    assert resultado["metadata"]["filtros_fallback_aplicados"] == {
-        "descricao": "Sigma 6"
-    }
+    assert resultado["metadata"]["filtros_fallback_aplicados"] == {"descricao": "Sigma 6"}
 
     session.close()
 
@@ -490,9 +488,7 @@ def test_consultar_contratos_faz_fallback_de_fornecedor_para_categoria(
         }
     ]
     assert "categoria" in resultado["mensagem"]
-    assert resultado["metadata"]["filtros_fallback_aplicados"] == {
-        "categoria": "Festas e Eventos"
-    }
+    assert resultado["metadata"]["filtros_fallback_aplicados"] == {"categoria": "Festas e Eventos"}
 
     session.close()
 
@@ -587,9 +583,7 @@ def test_consultar_contratos_busca_no_xml_original_como_ultimo_fallback(
             secretaria="Prefeitura Municipal",
             descricao="Servico comum",
             xml_original=(
-                "<InstrumentoContratual>"
-                "<ObservacaoInterna>Projeto Aurora</ObservacaoInterna>"
-                "</InstrumentoContratual>"
+                "<InstrumentoContratual><ObservacaoInterna>Projeto Aurora</ObservacaoInterna></InstrumentoContratual>"
             ),
         )
     )
@@ -734,9 +728,7 @@ def test_consultar_contratos_inclui_detalhes_quando_solicitado(monkeypatch) -> N
     assert contrato_resultado["tipo_do_instrumento"] == "Contrato"
     assert contrato_resultado["possui_aditivo"] == "Nao"
     assert contrato_resultado["total_despesas_orcamentarias"] == 1
-    assert contrato_resultado["despesas_orcamentarias"][0][
-        "classificacao_da_despesa"
-    ] == ("Festividades e Homenagens")
+    assert contrato_resultado["despesas_orcamentarias"][0]["classificacao_da_despesa"] == ("Festividades e Homenagens")
     assert contrato_resultado["total_itens_adquiridos"] == 1
     assert contrato_resultado["itens_adquiridos"][0]["numero_item"] == "1"
 
@@ -758,9 +750,7 @@ def test_consultar_contratos_nao_quebra_em_base_antiga_sem_descricao_despesa(
     )
 
     assert resultado_por_fornecedor["total"] == 1
-    assert resultado_por_fornecedor["resultados"] == [
-        {"numero": "001/2025", "fornecedor": "Fornecedor Alfa"}
-    ]
+    assert resultado_por_fornecedor["resultados"] == [{"numero": "001/2025", "fornecedor": "Fornecedor Alfa"}]
     assert resultado_por_classificacao["total"] == 0
     assert "classificacao da despesa" in resultado_por_classificacao["sugestao"].lower()
 
@@ -861,9 +851,7 @@ def test_agregar_contratos_faz_fallback_textual_para_categoria(monkeypatch) -> N
 
     assert resultado["valor_total"] == 2
     assert "categoria" in resultado["mensagem"]
-    assert resultado["metadata"]["filtros_fallback_aplicados"] == {
-        "categoria": "Festas e Eventos"
-    }
+    assert resultado["metadata"]["filtros_fallback_aplicados"] == {"categoria": "Festas e Eventos"}
 
     session.close()
 
@@ -1000,9 +988,9 @@ def test_agregar_contratos_ranking_por_fornecedor_no_ano_corrente(monkeypatch) -
     session.close()
 
 
-def test_agregar_contratos_limite_cinco_preserva_empates_de_ranking(monkeypatch) -> (
-    None
-):
+def test_agregar_contratos_limite_cinco_preserva_empates_de_ranking(
+    monkeypatch,
+) -> None:
     current_year = date.today().year
     session = _build_session()
     contratos = []

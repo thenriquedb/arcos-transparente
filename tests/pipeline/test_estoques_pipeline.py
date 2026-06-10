@@ -77,11 +77,7 @@ def test_pipeline_importa_e_reimporta_estoques_sem_duplicar(
     assert session.query(EstoqueMaterial).count() == 2
     assert session.query(EstoqueMovimentacao).count() == 3
 
-    luva = (
-        session.query(EstoqueMaterial)
-        .filter(EstoqueMaterial.material == "LUVA DESCARTAVEL")
-        .one()
-    )
+    luva = session.query(EstoqueMaterial).filter(EstoqueMaterial.material == "LUVA DESCARTAVEL").one()
     assert luva.saldo_valor == Decimal("220.0000")
     assert len(luva.movimentacoes) == 3
     assert luva.movimentacoes[0].valor_total == Decimal("40.0000")
@@ -90,12 +86,8 @@ def test_pipeline_importa_e_reimporta_estoques_sem_duplicar(
     atualizado = (
         (FIXTURES_DIR / "estoques_sample.xml")
         .read_text(encoding="utf-8")
-        .replace(
-            "<SaldoValor>220.0000</SaldoValor>", "<SaldoValor>250.0000</SaldoValor>", 1
-        )
-        .replace(
-            "<ValorTotal>40.0000</ValorTotal>", "<ValorTotal>45.0000</ValorTotal>", 1
-        )
+        .replace("<SaldoValor>220.0000</SaldoValor>", "<SaldoValor>250.0000</SaldoValor>", 1)
+        .replace("<ValorTotal>40.0000</ValorTotal>", "<ValorTotal>45.0000</ValorTotal>", 1)
     )
     arquivo.write_text(atualizado, encoding="ISO-8859-1")
 
@@ -106,16 +98,8 @@ def test_pipeline_importa_e_reimporta_estoques_sem_duplicar(
     assert session.query(EstoqueMaterial).count() == 2
     assert session.query(EstoqueMovimentacao).count() == 3
 
-    luva_atualizada = (
-        session.query(EstoqueMaterial)
-        .filter(EstoqueMaterial.material == "LUVA DESCARTAVEL")
-        .one()
-    )
-    alcool = (
-        session.query(EstoqueMaterial)
-        .filter(EstoqueMaterial.material == "ALCOOL 70")
-        .one()
-    )
+    luva_atualizada = session.query(EstoqueMaterial).filter(EstoqueMaterial.material == "LUVA DESCARTAVEL").one()
+    alcool = session.query(EstoqueMaterial).filter(EstoqueMaterial.material == "ALCOOL 70").one()
     assert alcool.saldo_valor == Decimal("120.0000")
     assert luva_atualizada.saldo_valor == Decimal("250.0000")
     assert luva_atualizada.movimentacoes[0].valor_total == Decimal("45.0000")

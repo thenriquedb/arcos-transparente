@@ -8,6 +8,14 @@ from typing import Any
 from sqlalchemy import select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.filtering import (
+    apply_declared_filters,
+    equals_filter,
+    max_filter,
+    min_filter,
+    predicate_filter,
+    text_filter,
+)
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
     execute_collection_lookup_result,
@@ -17,7 +25,6 @@ from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import DespesaPorFuncao
 from shared.utils.decimal_to_float import decimal_to_float
-from shared.utils.text import matches_text_query
 
 from .consultar_despesas_por_funcao_schema import (
     ConsultarDespesasPorFuncaoMetadata,
@@ -49,46 +56,26 @@ def _row_to_public_dict(registro: DespesaPorFuncao) -> dict[str, Any]:
     }
 
 
+_DESPESAS_POR_FUNCAO_FILTER_CONDITIONS = (
+    text_filter("origem", lambda r: r.origem),
+    equals_filter("ano", lambda r: r.exercicio),
+    predicate_filter("periodo_inicio", lambda r, v: r.periodo_fim >= v),
+    predicate_filter("periodo_fim", lambda r, v: r.periodo_inicio <= v),
+    text_filter("unidade_gestora", lambda r: r.unidade_gestora),
+    text_filter("funcao", lambda r: r.funcao),
+    min_filter("valor_pago_min", lambda r: r.valor_pago),
+    max_filter("valor_pago_max", lambda r: r.valor_pago),
+)
+
+
 def load_filtered_despesas_por_funcao(
     session,
     filtros: DespesasPorFuncaoFiltroSchema,
 ) -> list[DespesaPorFuncao]:
+    """Carrega o relatório por função aplicando os filtros públicos declarados."""
+
     registros = list(session.execute(select(DespesaPorFuncao)).scalars())
-
-    if filtros.origem:
-        registros = [
-            r for r in registros if matches_text_query(r.origem, filtros.origem)
-        ]
-    if filtros.ano:
-        registros = [r for r in registros if r.exercicio == filtros.ano]
-    if filtros.periodo_inicio:
-        registros = [r for r in registros if r.periodo_fim >= filtros.periodo_inicio]
-    if filtros.periodo_fim:
-        registros = [r for r in registros if r.periodo_inicio <= filtros.periodo_fim]
-    if filtros.unidade_gestora:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.unidade_gestora, filtros.unidade_gestora)
-        ]
-    if filtros.funcao:
-        registros = [
-            r for r in registros if matches_text_query(r.funcao, filtros.funcao)
-        ]
-    if filtros.valor_pago_min is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.valor_pago or Decimal("0")) >= filtros.valor_pago_min
-        ]
-    if filtros.valor_pago_max is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.valor_pago or Decimal("0")) <= filtros.valor_pago_max
-        ]
-
-    return registros
+    return apply_declared_filters(registros, filtros, _DESPESAS_POR_FUNCAO_FILTER_CONDITIONS)
 
 
 SORT_FIELD_GETTERS = {
@@ -105,6 +92,8 @@ def project_despesas_por_funcao_fields(
     registro: DespesaPorFuncao,
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_fields(
         registro,
         campos,
@@ -123,8 +112,7 @@ def _field_explanations(campos: list[str]) -> dict[str, str]:
 
 def _financial_stage_explanations() -> dict[str, str]:
     return {
-        campo: DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS[campo]
-        for campo in DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS
+        campo: DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS[campo] for campo in DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS
     }
 
 
@@ -224,9 +212,7 @@ def consultar_despesas_por_funcao(
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
-            empty_suggestion=(
-                "Nenhum registro de despesas por funcao encontrado com os filtros."
-            ),
+            empty_suggestion=("Nenhum registro de despesas por funcao encontrado com os filtros."),
         )
 
     campos_retorno = params.campos or list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)
@@ -239,9 +225,7 @@ def consultar_despesas_por_funcao(
         offset=params.offset,
         campos=campos_retorno,
         explicacao_campos=_field_explanations(campos_retorno),
-        campos_financeiros_prioritarios=list(
-            DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS
-        ),
+        campos_financeiros_prioritarios=list(DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS),
         explicacao_estagios_despesa=_financial_stage_explanations(),
         orientacao_gasto_amplo=DESPESAS_POR_FUNCAO_BROAD_SPEND_GUIDANCE,
     )

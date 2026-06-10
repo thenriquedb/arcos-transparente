@@ -74,6 +74,8 @@ ALLOWED_RECEITA_TYPES = ("arrecadacao", "lancamento")
 
 
 class ReceitaFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     tipo_de_dado: str = "arrecadacao"
     ano: int | None = None
     mes: int | None = None
@@ -134,20 +136,14 @@ class ReceitaFiltroSchema(SqlToolBaseSchema):
 
     @model_validator(mode="after")
     def _validate_ranges(self) -> "ReceitaFiltroSchema":
-        if self.mes is not None and (
-            self.mes_inicio is not None or self.mes_fim is not None
-        ):
+        if self.mes is not None and (self.mes_inicio is not None or self.mes_fim is not None):
             raise ValueError("mes nao pode ser usado junto com mes_inicio/mes_fim")
         if self.mes_inicio is not None or self.mes_fim is not None:
             if self.mes_inicio is None or self.mes_fim is None:
                 raise ValueError("mes_inicio e mes_fim devem ser informados juntos")
             if self.mes_inicio > self.mes_fim:
                 raise ValueError("mes_inicio deve ser menor ou igual a mes_fim")
-        if (
-            self.valor_min is not None
-            and self.valor_max is not None
-            and self.valor_min > self.valor_max
-        ):
+        if self.valor_min is not None and self.valor_max is not None and self.valor_min > self.valor_max:
             raise ValueError("valor_min deve ser menor ou igual a valor_max")
         return self
 

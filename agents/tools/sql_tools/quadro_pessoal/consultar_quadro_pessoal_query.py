@@ -7,6 +7,11 @@ from typing import Any
 from sqlalchemy import select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.filtering import (
+    apply_declared_filters,
+    predicate_filter,
+    text_filter,
+)
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
     execute_collection_lookup_result,
@@ -15,7 +20,6 @@ from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import QuadroPessoal
-from shared.utils.text import matches_text_query
 
 from .consultar_quadro_pessoal_schema import (
     ALLOWED_QUADRO_FIELDS,
@@ -43,32 +47,22 @@ def _row_to_public_dict(registro: QuadroPessoal) -> dict[str, Any]:
     }
 
 
+_QUADRO_PESSOAL_FILTER_CONDITIONS = (
+    text_filter("origem", lambda r: r.origem),
+    predicate_filter("ano", lambda r, v: r.competencia_referencia.year == v),
+    predicate_filter("mes", lambda r, v: r.competencia_referencia.month == v),
+    text_filter("regime", lambda r: r.regime_contratacao),
+)
+
+
 def load_filtered_quadro_pessoal(
     session,
     filtros: QuadroPessoalFiltroSchema,
 ) -> list[QuadroPessoal]:
+    """Carrega o quadro de pessoal aplicando os filtros públicos declarados."""
+
     registros = list(session.execute(select(QuadroPessoal)).scalars())
-
-    if filtros.origem:
-        registros = [
-            r for r in registros if matches_text_query(r.origem, filtros.origem)
-        ]
-    if filtros.ano:
-        registros = [
-            r for r in registros if r.competencia_referencia.year == filtros.ano
-        ]
-    if filtros.mes:
-        registros = [
-            r for r in registros if r.competencia_referencia.month == filtros.mes
-        ]
-    if filtros.regime:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.regime_contratacao, filtros.regime)
-        ]
-
-    return registros
+    return apply_declared_filters(registros, filtros, _QUADRO_PESSOAL_FILTER_CONDITIONS)
 
 
 SORT_FIELD_GETTERS = {
@@ -85,6 +79,8 @@ def project_quadro_pessoal_fields(
     registro: QuadroPessoal,
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_fields(
         registro,
         campos,

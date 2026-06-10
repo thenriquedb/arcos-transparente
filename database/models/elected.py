@@ -1,3 +1,5 @@
+"""Modelo ORM de politicos eleitos."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -31,9 +33,7 @@ class Eleito(Base):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -47,12 +47,8 @@ class Eleito(Base):
     estado: Mapped[str] = mapped_column(String(10), nullable=False, index=True)
 
     nome_completo: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
-    nome_popular: Mapped[Optional[str]] = mapped_column(
-        String(255), nullable=True, index=True
-    )
-    partido: Mapped[Optional[str]] = mapped_column(
-        String(60), nullable=True, index=True
-    )
+    nome_popular: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
+    partido: Mapped[Optional[str]] = mapped_column(String(60), nullable=True, index=True)
     telefone: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
     email: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     homepage: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)

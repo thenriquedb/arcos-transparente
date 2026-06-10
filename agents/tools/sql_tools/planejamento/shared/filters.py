@@ -80,6 +80,8 @@ ALLOWED_ORDER_VALUES = ("asc", "desc")
 
 
 class PlanejamentoFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     origem: str | None = "saude"
     ano: int | None = None
     mes: int | None = None
@@ -134,9 +136,7 @@ class PlanejamentoFiltroSchema(SqlToolBaseSchema):
 
     @model_validator(mode="after")
     def _validate_ranges(self) -> "PlanejamentoFiltroSchema":
-        if self.mes is not None and (
-            self.mes_inicio is not None or self.mes_fim is not None
-        ):
+        if self.mes is not None and (self.mes_inicio is not None or self.mes_fim is not None):
             raise ValueError("mes nao pode ser usado junto com mes_inicio/mes_fim")
         if self.mes_inicio is not None or self.mes_fim is not None:
             if self.mes_inicio is None or self.mes_fim is None:

@@ -28,9 +28,7 @@ def test_load_contratos_persiste_campos_e_filhos_completos() -> None:
     )
     session = session_local()
 
-    fixture_path = (
-        Path(__file__).resolve().parents[1] / "fixtures" / "contratos_sample.xml"
-    )
+    fixture_path = Path(__file__).resolve().parents[1] / "fixtures" / "contratos_sample.xml"
     registros = ContratosParser().parse(str(fixture_path))
 
     pipeline = IngestionPipeline(data_dir="data/xml")
@@ -46,10 +44,7 @@ def test_load_contratos_persiste_campos_e_filhos_completos() -> None:
     assert contrato.descricao_despesa == "Festividades e Homenagens"
     assert contrato.xml_original is not None
     assert "<InstrumentoContratual>" in contrato.xml_original
-    assert (
-        "<DescricaoDespesa>Festividades e Homenagens</DescricaoDespesa>"
-        in contrato.xml_original
-    )
+    assert "<DescricaoDespesa>Festividades e Homenagens</DescricaoDespesa>" in contrato.xml_original
 
     despesas = (
         session.query(ContratoDespesaOrcamentaria)
@@ -74,9 +69,7 @@ def test_load_contratos_persiste_campos_e_filhos_completos() -> None:
     session.close()
 
 
-def test_pipeline_contratos_nao_persiste_caracteres_invalidos(
-    monkeypatch, tmp_path
-) -> None:
+def test_pipeline_contratos_nao_persiste_caracteres_invalidos(monkeypatch, tmp_path) -> None:
     engine = create_engine("sqlite:///:memory:", future=True)
     Base.metadata.create_all(bind=engine)
     session_local = sessionmaker(

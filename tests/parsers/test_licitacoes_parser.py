@@ -9,9 +9,7 @@ from ingestion.parsers.xml.licitacoes_parser import LicitacoesParser
 
 def test_parser_licitacoes_filtra_invalidos_sem_quebrar_lote() -> None:
     parser = LicitacoesParser()
-    fixture_path = (
-        Path(__file__).resolve().parents[1] / "fixtures" / "licitacoes_sample.xml"
-    )
+    fixture_path = Path(__file__).resolve().parents[1] / "fixtures" / "licitacoes_sample.xml"
 
     registros = parser.parse(str(fixture_path))
 
@@ -69,7 +67,4 @@ def test_parser_licitacoes_decodifica_iso_8859_1_com_acentos(tmp_path) -> None:
     assert len(registros) == 1
     assert registros[0]["objeto"] == "Reforma da Educação Básica"
     assert registros[0]["secretaria"] == "Secretaria de Saúde"
-    assert (
-        registros[0]["instrumentos_contratuais"][0]["materias"][0]["identificacao"]
-        == "Material pedagógico"
-    )
+    assert registros[0]["instrumentos_contratuais"][0]["materias"][0]["identificacao"] == "Material pedagógico"

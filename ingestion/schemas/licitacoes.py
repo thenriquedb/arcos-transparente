@@ -129,13 +129,9 @@ class LicitacaoInSchema(_LicitacoesBaseSchema):
     situacao: str | None = "nao_informado"
     secretaria: str | None = "nao_informado"
     vencedores: list[VencedorInSchema] = Field(default_factory=list)
-    instrumentos_contratuais: list[InstrumentoContratualInSchema] = Field(
-        default_factory=list
-    )
+    instrumentos_contratuais: list[InstrumentoContratualInSchema] = Field(default_factory=list)
 
-    @field_validator(
-        "numero", "modalidade", "objeto", "situacao", "secretaria", mode="before"
-    )
+    @field_validator("numero", "modalidade", "objeto", "situacao", "secretaria", mode="before")
     @classmethod
     def _normalize_text_fields(cls, value: Any) -> str | None:
         return clean_text(value)

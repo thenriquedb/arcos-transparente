@@ -68,16 +68,10 @@ def upgrade() -> None:
         sa.Column("cnpj_cpf", sa.String(length=18), nullable=False),
         sa.Column("nome", sa.String(length=255), nullable=False),
         sa.Column("validade_proposta", sa.String(length=80), nullable=True),
-        sa.UniqueConstraint(
-            "licitacao_id", "cnpj_cpf", "nome", name="uq_vencedor_licitacao_doc_nome"
-        ),
+        sa.UniqueConstraint("licitacao_id", "cnpj_cpf", "nome", name="uq_vencedor_licitacao_doc_nome"),
     )
-    op.create_index(
-        "ix_vencedores_licitacao_licitacao_id", "vencedores_licitacao", ["licitacao_id"]
-    )
-    op.create_index(
-        "ix_vencedores_licitacao_cnpj_cpf", "vencedores_licitacao", ["cnpj_cpf"]
-    )
+    op.create_index("ix_vencedores_licitacao_licitacao_id", "vencedores_licitacao", ["licitacao_id"])
+    op.create_index("ix_vencedores_licitacao_cnpj_cpf", "vencedores_licitacao", ["cnpj_cpf"])
 
     op.create_table(
         "instrumentos_contratuais",
@@ -116,9 +110,7 @@ def upgrade() -> None:
         sa.Column("data_expiracao", sa.Date(), nullable=True),
         sa.Column("possui_aditivo", sa.String(length=20), nullable=True),
         sa.Column("valor_instrumento_contratual", sa.Numeric(15, 2), nullable=True),
-        sa.UniqueConstraint(
-            "licitacao_id", "numero_instrumento", name="uq_instrumento_licitacao_numero"
-        ),
+        sa.UniqueConstraint("licitacao_id", "numero_instrumento", name="uq_instrumento_licitacao_numero"),
     )
     op.create_index(
         "ix_instrumentos_contratuais_licitacao_id",
@@ -194,9 +186,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index(
-        "ix_materias_instrumento_instrumento_id", table_name="materias_instrumento"
-    )
+    op.drop_index("ix_materias_instrumento_instrumento_id", table_name="materias_instrumento")
     op.drop_table("materias_instrumento")
 
     op.drop_index(
@@ -226,9 +216,7 @@ def downgrade() -> None:
     op.drop_table("instrumentos_contratuais")
 
     op.drop_index("ix_vencedores_licitacao_cnpj_cpf", table_name="vencedores_licitacao")
-    op.drop_index(
-        "ix_vencedores_licitacao_licitacao_id", table_name="vencedores_licitacao"
-    )
+    op.drop_index("ix_vencedores_licitacao_licitacao_id", table_name="vencedores_licitacao")
     op.drop_table("vencedores_licitacao")
 
     op.drop_index("ix_fornecedores_nome", table_name="fornecedores")

@@ -45,6 +45,8 @@ ALLOWED_ORDER_VALUES = ("asc", "desc")
 
 
 class LicitacoesFiltroSchema(LicitacoesToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     numero: str | None = None
     modalidade: str | None = None
     objeto: str | None = None
@@ -92,16 +94,11 @@ class LicitacoesFiltroSchema(LicitacoesToolBaseSchema):
         if self.data_abertura is not None and (
             self.data_abertura_inicio is not None or self.data_abertura_fim is not None
         ):
-            raise ValueError(
-                "data_abertura nao pode ser usada junto com "
-                "data_abertura_inicio ou data_abertura_fim"
-            )
+            raise ValueError("data_abertura nao pode ser usada junto com data_abertura_inicio ou data_abertura_fim")
 
         if self.data_abertura_inicio is not None or self.data_abertura_fim is not None:
             if self.data_abertura_inicio is None or self.data_abertura_fim is None:
-                raise ValueError(
-                    "data_abertura_inicio e data_abertura_fim devem ser informadas juntas"
-                )
+                raise ValueError("data_abertura_inicio e data_abertura_fim devem ser informadas juntas")
             validate_date_period(self.data_abertura_inicio, self.data_abertura_fim)
 
         if (
@@ -109,9 +106,7 @@ class LicitacoesFiltroSchema(LicitacoesToolBaseSchema):
             and self.valor_estimado_max is not None
             and self.valor_estimado_min > self.valor_estimado_max
         ):
-            raise ValueError(
-                "valor_estimado_min deve ser menor ou igual a valor_estimado_max"
-            )
+            raise ValueError("valor_estimado_min deve ser menor ou igual a valor_estimado_max")
         return self
 
 

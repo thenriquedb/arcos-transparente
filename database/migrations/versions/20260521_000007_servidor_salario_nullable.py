@@ -16,13 +16,9 @@ depends_on = None
 
 def upgrade() -> None:
     with op.batch_alter_table("servidores") as batch_op:
-        batch_op.alter_column(
-            "salario_base", existing_type=sa.Numeric(15, 2), nullable=True
-        )
+        batch_op.alter_column("salario_base", existing_type=sa.Numeric(15, 2), nullable=True)
 
 
 def downgrade() -> None:
     with op.batch_alter_table("servidores") as batch_op:
-        batch_op.alter_column(
-            "salario_base", existing_type=sa.Numeric(15, 2), nullable=False
-        )
+        batch_op.alter_column("salario_base", existing_type=sa.Numeric(15, 2), nullable=False)

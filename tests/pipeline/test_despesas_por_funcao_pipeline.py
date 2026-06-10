@@ -68,9 +68,7 @@ def test_pipeline_importa_e_reimporta_despesas_por_funcao_sem_duplicar(
     assert resultado_inicial["despesas"].inseridos == 2
     assert session.query(DespesaPorFuncao).count() == 2
 
-    saude = (
-        session.query(DespesaPorFuncao).filter(DespesaPorFuncao.funcao == "Saude").one()
-    )
+    saude = session.query(DespesaPorFuncao).filter(DespesaPorFuncao.funcao == "Saude").one()
     assert saude.valor_pago == Decimal("73415583.84")
     assert saude.linha_origem == 6
     session.rollback()
@@ -88,9 +86,7 @@ def test_pipeline_importa_e_reimporta_despesas_por_funcao_sem_duplicar(
     assert resultado_reimportado["despesas"].ignorados == 1
     assert session.query(DespesaPorFuncao).count() == 2
 
-    saude_atualizada = (
-        session.query(DespesaPorFuncao).filter(DespesaPorFuncao.funcao == "Saude").one()
-    )
+    saude_atualizada = session.query(DespesaPorFuncao).filter(DespesaPorFuncao.funcao == "Saude").one()
     assert saude_atualizada.valor_pago == Decimal("70000000.00")
 
     session.close()

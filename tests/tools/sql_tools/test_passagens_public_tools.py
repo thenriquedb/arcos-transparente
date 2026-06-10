@@ -260,8 +260,7 @@ def test_agregar_passagens_por_mes(monkeypatch) -> None:
 
 def test_registry_expoe_tools_publicas_de_passagens() -> None:
     tool_names = {
-        getattr(tool_obj, "name", "")
-        for tool_obj in tools_registry.get_public_tools(tags=["domain:passagens"])
+        getattr(tool_obj, "name", "") for tool_obj in tools_registry.get_public_tools(tags=["domain:passagens"])
     }
 
     assert "consultar_passagens" in tool_names

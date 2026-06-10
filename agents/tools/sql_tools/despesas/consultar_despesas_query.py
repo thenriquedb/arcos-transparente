@@ -13,6 +13,12 @@ from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
     execute_collection_lookup_result,
 )
+from agents.tools.sql_tools.shared.filtering import (
+    apply_declared_filters,
+    equals_filter,
+    predicate_filter,
+    text_filter,
+)
 from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
@@ -75,64 +81,37 @@ def _matches_descricao(registro: DespesaDocumento, descricao: str | None) -> boo
     return any(matches_text_query(texto, descricao) for texto in textos)
 
 
+_DESPESAS_FILTER_CONDITIONS = (
+    equals_filter("tipo", lambda r: r.tipo_origem),
+    text_filter("origem", lambda r: r.origem),
+    equals_filter("ano", lambda r: r.exercicio),
+    predicate_filter("data_inicio", lambda r, v: r.data_documento >= v),
+    predicate_filter("data_fim", lambda r, v: r.data_documento <= v),
+    text_filter("numero", lambda r: r.numero_documento),
+    text_filter("credor", lambda r: r.credor),
+    text_filter("cpf_cnpj", lambda r: r.cpf_cnpj),
+    text_filter("unidade_responsavel", lambda r: r.unidade_gestora),
+    text_filter("area", lambda r: r.funcao),
+    predicate_filter(
+        "conta_extra",
+        lambda r, v: (
+            matches_text_query(r.conta_extra_descricao, v) or matches_text_query(r.conta_extra_identificacao, v)
+        ),
+    ),
+    text_filter("contrato", lambda r: r.numero_contrato),
+    predicate_filter("descricao", lambda r, v: _matches_descricao(r, v)),
+)
+
+
 def load_filtered_despesas(
     session,
     filtros: DespesaFiltroSchema,
 ) -> list[DespesaDocumento]:
+    """Carrega despesas aplicando os filtros públicos declarados."""
+
     stmt = select(DespesaDocumento).options(selectinload(DespesaDocumento.itens))
     registros = list(session.execute(stmt).scalars())
-
-    if filtros.tipo:
-        registros = [r for r in registros if r.tipo_origem == filtros.tipo]
-    if filtros.origem:
-        registros = [
-            r for r in registros if matches_text_query(r.origem, filtros.origem)
-        ]
-    if filtros.ano:
-        registros = [r for r in registros if r.exercicio == filtros.ano]
-    if filtros.data_inicio:
-        registros = [r for r in registros if r.data_documento >= filtros.data_inicio]
-    if filtros.data_fim:
-        registros = [r for r in registros if r.data_documento <= filtros.data_fim]
-    if filtros.numero:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.numero_documento, filtros.numero)
-        ]
-    if filtros.credor:
-        registros = [
-            r for r in registros if matches_text_query(r.credor, filtros.credor)
-        ]
-    if filtros.cpf_cnpj:
-        registros = [
-            r for r in registros if matches_text_query(r.cpf_cnpj, filtros.cpf_cnpj)
-        ]
-    if filtros.unidade_responsavel:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.unidade_gestora, filtros.unidade_responsavel)
-        ]
-    if filtros.area:
-        registros = [r for r in registros if matches_text_query(r.funcao, filtros.area)]
-    if filtros.conta_extra:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.conta_extra_descricao, filtros.conta_extra)
-            or matches_text_query(r.conta_extra_identificacao, filtros.conta_extra)
-        ]
-    if filtros.contrato:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.numero_contrato, filtros.contrato)
-        ]
-    if filtros.descricao:
-        registros = [r for r in registros if _matches_descricao(r, filtros.descricao)]
-
-    return registros
+    return apply_declared_filters(registros, filtros, _DESPESAS_FILTER_CONDITIONS)
 
 
 SORT_FIELD_GETTERS = {
@@ -149,6 +128,8 @@ def project_despesa_fields(
     registro: DespesaDocumento,
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_fields(
         registro,
         campos,
@@ -280,7 +261,5 @@ def consultar_despesas(
         execution=execution,
         project_row=project_despesa_fields,
         campos=params.campos,
-        pagination_message_builder=lambda shown, total: (
-            f"Mostrando {shown} de {total} despesas encontradas."
-        ),
+        pagination_message_builder=lambda shown, total: f"Mostrando {shown} de {total} despesas encontradas.",
     )

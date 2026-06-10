@@ -51,9 +51,7 @@ def upgrade() -> None:
             name="uq_patrimonio_unidade_placa",
         ),
     )
-    op.create_index(
-        "ix_patrimonios_unidade_gestora", "patrimonios", ["unidade_gestora"]
-    )
+    op.create_index("ix_patrimonios_unidade_gestora", "patrimonios", ["unidade_gestora"])
     op.create_index("ix_patrimonios_placa", "patrimonios", ["placa"])
     op.create_index("ix_patrimonios_situacao_bem", "patrimonios", ["situacao_bem"])
     op.create_index("ix_patrimonios_tipo_ingresso", "patrimonios", ["tipo_ingresso"])
@@ -146,23 +144,15 @@ def upgrade() -> None:
         sa.Column("fonte_recurso_identificacao", sa.String(length=40), nullable=True),
         sa.Column("fonte_recurso_descricao", sa.Text(), nullable=True),
         sa.Column("esfera_administrativa", sa.String(length=80), nullable=True),
-        sa.Column(
-            "modalidade_aplicacao_identificacao", sa.String(length=40), nullable=True
-        ),
+        sa.Column("modalidade_aplicacao_identificacao", sa.String(length=40), nullable=True),
         sa.Column("modalidade_aplicacao_descricao", sa.Text(), nullable=True),
-        sa.Column(
-            "categoria_economica_identificacao", sa.String(length=40), nullable=True
-        ),
+        sa.Column("categoria_economica_identificacao", sa.String(length=40), nullable=True),
         sa.Column("categoria_economica_descricao", sa.Text(), nullable=True),
         sa.Column("grupo_despesa_identificacao", sa.String(length=40), nullable=True),
         sa.Column("grupo_despesa_descricao", sa.Text(), nullable=True),
-        sa.Column(
-            "elemento_despesa_identificacao", sa.String(length=40), nullable=True
-        ),
+        sa.Column("elemento_despesa_identificacao", sa.String(length=40), nullable=True),
         sa.Column("elemento_despesa_descricao", sa.Text(), nullable=True),
-        sa.Column(
-            "desdobramento_despesa_identificacao", sa.String(length=40), nullable=True
-        ),
+        sa.Column("desdobramento_despesa_identificacao", sa.String(length=40), nullable=True),
         sa.Column("desdobramento_despesa_descricao", sa.Text(), nullable=True),
         sa.Column("conta_extra_identificacao", sa.String(length=40), nullable=True),
         sa.Column("conta_extra_descricao", sa.Text(), nullable=True),
@@ -200,16 +190,10 @@ def upgrade() -> None:
             name="uq_despesa_documento_base",
         ),
     )
-    op.create_index(
-        "ix_despesa_documentos_tipo_origem", "despesa_documentos", ["tipo_origem"]
-    )
-    op.create_index(
-        "ix_despesa_documentos_arquivo_origem", "despesa_documentos", ["arquivo_origem"]
-    )
+    op.create_index("ix_despesa_documentos_tipo_origem", "despesa_documentos", ["tipo_origem"])
+    op.create_index("ix_despesa_documentos_arquivo_origem", "despesa_documentos", ["arquivo_origem"])
     op.create_index("ix_despesa_documentos_origem", "despesa_documentos", ["origem"])
-    op.create_index(
-        "ix_despesa_documentos_exercicio", "despesa_documentos", ["exercicio"]
-    )
+    op.create_index("ix_despesa_documentos_exercicio", "despesa_documentos", ["exercicio"])
     op.create_index(
         "ix_despesa_documentos_unidade_gestora",
         "despesa_documentos",
@@ -220,17 +204,13 @@ def upgrade() -> None:
         "despesa_documentos",
         ["numero_documento"],
     )
-    op.create_index(
-        "ix_despesa_documentos_data_documento", "despesa_documentos", ["data_documento"]
-    )
+    op.create_index("ix_despesa_documentos_data_documento", "despesa_documentos", ["data_documento"])
     op.create_index(
         "ix_despesa_documentos_tipo_exercicio",
         "despesa_documentos",
         ["tipo_origem", "exercicio"],
     )
-    op.create_index(
-        "ix_despesa_documentos_data", "despesa_documentos", ["data_documento"]
-    )
+    op.create_index("ix_despesa_documentos_data", "despesa_documentos", ["data_documento"])
     op.create_index("ix_despesa_documentos_credor", "despesa_documentos", ["credor"])
     op.create_index("ix_despesa_documentos_funcao", "despesa_documentos", ["funcao"])
     op.create_index(
@@ -267,9 +247,7 @@ def upgrade() -> None:
         sa.Column("quantidade", sa.Numeric(15, 4), nullable=True),
         sa.Column("valor_unitario", sa.Numeric(15, 2), nullable=True),
         sa.Column("valor_total", sa.Numeric(15, 2), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["documento_id"], ["despesa_documentos.id"], ondelete="CASCADE"
-        ),
+        sa.ForeignKeyConstraint(["documento_id"], ["despesa_documentos.id"], ondelete="CASCADE"),
         sa.UniqueConstraint(
             "documento_id",
             "ordem",
@@ -312,9 +290,7 @@ def upgrade() -> None:
         sa.Column("numero_empenho", sa.String(length=80), nullable=True),
         sa.Column("codigo_unidade_gestora", sa.String(length=40), nullable=True),
         sa.Column("numero_sequencia", sa.String(length=80), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["documento_id"], ["despesa_documentos.id"], ondelete="CASCADE"
-        ),
+        sa.ForeignKeyConstraint(["documento_id"], ["despesa_documentos.id"], ondelete="CASCADE"),
         sa.UniqueConstraint(
             "documento_id",
             "ordem",
@@ -341,30 +317,18 @@ def downgrade() -> None:
     op.drop_table("despesa_documento_itens")
 
     op.drop_index("ix_despesa_documentos_conta_extra", table_name="despesa_documentos")
-    op.drop_index(
-        "ix_despesa_documentos_numero_contrato", table_name="despesa_documentos"
-    )
+    op.drop_index("ix_despesa_documentos_numero_contrato", table_name="despesa_documentos")
     op.drop_index("ix_despesa_documentos_funcao", table_name="despesa_documentos")
     op.drop_index("ix_despesa_documentos_credor", table_name="despesa_documentos")
     op.drop_index("ix_despesa_documentos_data", table_name="despesa_documentos")
-    op.drop_index(
-        "ix_despesa_documentos_tipo_exercicio", table_name="despesa_documentos"
-    )
-    op.drop_index(
-        "ix_despesa_documentos_data_documento", table_name="despesa_documentos"
-    )
-    op.drop_index(
-        "ix_despesa_documentos_numero_documento", table_name="despesa_documentos"
-    )
-    op.drop_index(
-        "ix_despesa_documentos_unidade_gestora", table_name="despesa_documentos"
-    )
+    op.drop_index("ix_despesa_documentos_tipo_exercicio", table_name="despesa_documentos")
+    op.drop_index("ix_despesa_documentos_data_documento", table_name="despesa_documentos")
+    op.drop_index("ix_despesa_documentos_numero_documento", table_name="despesa_documentos")
+    op.drop_index("ix_despesa_documentos_unidade_gestora", table_name="despesa_documentos")
     op.drop_index("ix_despesa_documentos_exercicio", table_name="despesa_documentos")
     op.drop_index("ix_despesa_documentos_origem", table_name="despesa_documentos")
     op.drop_index("ix_despesa_documentos_tipo_origem", table_name="despesa_documentos")
-    op.drop_index(
-        "ix_despesa_documentos_arquivo_origem", table_name="despesa_documentos"
-    )
+    op.drop_index("ix_despesa_documentos_arquivo_origem", table_name="despesa_documentos")
     op.drop_table("despesa_documentos")
 
     op.drop_index("ix_quadro_pessoal_origem_competencia", table_name="quadro_pessoal")

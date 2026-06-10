@@ -23,6 +23,8 @@ from .agregar_contratos_schema import (
     AgregarContratosParams,
     AgregarContratosResponse,
 )
+from shared.utils.decimal_to_float import decimal_or_int_to_json
+
 from .shared.querying import (
     GROUP_BY_COLUMNS,
     apply_contratos_filters,
@@ -31,7 +33,6 @@ from .shared.querying import (
     contratos_supports_descricao_despesa,
     contratos_supports_xml_original,
     get_contratos_available_columns,
-    decimal_or_int_to_json,
 )
 
 
@@ -157,6 +158,76 @@ def _execute_fallback_aggregate(
     return None
 
 
+def _responder_total_sem_grupo(
+    session,
+    params: AgregarContratosParams,
+    metadata: AgregarContratosMetadata,
+    *,
+    include_descricao_despesa: bool,
+    include_xml_original: bool,
+    available_columns: set[str],
+) -> dict[str, Any]:
+    """Responde a agregacao sem agrupamento, com fallback de filtro textual."""
+
+    fallback_aplicado = False
+    fallback_source_field = ""
+    fallback_target_field = ""
+
+    total_match, valor_total_json = _execute_total_sem_grupo(
+        session,
+        params,
+        include_descricao_despesa=include_descricao_despesa,
+        include_xml_original=include_xml_original,
+        available_columns=available_columns,
+    )
+    filtros_execucao = params.filtros
+    if total_match == 0:
+        fallback_result = _execute_fallback_aggregate(
+            session,
+            params,
+            include_descricao_despesa=include_descricao_despesa,
+            include_xml_original=include_xml_original,
+            available_columns=available_columns,
+        )
+        if fallback_result is not None:
+            (
+                (filtros_execucao, total_match, valor_total_json),
+                fallback_source_field,
+                fallback_target_field,
+            ) = fallback_result
+            fallback_aplicado = True
+            metadata = metadata.model_copy(update={"filtros_fallback_aplicados": filtros_execucao.to_metadata_dict()})
+    mensagens = [
+        (
+            build_descricao_despesa_unavailable_message(params.filtros)
+            if not include_descricao_despesa and total_match > 0
+            else None
+        ),
+        (
+            build_contract_fallback_message(
+                fallback_source_field,
+                fallback_target_field,
+            )
+            if fallback_aplicado
+            else None
+        ),
+    ]
+    return build_aggregate_response(
+        response_type=AgregarContratosResponse,
+        metadata=metadata,
+        execution=AggregateExecutionResult(
+            valor_total=valor_total_json,
+            source_count=total_match,
+            messages=mensagens,
+            suggestion=(
+                build_descricao_despesa_unavailable_message(params.filtros)
+                if total_match == 0 and not include_descricao_despesa
+                else ("Nenhum contrato encontrado com os filtros informados." if total_match == 0 else None)
+            ),
+        ),
+    )
+
+
 @register(
     name="agregar_contratos",
     scope=PUBLIC_SCOPE,
@@ -265,66 +336,13 @@ def agregar_contratos(
         fallback_target_field = ""
 
         if params.agrupar_por is None:
-            total_match, valor_total_json = _execute_total_sem_grupo(
+            return _responder_total_sem_grupo(
                 session,
                 params,
+                metadata,
                 include_descricao_despesa=include_descricao_despesa,
                 include_xml_original=include_xml_original,
                 available_columns=available_columns,
-            )
-            filtros_execucao = params.filtros
-            if total_match == 0:
-                fallback_result = _execute_fallback_aggregate(
-                    session,
-                    params,
-                    include_descricao_despesa=include_descricao_despesa,
-                    include_xml_original=include_xml_original,
-                    available_columns=available_columns,
-                )
-                if fallback_result is not None:
-                    (
-                        (filtros_execucao, total_match, valor_total_json),
-                        fallback_source_field,
-                        fallback_target_field,
-                    ) = fallback_result
-                    fallback_aplicado = True
-                    metadata = metadata.model_copy(
-                        update={
-                            "filtros_fallback_aplicados": filtros_execucao.to_metadata_dict()
-                        }
-                    )
-            mensagens = [
-                (
-                    build_descricao_despesa_unavailable_message(params.filtros)
-                    if not include_descricao_despesa and total_match > 0
-                    else None
-                ),
-                (
-                    build_contract_fallback_message(
-                        fallback_source_field,
-                        fallback_target_field,
-                    )
-                    if fallback_aplicado
-                    else None
-                ),
-            ]
-            return build_aggregate_response(
-                response_type=AgregarContratosResponse,
-                metadata=metadata,
-                execution=AggregateExecutionResult(
-                    valor_total=valor_total_json,
-                    source_count=total_match,
-                    messages=mensagens,
-                    suggestion=(
-                        build_descricao_despesa_unavailable_message(params.filtros)
-                        if total_match == 0 and not include_descricao_despesa
-                        else (
-                            "Nenhum contrato encontrado com os filtros informados."
-                            if total_match == 0
-                            else None
-                        )
-                    ),
-                ),
             )
         total_grupos, rows = _execute_grupo(
             session,
@@ -350,9 +368,7 @@ def agregar_contratos(
                 ) = fallback_result
                 fallback_aplicado = True
                 metadata = metadata.model_copy(
-                    update={
-                        "filtros_fallback_aplicados": filtros_execucao.to_metadata_dict()
-                    }
+                    update={"filtros_fallback_aplicados": filtros_execucao.to_metadata_dict()}
                 )
 
     mensagens: list[str] = []
@@ -388,11 +404,7 @@ def agregar_contratos(
         agrupar_por=params.agrupar_por,
         metrica=params.metrica,
         serialize_group_value=(
-            lambda value: (
-                int(value)
-                if params.agrupar_por == "ano_inicio" and value is not None
-                else value
-            )
+            lambda value: int(value) if params.agrupar_por == "ano_inicio" and value is not None else value
         ),
         serialize_metric=decimal_or_int_to_json,
     )

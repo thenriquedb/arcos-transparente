@@ -357,10 +357,7 @@ def test_consultar_transferencias_financeiras_retorna_sugestao_sem_resultados(
 
     assert resultado["total"] == 0
     assert resultado["resultados"] == []
-    assert (
-        resultado["sugestao"]
-        == "Nenhum registro de transferencias financeiras encontrado com os filtros."
-    )
+    assert resultado["sugestao"] == "Nenhum registro de transferencias financeiras encontrado com os filtros."
 
     session.close()
 
@@ -368,9 +365,7 @@ def test_consultar_transferencias_financeiras_retorna_sugestao_sem_resultados(
 def test_registry_expoe_tools_publicas_de_transferencias_financeiras() -> None:
     tool_names = {
         getattr(tool_obj, "name", "")
-        for tool_obj in tools_registry.get_public_tools(
-            tags=["domain:transferencias_financeiras"]
-        )
+        for tool_obj in tools_registry.get_public_tools(tags=["domain:transferencias_financeiras"])
     }
 
     assert "consultar_transferencias_financeiras" in tool_names
@@ -402,9 +397,7 @@ def test_query_de_transferencias_financeiras_rota_para_tool_publica_dedicada(
     _patch_session(monkeypatch, session)
 
     route = route_user_query("Quanto foi transferido para a camara em 2026?")
-    tool = select_public_tools_for_query(
-        "Quanto foi transferido para a camara em 2026?"
-    )[0]
+    tool = select_public_tools_for_query("Quanto foi transferido para a camara em 2026?")[0]
     resultado = tool.invoke(route.tool_kwargs)
 
     assert route.tool_name == "agregar_transferencias_financeiras"

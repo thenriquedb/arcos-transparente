@@ -37,9 +37,7 @@ def test_pipeline_importa_e_reimporta_transferencias_financeiras_sem_duplicar(
     csv_arquivo = transferencias_dir / "emendas-parlamentares-2026.csv"
 
     xml_arquivo.write_text(
-        (FIXTURES_DIR / "transferencias_financeiras_sample.xml").read_text(
-            encoding="utf-8"
-        ),
+        (FIXTURES_DIR / "transferencias_financeiras_sample.xml").read_text(encoding="utf-8"),
         encoding="ISO-8859-1",
     )
     csv_arquivo.write_text(
@@ -88,11 +86,7 @@ def test_pipeline_importa_e_reimporta_transferencias_financeiras_sem_duplicar(
         .filter(TransferenciaFinanceiraMovimento.sequencia_origem == 2)
         .one()
     )
-    emenda_atualizada = (
-        session.query(EmendaParlamentar)
-        .filter(EmendaParlamentar.sequencia_origem == 3)
-        .one()
-    )
+    emenda_atualizada = session.query(EmendaParlamentar).filter(EmendaParlamentar.sequencia_origem == 3).one()
 
     assert movimento_atualizado.valor_movimento == Decimal("600000.00")
     assert movimento_atualizado.programacao_inicial == Decimal("600000.00")

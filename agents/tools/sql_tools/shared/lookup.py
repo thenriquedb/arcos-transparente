@@ -47,14 +47,10 @@ def execute_statement_lookup(
 ) -> tuple[int, list[RowT]]:
     """Run a paginated statement-backed lookup with shared ordering semantics."""
 
-    total = session.execute(
-        select(func.count()).select_from(stmt.order_by(None).subquery())
-    ).scalar_one()
+    total = session.execute(select(func.count()).select_from(stmt.order_by(None).subquery())).scalar_one()
 
     ordered_stmt = stmt.order_by(
-        order_columns[ordenar_por].desc()
-        if ordem == "desc"
-        else order_columns[ordenar_por].asc(),
+        order_columns[ordenar_por].desc() if ordem == "desc" else order_columns[ordenar_por].asc(),
         *tie_breakers,
     )
     rows = list(load_rows(session, ordered_stmt.offset(offset).limit(limite)))
@@ -121,8 +117,7 @@ def build_lookup_response(
     execution: LookupExecutionResult,
     project_row: Callable[[Any, list[str]], dict[str, Any]],
     campos: list[str],
-    transform_results: Callable[[list[dict[str, Any]]], list[dict[str, Any]]]
-    | None = None,
+    transform_results: Callable[[list[dict[str, Any]]], list[dict[str, Any]]] | None = None,
     pagination_message_builder: Callable[[int, int], str] | None = None,
 ) -> dict[str, Any]:
     """Shape a normalized lookup result into the public response envelope."""

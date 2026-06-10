@@ -82,60 +82,30 @@ def _row_to_public_dict(registro: Eleito) -> dict[str, Any]:
 
 def _load_filtered_eleitos(session, filtros: EleitoFiltroSchema) -> list[Eleito]:
     registros = list(session.execute(select(Eleito)).scalars())
-    tipo_politico_resolvido = filtros.tipo_politico or _resolve_tipo_politico_alias(
-        filtros.cargo
-    )
+    tipo_politico_resolvido = filtros.tipo_politico or _resolve_tipo_politico_alias(filtros.cargo)
 
     if tipo_politico_resolvido:
-        registros = [
-            r
-            for r in registros
-            if normalize_search_text(r.tipo_politico) == tipo_politico_resolvido
-        ]
+        registros = [r for r in registros if normalize_search_text(r.tipo_politico) == tipo_politico_resolvido]
     if filtros.nome:
-        registros = [
-            r for r in registros if matches_text_query(r.nome_completo, filtros.nome)
-        ]
+        registros = [r for r in registros if matches_text_query(r.nome_completo, filtros.nome)]
     if filtros.nome_popular:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.nome_popular, filtros.nome_popular)
-        ]
+        registros = [r for r in registros if matches_text_query(r.nome_popular, filtros.nome_popular)]
     if filtros.partido:
-        registros = [
-            r for r in registros if matches_text_query(r.partido, filtros.partido)
-        ]
+        registros = [r for r in registros if matches_text_query(r.partido, filtros.partido)]
     if filtros.cargo and _resolve_tipo_politico_alias(filtros.cargo) is None:
         registros = [r for r in registros if matches_text_query(r.cargo, filtros.cargo)]
     if filtros.status_mandato:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.mandato_status, filtros.status_mandato)
-        ]
+        registros = [r for r in registros if matches_text_query(r.mandato_status, filtros.status_mandato)]
     if filtros.ano:
-        registros = [
-            r for r in registros if r.mandato_inicio <= filtros.ano <= r.mandato_fim
-        ]
+        registros = [r for r in registros if r.mandato_inicio <= filtros.ano <= r.mandato_fim]
     if filtros.em_exercicio is True:
-        registros = [
-            r for r in registros if matches_text_query(r.mandato_status, "em exercicio")
-        ]
+        registros = [r for r in registros if matches_text_query(r.mandato_status, "em exercicio")]
     if filtros.em_exercicio is False:
-        registros = [
-            r
-            for r in registros
-            if not matches_text_query(r.mandato_status, "em exercicio")
-        ]
+        registros = [r for r in registros if not matches_text_query(r.mandato_status, "em exercicio")]
     if filtros.municipio:
-        registros = [
-            r for r in registros if matches_text_query(r.municipio, filtros.municipio)
-        ]
+        registros = [r for r in registros if matches_text_query(r.municipio, filtros.municipio)]
     if filtros.estado:
-        registros = [
-            r for r in registros if matches_text_query(r.estado, filtros.estado)
-        ]
+        registros = [r for r in registros if matches_text_query(r.estado, filtros.estado)]
 
     return registros
 

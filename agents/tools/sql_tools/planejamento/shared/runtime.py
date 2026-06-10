@@ -42,6 +42,8 @@ def project_planejamento_fields(
     registro: PlanejamentoDespesa,
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_fields(
         registro,
         campos,

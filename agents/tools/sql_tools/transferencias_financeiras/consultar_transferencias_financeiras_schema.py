@@ -51,6 +51,8 @@ ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
 class TransferenciasFinanceirasFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     tipo_registro: str | None = None
     ano: int | None = None
     data_inicio: date | None = None
@@ -108,9 +110,9 @@ class TransferenciasFinanceirasFiltroSchema(SqlToolBaseSchema):
 
 
 class ConsultarTransferenciasFinanceirasParams(SqlToolBaseSchema):
-    filtros: TransferenciasFinanceirasFiltroSchema = Field(
-        default_factory=TransferenciasFinanceirasFiltroSchema
-    )
+    """Parametros validados da chamada da tool."""
+
+    filtros: TransferenciasFinanceirasFiltroSchema = Field(default_factory=TransferenciasFinanceirasFiltroSchema)
     ordenar_por: str = "data"
     ordem: str = "desc"
     limite: int = 10
@@ -169,17 +171,19 @@ class ConsultarTransferenciasFinanceirasParams(SqlToolBaseSchema):
 
 
 class ConsultarTransferenciasFinanceirasMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
     limite: int
     offset: int
-    campos: list[str] = Field(
-        default_factory=lambda: list(ALLOWED_TRANSFERENCIAS_FIELDS)
-    )
+    campos: list[str] = Field(default_factory=lambda: list(ALLOWED_TRANSFERENCIAS_FIELDS))
 
 
 class ConsultarTransferenciasFinanceirasResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarTransferenciasFinanceirasMetadata

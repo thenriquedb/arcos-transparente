@@ -35,12 +35,8 @@ def _try_route_planejamento_agregacao(normalized_text: str) -> RouteDecision | N
         return None
 
     # Pedidos de lista sem linguagem de total/ranking ficam com a tool de consulta.
-    if any(
-        keyword in normalized_text
-        for keyword in ("lista", "liste", "mostre", "quais", "detalhe")
-    ) and not any(
-        keyword in normalized_text
-        for keyword in ("maior", "maiores", "mais", "quanto", "total", "por mes")
+    if any(keyword in normalized_text for keyword in ("lista", "liste", "mostre", "quais", "detalhe")) and not any(
+        keyword in normalized_text for keyword in ("maior", "maiores", "mais", "quanto", "total", "por mes")
     ):
         return None
 
@@ -48,23 +44,15 @@ def _try_route_planejamento_agregacao(normalized_text: str) -> RouteDecision | N
     metrica = _extract_planejamento_metric(normalized_text)
 
     # O agrupamento é inferido pela dimensão mais explícita mencionada na pergunta.
-    if any(
-        _contains_term(normalized_text, keyword) for keyword in ("por mes", "mes a mes")
-    ):
+    if any(_contains_term(normalized_text, keyword) for keyword in ("por mes", "mes a mes")):
         agrupar_por = "mes"
     elif _contains_term(normalized_text, "programa"):
         agrupar_por = "programa"
-    elif _contains_term(normalized_text, "subarea") or _contains_term(
-        normalized_text, "subfuncao"
-    ):
+    elif _contains_term(normalized_text, "subarea") or _contains_term(normalized_text, "subfuncao"):
         agrupar_por = "subarea"
-    elif _contains_term(normalized_text, "acao") or _contains_term(
-        normalized_text, "acoes"
-    ):
+    elif _contains_term(normalized_text, "acao") or _contains_term(normalized_text, "acoes"):
         agrupar_por = "acao"
-    elif _contains_term(normalized_text, "grupo") or _contains_term(
-        normalized_text, "tipo de gasto"
-    ):
+    elif _contains_term(normalized_text, "grupo") or _contains_term(normalized_text, "tipo de gasto"):
         agrupar_por = "grupo_de_gasto"
     else:
         agrupar_por = None
@@ -104,10 +92,7 @@ def _try_route_planejamento_saude_lista(normalized_text: str) -> RouteDecision |
     """
     if not _is_planejamento_query(normalized_text):
         return None
-    if not any(
-        keyword in normalized_text
-        for keyword in ("lista", "liste", "mostre", "quais", "detalhe")
-    ):
+    if not any(keyword in normalized_text for keyword in ("lista", "liste", "mostre", "quais", "detalhe")):
         return None
 
     filtros = _extract_planejamento_filters_from_query(normalized_text)
@@ -119,9 +104,7 @@ def _try_route_planejamento_saude_lista(normalized_text: str) -> RouteDecision |
             "filtros": filtros,
             "ordenar_por": "mes_num",
             "ordem": "asc",
-            "limite": 100
-            if any(keyword in normalized_text for keyword in ("todas", "todos"))
-            else 10,
+            "limite": 100 if any(keyword in normalized_text for keyword in ("todas", "todos")) else 10,
         },
         tags=["scope:public", "domain:planejamento", "shape:lookup"],
         confident=True,

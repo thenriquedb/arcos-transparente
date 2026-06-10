@@ -24,10 +24,9 @@ from .agregar_licitacoes_schema import (
     AgregarLicitacoesParams,
     AgregarLicitacoesResponse,
 )
-from .shared.querying import (
-    apply_licitacoes_filters,
-    decimal_or_int_to_json,
-)
+from shared.utils.decimal_to_float import decimal_or_int_to_json
+
+from .shared.querying import apply_licitacoes_filters
 
 
 GROUP_BY_COLUMNS = {
@@ -203,9 +202,7 @@ def agregar_licitacoes(
         if params.filtros.objeto:
             licitacoes = [
                 licitacao
-                for licitacao in session.execute(
-                    apply_licitacoes_filters(select(Licitacao), params.filtros)
-                )
+                for licitacao in session.execute(apply_licitacoes_filters(select(Licitacao), params.filtros))
                 .scalars()
                 .all()
                 if matches_text_query(licitacao.objeto, params.filtros.objeto)

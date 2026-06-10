@@ -2,25 +2,22 @@
 
 from __future__ import annotations
 
-from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import exists, func, select
 
 from database.models import Licitacao, VencedorLicitacao
-from shared.utils.decimal_to_float import decimal_to_float
 
 from .filters import LicitacoesFiltroSchema
 from .runtime import serializar_licitacao
 
 
 def apply_licitacoes_filters(stmt, filtros: LicitacoesFiltroSchema):
+    """Aplica os filtros publicos do dominio sobre a consulta."""
+
     if filtros.data_abertura is not None:
         stmt = stmt.where(Licitacao.data_abertura == filtros.data_abertura)
-    elif (
-        filtros.data_abertura_inicio is not None
-        and filtros.data_abertura_fim is not None
-    ):
+    elif filtros.data_abertura_inicio is not None and filtros.data_abertura_fim is not None:
         stmt = stmt.where(
             Licitacao.data_abertura.between(
                 filtros.data_abertura_inicio,
@@ -29,21 +26,13 @@ def apply_licitacoes_filters(stmt, filtros: LicitacoesFiltroSchema):
         )
 
     if filtros.numero:
-        stmt = stmt.where(
-            func.lower(Licitacao.numero).like(f"%{filtros.numero.lower()}%")
-        )
+        stmt = stmt.where(func.lower(Licitacao.numero).like(f"%{filtros.numero.lower()}%"))
     if filtros.modalidade:
-        stmt = stmt.where(
-            func.lower(Licitacao.modalidade).like(f"%{filtros.modalidade.lower()}%")
-        )
+        stmt = stmt.where(func.lower(Licitacao.modalidade).like(f"%{filtros.modalidade.lower()}%"))
     if filtros.secretaria:
-        stmt = stmt.where(
-            func.lower(Licitacao.secretaria).like(f"%{filtros.secretaria.lower()}%")
-        )
+        stmt = stmt.where(func.lower(Licitacao.secretaria).like(f"%{filtros.secretaria.lower()}%"))
     if filtros.situacao:
-        stmt = stmt.where(
-            func.lower(Licitacao.situacao).like(f"%{filtros.situacao.lower()}%")
-        )
+        stmt = stmt.where(func.lower(Licitacao.situacao).like(f"%{filtros.situacao.lower()}%"))
     if filtros.valor_estimado_min is not None:
         stmt = stmt.where(Licitacao.valor_estimado >= filtros.valor_estimado_min)
     if filtros.valor_estimado_max is not None:
@@ -53,9 +42,7 @@ def apply_licitacoes_filters(stmt, filtros: LicitacoesFiltroSchema):
             exists(
                 select(VencedorLicitacao.id).where(
                     VencedorLicitacao.licitacao_id == Licitacao.id,
-                    func.lower(VencedorLicitacao.nome).like(
-                        f"%{filtros.fornecedor.lower()}%"
-                    ),
+                    func.lower(VencedorLicitacao.nome).like(f"%{filtros.fornecedor.lower()}%"),
                 )
             )
         )
@@ -80,6 +67,8 @@ def project_licitacao_fields(
     max_instrumentos: int,
     max_itens: int,
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     serialized = serializar_licitacao(
         licitacao,
         incluir_detalhes=incluir_detalhes,
@@ -100,9 +89,3 @@ def project_licitacao_fields(
         ):
             projected[detail_key] = serialized[detail_key]
     return projected
-
-
-def decimal_or_int_to_json(value: Decimal | int | None) -> float | int | None:
-    if isinstance(value, Decimal):
-        return decimal_to_float(value)
-    return value

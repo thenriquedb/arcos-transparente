@@ -54,9 +54,7 @@ def _period_end(registro: DespesaDocumento) -> date:
 GROUP_FIELD_GETTERS = {
     "origem": lambda registro: registro.origem,
     "ano": lambda registro: registro.exercicio,
-    "mes": lambda registro: (
-        _period_end(registro).month if _period_end(registro) else None
-    ),
+    "mes": lambda registro: _period_end(registro).month if _period_end(registro) else None,
     "beneficiario": lambda registro: registro.credor,
     "unidade_gestora": lambda registro: registro.unidade_gestora,
 }

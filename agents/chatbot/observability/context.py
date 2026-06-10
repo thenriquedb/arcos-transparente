@@ -1,3 +1,5 @@
+"""Propagacao de contexto (request/session) para eventos de observabilidade."""
+
 from __future__ import annotations
 
 from contextlib import contextmanager

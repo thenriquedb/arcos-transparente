@@ -241,9 +241,7 @@ def test_consultar_despesas_por_funcao_detecta_funcao_sem_confundir_com_origem(
     _patch_session(monkeypatch, session)
 
     decision = route_user_query("Quanto a prefeitura gastou na saude em 2025?")
-    tool = select_public_tools_for_query(
-        "Quanto a prefeitura gastou na saude em 2025?"
-    )[0]
+    tool = select_public_tools_for_query("Quanto a prefeitura gastou na saude em 2025?")[0]
     resultado = tool.invoke(decision.tool_kwargs)
 
     assert decision.tool_name == "agregar_despesas_por_funcao"
@@ -307,9 +305,7 @@ def test_agregar_despesas_por_funcao_por_funcao(monkeypatch) -> None:
 def test_registry_expoe_tools_publicas_de_despesas_por_funcao() -> None:
     tool_names = {
         getattr(tool_obj, "name", "")
-        for tool_obj in tools_registry.get_public_tools(
-            tags=["domain:despesas_por_funcao"]
-        )
+        for tool_obj in tools_registry.get_public_tools(tags=["domain:despesas_por_funcao"])
     }
 
     assert "consultar_despesas_por_funcao" in tool_names

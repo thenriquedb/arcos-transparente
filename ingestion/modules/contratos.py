@@ -41,9 +41,7 @@ def load_contratos(
                     "numero": registro["numero"],
                     "numero_licitatorio": registro.get("numero_licitatorio"),
                     "numero_instrumento": registro.get("numero_instrumento"),
-                    "tipo_instrumento_contratual": registro.get(
-                        "tipo_instrumento_contratual"
-                    ),
+                    "tipo_instrumento_contratual": registro.get("tipo_instrumento_contratual"),
                     "fornecedor": registro["fornecedor"],
                     "cnpj": registro["cnpj"],
                     "fornecedor_id": fornecedor.id,
@@ -82,9 +80,7 @@ def load_contratos(
                             "unidade": despesa.get("unidade"),
                             "departamento": despesa.get("departamento"),
                             "fonte_recurso": despesa.get("fonte_recurso"),
-                            "natureza_despesa_rubrica": despesa.get(
-                                "natureza_despesa_rubrica"
-                            ),
+                            "natureza_despesa_rubrica": despesa.get("natureza_despesa_rubrica"),
                             "descricao_despesa": despesa.get("descricao_despesa"),
                             "valor_despesa": despesa.get("valor_despesa"),
                         }

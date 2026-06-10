@@ -40,9 +40,7 @@ def upgrade() -> None:
         sa.Column("categoria", sa.String(length=100), nullable=False),
         sa.Column("secretaria", sa.String(length=120), nullable=False),
         sa.Column("descricao", sa.Text(), nullable=True),
-        sa.UniqueConstraint(
-            "numero", "data_inicio", name="uq_contrato_numero_data_inicio"
-        ),
+        sa.UniqueConstraint("numero", "data_inicio", name="uq_contrato_numero_data_inicio"),
     )
     op.create_index("ix_contratos_cnpj", "contratos", ["cnpj"])
     op.create_index("ix_contratos_categoria", "contratos", ["categoria"])
@@ -72,9 +70,7 @@ def upgrade() -> None:
         sa.Column("data_abertura", sa.Date(), nullable=False),
         sa.Column("situacao", sa.String(length=80), nullable=False),
         sa.Column("secretaria", sa.String(length=120), nullable=False),
-        sa.UniqueConstraint(
-            "numero", "data_abertura", name="uq_licitacao_numero_data_abertura"
-        ),
+        sa.UniqueConstraint("numero", "data_abertura", name="uq_licitacao_numero_data_abertura"),
     )
     op.create_index("ix_licitacoes_modalidade", "licitacoes", ["modalidade"])
     op.create_index("ix_licitacoes_situacao", "licitacoes", ["situacao"])

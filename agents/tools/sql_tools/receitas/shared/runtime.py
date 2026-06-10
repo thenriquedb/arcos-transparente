@@ -19,9 +19,7 @@ def serializar_receita_arrecadacao(registro: ReceitaArrecadacao) -> dict[str, An
         "mes_num": parse_month(registro.mes),
         "data": registro.data_arrecadacao,
         "unidade_responsavel": registro.unidade_gestora,
-        "categoria_codigo": registro.natureza.identificacao
-        if registro.natureza
-        else None,
+        "categoria_codigo": registro.natureza.identificacao if registro.natureza else None,
         "categoria": registro.natureza.nome if registro.natureza else None,
         "tipo": None,
         "tributo": None,
@@ -60,13 +58,11 @@ def serializar_receita_lancamento(registro: ReceitaLancamento) -> dict[str, Any]
         "descontos_realizados": None,
         "valor_lancado": decimal_to_float(registro.valor_lancado_exercicio),
         "valor_em_divida_ativa": decimal_to_float(registro.valor_lancado_divida_ativa),
-        "valor_em_cobranca_judicial": decimal_to_float(
-            registro.valor_lancado_cobraca_judicial
-        ),
+        "valor_em_cobranca_judicial": decimal_to_float(registro.valor_lancado_cobraca_judicial),
     }
 
 
-def project_receita_fields(
-    registro: dict[str, Any], campos: list[str]
-) -> dict[str, Any]:
+def project_receita_fields(registro: dict[str, Any], campos: list[str]) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_dict(registro, campos, order="requested")

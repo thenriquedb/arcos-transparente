@@ -136,9 +136,7 @@ def _fetch_contratos(
         limite=params.limite,
         order_columns=CONTRACT_ORDER_COLUMNS,
         tie_breakers=(Contrato.id.desc(),),
-        load_rows=lambda db_session, stmt: [
-            dict(row) for row in db_session.execute(stmt).mappings()
-        ],
+        load_rows=lambda db_session, stmt: [dict(row) for row in db_session.execute(stmt).mappings()],
     )
     return total, contratos
 
@@ -194,15 +192,11 @@ def _attach_contract_details(
 
     despesas_por_contrato: dict[int, list[dict[str, Any]]] = {}
     for despesa in despesas_rows:
-        despesas_por_contrato.setdefault(despesa.contrato_id, []).append(
-            serializar_contrato_despesa(despesa)
-        )
+        despesas_por_contrato.setdefault(despesa.contrato_id, []).append(serializar_contrato_despesa(despesa))
 
     itens_por_contrato: dict[int, list[dict[str, Any]]] = {}
     for item in itens_rows:
-        itens_por_contrato.setdefault(item.contrato_id, []).append(
-            serializar_contrato_item(item)
-        )
+        itens_por_contrato.setdefault(item.contrato_id, []).append(serializar_contrato_item(item))
 
     for contrato in contratos:
         despesas = despesas_por_contrato.get(contrato["id"], [])
@@ -288,6 +282,52 @@ def _project_contrato_lookup_item(
     campos: list[str],
 ) -> dict[str, Any]:
     return _aplicar_aviso_valor_zero([project_contrato_fields(contrato, campos)])[0]
+
+
+def _build_consulta_warnings(
+    params,
+    *,
+    include_descricao_despesa: bool,
+    details_available: bool,
+    fallback_aplicado: bool,
+    fallback_source_field: str,
+    fallback_target_field: str,
+) -> list[str]:
+    """Monta os avisos sobre colunas ausentes e fallback de filtro textual."""
+
+    mensagens: list[str] = []
+    if not include_descricao_despesa:
+        warning = build_descricao_despesa_unavailable_message(params.filtros)
+        if warning is not None:
+            mensagens.append(warning)
+    if params.incluir_detalhes and not details_available:
+        mensagens.append(build_contrato_details_unavailable_message())
+    if fallback_aplicado:
+        mensagens.append(
+            build_contract_fallback_message(
+                fallback_source_field,
+                fallback_target_field,
+            )
+        )
+    return mensagens
+
+
+def _build_consulta_suggestion(
+    params,
+    *,
+    has_results: bool,
+    include_descricao_despesa: bool,
+    details_available: bool,
+) -> str | None:
+    """Escolhe a sugestao exibida quando a consulta volta vazia."""
+
+    if has_results:
+        return None
+    return (
+        (build_contrato_details_unavailable_message() if params.incluir_detalhes and not details_available else None)
+        or (build_descricao_despesa_unavailable_message(params.filtros) if not include_descricao_despesa else None)
+        or _SUGESTAO_SEM_RESULTADOS
+    )
 
 
 @register(
@@ -478,9 +518,7 @@ def consultar_contratos(
 
     metadata = ConsultarContratosMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
-        filtros_fallback_aplicados=(
-            filtros_execucao.to_metadata_dict() if fallback_aplicado else None
-        ),
+        filtros_fallback_aplicados=(filtros_execucao.to_metadata_dict() if fallback_aplicado else None),
         ordenar_por=params.ordenar_por,
         ordem=params.ordem,
         limite=params.limite,
@@ -489,38 +527,23 @@ def consultar_contratos(
         campos=params.campos or list(ALLOWED_CONTRACT_FIELDS),
     )
 
-    mensagens: list[str] = []
-    if not include_descricao_despesa:
-        warning = build_descricao_despesa_unavailable_message(params.filtros)
-        if warning is not None:
-            mensagens.append(warning)
-    if params.incluir_detalhes and not details_available:
-        mensagens.append(build_contrato_details_unavailable_message())
-    if fallback_aplicado:
-        mensagens.append(
-            build_contract_fallback_message(
-                fallback_source_field,
-                fallback_target_field,
-            )
-        )
+    mensagens = _build_consulta_warnings(
+        params,
+        include_descricao_despesa=include_descricao_despesa,
+        details_available=details_available,
+        fallback_aplicado=fallback_aplicado,
+        fallback_source_field=fallback_source_field,
+        fallback_target_field=fallback_target_field,
+    )
     execution = LookupExecutionResult(
         total=total,
         rows=contratos,
         messages=mensagens if contratos else (),
-        suggestion=(
-            (
-                build_contrato_details_unavailable_message()
-                if params.incluir_detalhes and not details_available
-                else None
-            )
-            or (
-                build_descricao_despesa_unavailable_message(params.filtros)
-                if not include_descricao_despesa
-                else None
-            )
-            or _SUGESTAO_SEM_RESULTADOS
-            if not contratos
-            else None
+        suggestion=_build_consulta_suggestion(
+            params,
+            has_results=bool(contratos),
+            include_descricao_despesa=include_descricao_despesa,
+            details_available=details_available,
         ),
     )
     return build_lookup_response(

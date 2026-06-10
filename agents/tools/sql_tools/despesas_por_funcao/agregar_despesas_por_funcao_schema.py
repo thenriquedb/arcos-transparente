@@ -35,9 +35,9 @@ ALLOWED_DESPESAS_POR_FUNCAO_METRICS = {
 
 
 class AgregarDespesasPorFuncaoParams(SqlToolBaseSchema):
-    filtros: DespesasPorFuncaoFiltroSchema = Field(
-        default_factory=DespesasPorFuncaoFiltroSchema
-    )
+    """Parametros validados da chamada da tool."""
+
+    filtros: DespesasPorFuncaoFiltroSchema = Field(default_factory=DespesasPorFuncaoFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_valor_pago"
     ordenar_por: str = "metrica"
@@ -94,13 +94,13 @@ class AgregarDespesasPorFuncaoParams(SqlToolBaseSchema):
         if self.ordenar_por not in {"metrica", self.agrupar_por}:
             raise ValueError("ordenar_por deve ser 'metrica' ou igual a agrupar_por")
         if self.agrupar_por is None and self.ordenar_por != "metrica":
-            raise ValueError(
-                "ordenar_por deve ser 'metrica' quando agrupar_por nao for informado"
-            )
+            raise ValueError("ordenar_por deve ser 'metrica' quando agrupar_por nao for informado")
         return self
 
 
 class AgregarDespesasPorFuncaoMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -110,6 +110,8 @@ class AgregarDespesasPorFuncaoMetadata(SqlToolBaseSchema):
 
 
 class AgregarDespesasPorFuncaoResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarDespesasPorFuncaoMetadata

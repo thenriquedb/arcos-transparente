@@ -8,6 +8,8 @@ from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 
 
 class ContratoToolItem(SqlToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     id: int
     numero: str
     fornecedor: str
@@ -22,6 +24,8 @@ class ContratoToolItem(SqlToolBaseSchema):
 
 
 class ContratoDespesaOrcamentariaToolItem(SqlToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     ordem: int
     unidade_gestora: str | None = None
     exercicio: int | None = None
@@ -35,6 +39,8 @@ class ContratoDespesaOrcamentariaToolItem(SqlToolBaseSchema):
 
 
 class ContratoItemAdquiridoToolItem(SqlToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     ordem: int
     unidade_gestora: str | None = None
     numero_lote: str | None = None

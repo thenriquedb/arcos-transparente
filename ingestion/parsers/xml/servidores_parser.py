@@ -20,9 +20,7 @@ class ServidoresParser:
             payload = json.load(fp)
 
         if not isinstance(payload, list):
-            raise ValueError(
-                "JSON de servidores deve ser uma lista de objetos suportados"
-            )
+            raise ValueError("JSON de servidores deve ser uma lista de objetos suportados")
 
         registros: list[dict[str, Any]] = []
         invalidos = 0
@@ -42,9 +40,7 @@ class ServidoresParser:
                 "fundamento_legal": raw_row.get("FundamentoLegal"),
                 "lotacao": raw_row.get("Lotacao"),
                 "situacao_funcional": raw_row.get("SituacaoFuncional"),
-                "forma_contratacao_investidura": raw_row.get(
-                    "FormaContratacaoInvestidura"
-                ),
+                "forma_contratacao_investidura": raw_row.get("FormaContratacaoInvestidura"),
                 "data_admissao": raw_row.get("DataAdmissao"),
                 "data_desligamento": raw_row.get("DataDesligamento"),
                 "horario_trabalho": raw_row.get("HorarioTrabalho"),
@@ -67,8 +63,6 @@ class ServidoresParser:
             registros.append(payload.model_dump(mode="python"))
 
         if invalidos:
-            logger.info(
-                f"Descartados {invalidos} registros invalidos de servidores em {filepath}"
-            )
+            logger.info(f"Descartados {invalidos} registros invalidos de servidores em {filepath}")
 
         return registros

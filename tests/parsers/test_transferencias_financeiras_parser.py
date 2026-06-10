@@ -12,9 +12,7 @@ FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures"
 
 
 def test_transferencias_financeiras_parser_parseia_movimentos_xml() -> None:
-    registros = TransferenciasFinanceirasParser().parse(
-        str(FIXTURES_DIR / "transferencias_financeiras_sample.xml")
-    )
+    registros = TransferenciasFinanceirasParser().parse(str(FIXTURES_DIR / "transferencias_financeiras_sample.xml"))
 
     assert len(registros) == 2
     assert registros[0]["arquivo_origem"] == "transferencias_financeiras_sample.xml"

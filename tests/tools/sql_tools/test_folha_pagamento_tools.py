@@ -124,9 +124,7 @@ def test_busca_historico_de_pagamentos_serializa_contrato_leigo(monkeypatch) -> 
 
     assert resultado["query"] == "Maria da Silva"
     assert resultado["total"] == 1
-    assert (
-        resultado["resultados"][0]["folha_servidor_id"] == folha_servidor_fevereiro.id
-    )
+    assert resultado["resultados"][0]["folha_servidor_id"] == folha_servidor_fevereiro.id
     assert resultado["resultados"][0]["nome"] == "Maria da Silva"
     assert resultado["resultados"][0]["cargo_atual"] == "Enfermeira"
     assert resultado["resultados"][0]["setor_atual"] == "UPA Central"
@@ -161,9 +159,7 @@ def test_busca_historico_de_pagamentos_serializa_contrato_leigo(monkeypatch) -> 
             "valor_recebido": 2800.0,
         },
     ]
-    assert resultado["resultados"][0]["nota"].endswith(
-        "Historico limitado aos ultimos 2 meses de pagamento."
-    )
+    assert resultado["resultados"][0]["nota"].endswith("Historico limitado aos ultimos 2 meses de pagamento.")
     assert "lotacao_atual" not in resultado["resultados"][0]
     assert "competencia_referencia_servidor" not in resultado["resultados"][0]
     assert "total_pagamentos_considerados" not in resultado["resultados"][0]
@@ -220,9 +216,7 @@ def test_busca_historico_de_pagamentos_aceita_termos_nao_contiguos(
 
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
-    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
-        "Ronaldo Ribeiro"
-    )
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("Ronaldo Ribeiro")
 
     assert resultado["query"] == "Ronaldo Ribeiro"
     assert resultado["total"] == 1
@@ -277,9 +271,7 @@ def test_busca_historico_de_pagamentos_ignora_diferenca_de_acentos(
     )
 
     assert resultado["total"] == 1
-    assert resultado["resultados"][0]["nome"] == (
-        "Wellington Francelli Estevao Rodrigues Roque"
-    )
+    assert resultado["resultados"][0]["nome"] == ("Wellington Francelli Estevao Rodrigues Roque")
     assert resultado["resultados"][0]["cargo_atual"] == "Prefeito Municipal"
     assert resultado["resultados"][0]["pagamentos"][0]["salario_base"] == 22614.44
 
@@ -339,15 +331,11 @@ def test_busca_historico_de_pagamentos_resolve_cargo_politico_automaticamente(
 
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
-    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
-        "do prefeito"
-    )
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("do prefeito")
 
     assert resultado["query"] == "do prefeito"
     assert resultado["total"] == 1
-    assert resultado["resultados"][0]["nome"] == (
-        "Wellington Francelli Estevao Rodrigues Roque"
-    )
+    assert resultado["resultados"][0]["nome"] == ("Wellington Francelli Estevao Rodrigues Roque")
     assert resultado["resultados"][0]["cargo_atual"] == "Prefeito Municipal"
     assert resultado["resultados"][0]["pagamentos"][0]["salario_base"] == 22614.44
 
@@ -429,9 +417,7 @@ def test_busca_historico_de_pagamentos_desambigua_multiplos_candidatos(
 
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
-    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
-        "Ronaldo Ribeiro"
-    )
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("Ronaldo Ribeiro")
 
     assert resultado["query"] == "Ronaldo Ribeiro"
     assert resultado["total"] == 2
@@ -542,15 +528,12 @@ def test_busca_historico_de_pagamentos_retorna_mensagem_para_nome_vazio() -> Non
 
     assert resultado["total"] == 0
     assert resultado["mensagem"] == (
-        "Informe um nome de servidor ou selecione um `folha_servidor_id` "
-        "para realizar a busca."
+        "Informe um nome de servidor ou selecione um `folha_servidor_id` para realizar a busca."
     )
 
 
 def test_busca_historico_de_pagamentos_exige_nome_suficiente() -> None:
-    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
-        "Ronaldo"
-    )
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("Ronaldo")
 
     assert resultado["query"] == "Ronaldo"
     assert resultado["total"] == 0
@@ -573,15 +556,12 @@ def test_busca_historico_de_pagamentos_avisa_quando_base_de_folha_esta_vazia(
 
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
-    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
-        "Jose Silva"
-    )
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("Jose Silva")
 
     assert resultado["query"] == "Jose Silva"
     assert resultado["total"] == 0
     assert resultado["mensagem"] == (
-        "A base local de folha de pagamento esta vazia. "
-        "Importe os XMLs de folha antes de consultar salarios."
+        "A base local de folha de pagamento esta vazia. Importe os XMLs de folha antes de consultar salarios."
     )
 
     session.close()
@@ -608,9 +588,7 @@ def test_busca_historico_de_pagamentos_retorna_sugestao_sem_resultados(
 
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
-    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor(
-        "Jose Silva"
-    )
+    resultado = folha_pagamento_tools.buscar_historico_de_pagamentos_do_servidor("Jose Silva")
 
     assert resultado["query"] == "Jose Silva"
     assert resultado["total"] == 0

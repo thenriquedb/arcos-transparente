@@ -51,9 +51,7 @@ def test_schema_converte_dados_e_aplica_defaults() -> None:
     assert data["situacao"] == "nao_informado"
     assert data["secretaria"] == "nao_informado"
     assert data["instrumentos_contratuais"][0]["data_emissao"] == date(2025, 3, 10)
-    assert data["instrumentos_contratuais"][0]["materias"][0]["quantidade"] == Decimal(
-        "2.50"
-    )
+    assert data["instrumentos_contratuais"][0]["materias"][0]["quantidade"] == Decimal("2.50")
 
 
 def test_schema_rejeita_campos_obrigatorios_ausentes() -> None:

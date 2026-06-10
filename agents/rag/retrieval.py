@@ -82,9 +82,7 @@ _SCHEDULE_HINT_TERMS = frozenset(
     }
 )
 _GENERIC_INTENT_TERMS = (
-    _CONTACT_HINT_TERMS
-    | _SCHEDULE_HINT_TERMS
-    | frozenset({"uteis", "util", "municipal", "prefeitura", "arcos"})
+    _CONTACT_HINT_TERMS | _SCHEDULE_HINT_TERMS | frozenset({"uteis", "util", "municipal", "prefeitura", "arcos"})
 )
 
 
@@ -201,16 +199,12 @@ class KnowledgeRetriever:
                 k=search_limit,
             )
             results = [
-                (document, score)
-                for document, score in raw_results
-                if score >= self._config.relevance_threshold
+                (document, score) for document, score in raw_results if score >= self._config.relevance_threshold
             ]
 
         passages = tuple(
             RetrievedPassage(
-                titulo_documento=str(
-                    document.metadata.get("document_title") or "Documento sem titulo"
-                ),
+                titulo_documento=str(document.metadata.get("document_title") or "Documento sem titulo"),
                 arquivo_fonte=str(document.metadata.get("source_path") or ""),
                 secao=str(document.metadata.get("section_path") or ""),
                 pontuacao=float(score),
@@ -234,8 +228,7 @@ class KnowledgeRetriever:
             status="ok",
             pergunta=query,
             mensagem=(
-                "Trechos relevantes recuperados do acervo markdown local. Cite as "
-                "fontes ao redigir a resposta final."
+                "Trechos relevantes recuperados do acervo markdown local. Cite as fontes ao redigir a resposta final."
             ),
             fontes=passages,
             index_state=index_status.state,
@@ -255,9 +248,7 @@ class KnowledgeRetriever:
         entity_terms = tuple(
             token
             for token in query_tokens
-            if len(token) >= 4
-            and token not in _STOPWORDS
-            and token not in _GENERIC_INTENT_TERMS
+            if len(token) >= 4 and token not in _STOPWORDS and token not in _GENERIC_INTENT_TERMS
         )
         if not entity_terms:
             return ()
@@ -317,9 +308,7 @@ class KnowledgeRetriever:
                         score,
                         RetrievedPassage(
                             titulo_documento=title,
-                            arquivo_fonte=path.relative_to(
-                                self._config.source_directory
-                            ).as_posix(),
+                            arquivo_fonte=path.relative_to(self._config.source_directory).as_posix(),
                             secao=secao,
                             pontuacao=score,
                             trecho=snippet,
@@ -368,9 +357,7 @@ class KnowledgeRetriever:
                         score,
                         RetrievedPassage(
                             titulo_documento=title,
-                            arquivo_fonte=path.relative_to(
-                                self._config.source_directory
-                            ).as_posix(),
+                            arquivo_fonte=path.relative_to(self._config.source_directory).as_posix(),
                             secao=_resolve_section_label(lines, index),
                             pontuacao=score,
                             trecho=snippet,
@@ -390,9 +377,7 @@ class KnowledgeRetriever:
     def _load_vectorstore(self):
         vectorstore_cls = self._vectorstore_cls or _get_chroma_class()
         embeddings = (
-            self._embeddings_factory()
-            if self._embeddings_factory is not None
-            else _build_embeddings(self._config)
+            self._embeddings_factory() if self._embeddings_factory is not None else _build_embeddings(self._config)
         )
         return vectorstore_cls(
             collection_name=self._config.collection_name,

@@ -32,9 +32,7 @@ def test_schema_contrato_converte_dados_e_aplica_defaults() -> None:
     payload["categoria"] = "   "
     payload["secretaria"] = None
     payload["descricao_despesa"] = "  Festividades e Homenagens  "
-    payload["xml_original"] = (
-        "  <InstrumentoContratual><Objeto>Locacao</Objeto></InstrumentoContratual>  "
-    )
+    payload["xml_original"] = "  <InstrumentoContratual><Objeto>Locacao</Objeto></InstrumentoContratual>  "
     payload["despesas_orcamentarias"] = [
         {
             "unidade_gestora": "Secretaria de Saude",
@@ -62,10 +60,7 @@ def test_schema_contrato_converte_dados_e_aplica_defaults() -> None:
     assert data["categoria"] == "nao_informado"
     assert data["secretaria"] == "nao_informado"
     assert data["descricao_despesa"] == "Festividades e Homenagens"
-    assert (
-        data["xml_original"]
-        == "<InstrumentoContratual><Objeto>Locacao</Objeto></InstrumentoContratual>"
-    )
+    assert data["xml_original"] == "<InstrumentoContratual><Objeto>Locacao</Objeto></InstrumentoContratual>"
     assert data["despesas_orcamentarias"][0]["exercicio"] == 2025
     assert data["despesas_orcamentarias"][0]["valor_despesa"] == Decimal("7500.00")
     assert data["itens_adquiridos"][0]["quantidade"] == Decimal("2.0000")

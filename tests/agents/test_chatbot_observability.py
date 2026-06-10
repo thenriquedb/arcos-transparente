@@ -188,10 +188,7 @@ def test_observabilidade_langsmith_rejeita_api_key_ausente(monkeypatch) -> None:
 
     with pytest.raises(
         ValueError,
-        match=(
-            "LANGSMITH_API_KEY deve ser informado quando "
-            "OBSERVABILITY_PROVIDER=langsmith\\."
-        ),
+        match=("LANGSMITH_API_KEY deve ser informado quando OBSERVABILITY_PROVIDER=langsmith\\."),
     ):
         criar_provider_observabilidade()
 
@@ -220,12 +217,8 @@ def test_chatbot_emit_eventos_para_consulta_bloqueada() -> None:
     response = app.ask("Como implementar uma lista encadeada em Python?")
 
     assert response.guardrail_triggered is True
-    policy_event = next(
-        event for event in provider.emitted_events if event.name == "chatbot.policy"
-    )
-    request_span = next(
-        span for span in provider.completed_spans if span.name == "chatbot.request"
-    )
+    policy_event = next(event for event in provider.emitted_events if event.name == "chatbot.policy")
+    request_span = next(span for span in provider.completed_spans if span.name == "chatbot.request")
 
     assert policy_event.outputs["policy_action"] == "block"
     assert request_span.outputs["status"] == "blocked"
@@ -259,12 +252,8 @@ def test_chatbot_emit_eventos_para_consulta_permitida_com_selecao(
     response = app.ask("mostre contratos em 2025")
 
     assert "resposta para" in response.content
-    selection_event = next(
-        event for event in provider.emitted_events if event.name == "chatbot.selection"
-    )
-    request_span = next(
-        span for span in provider.completed_spans if span.name == "chatbot.request"
-    )
+    selection_event = next(event for event in provider.emitted_events if event.name == "chatbot.selection")
+    request_span = next(span for span in provider.completed_spans if span.name == "chatbot.request")
 
     assert selection_event.outputs["selection_action"] == "allow"
     assert selection_event.outputs["selected_tool_names"] == ["consultar_contratos"]
@@ -297,9 +286,7 @@ def test_chatbot_registra_falha_surfaced_no_request_span(monkeypatch) -> None:
     with pytest.raises(RuntimeError, match="backend explodiu"):
         app.ask("mostre contratos em 2025")
 
-    request_span = next(
-        span for span in provider.completed_spans if span.name == "chatbot.request"
-    )
+    request_span = next(span for span in provider.completed_spans if span.name == "chatbot.request")
 
     assert request_span.error_type == "RuntimeError"
     assert request_span.metadata["status"] == "error"

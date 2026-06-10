@@ -20,6 +20,8 @@ from .shared.filters import (
 
 
 class ConsultarContratosParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: ContratosFiltroSchema = Field(default_factory=ContratosFiltroSchema)
     ordenar_por: str = "data_inicio"
     ordem: str = "desc"
@@ -76,6 +78,8 @@ class ConsultarContratosParams(SqlToolBaseSchema):
 
 
 class ConsultarContratosMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     filtros_fallback_aplicados: dict[str, Any] | None = None
     ordenar_por: str
@@ -87,6 +91,8 @@ class ConsultarContratosMetadata(SqlToolBaseSchema):
 
 
 class ConsultarContratosResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarContratosMetadata

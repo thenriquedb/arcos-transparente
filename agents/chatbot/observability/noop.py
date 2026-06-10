@@ -1,3 +1,5 @@
+"""Provider nulo usado quando a observabilidade esta desligada."""
+
 from __future__ import annotations
 
 from collections.abc import Iterator, Mapping, Sequence

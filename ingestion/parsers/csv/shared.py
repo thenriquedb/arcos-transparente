@@ -12,9 +12,7 @@ from ingestion.parsers.xml.shared import sanitize_xml_text
 CSV_FALLBACK_ENCODING = "ISO-8859-1"
 
 
-def read_csv_text(
-    filepath: str | Path, *, encoding: str = CSV_FALLBACK_ENCODING
-) -> str:
+def read_csv_text(filepath: str | Path, *, encoding: str = CSV_FALLBACK_ENCODING) -> str:
     """Le o CSV com encoding conhecido e remove caracteres de controle invalidos."""
 
     text = Path(filepath).read_text(encoding=encoding)

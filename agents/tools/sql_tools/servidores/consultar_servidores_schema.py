@@ -21,6 +21,8 @@ from .shared.filters import (
 
 
 class ConsultarServidoresParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: ServidoresFiltroSchema = Field(default_factory=ServidoresFiltroSchema)
     ordenar_por: str = "nome"
     ordem: str = "asc"
@@ -76,6 +78,8 @@ class ConsultarServidoresParams(SqlToolBaseSchema):
 
 
 class ConsultarServidoresMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -87,6 +91,8 @@ class ConsultarServidoresMetadata(SqlToolBaseSchema):
 
 
 class ConsultarServidoresResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarServidoresMetadata

@@ -30,9 +30,7 @@ class EmendasParlamentaresCsvParser:
         metadata = self._extract_metadata(rows, filepath)
         exercicio_consulta = parse_int(metadata.get("exercicio"))
         if exercicio_consulta is None:
-            raise ValueError(
-                f"Metadata obrigatoria 'exercicio' ausente em '{filepath}'."
-            )
+            raise ValueError(f"Metadata obrigatoria 'exercicio' ausente em '{filepath}'.")
 
         registros: list[dict[str, Any]] = []
         arquivo_origem = Path(filepath).name
@@ -84,9 +82,7 @@ class EmendasParlamentaresCsvParser:
                     metadata[key] = value
 
         if not header_found:
-            raise ValueError(
-                f"Cabecalho de emendas parlamentares CSV nao encontrado no arquivo '{filepath}'."
-            )
+            raise ValueError(f"Cabecalho de emendas parlamentares CSV nao encontrado no arquivo '{filepath}'.")
 
         return metadata
 
@@ -118,17 +114,13 @@ class EmendasParlamentaresCsvParser:
             data_rows.append(cleaned_row[: len(_EXPECTED_HEADER)])
 
         if not header_found:
-            raise ValueError(
-                f"Cabecalho de emendas parlamentares CSV nao encontrado no arquivo '{filepath}'."
-            )
+            raise ValueError(f"Cabecalho de emendas parlamentares CSV nao encontrado no arquivo '{filepath}'.")
 
         return data_rows
 
     @staticmethod
     def _is_header_row(row: list[str]) -> bool:
-        normalized = tuple(
-            normalize_search_text(value) for value in row[: len(_EXPECTED_HEADER)]
-        )
+        normalized = tuple(normalize_search_text(value) for value in row[: len(_EXPECTED_HEADER)])
         return normalized == _EXPECTED_HEADER
 
     @classmethod

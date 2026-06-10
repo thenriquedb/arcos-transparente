@@ -29,8 +29,7 @@ def load_estoques(session, registros: list[dict[str, Any]]) -> LoadResult:
                     filters=[
                         EstoqueMaterial.origem == registro["origem"],
                         EstoqueMaterial.arquivo_origem == registro["arquivo_origem"],
-                        EstoqueMaterial.sequencia_material
-                        == registro["sequencia_material"],
+                        EstoqueMaterial.sequencia_material == registro["sequencia_material"],
                     ],
                     payload=payload,
                 )
