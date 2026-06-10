@@ -58,8 +58,10 @@ from agents.routing.routes.transferencias_financeiras import (
 )
 from agents.tools.registry import get_public_tools
 
-# The priority chain stays centralized here so compatibility callers use
-# the same deterministic precedence without treating the facade as authority.
+# The priority chain stays centralized here as the single deterministic
+# precedence order. It is load-bearing for the main chatbot path: the policy
+# gate and several hybrid-selection heuristics call route_public_compatibility_query
+# directly, in addition to legacy compatibility callers.
 ROUTE_PRIORITY_CHAIN = (
     _try_route_historico,
     _try_route_contratos_agregacao,

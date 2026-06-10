@@ -1,3 +1,5 @@
+"""Sanitizacao de payloads antes do envio ao backend de observabilidade."""
+
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence

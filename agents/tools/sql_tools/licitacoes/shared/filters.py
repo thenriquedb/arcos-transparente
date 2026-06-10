@@ -45,6 +45,8 @@ ALLOWED_ORDER_VALUES = ("asc", "desc")
 
 
 class LicitacoesFiltroSchema(LicitacoesToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     numero: str | None = None
     modalidade: str | None = None
     objeto: str | None = None

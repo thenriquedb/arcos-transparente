@@ -24,6 +24,10 @@ from agents.chatbot.observability import (
     use_observability_provider,
 )
 from agents.chatbot.policy import evaluate_deterministic_policy
+from agents.chatbot.streaming import (
+    extract_last_message_content,
+    extract_stream_chunk_content,
+)
 from agents.tools.registry import get_public_tools
 
 
@@ -145,7 +149,7 @@ class ChatbotAgentBackend:
                 )
                 raise
 
-            content = _extract_last_message_content(result)
+            content = extract_last_message_content(result)
             response = ChatResponse(
                 content=content,
                 guardrail_triggered=bool(result.get("guardrail_triggered", False)),
@@ -250,7 +254,7 @@ class ChatbotAgentBackend:
             yielded = False
             chunks: list[str] = []
             for event in events:
-                content = _extract_stream_chunk_content(event)
+                content = extract_stream_chunk_content(event)
                 if not content:
                     continue
                 yielded = True
@@ -606,106 +610,6 @@ class ChatbotApplication:
             metadata=assistant_metadata,
         )
         return final_content
-
-
-def _extract_last_message_content(result: dict[str, Any]) -> str:
-    messages = result.get("messages") or []
-    if not messages:
-        return ""
-
-    last_message = messages[-1]
-    content = getattr(last_message, "content", last_message)
-    # return messages
-    return str(content)
-
-
-def _extract_stream_chunk_content(event: Any) -> str:
-    if event is None:
-        return ""
-
-    if _is_langgraph_message_event(event):
-        message, metadata = event
-        if not _is_user_visible_stream_message(message, metadata):
-            return ""
-        return _extract_stream_chunk_content(message)
-
-    if isinstance(event, str):
-        return event
-
-    if isinstance(event, bytes):
-        return event.decode("utf-8", errors="ignore")
-
-    if isinstance(event, dict):
-        for key in ("content", "text", "delta"):
-            content = _content_to_text(event.get(key))
-            if content:
-                return content
-        for key in ("message", "messages", "chunk", "data"):
-            content = _extract_stream_chunk_content(event.get(key))
-            if content:
-                return content
-        return ""
-
-    if isinstance(event, (tuple, list)):
-        if len(event) == 2 and isinstance(event[1], dict):
-            return _extract_stream_chunk_content(event[0])
-        for item in event:
-            content = _extract_stream_chunk_content(item)
-            if content:
-                return content
-        return ""
-
-    return _content_to_text(getattr(event, "content", None))
-
-
-def _is_langgraph_message_event(event: Any) -> bool:
-    return (
-        isinstance(event, (tuple, list))
-        and len(event) == 2
-        and isinstance(event[1], dict)
-    )
-
-
-def _is_user_visible_stream_message(message: Any, metadata: dict[str, Any]) -> bool:
-    node_name = str(
-        metadata.get("langgraph_node")
-        or metadata.get("node")
-        or metadata.get("name")
-        or ""
-    ).lower()
-    if node_name in {"tool", "tools"} or node_name.endswith(":tools"):
-        return False
-
-    message_kind = str(
-        getattr(message, "type", None) or getattr(message, "role", None) or ""
-    ).lower()
-    if message_kind in {"tool", "human", "system"}:
-        return False
-
-    class_name = message.__class__.__name__.lower()
-    hidden_message_classes = ("toolmessage", "humanmessage", "systemmessage")
-    return not any(
-        hidden_class in class_name for hidden_class in hidden_message_classes
-    )
-
-
-def _content_to_text(content: Any) -> str:
-    if isinstance(content, str):
-        return content
-
-    if isinstance(content, list):
-        parts: list[str] = []
-        for item in content:
-            if isinstance(item, str):
-                parts.append(item)
-                continue
-            if isinstance(item, dict):
-                text = item.get("text") or item.get("content")
-                if isinstance(text, str):
-                    parts.append(text)
-        return "".join(parts)
-
-    return ""
 
 
 def _normalize_question(question: str) -> str:

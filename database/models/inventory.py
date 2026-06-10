@@ -1,3 +1,5 @@
+"""Modelos ORM de estoques e movimentacoes de almoxarifado."""
+
 from __future__ import annotations
 
 from datetime import date, datetime

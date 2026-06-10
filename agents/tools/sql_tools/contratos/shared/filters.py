@@ -53,6 +53,8 @@ TEXT_FALLBACK_TARGETS = {
 
 
 class ContratosFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     numero: str | None = None
     fornecedor: str | None = None
     documento_fornecedor: str | None = None

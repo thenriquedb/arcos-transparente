@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import func, or_
@@ -10,7 +9,6 @@ from sqlalchemy import func, or_
 from database.session import _normalizar_texto
 from database.models import FolhaServidor
 from agents.tools.sql_tools.shared.projection import project_public_fields
-from shared.utils.decimal_to_float import decimal_to_float
 
 from .filters import ServidoresFiltroSchema
 from .runtime import obter_mes_de_referencia_mais_recente, serializar_servidor
@@ -54,6 +52,8 @@ def apply_servidores_filters(
     *,
     mes_de_referencia_considerado,
 ):
+    """Aplica os filtros publicos do dominio sobre a consulta."""
+
     if mes_de_referencia_considerado is not None:
         stmt = stmt.where(
             FolhaServidor.competencia_referencia == mes_de_referencia_considerado
@@ -113,15 +113,11 @@ def project_servidor_fields(
     servidor: FolhaServidor,
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_fields(
         servidor,
         campos,
         serializer=serializar_servidor,
         order="requested",
     )
-
-
-def decimal_or_int_to_json(value: Decimal | int | None) -> float | int | None:
-    if isinstance(value, Decimal):
-        return decimal_to_float(value)
-    return value

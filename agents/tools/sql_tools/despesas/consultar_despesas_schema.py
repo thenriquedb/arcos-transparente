@@ -51,6 +51,8 @@ ALLOWED_TIPOS = {
 
 
 class DespesaFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     tipo: str | None = None
     origem: str | None = None
     ano: int | None = None
@@ -101,6 +103,8 @@ class DespesaFiltroSchema(SqlToolBaseSchema):
 
 
 class ConsultarDespesasParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: DespesaFiltroSchema = Field(default_factory=DespesaFiltroSchema)
     ordenar_por: str = "data"
     ordem: str = "desc"
@@ -157,6 +161,8 @@ class ConsultarDespesasParams(SqlToolBaseSchema):
 
 
 class ConsultarDespesasMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -166,6 +172,8 @@ class ConsultarDespesasMetadata(SqlToolBaseSchema):
 
 
 class ConsultarDespesasResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarDespesasMetadata

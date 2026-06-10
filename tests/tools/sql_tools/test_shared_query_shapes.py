@@ -16,9 +16,9 @@ from agents.tools.sql_tools.licitacoes.consultar_licitacoes_schema import (
     ConsultarLicitacoesResponse,
 )
 from agents.tools.sql_tools.licitacoes.shared.querying import (
-    decimal_or_int_to_json,
     project_licitacao_fields,
 )
+from shared.utils.decimal_to_float import decimal_or_int_to_json
 from agents.tools.sql_tools.receitas.agregar_receitas_schema import (
     AgregacaoReceitasItem,
     AgregarReceitasMetadata,

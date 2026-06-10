@@ -32,6 +32,8 @@ ALLOWED_PATRIMONIO_METRICS = {
 
 
 class AgregarPatrimoniosParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: PatrimonioFiltroSchema = Field(default_factory=PatrimonioFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "contagem"
@@ -96,6 +98,8 @@ class AgregarPatrimoniosParams(SqlToolBaseSchema):
 
 
 class AgregarPatrimoniosMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -105,6 +109,8 @@ class AgregarPatrimoniosMetadata(SqlToolBaseSchema):
 
 
 class AgregarPatrimoniosResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarPatrimoniosMetadata

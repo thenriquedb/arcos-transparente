@@ -13,12 +13,17 @@ from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
     execute_collection_lookup_result,
 )
+from agents.tools.sql_tools.shared.filtering import (
+    apply_declared_filters,
+    equals_filter,
+    predicate_filter,
+    text_filter,
+)
 from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import DespesaDocumento
 from shared.utils.decimal_to_float import decimal_to_float
-from shared.utils.text import matches_text_query
 
 from .consultar_passagens_schema import (
     ALLOWED_PASSAGENS_FIELDS,
@@ -58,48 +63,30 @@ def _row_to_public_dict(registro: DespesaDocumento) -> dict[str, Any]:
     }
 
 
+_PASSAGENS_FILTER_CONDITIONS = (
+    text_filter("origem", lambda r: r.origem),
+    equals_filter("ano", lambda r: r.exercicio),
+    text_filter("beneficiario", lambda r: r.credor),
+    text_filter("cpf_cnpj", lambda r: r.cpf_cnpj),
+    text_filter("unidade_gestora", lambda r: r.unidade_gestora),
+    text_filter("categoria", lambda r: r.categoria_documento),
+    predicate_filter("periodo_inicio", lambda r, v: _period_end(r) >= v),
+    predicate_filter("periodo_fim", lambda r, v: _period_start(r) <= v),
+)
+
+
 def load_filtered_passagens(
     session,
     filtros: PassagemFiltroSchema,
 ) -> list[DespesaDocumento]:
+    """Carrega passagens aplicando os filtros públicos declarados."""
+
     registros = list(
         session.execute(
             select(DespesaDocumento).where(DespesaDocumento.tipo_origem == "passagem")
         ).scalars()
     )
-
-    if filtros.origem:
-        registros = [
-            r for r in registros if matches_text_query(r.origem, filtros.origem)
-        ]
-    if filtros.ano:
-        registros = [r for r in registros if r.exercicio == filtros.ano]
-    if filtros.beneficiario:
-        registros = [
-            r for r in registros if matches_text_query(r.credor, filtros.beneficiario)
-        ]
-    if filtros.cpf_cnpj:
-        registros = [
-            r for r in registros if matches_text_query(r.cpf_cnpj, filtros.cpf_cnpj)
-        ]
-    if filtros.unidade_gestora:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.unidade_gestora, filtros.unidade_gestora)
-        ]
-    if filtros.categoria:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.categoria_documento, filtros.categoria)
-        ]
-    if filtros.periodo_inicio:
-        registros = [r for r in registros if _period_end(r) >= filtros.periodo_inicio]
-    if filtros.periodo_fim:
-        registros = [r for r in registros if _period_start(r) <= filtros.periodo_fim]
-
-    return registros
+    return apply_declared_filters(registros, filtros, _PASSAGENS_FILTER_CONDITIONS)
 
 
 SORT_FIELD_GETTERS = {
@@ -116,6 +103,8 @@ def project_passagem_fields(
     registro: DespesaDocumento,
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_fields(
         registro,
         campos,

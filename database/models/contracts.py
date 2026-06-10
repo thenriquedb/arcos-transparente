@@ -1,3 +1,5 @@
+"""Modelos ORM de contratos e seus detalhes (despesas e itens)."""
+
 from __future__ import annotations
 
 from datetime import date, datetime

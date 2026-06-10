@@ -33,6 +33,8 @@ ALLOWED_DIARIAS_METRICS = {
 
 
 class AgregarDiariasParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: DiariaFiltroSchema = Field(default_factory=DiariaFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_valor_pago"
@@ -97,6 +99,8 @@ class AgregarDiariasParams(SqlToolBaseSchema):
 
 
 class AgregarDiariasMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -106,6 +110,8 @@ class AgregarDiariasMetadata(SqlToolBaseSchema):
 
 
 class AgregarDiariasResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarDiariasMetadata

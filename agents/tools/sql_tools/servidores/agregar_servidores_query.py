@@ -23,9 +23,10 @@ from .agregar_servidores_schema import (
     AgregarServidoresParams,
     AgregarServidoresResponse,
 )
+from shared.utils.decimal_to_float import decimal_or_int_to_json
+
 from .shared.querying import (
     apply_servidores_filters,
-    decimal_or_int_to_json,
     resolve_mes_de_referencia_padrao,
 )
 

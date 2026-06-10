@@ -41,6 +41,8 @@ ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
 class PatrimonioFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     unidade_responsavel: str | None = None
     placa: str | None = None
     descricao: str | None = None
@@ -74,6 +76,8 @@ class PatrimonioFiltroSchema(SqlToolBaseSchema):
 
 
 class ConsultarPatrimoniosParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: PatrimonioFiltroSchema = Field(default_factory=PatrimonioFiltroSchema)
     ordenar_por: str = "data_aquisicao"
     ordem: str = "desc"
@@ -130,6 +134,8 @@ class ConsultarPatrimoniosParams(SqlToolBaseSchema):
 
 
 class ConsultarPatrimoniosMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -139,6 +145,8 @@ class ConsultarPatrimoniosMetadata(SqlToolBaseSchema):
 
 
 class ConsultarPatrimoniosResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarPatrimoniosMetadata

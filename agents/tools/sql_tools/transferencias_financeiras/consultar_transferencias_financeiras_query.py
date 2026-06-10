@@ -9,6 +9,11 @@ from typing import Any
 from sqlalchemy import select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.filtering import (
+    apply_declared_filters,
+    predicate_filter,
+    text_filter,
+)
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
     execute_collection_lookup_result,
@@ -18,7 +23,6 @@ from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import EmendaParlamentar, TransferenciaFinanceiraMovimento
 from shared.utils.decimal_to_float import decimal_to_float
-from shared.utils.text import matches_text_query
 
 from .consultar_transferencias_financeiras_schema import (
     ALLOWED_TRANSFERENCIAS_FIELDS,
@@ -91,10 +95,40 @@ def _load_emendas(session) -> list[dict[str, Any]]:
     return [_emenda_to_public_dict(registro) for registro in registros]
 
 
+_TRANSFERENCIAS_FILTER_CONDITIONS = (
+    predicate_filter("ano", lambda r, v: r.get("ano") == v),
+    predicate_filter(
+        "data_inicio",
+        lambda r, v: r.get("data") is not None and date.fromisoformat(r["data"]) >= v,
+    ),
+    predicate_filter(
+        "data_fim",
+        lambda r, v: r.get("data") is not None and date.fromisoformat(r["data"]) <= v,
+    ),
+    text_filter("identificacao", lambda r: r["identificacao"]),
+    text_filter("unidade_concessora", lambda r: r["unidade_concessora"]),
+    text_filter("unidade_recebedora", lambda r: r["unidade_recebedora"]),
+    text_filter("tipo_movimento", lambda r: r["tipo_movimento"]),
+    text_filter("finalidade", lambda r: r["finalidade"]),
+    text_filter("fonte_recurso", lambda r: r["fonte_recurso"]),
+    predicate_filter(
+        "exercicio_consulta",
+        lambda r, v: r.get("exercicio_consulta") == v,
+    ),
+    text_filter("ano_numero", lambda r: r["ano_numero"]),
+    text_filter("autor", lambda r: r["autor"]),
+    text_filter("objeto", lambda r: r["objeto"]),
+    text_filter("tipo_emenda", lambda r: r["tipo_emenda"]),
+    text_filter("funcao", lambda r: r["funcao"]),
+)
+
+
 def load_filtered_transferencias_financeiras(
     session,
     filtros: TransferenciasFinanceirasFiltroSchema,
 ) -> list[dict[str, Any]]:
+    """Carrega os registros do dominio aplicando os filtros publicos."""
+
     registros: list[dict[str, Any]] = []
 
     if filtros.tipo_registro in (None, "movimentacao"):
@@ -102,90 +136,7 @@ def load_filtered_transferencias_financeiras(
     if filtros.tipo_registro in (None, "emenda"):
         registros.extend(_load_emendas(session))
 
-    if filtros.ano:
-        registros = [r for r in registros if r.get("ano") == filtros.ano]
-    if filtros.data_inicio:
-        registros = [
-            r
-            for r in registros
-            if r.get("data") is not None
-            and date.fromisoformat(r["data"]) >= filtros.data_inicio
-        ]
-    if filtros.data_fim:
-        registros = [
-            r
-            for r in registros
-            if r.get("data") is not None
-            and date.fromisoformat(r["data"]) <= filtros.data_fim
-        ]
-    if filtros.identificacao:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r["identificacao"], filtros.identificacao)
-        ]
-    if filtros.unidade_concessora:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r["unidade_concessora"], filtros.unidade_concessora)
-        ]
-    if filtros.unidade_recebedora:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r["unidade_recebedora"], filtros.unidade_recebedora)
-        ]
-    if filtros.tipo_movimento:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r["tipo_movimento"], filtros.tipo_movimento)
-        ]
-    if filtros.finalidade:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r["finalidade"], filtros.finalidade)
-        ]
-    if filtros.fonte_recurso:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r["fonte_recurso"], filtros.fonte_recurso)
-        ]
-    if filtros.exercicio_consulta:
-        registros = [
-            r
-            for r in registros
-            if r.get("exercicio_consulta") == filtros.exercicio_consulta
-        ]
-    if filtros.ano_numero:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r["ano_numero"], filtros.ano_numero)
-        ]
-    if filtros.autor:
-        registros = [
-            r for r in registros if matches_text_query(r["autor"], filtros.autor)
-        ]
-    if filtros.objeto:
-        registros = [
-            r for r in registros if matches_text_query(r["objeto"], filtros.objeto)
-        ]
-    if filtros.tipo_emenda:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r["tipo_emenda"], filtros.tipo_emenda)
-        ]
-    if filtros.funcao:
-        registros = [
-            r for r in registros if matches_text_query(r["funcao"], filtros.funcao)
-        ]
-
-    return registros
+    return apply_declared_filters(registros, filtros, _TRANSFERENCIAS_FILTER_CONDITIONS)
 
 
 SORT_FIELD_GETTERS = {
@@ -205,6 +156,8 @@ def project_transferencia_financeira_fields(
     registro: dict[str, Any],
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_dict(
         registro,
         campos,

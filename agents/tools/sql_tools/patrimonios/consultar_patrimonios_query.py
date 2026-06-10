@@ -9,6 +9,11 @@ from typing import Any
 from sqlalchemy import select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.filtering import (
+    apply_declared_filters,
+    predicate_filter,
+    text_filter,
+)
 from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
     execute_collection_lookup_result,
@@ -18,7 +23,6 @@ from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import Patrimonio
 from shared.utils.decimal_to_float import decimal_to_float
-from shared.utils.text import matches_text_query
 
 from .consultar_patrimonios_schema import (
     ALLOWED_PATRIMONIO_FIELDS,
@@ -48,67 +52,33 @@ def _row_to_public_dict(registro: Patrimonio) -> dict[str, Any]:
     }
 
 
+_PATRIMONIOS_FILTER_CONDITIONS = (
+    text_filter("unidade_responsavel", lambda r: r.unidade_gestora),
+    text_filter("placa", lambda r: r.placa),
+    text_filter("descricao", lambda r: r.descricao_item),
+    text_filter("classificacao", lambda r: r.classificacao),
+    text_filter("localizacao", lambda r: r.localizacao),
+    text_filter("status", lambda r: r.status),
+    text_filter("situacao", lambda r: r.situacao_bem),
+    text_filter("tipo_ingresso", lambda r: r.tipo_ingresso),
+    predicate_filter(
+        "data_aquisicao_inicio",
+        lambda r, v: r.data_aquisicao is not None and r.data_aquisicao >= v,
+    ),
+    predicate_filter(
+        "data_aquisicao_fim",
+        lambda r, v: r.data_aquisicao is not None and r.data_aquisicao <= v,
+    ),
+)
+
+
 def load_filtered_patrimonios(
     session, filtros: PatrimonioFiltroSchema
 ) -> list[Patrimonio]:
+    """Carrega bens patrimoniais aplicando os filtros públicos declarados."""
+
     registros = list(session.execute(select(Patrimonio)).scalars())
-
-    if filtros.unidade_responsavel:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.unidade_gestora, filtros.unidade_responsavel)
-        ]
-    if filtros.placa:
-        registros = [r for r in registros if matches_text_query(r.placa, filtros.placa)]
-    if filtros.descricao:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.descricao_item, filtros.descricao)
-        ]
-    if filtros.classificacao:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.classificacao, filtros.classificacao)
-        ]
-    if filtros.localizacao:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.localizacao, filtros.localizacao)
-        ]
-    if filtros.status:
-        registros = [
-            r for r in registros if matches_text_query(r.status, filtros.status)
-        ]
-    if filtros.situacao:
-        registros = [
-            r for r in registros if matches_text_query(r.situacao_bem, filtros.situacao)
-        ]
-    if filtros.tipo_ingresso:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.tipo_ingresso, filtros.tipo_ingresso)
-        ]
-    if filtros.data_aquisicao_inicio:
-        registros = [
-            r
-            for r in registros
-            if r.data_aquisicao is not None
-            and r.data_aquisicao >= filtros.data_aquisicao_inicio
-        ]
-    if filtros.data_aquisicao_fim:
-        registros = [
-            r
-            for r in registros
-            if r.data_aquisicao is not None
-            and r.data_aquisicao <= filtros.data_aquisicao_fim
-        ]
-
-    return registros
+    return apply_declared_filters(registros, filtros, _PATRIMONIOS_FILTER_CONDITIONS)
 
 
 SORT_FIELD_GETTERS = {
@@ -125,6 +95,8 @@ def project_patrimonio_fields(
     registro: Patrimonio,
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_fields(
         registro,
         campos,

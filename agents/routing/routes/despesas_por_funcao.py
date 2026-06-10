@@ -78,7 +78,9 @@ def _extract_funcao_de_governo(normalized_text: str) -> str | None:
     return None
 
 
-def _strip_despesas_por_funcao_domain_keywords(normalized_text: str) -> str:
+def strip_despesas_por_funcao_domain_keywords(normalized_text: str) -> str:
+    """Remove os termos do relatorio para inspecionar so o resto da pergunta."""
+
     stripped = normalized_text
     for keyword in DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS:
         stripped = stripped.replace(keyword, " ")
@@ -145,12 +147,56 @@ def _extract_despesas_por_funcao_filters(normalized_text: str) -> dict[str, obje
     return filtros
 
 
+# Ordem importa: pistas mais específicas ("dotacao inicial") antes das genéricas.
+_DESPESAS_POR_FUNCAO_METRIC_CUES: tuple[tuple[tuple[str, ...], str], ...] = (
+    (("dotacao inicial",), "soma_dotacao_inicial"),
+    (("creditos adicionais", "reducoes"), "soma_creditos_adicionais"),
+    (("dotacao atualizada",), "soma_dotacao_atualizada"),
+    (("em liquidacao",), "soma_valor_em_liquidacao"),
+    (("liquidado",), "soma_valor_liquidado"),
+    (("empenhado",), "soma_valor_empenhado"),
+)
+
+
+def _extract_despesas_por_funcao_metric(
+    normalized_text: str, aggregation_text: str
+) -> str:
+    """Escolhe a métrica do relatório citada na pergunta (default: valor pago)."""
+
+    if "quantas" in aggregation_text:
+        return "contagem"
+    for cues, metrica in _DESPESAS_POR_FUNCAO_METRIC_CUES:
+        if any(cue in normalized_text for cue in cues):
+            return metrica
+    return "soma_valor_pago"
+
+
+def _extract_despesas_por_funcao_group_by(aggregation_text: str) -> str | None:
+    """Escolhe a dimensão de agrupamento pedida na pergunta."""
+
+    if "por origem" in aggregation_text:
+        return "origem"
+    if "por unidade" in aggregation_text or "por unidade gestora" in aggregation_text:
+        return "unidade_gestora"
+    if "por ano" in aggregation_text or "por exercicio" in aggregation_text:
+        return "ano"
+    if "por funcao" in aggregation_text or (
+        "funcoes" in aggregation_text
+        and any(
+            token in aggregation_text
+            for token in ("quais", "maior", "maiores", "ranking")
+        )
+    ):
+        return "funcao"
+    return None
+
+
 def _try_route_despesas_por_funcao_agregacao(
     normalized_text: str,
 ) -> RouteDecision | None:
     if not _is_despesas_por_funcao_query(normalized_text):
         return None
-    aggregation_text = _strip_despesas_por_funcao_domain_keywords(normalized_text)
+    aggregation_text = strip_despesas_por_funcao_domain_keywords(normalized_text)
     if not any(
         keyword in aggregation_text
         for keyword in ("quanto", "total", "maior", "maiores", "por ", "quantas")
@@ -158,39 +204,8 @@ def _try_route_despesas_por_funcao_agregacao(
         return None
 
     filtros = _extract_despesas_por_funcao_filters(normalized_text)
-    if "quantas" in aggregation_text:
-        metrica = "contagem"
-    elif "dotacao inicial" in normalized_text:
-        metrica = "soma_dotacao_inicial"
-    elif "creditos adicionais" in normalized_text or "reducoes" in normalized_text:
-        metrica = "soma_creditos_adicionais"
-    elif "dotacao atualizada" in normalized_text:
-        metrica = "soma_dotacao_atualizada"
-    elif "em liquidacao" in normalized_text:
-        metrica = "soma_valor_em_liquidacao"
-    elif "liquidado" in normalized_text:
-        metrica = "soma_valor_liquidado"
-    elif "empenhado" in normalized_text:
-        metrica = "soma_valor_empenhado"
-    else:
-        metrica = "soma_valor_pago"
-
-    if "por origem" in aggregation_text:
-        agrupar_por = "origem"
-    elif "por unidade" in aggregation_text or "por unidade gestora" in aggregation_text:
-        agrupar_por = "unidade_gestora"
-    elif "por ano" in aggregation_text or "por exercicio" in aggregation_text:
-        agrupar_por = "ano"
-    elif "por funcao" in aggregation_text or (
-        "funcoes" in aggregation_text
-        and any(
-            token in aggregation_text
-            for token in ("quais", "maior", "maiores", "ranking")
-        )
-    ):
-        agrupar_por = "funcao"
-    else:
-        agrupar_por = None
+    metrica = _extract_despesas_por_funcao_metric(normalized_text, aggregation_text)
+    agrupar_por = _extract_despesas_por_funcao_group_by(aggregation_text)
 
     return RouteDecision(
         domain="despesas_por_funcao",

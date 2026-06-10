@@ -8,6 +8,8 @@ from agents.tools.sql_tools.shared.base import SqlToolBaseSchema
 
 
 class ServidorToolItem(SqlToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     id: int
     nome: str
     cargo: str

@@ -1,3 +1,5 @@
+"""Camada plugavel de observabilidade do chatbot (providers, eventos, contexto)."""
+
 from .config import (
     LangSmithObservabilityConfig,
     ObservabilityConfig,

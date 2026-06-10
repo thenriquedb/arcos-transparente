@@ -35,6 +35,8 @@ ALLOWED_DESPESAS_POR_FUNCAO_METRICS = {
 
 
 class AgregarDespesasPorFuncaoParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: DespesasPorFuncaoFiltroSchema = Field(
         default_factory=DespesasPorFuncaoFiltroSchema
     )
@@ -101,6 +103,8 @@ class AgregarDespesasPorFuncaoParams(SqlToolBaseSchema):
 
 
 class AgregarDespesasPorFuncaoMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -110,6 +114,8 @@ class AgregarDespesasPorFuncaoMetadata(SqlToolBaseSchema):
 
 
 class AgregarDespesasPorFuncaoResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarDespesasPorFuncaoMetadata

@@ -19,6 +19,8 @@ from .shared.filters import (
 
 
 class AgregarContratosParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: ContratosFiltroSchema = Field(default_factory=ContratosFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "contagem"
@@ -83,6 +85,8 @@ class AgregarContratosParams(SqlToolBaseSchema):
 
 
 class AgregarContratosMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     filtros_fallback_aplicados: dict[str, Any] | None = None
     agrupar_por: str | None = None
@@ -93,6 +97,8 @@ class AgregarContratosMetadata(SqlToolBaseSchema):
 
 
 class AgregacaoContratosItem(SqlToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     secretaria: str | None = None
     categoria: str | None = None
     fornecedor: str | None = None
@@ -103,6 +109,8 @@ class AgregacaoContratosItem(SqlToolBaseSchema):
 
 
 class AgregarContratosResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarContratosMetadata

@@ -29,6 +29,9 @@ from agents.routing.constants import (
     PASSAGENS_DOMAIN_KEYWORDS,
 )
 from agents.routing.reading import read_query
+from agents.routing.routes.despesas_por_funcao import (
+    strip_despesas_por_funcao_domain_keywords,
+)
 from agents.tools.registry import (
     PublicToolCatalogEntry,
     get_public_tool_catalog,
@@ -437,8 +440,8 @@ def _select_with_heuristics(
         emenda_selection = _select_emenda_query_with_router(question)
         if emenda_selection is not None:
             return emenda_selection
-        contract_count_ranking_selection = (
-            _select_contract_count_ranking_with_router(question)
+        contract_count_ranking_selection = _select_contract_count_ranking_with_router(
+            question
         )
         if contract_count_ranking_selection is not None:
             return contract_count_ranking_selection
@@ -578,15 +581,8 @@ def _select_function_spend_breakdown_query(
     )
 
 
-def _strip_despesas_por_funcao_domain_keywords(normalized_question: str) -> str:
-    stripped = normalized_question
-    for keyword in DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS:
-        stripped = stripped.replace(keyword, " ")
-    return " ".join(stripped.split())
-
-
 def _is_explicit_aggregate_spend_request(normalized_question: str) -> bool:
-    aggregate_text = _strip_despesas_por_funcao_domain_keywords(normalized_question)
+    aggregate_text = strip_despesas_por_funcao_domain_keywords(normalized_question)
     if any(term in aggregate_text for term in _SPEND_GROUPING_TERMS):
         return True
     return any(term in aggregate_text for term in _SPEND_AGGREGATION_TERMS)

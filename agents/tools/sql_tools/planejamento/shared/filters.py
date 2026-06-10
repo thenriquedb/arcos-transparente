@@ -80,6 +80,8 @@ ALLOWED_ORDER_VALUES = ("asc", "desc")
 
 
 class PlanejamentoFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     origem: str | None = "saude"
     ano: int | None = None
     mes: int | None = None

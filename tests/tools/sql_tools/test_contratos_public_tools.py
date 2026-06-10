@@ -1000,9 +1000,9 @@ def test_agregar_contratos_ranking_por_fornecedor_no_ano_corrente(monkeypatch) -
     session.close()
 
 
-def test_agregar_contratos_limite_cinco_preserva_empates_de_ranking(monkeypatch) -> (
-    None
-):
+def test_agregar_contratos_limite_cinco_preserva_empates_de_ranking(
+    monkeypatch,
+) -> None:
     current_year = date.today().year
     session = _build_session()
     contratos = []

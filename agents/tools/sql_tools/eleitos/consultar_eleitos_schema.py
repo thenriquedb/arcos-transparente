@@ -49,6 +49,8 @@ class EleitoToolBaseSchema(SqlToolBaseSchema):
 
 
 class EleitoFiltroSchema(EleitoToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     tipo_politico: str | None = None
     nome: str | None = None
     nome_popular: str | None = None
@@ -106,6 +108,8 @@ class EleitoFiltroSchema(EleitoToolBaseSchema):
 
 
 class ConsultarEleitosParams(EleitoToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: EleitoFiltroSchema = Field(default_factory=EleitoFiltroSchema)
     ordenar_por: str = "mandato_inicio"
     ordem: str = "desc"
@@ -162,6 +166,8 @@ class ConsultarEleitosParams(EleitoToolBaseSchema):
 
 
 class ConsultarEleitosMetadata(EleitoToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -171,6 +177,8 @@ class ConsultarEleitosMetadata(EleitoToolBaseSchema):
 
 
 class ConsultarEleitosResponse(EleitoToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarEleitosMetadata

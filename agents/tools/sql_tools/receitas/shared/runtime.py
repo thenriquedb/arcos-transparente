@@ -69,4 +69,6 @@ def serializar_receita_lancamento(registro: ReceitaLancamento) -> dict[str, Any]
 def project_receita_fields(
     registro: dict[str, Any], campos: list[str]
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_dict(registro, campos, order="requested")

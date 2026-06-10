@@ -49,6 +49,8 @@ ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
 class EstoqueMovimentacaoFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     origem: str | None = None
     ano: int | None = None
     material: str | None = None
@@ -92,6 +94,8 @@ class EstoqueMovimentacaoFiltroSchema(SqlToolBaseSchema):
 
 
 class ConsultarMovimentacoesDeEstoqueParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: EstoqueMovimentacaoFiltroSchema = Field(
         default_factory=EstoqueMovimentacaoFiltroSchema
     )
@@ -152,6 +156,8 @@ class ConsultarMovimentacoesDeEstoqueParams(SqlToolBaseSchema):
 
 
 class ConsultarMovimentacoesDeEstoqueMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -163,6 +169,8 @@ class ConsultarMovimentacoesDeEstoqueMetadata(SqlToolBaseSchema):
 
 
 class ConsultarMovimentacoesDeEstoqueResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarMovimentacoesDeEstoqueMetadata

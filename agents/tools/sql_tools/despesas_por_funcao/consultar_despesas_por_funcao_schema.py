@@ -76,6 +76,8 @@ ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
 class DespesasPorFuncaoFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     origem: str | None = None
     ano: int | None = None
     periodo_inicio: date | None = None
@@ -119,6 +121,8 @@ class DespesasPorFuncaoFiltroSchema(SqlToolBaseSchema):
 
 
 class ConsultarDespesasPorFuncaoParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: DespesasPorFuncaoFiltroSchema = Field(
         default_factory=DespesasPorFuncaoFiltroSchema
     )
@@ -179,6 +183,8 @@ class ConsultarDespesasPorFuncaoParams(SqlToolBaseSchema):
 
 
 class ConsultarDespesasPorFuncaoMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -194,6 +200,8 @@ class ConsultarDespesasPorFuncaoMetadata(SqlToolBaseSchema):
 
 
 class ConsultarDespesasPorFuncaoResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarDespesasPorFuncaoMetadata

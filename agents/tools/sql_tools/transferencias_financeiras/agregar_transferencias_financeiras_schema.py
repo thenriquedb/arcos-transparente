@@ -36,6 +36,8 @@ ALLOWED_TRANSFERENCIAS_METRICS = {
 
 
 class AgregarTransferenciasFinanceirasParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: TransferenciasFinanceirasFiltroSchema = Field(
         default_factory=TransferenciasFinanceirasFiltroSchema
     )
@@ -105,6 +107,8 @@ class AgregarTransferenciasFinanceirasParams(SqlToolBaseSchema):
 
 
 class AgregarTransferenciasFinanceirasMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -114,6 +118,8 @@ class AgregarTransferenciasFinanceirasMetadata(SqlToolBaseSchema):
 
 
 class AgregarTransferenciasFinanceirasResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarTransferenciasFinanceirasMetadata

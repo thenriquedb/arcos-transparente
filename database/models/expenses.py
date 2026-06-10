@@ -1,3 +1,5 @@
+"""Modelos ORM de despesas executadas e seus itens."""
+
 from __future__ import annotations
 
 from datetime import date, datetime

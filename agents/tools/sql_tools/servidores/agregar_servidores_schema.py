@@ -20,6 +20,8 @@ from .shared.filters import (
 
 
 class AgregarServidoresParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: ServidoresFiltroSchema = Field(default_factory=ServidoresFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "contagem"
@@ -84,6 +86,8 @@ class AgregarServidoresParams(SqlToolBaseSchema):
 
 
 class AgregarServidoresMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -95,6 +99,8 @@ class AgregarServidoresMetadata(SqlToolBaseSchema):
 
 
 class AgregacaoServidoresItem(SqlToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     secretaria: str | None = None
     cargo: str | None = None
     mes_de_referencia: date | None = None
@@ -103,6 +109,8 @@ class AgregacaoServidoresItem(SqlToolBaseSchema):
 
 
 class AgregarServidoresResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarServidoresMetadata

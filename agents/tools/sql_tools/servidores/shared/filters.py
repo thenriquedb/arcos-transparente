@@ -40,6 +40,8 @@ ALLOWED_ORDER_VALUES = ("asc", "desc")
 
 
 class ServidoresFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     nome: str | None = None
     secretaria: str | None = None
     cargo: str | None = None

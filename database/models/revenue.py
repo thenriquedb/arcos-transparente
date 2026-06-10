@@ -1,3 +1,5 @@
+"""Modelos ORM de receitas (arrecadacao e lancamento)."""
+
 from __future__ import annotations
 
 from datetime import date, datetime

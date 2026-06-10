@@ -9,6 +9,11 @@ from pydantic import ValidationError
 from sqlalchemy import select
 
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.filtering import (
+    apply_declared_filters,
+    predicate_filter,
+    text_filter,
+)
 from agents.tools.sql_tools.shared.projection import project_public_rows
 from database import session as session_manager
 from database.models import FrotaVeiculo
@@ -54,73 +59,52 @@ def _row_to_public_dict(registro: FrotaVeiculo) -> dict[str, Any]:
     }
 
 
+_FROTA_FILTER_CONDITIONS = (
+    text_filter("unidade_responsavel", lambda r: r.unidade_gestora),
+    predicate_filter(
+        "placa",
+        lambda r, v: (
+            matches_text_query(r.placa_veiculo, v)
+            or matches_text_query(r.placa_patrimonio, v)
+        ),
+    ),
+    predicate_filter(
+        "descricao",
+        lambda r, v: (
+            matches_text_query(r.descricao_material, v)
+            or matches_text_query(r.descricao, v)
+        ),
+    ),
+    text_filter("tipo_veiculo", lambda r: r.tipo_veiculo),
+    text_filter("marca", lambda r: r.marca),
+    text_filter("modelo", lambda r: r.modelo),
+    predicate_filter(
+        "situacao",
+        lambda r, v: (
+            matches_text_query(r.situacao_veiculo, v)
+            or matches_text_query(r.situacao_veiculo_patrimonio, v)
+        ),
+    ),
+    text_filter("localizacao", lambda r: r.localizacao),
+    predicate_filter(
+        "data_aquisicao_inicio",
+        lambda r, v: r.data_aquisicao is not None and r.data_aquisicao.date() >= v,
+    ),
+    predicate_filter(
+        "data_aquisicao_fim",
+        lambda r, v: r.data_aquisicao is not None and r.data_aquisicao.date() <= v,
+    ),
+)
+
+
 def load_filtered_frota(
     session,
     filtros: FrotaFiltroSchema,
 ) -> list[FrotaVeiculo]:
+    """Carrega veículos da frota aplicando os filtros públicos declarados."""
+
     registros = list(session.execute(select(FrotaVeiculo)).scalars())
-
-    if filtros.unidade_responsavel:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.unidade_gestora, filtros.unidade_responsavel)
-        ]
-    if filtros.placa:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.placa_veiculo, filtros.placa)
-            or matches_text_query(r.placa_patrimonio, filtros.placa)
-        ]
-    if filtros.descricao:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.descricao_material, filtros.descricao)
-            or matches_text_query(r.descricao, filtros.descricao)
-        ]
-    if filtros.tipo_veiculo:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.tipo_veiculo, filtros.tipo_veiculo)
-        ]
-    if filtros.marca:
-        registros = [r for r in registros if matches_text_query(r.marca, filtros.marca)]
-    if filtros.modelo:
-        registros = [
-            r for r in registros if matches_text_query(r.modelo, filtros.modelo)
-        ]
-    if filtros.situacao:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.situacao_veiculo, filtros.situacao)
-            or matches_text_query(r.situacao_veiculo_patrimonio, filtros.situacao)
-        ]
-    if filtros.localizacao:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.localizacao, filtros.localizacao)
-        ]
-    if filtros.data_aquisicao_inicio:
-        registros = [
-            r
-            for r in registros
-            if r.data_aquisicao is not None
-            and r.data_aquisicao.date() >= filtros.data_aquisicao_inicio
-        ]
-    if filtros.data_aquisicao_fim:
-        registros = [
-            r
-            for r in registros
-            if r.data_aquisicao is not None
-            and r.data_aquisicao.date() <= filtros.data_aquisicao_fim
-        ]
-
-    return registros
+    return apply_declared_filters(registros, filtros, _FROTA_FILTER_CONDITIONS)
 
 
 def sort_frota(

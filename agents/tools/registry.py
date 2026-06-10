@@ -1,3 +1,5 @@
+"""Registro central de tools com escopo, tags e metadata de roteamento."""
+
 import importlib
 import inspect
 import pkgutil

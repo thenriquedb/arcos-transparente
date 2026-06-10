@@ -1,3 +1,5 @@
+"""Contrato (protocolo) que todo provider de observabilidade implementa."""
+
 from __future__ import annotations
 
 from collections.abc import Iterator, Mapping, Sequence

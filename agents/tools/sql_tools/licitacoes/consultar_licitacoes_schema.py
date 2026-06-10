@@ -20,6 +20,8 @@ from .shared.filters import (
 
 
 class ConsultarLicitacoesParams(LicitacoesToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: LicitacoesFiltroSchema = Field(default_factory=LicitacoesFiltroSchema)
     ordenar_por: str = "data_abertura"
     ordem: str = "desc"
@@ -94,6 +96,8 @@ class ConsultarLicitacoesParams(LicitacoesToolBaseSchema):
 
 
 class ConsultarLicitacoesMetadata(LicitacoesToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -104,6 +108,8 @@ class ConsultarLicitacoesMetadata(LicitacoesToolBaseSchema):
 
 
 class ConsultarLicitacoesResponse(LicitacoesToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     valor_total_estimado: float | None = None
     resultados: list[dict[str, Any]] = Field(default_factory=list)

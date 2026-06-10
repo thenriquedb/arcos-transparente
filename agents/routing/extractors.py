@@ -7,9 +7,7 @@ import re
 from typing import Any
 
 from agents.routing.conversation import normalize_conversation_text
-from agents.tools.sql_tools.planejamento.shared.entities import (
-    extract_planejamento_entidade_alias,
-)
+from shared.planejamento_entidades import extract_planejamento_entidade_alias
 
 from .constants import (
     CONTRATOS_DOMAIN_KEYWORDS,
@@ -563,10 +561,9 @@ def _extract_contrato_numero(normalized_text: str) -> str | None:
 def _extract_contrato_fornecedor(normalized_text: str) -> str | None:
     """Extrai um nome de fornecedor em perguntas focadas em contratos."""
 
-    if (
-        _extract_contratos_ranking_dimension(normalized_text) == "fornecedor"
-        and _has_contratos_dimension_count_signal(normalized_text)
-    ):
+    if _extract_contratos_ranking_dimension(
+        normalized_text
+    ) == "fornecedor" and _has_contratos_dimension_count_signal(normalized_text):
         return None
 
     patterns = [
@@ -706,6 +703,23 @@ def _extract_receitas_tema(normalized_text: str) -> str | None:
     return None
 
 
+_TRIMESTRE_RANGES: tuple[tuple[tuple[str, str], tuple[int, int]], ...] = (
+    (("primeiro trimestre", "1 trimestre"), (1, 3)),
+    (("segundo trimestre", "2 trimestre"), (4, 6)),
+    (("terceiro trimestre", "3 trimestre"), (7, 9)),
+    (("quarto trimestre", "4 trimestre"), (10, 12)),
+)
+
+
+def _extract_trimestre_range(normalized_text: str) -> tuple[int, int] | None:
+    """Mapeia menções a trimestres para o intervalo de meses correspondente."""
+
+    for cues, month_range in _TRIMESTRE_RANGES:
+        if any(cue in normalized_text for cue in cues):
+            return month_range
+    return None
+
+
 def _extract_receitas_filters_from_query(normalized_text: str) -> dict[str, Any]:
     """Converte sinais do texto em filtros públicos da tool de receitas."""
 
@@ -716,18 +730,8 @@ def _extract_receitas_filters_from_query(normalized_text: str) -> dict[str, Any]
     if year := _extract_year(normalized_text):
         filtros["ano"] = year
 
-    if "primeiro trimestre" in normalized_text or "1 trimestre" in normalized_text:
-        filtros["mes_inicio"] = 1
-        filtros["mes_fim"] = 3
-    elif "segundo trimestre" in normalized_text or "2 trimestre" in normalized_text:
-        filtros["mes_inicio"] = 4
-        filtros["mes_fim"] = 6
-    elif "terceiro trimestre" in normalized_text or "3 trimestre" in normalized_text:
-        filtros["mes_inicio"] = 7
-        filtros["mes_fim"] = 9
-    elif "quarto trimestre" in normalized_text or "4 trimestre" in normalized_text:
-        filtros["mes_inicio"] = 10
-        filtros["mes_fim"] = 12
+    if trimestre := _extract_trimestre_range(normalized_text):
+        filtros["mes_inicio"], filtros["mes_fim"] = trimestre
 
     if unidade := _extract_receitas_unidade(normalized_text):
         filtros["unidade_responsavel"] = unidade
@@ -801,18 +805,8 @@ def _extract_planejamento_filters_from_query(normalized_text: str) -> dict[str, 
         filtros["ano"] = year
 
     # Trimestres são transformados em intervalo de meses para a tool pública.
-    if "primeiro trimestre" in normalized_text or "1 trimestre" in normalized_text:
-        filtros["mes_inicio"] = 1
-        filtros["mes_fim"] = 3
-    elif "segundo trimestre" in normalized_text or "2 trimestre" in normalized_text:
-        filtros["mes_inicio"] = 4
-        filtros["mes_fim"] = 6
-    elif "terceiro trimestre" in normalized_text or "3 trimestre" in normalized_text:
-        filtros["mes_inicio"] = 7
-        filtros["mes_fim"] = 9
-    elif "quarto trimestre" in normalized_text or "4 trimestre" in normalized_text:
-        filtros["mes_inicio"] = 10
-        filtros["mes_fim"] = 12
+    if trimestre := _extract_trimestre_range(normalized_text):
+        filtros["mes_inicio"], filtros["mes_fim"] = trimestre
 
     if entidade is not None:
         filtros["entidade"] = entidade

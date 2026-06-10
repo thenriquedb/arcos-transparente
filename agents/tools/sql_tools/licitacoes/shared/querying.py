@@ -2,19 +2,19 @@
 
 from __future__ import annotations
 
-from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import exists, func, select
 
 from database.models import Licitacao, VencedorLicitacao
-from shared.utils.decimal_to_float import decimal_to_float
 
 from .filters import LicitacoesFiltroSchema
 from .runtime import serializar_licitacao
 
 
 def apply_licitacoes_filters(stmt, filtros: LicitacoesFiltroSchema):
+    """Aplica os filtros publicos do dominio sobre a consulta."""
+
     if filtros.data_abertura is not None:
         stmt = stmt.where(Licitacao.data_abertura == filtros.data_abertura)
     elif (
@@ -80,6 +80,8 @@ def project_licitacao_fields(
     max_instrumentos: int,
     max_itens: int,
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     serialized = serializar_licitacao(
         licitacao,
         incluir_detalhes=incluir_detalhes,
@@ -100,9 +102,3 @@ def project_licitacao_fields(
         ):
             projected[detail_key] = serialized[detail_key]
     return projected
-
-
-def decimal_or_int_to_json(value: Decimal | int | None) -> float | int | None:
-    if isinstance(value, Decimal):
-        return decimal_to_float(value)
-    return value

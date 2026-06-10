@@ -242,9 +242,7 @@ def test_route_user_query_extrai_descricao_nominal_de_contrato() -> None:
     }
 
 
-def test_route_user_query_agrega_ranking_de_fornecedor_ativo_por_vigencia() -> (
-    None
-):
+def test_route_user_query_agrega_ranking_de_fornecedor_ativo_por_vigencia() -> None:
     decision = route_user_query("Qual fornecedor tem mais contratos ativos hoje?")
 
     assert decision.confident is True
@@ -261,9 +259,7 @@ def test_route_user_query_agrega_ranking_de_fornecedor_ativo_por_vigencia() -> (
     }
 
 
-def test_route_user_query_agrega_ranking_de_categoria_atual_por_vigencia() -> (
-    None
-):
+def test_route_user_query_agrega_ranking_de_categoria_atual_por_vigencia() -> None:
     decision = route_user_query("Qual categoria tem mais contratos atualmente?")
 
     assert decision.confident is True
@@ -296,9 +292,7 @@ def test_route_user_query_agrega_ranking_de_secretaria_sem_reduzir_empates() -> 
 
 
 def test_route_user_query_preserva_festival_nomeado_e_ano_informado() -> None:
-    decision = route_user_query(
-        "Houve licitacao para o festival de musica em 2024?"
-    )
+    decision = route_user_query("Houve licitacao para o festival de musica em 2024?")
 
     assert decision.confident is True
     assert decision.tool_name == "consultar_licitacoes"
@@ -318,9 +312,7 @@ def test_route_user_query_ano_explicito_vence_marcador_de_ativo_em_contratos() -
     }
 
 
-def test_route_user_query_preserva_ranking_de_contratos_individuais_por_valor() -> (
-    None
-):
+def test_route_user_query_preserva_ranking_de_contratos_individuais_por_valor() -> None:
     decision = route_user_query("Liste os 10 maiores contratos de 2025.")
 
     assert decision.confident is True

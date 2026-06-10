@@ -19,6 +19,8 @@ from .shared.filters import (
 
 
 class AgregarReceitasParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: ReceitaFiltroSchema = Field(default_factory=ReceitaFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_valor_recebido"
@@ -83,6 +85,8 @@ class AgregarReceitasParams(SqlToolBaseSchema):
 
 
 class AgregarReceitasMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -92,6 +96,8 @@ class AgregarReceitasMetadata(SqlToolBaseSchema):
 
 
 class AgregacaoReceitasItem(SqlToolBaseSchema):
+    """Item individual retornado pela tool."""
+
     mes: str | None = None
     unidade_responsavel: str | None = None
     categoria: str | None = None
@@ -107,6 +113,8 @@ class AgregacaoReceitasItem(SqlToolBaseSchema):
 
 
 class AgregarReceitasResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarReceitasMetadata

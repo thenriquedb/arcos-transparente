@@ -74,6 +74,8 @@ ALLOWED_RECEITA_TYPES = ("arrecadacao", "lancamento")
 
 
 class ReceitaFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     tipo_de_dado: str = "arrecadacao"
     ano: int | None = None
     mes: int | None = None

@@ -12,6 +12,8 @@ from .base import FolhaPagamentoToolBaseSchema
 
 
 class BuscarHistoricoPagamentosServidorParams(FolhaPagamentoToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     nome: str | None = None
     folha_servidor_id: int | None = None
     limite: int = 10

@@ -26,6 +26,8 @@ ALLOWED_QUADRO_METRICS = {
 
 
 class AgregarQuadroPessoalParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: QuadroPessoalFiltroSchema = Field(
         default_factory=QuadroPessoalFiltroSchema
     )
@@ -92,6 +94,8 @@ class AgregarQuadroPessoalParams(SqlToolBaseSchema):
 
 
 class AgregarQuadroPessoalMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -101,6 +105,8 @@ class AgregarQuadroPessoalMetadata(SqlToolBaseSchema):
 
 
 class AgregarQuadroPessoalResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarQuadroPessoalMetadata

@@ -1,3 +1,5 @@
+"""Tipos compartilhados da camada de observabilidade."""
+
 from __future__ import annotations
 
 from typing import Literal, TypeAlias

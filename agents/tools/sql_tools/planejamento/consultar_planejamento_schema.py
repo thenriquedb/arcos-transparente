@@ -20,6 +20,8 @@ from .shared.filters import (
 
 
 class ConsultarPlanejamentoParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: PlanejamentoFiltroSchema = Field(default_factory=PlanejamentoFiltroSchema)
     ordenar_por: str = "mes_num"
     ordem: str = "asc"
@@ -71,6 +73,8 @@ class ConsultarPlanejamentoParams(SqlToolBaseSchema):
 
 
 class ConsultarPlanejamentoMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -80,6 +84,8 @@ class ConsultarPlanejamentoMetadata(SqlToolBaseSchema):
 
 
 class ConsultarPlanejamentoResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarPlanejamentoMetadata

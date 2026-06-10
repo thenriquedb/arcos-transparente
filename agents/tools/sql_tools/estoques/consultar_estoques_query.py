@@ -12,12 +12,19 @@ from agents.tools.sql_tools.shared.lookup import (
     build_lookup_response,
     execute_collection_lookup_result,
 )
+from agents.tools.sql_tools.shared.filtering import (
+    apply_declared_filters,
+    equals_filter,
+    max_filter,
+    min_filter,
+    predicate_filter,
+    text_filter,
+)
 from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import EstoqueMaterial
 from shared.utils.decimal_to_float import decimal_to_float
-from shared.utils.text import matches_text_query
 
 from .consultar_estoques_schema import (
     ConsultarEstoquesMetadata,
@@ -49,82 +56,32 @@ def _row_to_public_dict(registro: EstoqueMaterial) -> dict[str, Any]:
     }
 
 
+_ESTOQUES_FILTER_CONDITIONS = (
+    text_filter("origem", lambda r: r.origem),
+    equals_filter("ano", lambda r: r.exercicio),
+    text_filter("material", lambda r: r.material),
+    text_filter("unidade_medida", lambda r: r.unidade_medida),
+    predicate_filter("periodo_inicio", lambda r, v: r.periodo_fim >= v),
+    predicate_filter("periodo_fim", lambda r, v: r.periodo_inicio <= v),
+    min_filter("entrada_valor_min", lambda r: r.entrada_valor),
+    max_filter("entrada_valor_max", lambda r: r.entrada_valor),
+    min_filter("saida_valor_min", lambda r: r.saida_valor),
+    max_filter("saida_valor_max", lambda r: r.saida_valor),
+    min_filter("saldo_quantidade_min", lambda r: r.saldo_quantidade),
+    max_filter("saldo_quantidade_max", lambda r: r.saldo_quantidade),
+    min_filter("saldo_valor_min", lambda r: r.saldo_valor),
+    max_filter("saldo_valor_max", lambda r: r.saldo_valor),
+)
+
+
 def load_filtered_estoques(
     session,
     filtros: EstoqueFiltroSchema,
 ) -> list[EstoqueMaterial]:
+    """Carrega saldos de estoque aplicando os filtros públicos declarados."""
+
     registros = list(session.execute(select(EstoqueMaterial)).scalars())
-
-    if filtros.origem:
-        registros = [
-            r for r in registros if matches_text_query(r.origem, filtros.origem)
-        ]
-    if filtros.ano:
-        registros = [r for r in registros if r.exercicio == filtros.ano]
-    if filtros.material:
-        registros = [
-            r for r in registros if matches_text_query(r.material, filtros.material)
-        ]
-    if filtros.unidade_medida:
-        registros = [
-            r
-            for r in registros
-            if matches_text_query(r.unidade_medida, filtros.unidade_medida)
-        ]
-    if filtros.periodo_inicio:
-        registros = [r for r in registros if r.periodo_fim >= filtros.periodo_inicio]
-    if filtros.periodo_fim:
-        registros = [r for r in registros if r.periodo_inicio <= filtros.periodo_fim]
-    if filtros.entrada_valor_min is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.entrada_valor or Decimal("0")) >= filtros.entrada_valor_min
-        ]
-    if filtros.entrada_valor_max is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.entrada_valor or Decimal("0")) <= filtros.entrada_valor_max
-        ]
-    if filtros.saida_valor_min is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.saida_valor or Decimal("0")) >= filtros.saida_valor_min
-        ]
-    if filtros.saida_valor_max is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.saida_valor or Decimal("0")) <= filtros.saida_valor_max
-        ]
-    if filtros.saldo_quantidade_min is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.saldo_quantidade or Decimal("0")) >= filtros.saldo_quantidade_min
-        ]
-    if filtros.saldo_quantidade_max is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.saldo_quantidade or Decimal("0")) <= filtros.saldo_quantidade_max
-        ]
-    if filtros.saldo_valor_min is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.saldo_valor or Decimal("0")) >= filtros.saldo_valor_min
-        ]
-    if filtros.saldo_valor_max is not None:
-        registros = [
-            r
-            for r in registros
-            if (r.saldo_valor or Decimal("0")) <= filtros.saldo_valor_max
-        ]
-
-    return registros
+    return apply_declared_filters(registros, filtros, _ESTOQUES_FILTER_CONDITIONS)
 
 
 SORT_FIELD_GETTERS = {
@@ -141,6 +98,8 @@ def project_estoque_fields(
     registro: EstoqueMaterial,
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     return project_public_fields(
         registro,
         campos,

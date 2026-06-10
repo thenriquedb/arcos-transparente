@@ -1,3 +1,5 @@
+"""Configuracao por variaveis de ambiente do provider de observabilidade."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

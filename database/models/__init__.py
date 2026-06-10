@@ -1,3 +1,5 @@
+"""Modelos ORM do banco local, reexportados por dominio."""
+
 from database.models.base import Base
 from database.models.assets import Patrimonio
 from database.models.bidding import (

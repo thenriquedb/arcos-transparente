@@ -24,10 +24,9 @@ from .agregar_licitacoes_schema import (
     AgregarLicitacoesParams,
     AgregarLicitacoesResponse,
 )
-from .shared.querying import (
-    apply_licitacoes_filters,
-    decimal_or_int_to_json,
-)
+from shared.utils.decimal_to_float import decimal_or_int_to_json
+
+from .shared.querying import apply_licitacoes_filters
 
 
 GROUP_BY_COLUMNS = {

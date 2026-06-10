@@ -131,6 +131,8 @@ def _match_receita_filters(
 def load_filtered_receitas(
     session, filtros: ReceitaFiltroSchema
 ) -> list[dict[str, object]]:
+    """Carrega os registros do dominio aplicando os filtros publicos."""
+
     if filtros.tipo_de_dado == "lancamento":
         registros = session.execute(select(ReceitaLancamento)).scalars().all()
         serializados = [

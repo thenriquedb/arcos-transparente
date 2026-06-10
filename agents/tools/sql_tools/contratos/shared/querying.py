@@ -2,14 +2,12 @@
 
 from __future__ import annotations
 
-from decimal import Decimal
 from typing import Any, Mapping
 
 from sqlalchemy import func, inspect, or_
 
 from database.session import _normalizar_texto
 from database.models import Contrato
-from shared.utils.decimal_to_float import decimal_to_float
 
 from .filters import ContratosFiltroSchema
 from .responses import ContratoToolItem
@@ -97,62 +95,48 @@ def build_contract_fallback_message(source_field: str, target_field: str) -> str
     )
 
 
-def apply_contratos_filters(
-    stmt,
-    filtros: ContratosFiltroSchema,
-    *,
-    include_descricao_despesa: bool = True,
-    include_xml_original: bool = False,
-    available_columns: set[str] | None = None,
-):
-    if filtros.numero:
-        numero_expressions = [
-            func.lower(func.coalesce(Contrato.numero, "")).like(
-                f"%{filtros.numero.lower()}%"
-            )
-        ]
-        if available_columns is not None:
-            if "numero_licitatorio" in available_columns:
-                numero_expressions.append(
-                    func.lower(func.coalesce(Contrato.numero_licitatorio, "")).like(
-                        f"%{filtros.numero.lower()}%"
-                    )
-                )
-            if "numero_instrumento" in available_columns:
-                numero_expressions.append(
-                    func.lower(func.coalesce(Contrato.numero_instrumento, "")).like(
-                        f"%{filtros.numero.lower()}%"
-                    )
-                )
-        stmt = stmt.where(or_(*numero_expressions))
-    if filtros.fornecedor:
-        for term in _normalized_filter_terms(filtros.fornecedor):
-            stmt = stmt.where(_text_contains_term(Contrato.fornecedor, term))
-    if filtros.documento_fornecedor:
-        stmt = stmt.where(
-            func.lower(Contrato.cnpj).like(f"%{filtros.documento_fornecedor.lower()}%")
-        )
-    if filtros.categoria:
-        for term in _normalized_filter_terms(filtros.categoria):
-            stmt = stmt.where(_text_contains_term(Contrato.categoria, term))
-    if filtros.secretaria:
-        for term in _normalized_filter_terms(filtros.secretaria):
-            stmt = stmt.where(_text_contains_term(Contrato.secretaria, term))
-    if filtros.descricao:
-        for term in _normalized_filter_terms(filtros.descricao):
-            descricao_expressions = [_text_contains_term(Contrato.descricao, term)]
-            if include_descricao_despesa:
-                descricao_expressions.append(
-                    _text_contains_term(Contrato.descricao_despesa, term)
-                )
+def _apply_numero_filter(stmt, numero: str, available_columns: set[str] | None):
+    """Busca o numero tambem nas colunas alternativas quando existem na base."""
 
-            # O XML bruto entra apenas como ultimo apoio para nao perder termos
-            # existentes no portal que ainda nao viraram colunas estruturadas.
-            if include_xml_original:
-                descricao_expressions.append(
-                    _text_contains_term(Contrato.xml_original, term)
-                )
-            stmt = stmt.where(or_(*descricao_expressions))
+    pattern = f"%{numero.lower()}%"
+    numero_expressions = [func.lower(func.coalesce(Contrato.numero, "")).like(pattern)]
+    if available_columns is not None:
+        if "numero_licitatorio" in available_columns:
+            numero_expressions.append(
+                func.lower(func.coalesce(Contrato.numero_licitatorio, "")).like(pattern)
+            )
+        if "numero_instrumento" in available_columns:
+            numero_expressions.append(
+                func.lower(func.coalesce(Contrato.numero_instrumento, "")).like(pattern)
+            )
+    return stmt.where(or_(*numero_expressions))
+
+
+def _apply_descricao_filter(
+    stmt,
+    descricao: str,
+    *,
+    include_descricao_despesa: bool,
+    include_xml_original: bool,
+):
+    for term in _normalized_filter_terms(descricao):
+        descricao_expressions = [_text_contains_term(Contrato.descricao, term)]
+        if include_descricao_despesa:
+            descricao_expressions.append(
+                _text_contains_term(Contrato.descricao_despesa, term)
+            )
+
+        # O XML bruto entra apenas como ultimo apoio para nao perder termos
+        # existentes no portal que ainda nao viraram colunas estruturadas.
+        if include_xml_original:
+            descricao_expressions.append(
+                _text_contains_term(Contrato.xml_original, term)
+            )
+        stmt = stmt.where(or_(*descricao_expressions))
+    return stmt
+
+
+def _apply_date_filters(stmt, filtros: ContratosFiltroSchema):
     if filtros.data_inicio is not None:
         stmt = stmt.where(Contrato.data_inicio == filtros.data_inicio)
     elif filtros.data_inicio_inicio is not None and filtros.data_inicio_fim is not None:
@@ -180,6 +164,42 @@ def apply_contratos_filters(
                 Contrato.data_fim >= filtros.vigente_em,
             )
         )
+    return stmt
+
+
+def apply_contratos_filters(
+    stmt,
+    filtros: ContratosFiltroSchema,
+    *,
+    include_descricao_despesa: bool = True,
+    include_xml_original: bool = False,
+    available_columns: set[str] | None = None,
+):
+    """Aplica os filtros publicos de contratos sobre o statement SQL."""
+
+    if filtros.numero:
+        stmt = _apply_numero_filter(stmt, filtros.numero, available_columns)
+    if filtros.fornecedor:
+        for term in _normalized_filter_terms(filtros.fornecedor):
+            stmt = stmt.where(_text_contains_term(Contrato.fornecedor, term))
+    if filtros.documento_fornecedor:
+        stmt = stmt.where(
+            func.lower(Contrato.cnpj).like(f"%{filtros.documento_fornecedor.lower()}%")
+        )
+    if filtros.categoria:
+        for term in _normalized_filter_terms(filtros.categoria):
+            stmt = stmt.where(_text_contains_term(Contrato.categoria, term))
+    if filtros.secretaria:
+        for term in _normalized_filter_terms(filtros.secretaria):
+            stmt = stmt.where(_text_contains_term(Contrato.secretaria, term))
+    if filtros.descricao:
+        stmt = _apply_descricao_filter(
+            stmt,
+            filtros.descricao,
+            include_descricao_despesa=include_descricao_despesa,
+            include_xml_original=include_xml_original,
+        )
+    stmt = _apply_date_filters(stmt, filtros)
     if filtros.valor_min is not None:
         stmt = stmt.where(Contrato.valor >= filtros.valor_min)
     if filtros.valor_max is not None:
@@ -207,6 +227,8 @@ def project_contrato_fields(
     contrato: Contrato | Mapping[str, Any],
     campos: list[str],
 ) -> dict[str, Any]:
+    """Projeta o registro nos campos publicos solicitados."""
+
     if isinstance(contrato, Mapping):
         raw_payload = dict(contrato)
         serialized = ContratoToolItem.model_validate(raw_payload).model_dump(
@@ -220,9 +242,3 @@ def project_contrato_fields(
     if not campos:
         return serialized
     return {campo: serialized[campo] for campo in campos}
-
-
-def decimal_or_int_to_json(value: Decimal | int | None) -> float | int | None:
-    if isinstance(value, Decimal):
-        return decimal_to_float(value)
-    return value

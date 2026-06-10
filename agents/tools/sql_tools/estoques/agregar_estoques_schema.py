@@ -89,6 +89,8 @@ _MOVEMENT_METRICS = {
 
 
 class AgregarEstoquesFiltroSchema(EstoqueFiltroSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     data_movimento_inicio: date | None = None
     data_movimento_fim: date | None = None
     tipo_movimento: str | None = None
@@ -128,6 +130,8 @@ class AgregarEstoquesFiltroSchema(EstoqueFiltroSchema):
 
 
 class AgregarEstoquesParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: AgregarEstoquesFiltroSchema = Field(
         default_factory=AgregarEstoquesFiltroSchema
     )
@@ -223,6 +227,8 @@ class AgregarEstoquesParams(SqlToolBaseSchema):
 
 
 class AgregarEstoquesMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     agrupar_por: str | None = None
     metrica: str
@@ -232,6 +238,8 @@ class AgregarEstoquesMetadata(SqlToolBaseSchema):
 
 
 class AgregarEstoquesResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total_grupos: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: AgregarEstoquesMetadata

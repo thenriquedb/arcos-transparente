@@ -1,3 +1,5 @@
+"""Fabrica que resolve o provider de observabilidade a partir da configuracao."""
+
 from __future__ import annotations
 
 from .config import ObservabilityConfig, load_observability_config_from_env

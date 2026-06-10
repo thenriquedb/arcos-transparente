@@ -1,3 +1,5 @@
+"""Modelos ORM de folha de pagamento (servidor, registros, snapshot)."""
+
 from __future__ import annotations
 
 from datetime import date, datetime

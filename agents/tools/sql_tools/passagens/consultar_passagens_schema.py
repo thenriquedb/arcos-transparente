@@ -41,6 +41,8 @@ ALLOWED_ORDER_VALUES = {"asc", "desc"}
 
 
 class PassagemFiltroSchema(SqlToolBaseSchema):
+    """Filtros publicos aceitos pela tool deste dominio."""
+
     origem: str | None = None
     ano: int | None = None
     periodo_inicio: date | None = None
@@ -74,6 +76,8 @@ class PassagemFiltroSchema(SqlToolBaseSchema):
 
 
 class ConsultarPassagensParams(SqlToolBaseSchema):
+    """Parametros validados da chamada da tool."""
+
     filtros: PassagemFiltroSchema = Field(default_factory=PassagemFiltroSchema)
     ordenar_por: str = "periodo_fim"
     ordem: str = "desc"
@@ -130,6 +134,8 @@ class ConsultarPassagensParams(SqlToolBaseSchema):
 
 
 class ConsultarPassagensMetadata(SqlToolBaseSchema):
+    """Metadados ecoados na resposta (filtros, ordenacao, paginacao)."""
+
     filtros_aplicados: dict[str, Any] = Field(default_factory=dict)
     ordenar_por: str
     ordem: str
@@ -139,6 +145,8 @@ class ConsultarPassagensMetadata(SqlToolBaseSchema):
 
 
 class ConsultarPassagensResponse(SqlToolBaseSchema):
+    """Formato da resposta publica da tool."""
+
     total: int
     resultados: list[dict[str, Any]] = Field(default_factory=list)
     metadata: ConsultarPassagensMetadata
