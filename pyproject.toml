@@ -29,3 +29,58 @@ dev = [
     "pytest>=8.0.0",
     "ruff>=0.15.14",
 ]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 119
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "F",  # Pyflakes
+    "I",  # isort
+    "W",  # pycodestyle warnings
+    "UP",  # pyupgrade
+    "FURB",  # refurb
+    "SIM",  # flake8-simplify
+    "S110",  # bandit's try-except-pass rule
+    "C4",  # flake8-comprehensions
+    "C901",  # McCabe complexity
+    "RUF013",  # Checks for the use of implicit Optional in type annotations when the default parameter value is None.
+    "PERF102",  # Checks for uses of dict.items() that discard either the key or the value when iterating over the dictionary.
+    "PLC1802",  # Checks for len calls on sequences in a boolean test context.
+    "PLC0208",  # Checks for iteration over a set literal where each element in the set is itself a literal value.
+    "PIE794",  # Checks for duplicate field definitions in classes.
+]
+ignore = [
+    "E501",  # Checks for lines that exceed the specified maximum character length.
+    "E741",  # Checks for the use of the characters 'l', 'O', or 'I' as variable names.
+    "SIM1",  # All SIM1XX rules
+    "SIM905",  # Checks for static str.split calls that can be replaced with list literals.
+    "UP015",  # Checks for redundant open mode arguments.
+    "UP031",  # Checks for printf-style string formatting, and offers to replace it with str.format calls.
+]
+extend-safe-fixes = [
+    "UP006",  # Checks for the use of generics that can be replaced with standard library variants based on PEP 585.
+]
+
+# Ignore import violations in all `__init__.py` files.
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "F401", "F403", "F811"]
+"examples/**/*.py" = ["C901"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 75
