@@ -3,18 +3,21 @@
 from __future__ import annotations
 
 import hashlib
-from pathlib import Path
+import re
 import sys
+from pathlib import Path
 from uuid import uuid4
 
 import streamlit as st
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from agents.chatbot import ChatbotAgentBackend, ChatSession, ChatbotApplication  # noqa: E402
+from agents.chatbot import ChatbotAgentBackend, ChatbotApplication, ChatSession  # noqa: E402
 from shared.runtime_config import get_chatbot_system_prompt_path, get_project_root  # noqa: E402
+
 
 APP_TITLE = "Arcos Transparente"
 INPUT_PLACEHOLDER = "Pergunte sobre servidores, folha, frota, contratos, receitas..."
@@ -24,6 +27,8 @@ BACKEND_CACHE_FILES = (
     PROJECT_ROOT / "agents" / "chatbot" / "agent.py",
 )
 BACKEND_CACHE_DIRS = (PROJECT_ROOT / "agents" / "tools" / "sql_tools",)
+_CODE_SPAN_PATTERN = re.compile(r"(```[\s\S]*?```|`[^`\n]*`)")
+_UNESCAPED_DOLLAR_PATTERN = re.compile(r"(?<!\\)\$")
 
 
 @st.cache_resource
@@ -114,7 +119,8 @@ def render_header() -> None:
 def render_history() -> None:
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+            sanitized_content = _prepare_markdown_for_streamlit(message["content"])
+            st.markdown(sanitized_content)
 
 
 def friendly_error_message(exc: Exception) -> str:
@@ -152,14 +158,14 @@ def handle_prompt(prompt: str) -> None:
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     with st.chat_message("user"):
-        st.markdown(prompt)
+        st.markdown(_prepare_markdown_for_streamlit(prompt))
 
     with st.chat_message("assistant"):
         st.session_state.is_loading = True
         try:
             response = app.ask(prompt)
             assistant_content = response.content
-            st.markdown(assistant_content)
+            st.markdown(_prepare_markdown_for_streamlit(assistant_content))
         except ValueError as exc:
             assistant_content = str(exc)
             st.warning(assistant_content)
@@ -173,6 +179,28 @@ def handle_prompt(prompt: str) -> None:
 
     if assistant_content:
         st.session_state.messages.append({"role": "assistant", "content": assistant_content})
+
+
+def _prepare_markdown_for_streamlit(content: str) -> str:
+    """Escapa `$` fora de code spans para evitar parse acidental de LaTeX.
+
+    Streamlit interpreta `$...$` como matemática inline. Em respostas com moeda
+    brasileira, como `R$ 23.496,40`, isso pode quebrar negrito, listas e quebras
+    de linha. Mantemos o texto bruto no histórico e sanitizamos apenas na
+    borda de renderização.
+    """
+
+    if not content or "$" not in content:
+        return content
+
+    parts = _CODE_SPAN_PATTERN.split(content)
+    sanitized_parts: list[str] = []
+    for index, part in enumerate(parts):
+        if index % 2 == 1:
+            sanitized_parts.append(part)
+            continue
+        sanitized_parts.append(_UNESCAPED_DOLLAR_PATTERN.sub(r"\\$", part))
+    return "".join(sanitized_parts)
 
 
 def render_question_suggestions() -> None:
