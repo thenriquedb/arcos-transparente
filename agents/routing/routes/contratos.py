@@ -90,9 +90,7 @@ def _try_route_contratos_agregacao(normalized_text: str) -> RouteDecision | None
             confident=True,
         )
 
-    if any(
-        keyword in normalized_text for keyword in ("total", "somatorio", "somatorio")
-    ):
+    if any(keyword in normalized_text for keyword in ("total", "somatorio", "somatorio")):
         return RouteDecision(
             domain="contratos",
             operation_type="agregacao_ranking",
@@ -153,19 +151,11 @@ def _try_route_contratos_lista(normalized_text: str) -> RouteDecision | None:
             confident=True,
         )
 
-    if filtros or any(
-        keyword in normalized_text
-        for keyword in ("lista", "liste", "quais", "detalhe", "mostre")
-    ):
+    if filtros or any(keyword in normalized_text for keyword in ("lista", "liste", "quais", "detalhe", "mostre")):
         incluir_detalhes = any(
-            keyword in normalized_text
-            for keyword in ("detalhe", "detalhes", "completo", "completos")
+            keyword in normalized_text for keyword in ("detalhe", "detalhes", "completo", "completos")
         )
-        limite = (
-            100
-            if any(keyword in normalized_text for keyword in ("todas", "todos"))
-            else 10
-        )
+        limite = 100 if any(keyword in normalized_text for keyword in ("todas", "todos")) else 10
         return RouteDecision(
             domain="contratos",
             operation_type="consulta_lista",

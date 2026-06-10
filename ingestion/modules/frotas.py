@@ -50,9 +50,7 @@ def load_frotas(
                     rows=[
                         {
                             "descricao_evento": despesa.get("descricao_evento"),
-                            "quantidade_lancamento": despesa.get(
-                                "quantidade_lancamento"
-                            ),
+                            "quantidade_lancamento": despesa.get("quantidade_lancamento"),
                             "valor_lancamento": despesa.get("valor_lancamento"),
                             "data_evento": to_date(despesa.get("data_evento")),
                             "tp_despesa": despesa.get("tp_despesa"),

@@ -47,9 +47,7 @@ def test_runtime_config_expoe_paths_padrao_do_projeto() -> None:
 
     assert get_env_file_path() == project_root / ".env"
     assert get_cli_data_directory() == project_root / "data" / "xml"
-    assert get_chatbot_system_prompt_path() == (
-        project_root / "docs" / "agent-system-prompt.md"
-    )
+    assert get_chatbot_system_prompt_path() == (project_root / "docs" / "agent-system-prompt.md")
 
 
 def test_runtime_config_resolve_paths_do_rag_com_env(
@@ -59,10 +57,7 @@ def test_runtime_config_resolve_paths_do_rag_com_env(
     monkeypatch.setenv("RAG_SOURCE_DIRECTORY", "dados/rag-custom")
     monkeypatch.setenv("RAG_PERSIST_DIRECTORY", str(tmp_path / "vector-store"))
 
-    assert (
-        get_rag_source_directory()
-        == (get_project_root() / "dados" / "rag-custom").resolve()
-    )
+    assert get_rag_source_directory() == (get_project_root() / "dados" / "rag-custom").resolve()
     assert get_rag_persist_directory() == (tmp_path / "vector-store").resolve()
 
 
@@ -77,12 +72,8 @@ def test_runtime_config_expoe_database_url_e_defaults_do_docker(
 
     docker_defaults = get_docker_runtime_defaults()
     assert docker_defaults.port == "8501"
-    assert docker_defaults.database_url.endswith(
-        "/app/runtime/database/transparencia.db"
-    )
-    assert docker_defaults.rag_persist_directory.endswith(
-        "/app/runtime/vector_store/knowledge_markdown"
-    )
+    assert docker_defaults.database_url.endswith("/app/runtime/database/transparencia.db")
+    assert docker_defaults.rag_persist_directory.endswith("/app/runtime/vector_store/knowledge_markdown")
     assert docker_defaults.auto_bootstrap_on_start == "1"
 
 

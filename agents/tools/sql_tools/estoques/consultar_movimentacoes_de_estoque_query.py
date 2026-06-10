@@ -171,9 +171,7 @@ def consultar_movimentacoes_de_estoque(
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
-            empty_suggestion=(
-                "Nenhuma movimentacao de estoque encontrada com os filtros."
-            ),
+            empty_suggestion=("Nenhuma movimentacao de estoque encontrada com os filtros."),
         )
 
     metadata = ConsultarMovimentacoesDeEstoqueMetadata(

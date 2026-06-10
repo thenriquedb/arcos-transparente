@@ -95,8 +95,7 @@ _DESPESAS_FILTER_CONDITIONS = (
     predicate_filter(
         "conta_extra",
         lambda r, v: (
-            matches_text_query(r.conta_extra_descricao, v)
-            or matches_text_query(r.conta_extra_identificacao, v)
+            matches_text_query(r.conta_extra_descricao, v) or matches_text_query(r.conta_extra_identificacao, v)
         ),
     ),
     text_filter("contrato", lambda r: r.numero_contrato),
@@ -262,7 +261,5 @@ def consultar_despesas(
         execution=execution,
         project_row=project_despesa_fields,
         campos=params.campos,
-        pagination_message_builder=lambda shown, total: (
-            f"Mostrando {shown} de {total} despesas encontradas."
-        ),
+        pagination_message_builder=lambda shown, total: f"Mostrando {shown} de {total} despesas encontradas.",
     )

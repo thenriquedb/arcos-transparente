@@ -111,11 +111,7 @@ class EstoqueFiltroSchema(SqlToolBaseSchema):
         for min_field, max_field in range_pairs:
             min_value = getattr(self, min_field)
             max_value = getattr(self, max_field)
-            if (
-                min_value is not None
-                and max_value is not None
-                and min_value > max_value
-            ):
+            if min_value is not None and max_value is not None and min_value > max_value:
                 raise ValueError(f"{min_field} deve ser menor ou igual a {max_field}")
         return self
 

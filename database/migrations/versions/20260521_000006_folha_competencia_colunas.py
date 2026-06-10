@@ -72,9 +72,7 @@ def upgrade() -> None:
             name="uq_folha_comp_servidor_cargo_lotacao",
         ),
     )
-    op.create_index(
-        "ix_folha_pagamentos_competencia_ano", "folha_pagamentos", ["competencia_ano"]
-    )
+    op.create_index("ix_folha_pagamentos_competencia_ano", "folha_pagamentos", ["competencia_ano"])
     op.create_index(
         "ix_folha_pagamentos_competencia_mes_num",
         "folha_pagamentos",
@@ -85,12 +83,8 @@ def upgrade() -> None:
         "folha_pagamentos",
         ["competencia_mes_nome"],
     )
-    op.create_index(
-        "ix_folha_pagamentos_servidor_id", "folha_pagamentos", ["servidor_id"]
-    )
-    op.create_index(
-        "ix_folha_pagamentos_lotacao_id", "folha_pagamentos", ["lotacao_id"]
-    )
+    op.create_index("ix_folha_pagamentos_servidor_id", "folha_pagamentos", ["servidor_id"])
+    op.create_index("ix_folha_pagamentos_lotacao_id", "folha_pagamentos", ["lotacao_id"])
     op.create_index("ix_folha_pagamentos_cargo_id", "folha_pagamentos", ["cargo_id"])
 
 
@@ -98,12 +92,8 @@ def downgrade() -> None:
     op.drop_index("ix_folha_pagamentos_cargo_id", table_name="folha_pagamentos")
     op.drop_index("ix_folha_pagamentos_lotacao_id", table_name="folha_pagamentos")
     op.drop_index("ix_folha_pagamentos_servidor_id", table_name="folha_pagamentos")
-    op.drop_index(
-        "ix_folha_pagamentos_competencia_mes_nome", table_name="folha_pagamentos"
-    )
-    op.drop_index(
-        "ix_folha_pagamentos_competencia_mes_num", table_name="folha_pagamentos"
-    )
+    op.drop_index("ix_folha_pagamentos_competencia_mes_nome", table_name="folha_pagamentos")
+    op.drop_index("ix_folha_pagamentos_competencia_mes_num", table_name="folha_pagamentos")
     op.drop_index("ix_folha_pagamentos_competencia_ano", table_name="folha_pagamentos")
     op.drop_table("folha_pagamentos")
 
@@ -155,13 +145,7 @@ def downgrade() -> None:
             name="uq_folha_comp_servidor_cargo_lotacao",
         ),
     )
-    op.create_index(
-        "ix_folha_pagamentos_competencia", "folha_pagamentos", ["competencia"]
-    )
-    op.create_index(
-        "ix_folha_pagamentos_servidor_id", "folha_pagamentos", ["servidor_id"]
-    )
-    op.create_index(
-        "ix_folha_pagamentos_lotacao_id", "folha_pagamentos", ["lotacao_id"]
-    )
+    op.create_index("ix_folha_pagamentos_competencia", "folha_pagamentos", ["competencia"])
+    op.create_index("ix_folha_pagamentos_servidor_id", "folha_pagamentos", ["servidor_id"])
+    op.create_index("ix_folha_pagamentos_lotacao_id", "folha_pagamentos", ["lotacao_id"])
     op.create_index("ix_folha_pagamentos_cargo_id", "folha_pagamentos", ["cargo_id"])

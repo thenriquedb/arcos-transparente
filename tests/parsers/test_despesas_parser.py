@@ -50,12 +50,8 @@ def test_despesas_parser_parseia_empenho_com_item_e_comprobatorio(tmp_path) -> N
     assert registros[0]["origem"] == "camara"
     assert registros[0]["numero_documento"] == "000331"
     assert registros[0]["valor_pago"] == Decimal("18.00")
-    assert registros[0]["itens"][0]["descricao_item"] == (
-        "Ressarcimento de despesa com locomoção"
-    )
-    assert registros[0]["documentos_comprobatorios"][0]["valor_documento"] == Decimal(
-        "18.00"
-    )
+    assert registros[0]["itens"][0]["descricao_item"] == ("Ressarcimento de despesa com locomoção")
+    assert registros[0]["documentos_comprobatorios"][0]["valor_documento"] == Decimal("18.00")
 
 
 def test_despesas_parser_parseia_documento_extra(tmp_path) -> None:

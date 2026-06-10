@@ -101,9 +101,7 @@ def test_consultar_e_agregar_despesas_filtram_diarias(monkeypatch) -> None:
     )
 
     assert consulta["total"] == 2
-    assert consulta["resultados"] == [
-        {"numero": "000332", "credor": "MARIA DE SOUZA", "valor_pago": 24.0}
-    ]
+    assert consulta["resultados"] == [{"numero": "000332", "credor": "MARIA DE SOUZA", "valor_pago": 24.0}]
     assert consulta["mensagem"] == "Mostrando 1 de 2 despesas encontradas."
     assert agregacao["valor_total"] == 42.0
 
@@ -162,9 +160,7 @@ def test_consultar_e_agregar_patrimonios_por_localizacao(monkeypatch) -> None:
     )
 
     assert consulta["total"] == 2
-    assert consulta["resultados"] == [
-        {"placa": "27982", "descricao": "REFRIGERADOR", "valor_atualizado": 1995.0}
-    ]
+    assert consulta["resultados"] == [{"placa": "27982", "descricao": "REFRIGERADOR", "valor_atualizado": 1995.0}]
     assert consulta["mensagem"] == "Mostrando 1 de 2 bens encontrados."
     assert agregacao["valor_total"] == 2495.0
 
@@ -224,15 +220,11 @@ def test_tools_retorna_sugestoes_quando_nao_ha_resultados(monkeypatch) -> None:
     _patch_session(monkeypatch, session)
 
     despesas = despesas_tools.consultar_despesas(filtros={"credor": "inexistente"})
-    patrimonios = patrimonios_tools.consultar_patrimonios(
-        filtros={"localizacao": "inexistente"}
-    )
+    patrimonios = patrimonios_tools.consultar_patrimonios(filtros={"localizacao": "inexistente"})
     quadro = quadro_tools.consultar_quadro_pessoal(filtros={"origem": "inexistente"})
 
     assert despesas["sugestao"] == "Nenhuma despesa encontrada com os filtros."
-    assert (
-        patrimonios["sugestao"] == "Nenhum bem patrimonial encontrado com os filtros."
-    )
+    assert patrimonios["sugestao"] == "Nenhum bem patrimonial encontrado com os filtros."
     assert quadro["sugestao"] == "Nenhum registro de quadro de pessoal encontrado."
 
     session.close()

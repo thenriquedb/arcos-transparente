@@ -60,9 +60,7 @@ def upgrade() -> None:
         "vencedores_licitacao",
         ["fornecedor_id"],
     )
-    op.create_index(
-        "ix_folha_servidores_servidor_id", "folha_servidores", ["servidor_id"]
-    )
+    op.create_index("ix_folha_servidores_servidor_id", "folha_servidores", ["servidor_id"])
     op.create_index(
         "ix_folha_pagamentos_ano_mes_lotacao",
         "folha_pagamentos",
@@ -191,11 +189,7 @@ def _backfill_contratos_fornecedores() -> None:
             fornecedor_id = int(insert_result.inserted_primary_key[0])
             fornecedores_existentes[chave] = fornecedor_id
 
-        conn.execute(
-            contratos.update()
-            .where(contratos.c.id == contrato.id)
-            .values(fornecedor_id=fornecedor_id)
-        )
+        conn.execute(contratos.update().where(contratos.c.id == contrato.id).values(fornecedor_id=fornecedor_id))
 
 
 def _backfill_folha_servidores() -> None:
@@ -216,9 +210,7 @@ def _backfill_folha_servidores() -> None:
     for servidor in conn.execute(sa.select(servidores.c.id, servidores.c.nome)):
         servidores_por_nome.setdefault(servidor.nome, []).append(servidor.id)
 
-    for folha_servidor in conn.execute(
-        sa.select(folha_servidores.c.id, folha_servidores.c.nome)
-    ):
+    for folha_servidor in conn.execute(sa.select(folha_servidores.c.id, folha_servidores.c.nome)):
         candidatos = servidores_por_nome.get(folha_servidor.nome, [])
         if len(candidatos) != 1:
             continue

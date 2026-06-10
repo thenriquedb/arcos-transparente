@@ -136,9 +136,7 @@ def _fetch_contratos(
         limite=params.limite,
         order_columns=CONTRACT_ORDER_COLUMNS,
         tie_breakers=(Contrato.id.desc(),),
-        load_rows=lambda db_session, stmt: [
-            dict(row) for row in db_session.execute(stmt).mappings()
-        ],
+        load_rows=lambda db_session, stmt: [dict(row) for row in db_session.execute(stmt).mappings()],
     )
     return total, contratos
 
@@ -194,15 +192,11 @@ def _attach_contract_details(
 
     despesas_por_contrato: dict[int, list[dict[str, Any]]] = {}
     for despesa in despesas_rows:
-        despesas_por_contrato.setdefault(despesa.contrato_id, []).append(
-            serializar_contrato_despesa(despesa)
-        )
+        despesas_por_contrato.setdefault(despesa.contrato_id, []).append(serializar_contrato_despesa(despesa))
 
     itens_por_contrato: dict[int, list[dict[str, Any]]] = {}
     for item in itens_rows:
-        itens_por_contrato.setdefault(item.contrato_id, []).append(
-            serializar_contrato_item(item)
-        )
+        itens_por_contrato.setdefault(item.contrato_id, []).append(serializar_contrato_item(item))
 
     for contrato in contratos:
         despesas = despesas_por_contrato.get(contrato["id"], [])
@@ -330,16 +324,8 @@ def _build_consulta_suggestion(
     if has_results:
         return None
     return (
-        (
-            build_contrato_details_unavailable_message()
-            if params.incluir_detalhes and not details_available
-            else None
-        )
-        or (
-            build_descricao_despesa_unavailable_message(params.filtros)
-            if not include_descricao_despesa
-            else None
-        )
+        (build_contrato_details_unavailable_message() if params.incluir_detalhes and not details_available else None)
+        or (build_descricao_despesa_unavailable_message(params.filtros) if not include_descricao_despesa else None)
         or _SUGESTAO_SEM_RESULTADOS
     )
 
@@ -532,9 +518,7 @@ def consultar_contratos(
 
     metadata = ConsultarContratosMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
-        filtros_fallback_aplicados=(
-            filtros_execucao.to_metadata_dict() if fallback_aplicado else None
-        ),
+        filtros_fallback_aplicados=(filtros_execucao.to_metadata_dict() if fallback_aplicado else None),
         ordenar_por=params.ordenar_por,
         ordem=params.ordem,
         limite=params.limite,

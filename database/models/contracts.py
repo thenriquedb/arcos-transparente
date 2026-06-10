@@ -28,9 +28,7 @@ if TYPE_CHECKING:
 class Contrato(Base):
     __tablename__ = "contratos"
     __table_args__ = (
-        UniqueConstraint(
-            "numero", "data_inicio", name="uq_contrato_numero_data_inicio"
-        ),
+        UniqueConstraint("numero", "data_inicio", name="uq_contrato_numero_data_inicio"),
         Index(
             "ix_contratos_secretaria_categoria_data_inicio",
             "secretaria",
@@ -45,9 +43,7 @@ class Contrato(Base):
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -56,15 +52,9 @@ class Contrato(Base):
     )
 
     numero: Mapped[str] = mapped_column(String(50), nullable=False)
-    numero_licitatorio: Mapped[Optional[str]] = mapped_column(
-        String(50), nullable=True, index=True
-    )
-    numero_instrumento: Mapped[Optional[str]] = mapped_column(
-        String(50), nullable=True, index=True
-    )
-    tipo_instrumento_contratual: Mapped[Optional[str]] = mapped_column(
-        String(60), nullable=True
-    )
+    numero_licitatorio: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, index=True)
+    numero_instrumento: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, index=True)
+    tipo_instrumento_contratual: Mapped[Optional[str]] = mapped_column(String(60), nullable=True)
     fornecedor: Mapped[str] = mapped_column(String(255), nullable=False)
     cnpj: Mapped[str] = mapped_column(String(18), nullable=False, index=True)
     fornecedor_id: Mapped[Optional[int]] = mapped_column(
@@ -80,9 +70,7 @@ class Contrato(Base):
     descricao_despesa: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     xml_original: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
-    fornecedor_rel: Mapped[Optional["Fornecedor"]] = relationship(
-        back_populates="contratos"
-    )
+    fornecedor_rel: Mapped[Optional["Fornecedor"]] = relationship(back_populates="contratos")
     despesas_orcamentarias: Mapped[list["ContratoDespesaOrcamentaria"]] = relationship(
         back_populates="contrato", cascade="all, delete-orphan"
     )
@@ -107,9 +95,7 @@ class ContratoDespesaOrcamentaria(Base):
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -128,13 +114,9 @@ class ContratoDespesaOrcamentaria(Base):
     unidade: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     departamento: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     fonte_recurso: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    natureza_despesa_rubrica: Mapped[Optional[str]] = mapped_column(
-        String(40), nullable=True, index=True
-    )
+    natureza_despesa_rubrica: Mapped[Optional[str]] = mapped_column(String(40), nullable=True, index=True)
     descricao_despesa: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    valor_despesa: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
+    valor_despesa: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
 
     contrato: Mapped["Contrato"] = relationship(back_populates="despesas_orcamentarias")
 
@@ -155,9 +137,7 @@ class ContratoItemAdquirido(Base):
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -175,11 +155,7 @@ class ContratoItemAdquirido(Base):
     numero_item: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     identificacao: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     quantidade: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 4), nullable=True)
-    valor_unitario: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
-    valor_total: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
+    valor_unitario: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    valor_total: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
 
     contrato: Mapped["Contrato"] = relationship(back_populates="itens_adquiridos")

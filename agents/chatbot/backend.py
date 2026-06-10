@@ -36,15 +36,13 @@ class ChatbotAgentBackend:
     ) -> None:
         self._agent_factory = agent_factory
         self._agents: dict[tuple[str, ...], Any] = {}
-        self._observability_provider = (
-            observability_provider or NoOpObservabilityProvider()
-        )
+        self._observability_provider = observability_provider or NoOpObservabilityProvider()
 
     def _get_agent(self, candidate_tools: tuple[object, ...] | None = None):
         normalized_tools = self._normalize_candidate_tools(candidate_tools)
         cache_key = tuple(_tool_name(tool_obj) for tool_obj in normalized_tools)
         cached_agent = self._agents.get(cache_key)
-        
+
         if cached_agent is not None:
             return cached_agent
 
@@ -61,7 +59,7 @@ class ChatbotAgentBackend:
     ) -> list[object]:
         if candidate_tools is None:
             return list(get_public_tools())
-        
+
         return list(candidate_tools)
 
     def set_observability_provider(
@@ -80,9 +78,7 @@ class ChatbotAgentBackend:
         session_id: str,
         selection: HybridToolSelection | None = None,
     ) -> ChatResponse:
-        agent = self._get_agent(
-            selection.candidate_tools if selection is not None else None
-        )
+        agent = self._get_agent(selection.candidate_tools if selection is not None else None)
 
         with self._observability_provider.span(
             "chatbot.agent.invoke",
@@ -90,9 +86,7 @@ class ChatbotAgentBackend:
                 {
                     "session_id": session_id,
                     "backend_question": question,
-                    "selected_tool_names": (
-                        list(selection.candidate_tool_names) if selection else []
-                    ),
+                    "selected_tool_names": (list(selection.candidate_tool_names) if selection else []),
                 }
             ),
             metadata=build_event_payload({"surface": "backend_answer"}),
@@ -145,18 +139,14 @@ class ChatbotAgentBackend:
     ) -> Iterator[str]:
         """Responde em chunks quando o agente LangGraph suportar streaming."""
 
-        agent = self._get_agent(
-            selection.candidate_tools if selection is not None else None
-        )
+        agent = self._get_agent(selection.candidate_tools if selection is not None else None)
         with self._observability_provider.span(
             "chatbot.agent.stream",
             inputs=build_event_payload(
                 {
                     "session_id": session_id,
                     "backend_question": question,
-                    "selected_tool_names": (
-                        list(selection.candidate_tool_names) if selection else []
-                    ),
+                    "selected_tool_names": (list(selection.candidate_tool_names) if selection else []),
                     "streaming": True,
                 }
             ),

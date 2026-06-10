@@ -26,8 +26,7 @@ class LicitacoesParser:
                 "modalidade": self._txt(node, "Modalidade"),
                 "objeto": self._txt(node, "Objeto"),
                 "valor_estimado": self._txt(node, "ValorProcesso"),
-                "data_abertura": self._txt(node, "DataJulgamento")
-                or self._txt(node, "DataHomologacao"),
+                "data_abertura": self._txt(node, "DataJulgamento") or self._txt(node, "DataHomologacao"),
                 "situacao": self._txt(node, "SituacaoProcesso"),
                 "secretaria": self._txt(node, "UnidadeGestora"),
                 "vencedores": self._parse_vencedores(node),
@@ -63,12 +62,8 @@ class LicitacoesParser:
                 {
                     "numero_licitatorio": self._txt(item, "NumeroLicitatorio"),
                     "unidade_gestora": self._txt(item, "UnidadeGestora"),
-                    "tipo_instrumento_contratual": self._txt(
-                        item, "TipoInstrumentoContratual"
-                    ),
-                    "numero_instrumento": self._txt(
-                        item, "NumeroInstrumentoContratual"
-                    ),
+                    "tipo_instrumento_contratual": self._txt(item, "TipoInstrumentoContratual"),
+                    "numero_instrumento": self._txt(item, "NumeroInstrumentoContratual"),
                     "tipo_contrato": self._txt(item, "TipoContrato"),
                     "objeto": self._txt(item, "Objeto"),
                     "data_emissao": self._txt(item, "DataEmissao"),
@@ -76,9 +71,7 @@ class LicitacoesParser:
                     "cnpj_fornecedor": self._txt(item, "CNPJFornecedor"),
                     "nome_fornecedor": self._txt(item, "NomeFornecedor"),
                     "possui_aditivo": self._txt(item, "PossuiAditivo"),
-                    "valor_instrumento_contratual": self._txt(
-                        item, "ValorInstrumentoContratual"
-                    ),
+                    "valor_instrumento_contratual": self._txt(item, "ValorInstrumentoContratual"),
                     "materias": self._parse_materias(item),
                 }
             )

@@ -202,9 +202,7 @@ def agregar_licitacoes(
         if params.filtros.objeto:
             licitacoes = [
                 licitacao
-                for licitacao in session.execute(
-                    apply_licitacoes_filters(select(Licitacao), params.filtros)
-                )
+                for licitacao in session.execute(apply_licitacoes_filters(select(Licitacao), params.filtros))
                 .scalars()
                 .all()
                 if matches_text_query(licitacao.objeto, params.filtros.objeto)

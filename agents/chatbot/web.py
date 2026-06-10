@@ -84,10 +84,7 @@ def ensure_session_state() -> None:
     if "is_loading" not in st.session_state:
         st.session_state.is_loading = False
 
-    if (
-        "app" not in st.session_state
-        or st.session_state.get("backend_cache_token") != cache_token
-    ):
+    if "app" not in st.session_state or st.session_state.get("backend_cache_token") != cache_token:
         st.session_state.backend_cache_token = cache_token
         st.session_state.app = build_application(
             st.session_state.chat_session_id,
@@ -107,9 +104,7 @@ def render_header() -> None:
     title_col, action_col = st.columns([0.72, 0.28], vertical_alignment="center")
     with title_col:
         st.title(APP_TITLE)
-        st.caption(
-            "Chatbot para consultas aos dados municipais de transparência e ao acervo local."
-        )
+        st.caption("Chatbot para consultas aos dados municipais de transparência e ao acervo local.")
     with action_col:
         if st.button("Nova conversa", use_container_width=True):
             reset_chat_session()
@@ -133,14 +128,8 @@ def friendly_error_message(exc: Exception) -> str:
             "o chat."
         )
 
-    if (
-        "provider nao suportado pelo chatbot" in normalized
-        or "llm_provider" in normalized
-    ):
-        return (
-            "Provider nao suportado para o chatbot nesta fase. Use "
-            "LLM_PROVIDER=openai no ambiente ou no .env."
-        )
+    if "provider nao suportado pelo chatbot" in normalized or "llm_provider" in normalized:
+        return "Provider nao suportado para o chatbot nesta fase. Use LLM_PROVIDER=openai no ambiente ou no .env."
 
     database_markers = (
         "no such table",
@@ -150,10 +139,7 @@ def friendly_error_message(exc: Exception) -> str:
         "transparencia.db",
     )
     if any(marker in normalized for marker in database_markers):
-        return (
-            "Banco local indisponivel ou sem dados importados. Importe a base SQLite "
-            "antes de consultar o chat."
-        )
+        return "Banco local indisponivel ou sem dados importados. Importe a base SQLite antes de consultar o chat."
 
     return (
         "Falha inesperada ao consultar o agente ou uma ferramenta. "
@@ -186,9 +172,7 @@ def handle_prompt(prompt: str) -> None:
             st.session_state.is_loading = False
 
     if assistant_content:
-        st.session_state.messages.append(
-            {"role": "assistant", "content": assistant_content}
-        )
+        st.session_state.messages.append({"role": "assistant", "content": assistant_content})
 
 
 def render_question_suggestions() -> None:

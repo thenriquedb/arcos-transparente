@@ -34,37 +34,17 @@ class PlanejamentosParser:
                 "programa": self._txt(node, "Programa"),
                 "tipo_acao": self._txt(node, "TipoAcao"),
                 "descricao_acao": self._txt(node, "DescricaoAcao"),
-                "fonte_recurso_identificacao": self._nested_txt(
-                    node, "FonteRecurso", "Identificacao"
-                ),
-                "fonte_recurso_descricao": self._nested_txt(
-                    node, "FonteRecurso", "Descricao"
-                ),
+                "fonte_recurso_identificacao": self._nested_txt(node, "FonteRecurso", "Identificacao"),
+                "fonte_recurso_descricao": self._nested_txt(node, "FonteRecurso", "Descricao"),
                 "esfera_administrativa": self._txt(node, "EsferaAdministrativa"),
-                "categoria_economica_identificacao": self._nested_txt(
-                    node, "CategoriaEconomica", "Identificacao"
-                ),
-                "categoria_economica_descricao": self._nested_txt(
-                    node, "CategoriaEconomica", "Descricao"
-                ),
-                "grupo_despesa_identificacao": self._nested_txt(
-                    node, "GrupoDespesa", "Identificacao"
-                ),
-                "grupo_despesa_descricao": self._nested_txt(
-                    node, "GrupoDespesa", "Descricao"
-                ),
-                "elemento_despesa_identificacao": self._nested_txt(
-                    node, "ElementoDespesa", "Identificacao"
-                ),
-                "elemento_despesa_descricao": self._nested_txt(
-                    node, "ElementoDespesa", "Descricao"
-                ),
-                "modalidade_aplicacao_identificacao": self._nested_txt(
-                    node, "ModalidadeAplicacao", "Identificacao"
-                ),
-                "modalidade_aplicacao_descricao": self._nested_txt(
-                    node, "ModalidadeAplicacao", "Descricao"
-                ),
+                "categoria_economica_identificacao": self._nested_txt(node, "CategoriaEconomica", "Identificacao"),
+                "categoria_economica_descricao": self._nested_txt(node, "CategoriaEconomica", "Descricao"),
+                "grupo_despesa_identificacao": self._nested_txt(node, "GrupoDespesa", "Identificacao"),
+                "grupo_despesa_descricao": self._nested_txt(node, "GrupoDespesa", "Descricao"),
+                "elemento_despesa_identificacao": self._nested_txt(node, "ElementoDespesa", "Identificacao"),
+                "elemento_despesa_descricao": self._nested_txt(node, "ElementoDespesa", "Descricao"),
+                "modalidade_aplicacao_identificacao": self._nested_txt(node, "ModalidadeAplicacao", "Identificacao"),
+                "modalidade_aplicacao_descricao": self._nested_txt(node, "ModalidadeAplicacao", "Descricao"),
                 "mes": self._txt(node, "Mes"),
                 "dotacao_inicial": self._txt(node, "DotacaoInicial"),
                 "creditos_adicionais": self._txt(node, "CreditosAdicionais"),
@@ -103,9 +83,7 @@ class PlanejamentosParser:
         value = child.text.strip()
         return value or None
 
-    def _nested_txt(
-        self, node: ET.Element, parent_tag: str, child_tag: str
-    ) -> str | None:
+    def _nested_txt(self, node: ET.Element, parent_tag: str, child_tag: str) -> str | None:
         parent = node.find(parent_tag)
         if parent is None:
             return None

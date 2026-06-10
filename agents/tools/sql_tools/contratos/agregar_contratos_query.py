@@ -196,11 +196,7 @@ def _responder_total_sem_grupo(
                 fallback_target_field,
             ) = fallback_result
             fallback_aplicado = True
-            metadata = metadata.model_copy(
-                update={
-                    "filtros_fallback_aplicados": filtros_execucao.to_metadata_dict()
-                }
-            )
+            metadata = metadata.model_copy(update={"filtros_fallback_aplicados": filtros_execucao.to_metadata_dict()})
     mensagens = [
         (
             build_descricao_despesa_unavailable_message(params.filtros)
@@ -226,11 +222,7 @@ def _responder_total_sem_grupo(
             suggestion=(
                 build_descricao_despesa_unavailable_message(params.filtros)
                 if total_match == 0 and not include_descricao_despesa
-                else (
-                    "Nenhum contrato encontrado com os filtros informados."
-                    if total_match == 0
-                    else None
-                )
+                else ("Nenhum contrato encontrado com os filtros informados." if total_match == 0 else None)
             ),
         ),
     )
@@ -376,9 +368,7 @@ def agregar_contratos(
                 ) = fallback_result
                 fallback_aplicado = True
                 metadata = metadata.model_copy(
-                    update={
-                        "filtros_fallback_aplicados": filtros_execucao.to_metadata_dict()
-                    }
+                    update={"filtros_fallback_aplicados": filtros_execucao.to_metadata_dict()}
                 )
 
     mensagens: list[str] = []
@@ -414,11 +404,7 @@ def agregar_contratos(
         agrupar_por=params.agrupar_por,
         metrica=params.metrica,
         serialize_group_value=(
-            lambda value: (
-                int(value)
-                if params.agrupar_por == "ano_inicio" and value is not None
-                else value
-            )
+            lambda value: int(value) if params.agrupar_por == "ano_inicio" and value is not None else value
         ),
         serialize_metric=decimal_or_int_to_json,
     )

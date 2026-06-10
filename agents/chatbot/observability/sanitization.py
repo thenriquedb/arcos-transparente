@@ -68,15 +68,11 @@ def sanitize_value(
     if isinstance(value, Mapping):
         items = list(value.items())[:_MAX_ITEMS]
         return {
-            str(item_key): sanitize_value(
-                item_value, key=str(item_key), depth=depth + 1
-            )
+            str(item_key): sanitize_value(item_value, key=str(item_key), depth=depth + 1)
             for item_key, item_value in items
         }
     if isinstance(value, Sequence) and not isinstance(value, str | bytes | bytearray):
-        return [
-            sanitize_value(item, depth=depth + 1) for item in list(value)[:_MAX_ITEMS]
-        ]
+        return [sanitize_value(item, depth=depth + 1) for item in list(value)[:_MAX_ITEMS]]
     return _truncate(str(value))
 
 
@@ -99,10 +95,7 @@ def summarize_result(result: Any) -> ObservationPayload:
         return {
             "kind": "sequence",
             "size": len(result),
-            "preview": [
-                sanitize_value(item, depth=1)
-                for item in list(result)[: min(3, _MAX_ITEMS)]
-            ],
+            "preview": [sanitize_value(item, depth=1) for item in list(result)[: min(3, _MAX_ITEMS)]],
         }
     if isinstance(result, str):
         return {

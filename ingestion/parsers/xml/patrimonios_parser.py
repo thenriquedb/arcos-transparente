@@ -48,9 +48,7 @@ class PatrimoniosParser:
             registros.append(payload.model_dump(mode="python"))
 
         if invalidos:
-            logger.info(
-                f"Descartados {invalidos} registros invalidos de patrimonio em {filepath}"
-            )
+            logger.info(f"Descartados {invalidos} registros invalidos de patrimonio em {filepath}")
 
         return registros
 

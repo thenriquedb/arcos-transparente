@@ -84,9 +84,7 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     bind = op.get_bind()
-    legacy_server_rows, legacy_folha_rows, payment_rows = _load_legacy_downgrade_state(
-        bind
-    )
+    legacy_server_rows, legacy_folha_rows, payment_rows = _load_legacy_downgrade_state(bind)
 
     op.drop_table("folha_pagamentos")
     op.drop_table("folha_servidores")
@@ -199,21 +197,15 @@ def _load_legacy_upgrade_state(
 
     folha_nomes = {
         row["id"]: _normalize_text(row["nome"])
-        for row in bind.execute(
-            sa.select(folha_servidores.c.id, folha_servidores.c.nome)
-        ).mappings()
+        for row in bind.execute(sa.select(folha_servidores.c.id, folha_servidores.c.nome)).mappings()
     }
     cargos = {
         row["id"]: _normalize_text(row["nome"])
-        for row in bind.execute(
-            sa.select(folha_cargos.c.id, folha_cargos.c.nome)
-        ).mappings()
+        for row in bind.execute(sa.select(folha_cargos.c.id, folha_cargos.c.nome)).mappings()
     }
     lotacoes = {
         row["id"]: _normalize_text(row["nome"])
-        for row in bind.execute(
-            sa.select(folha_lotacoes.c.id, folha_lotacoes.c.nome)
-        ).mappings()
+        for row in bind.execute(sa.select(folha_lotacoes.c.id, folha_lotacoes.c.nome)).mappings()
     }
 
     payment_rows: list[dict[str, object]] = []
@@ -595,12 +587,8 @@ def _create_folha_pagamentos_table() -> None:
         "folha_pagamentos",
         ["competencia_mes_nome"],
     )
-    op.create_index(
-        "ix_folha_pagamentos_servidor_id", "folha_pagamentos", ["servidor_id"]
-    )
-    op.create_index(
-        "ix_folha_pagamentos_lotacao_id", "folha_pagamentos", ["lotacao_id"]
-    )
+    op.create_index("ix_folha_pagamentos_servidor_id", "folha_pagamentos", ["servidor_id"])
+    op.create_index("ix_folha_pagamentos_lotacao_id", "folha_pagamentos", ["lotacao_id"])
     op.create_index("ix_folha_pagamentos_cargo_id", "folha_pagamentos", ["cargo_id"])
     op.create_index(
         "ix_folha_pagamentos_ano_mes_lotacao",

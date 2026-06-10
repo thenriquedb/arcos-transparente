@@ -13,9 +13,7 @@ FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures"
 
 
 def test_passagens_csv_parser_parseia_linhas_com_metadata_e_valores() -> None:
-    registros = PassagensCsvParser().parse(
-        str(FIXTURES_DIR / "passagens_camara_sample.csv")
-    )
+    registros = PassagensCsvParser().parse(str(FIXTURES_DIR / "passagens_camara_sample.csv"))
 
     assert len(registros) == 2
     assert registros[0]["tipo_origem"] == "passagem"

@@ -213,9 +213,7 @@ def agregar_despesas(
             source_count=execution.source_count,
             suggestion=suggestion,
         ),
-        project_group=(
-            _project_despesa_group if params.agrupar_por is not None else None
-        ),
+        project_group=(_project_despesa_group if params.agrupar_por is not None else None),
         agrupar_por=params.agrupar_por,
         metrica=params.metrica if params.agrupar_por is not None else None,
     )

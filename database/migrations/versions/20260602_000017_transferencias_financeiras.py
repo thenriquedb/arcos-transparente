@@ -159,9 +159,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index(
-        "ix_emendas_parlamentares_tipo_emenda", table_name="emendas_parlamentares"
-    )
+    op.drop_index("ix_emendas_parlamentares_tipo_emenda", table_name="emendas_parlamentares")
     op.drop_index("ix_emendas_parlamentares_funcao", table_name="emendas_parlamentares")
     op.drop_index(
         "ix_emendas_parlamentares_exercicio_consulta",
@@ -172,9 +170,7 @@ def downgrade() -> None:
         "ix_emendas_parlamentares_arquivo_origem",
         table_name="emendas_parlamentares",
     )
-    op.drop_index(
-        "ix_emendas_parlamentares_ano_numero", table_name="emendas_parlamentares"
-    )
+    op.drop_index("ix_emendas_parlamentares_ano_numero", table_name="emendas_parlamentares")
     op.drop_index("ix_emendas_parlamentares_ano", table_name="emendas_parlamentares")
     op.drop_table("emendas_parlamentares")
 

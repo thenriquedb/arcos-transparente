@@ -114,8 +114,6 @@ def test_planejamentos_parser_parseia_xml_de_prefeitura(tmp_path) -> None:
     assert registros[0]["origem"] == "prefeitura"
     assert registros[0]["mes_num"] == 4
     assert registros[0]["funcao"] == "Educação"
-    assert registros[0]["descricao_acao"] == (
-        "Manutenção das Atividades da Secretaria de Educação"
-    )
+    assert registros[0]["descricao_acao"] == ("Manutenção das Atividades da Secretaria de Educação")
     assert registros[0]["dotacao_inicial"] == Decimal("25000.00")
     assert registros[0]["valor_pago"] == Decimal("2345.67")

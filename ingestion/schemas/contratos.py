@@ -116,9 +116,7 @@ class ContratoInSchema(_ContratosBaseSchema):
     descricao: str | None = None
     descricao_despesa: str | None = None
     xml_original: str | None = None
-    despesas_orcamentarias: list[ContratoDespesaOrcamentariaInSchema] = Field(
-        default_factory=list
-    )
+    despesas_orcamentarias: list[ContratoDespesaOrcamentariaInSchema] = Field(default_factory=list)
     itens_adquiridos: list[ContratoItemAdquiridoInSchema] = Field(default_factory=list)
 
     @field_validator(

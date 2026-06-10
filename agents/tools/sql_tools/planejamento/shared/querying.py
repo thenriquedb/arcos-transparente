@@ -79,9 +79,7 @@ def apply_planejamento_sql_filters(stmt, filtros: PlanejamentoFiltroSchema):
     if filtros.mes is not None:
         stmt = stmt.where(PlanejamentoDespesa.mes_num == filtros.mes)
     elif filtros.mes_inicio is not None and filtros.mes_fim is not None:
-        stmt = stmt.where(
-            PlanejamentoDespesa.mes_num.between(filtros.mes_inicio, filtros.mes_fim)
-        )
+        stmt = stmt.where(PlanejamentoDespesa.mes_num.between(filtros.mes_inicio, filtros.mes_fim))
     if filtros.valor_pago_min is not None:
         stmt = stmt.where(PlanejamentoDespesa.valor_pago >= filtros.valor_pago_min)
     if filtros.valor_pago_max is not None:
@@ -113,11 +111,7 @@ def load_filtered_planejamentos(session, filtros: PlanejamentoFiltroSchema):
 
     stmt = apply_planejamento_sql_filters(select(PlanejamentoDespesa), filtros)
     registros = session.execute(stmt).scalars().all()
-    return [
-        registro
-        for registro in registros
-        if matches_planejamento_text_filters(registro, filtros)
-    ]
+    return [registro for registro in registros if matches_planejamento_text_filters(registro, filtros)]
 
 
 def metric_to_json(value: int | Decimal) -> int | float:

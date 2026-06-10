@@ -96,9 +96,7 @@ class EstoqueMovimentacaoFiltroSchema(SqlToolBaseSchema):
 class ConsultarMovimentacoesDeEstoqueParams(SqlToolBaseSchema):
     """Parametros validados da chamada da tool."""
 
-    filtros: EstoqueMovimentacaoFiltroSchema = Field(
-        default_factory=EstoqueMovimentacaoFiltroSchema
-    )
+    filtros: EstoqueMovimentacaoFiltroSchema = Field(default_factory=EstoqueMovimentacaoFiltroSchema)
     ordenar_por: str = "data_movimento"
     ordem: str = "desc"
     limite: int = 10
@@ -163,9 +161,7 @@ class ConsultarMovimentacoesDeEstoqueMetadata(SqlToolBaseSchema):
     ordem: str
     limite: int
     offset: int
-    campos: list[str] = Field(
-        default_factory=lambda: list(DEFAULT_ESTOQUE_MOVEMENT_FIELDS)
-    )
+    campos: list[str] = Field(default_factory=lambda: list(DEFAULT_ESTOQUE_MOVEMENT_FIELDS))
 
 
 class ConsultarMovimentacoesDeEstoqueResponse(SqlToolBaseSchema):

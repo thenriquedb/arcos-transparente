@@ -57,14 +57,10 @@ def load_licitacoes(
                 apply_upsert_status(resultado, status)
 
                 if status != "inserted":
-                    session.query(VencedorLicitacao).filter(
-                        VencedorLicitacao.licitacao_id == licitacao.id
-                    ).delete()
+                    session.query(VencedorLicitacao).filter(VencedorLicitacao.licitacao_id == licitacao.id).delete()
                     session.query(MateriaInstrumento).filter(
                         MateriaInstrumento.instrumento_id.in_(
-                            select(InstrumentoContratual.id).where(
-                                InstrumentoContratual.licitacao_id == licitacao.id
-                            )
+                            select(InstrumentoContratual.id).where(InstrumentoContratual.licitacao_id == licitacao.id)
                         )
                     ).delete(synchronize_session=False)
                     session.query(InstrumentoContratual).filter(
@@ -89,9 +85,7 @@ def load_licitacoes(
 
                 for instrumento in registro.get("instrumentos_contratuais", []):
                     fornecedor = None
-                    if instrumento.get("cnpj_fornecedor") and instrumento.get(
-                        "nome_fornecedor"
-                    ):
+                    if instrumento.get("cnpj_fornecedor") and instrumento.get("nome_fornecedor"):
                         fornecedor = get_or_create_fornecedor(
                             session=session,
                             cnpj_cpf=instrumento["cnpj_fornecedor"],
@@ -103,18 +97,14 @@ def load_licitacoes(
                         fornecedor_id=fornecedor.id if fornecedor else None,
                         numero_licitatorio=instrumento.get("numero_licitatorio"),
                         unidade_gestora=instrumento.get("unidade_gestora"),
-                        tipo_instrumento_contratual=instrumento.get(
-                            "tipo_instrumento_contratual"
-                        ),
+                        tipo_instrumento_contratual=instrumento.get("tipo_instrumento_contratual"),
                         numero_instrumento=instrumento.get("numero_instrumento"),
                         tipo_contrato=instrumento.get("tipo_contrato"),
                         objeto=instrumento.get("objeto"),
                         data_emissao=to_date(instrumento.get("data_emissao")),
                         data_expiracao=to_date(instrumento.get("data_expiracao")),
                         possui_aditivo=instrumento.get("possui_aditivo"),
-                        valor_instrumento_contratual=instrumento.get(
-                            "valor_instrumento_contratual"
-                        ),
+                        valor_instrumento_contratual=instrumento.get("valor_instrumento_contratual"),
                     )
                     session.add(instrumento_model)
                     session.flush()

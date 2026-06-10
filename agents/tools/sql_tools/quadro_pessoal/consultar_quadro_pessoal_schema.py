@@ -55,9 +55,7 @@ class QuadroPessoalFiltroSchema(SqlToolBaseSchema):
 class ConsultarQuadroPessoalParams(SqlToolBaseSchema):
     """Parametros validados da chamada da tool."""
 
-    filtros: QuadroPessoalFiltroSchema = Field(
-        default_factory=QuadroPessoalFiltroSchema
-    )
+    filtros: QuadroPessoalFiltroSchema = Field(default_factory=QuadroPessoalFiltroSchema)
     ordenar_por: str = "mes_de_referencia"
     ordem: str = "asc"
     limite: int = 10

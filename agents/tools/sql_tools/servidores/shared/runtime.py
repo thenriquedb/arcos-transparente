@@ -30,6 +30,4 @@ def serializar_servidor(servidor: FolhaServidor) -> dict[str, Any]:
 
 
 def obter_mes_de_referencia_mais_recente(session) -> date | None:
-    return session.execute(
-        select(func.max(FolhaServidor.competencia_referencia))
-    ).scalar_one_or_none()
+    return session.execute(select(func.max(FolhaServidor.competencia_referencia))).scalar_one_or_none()

@@ -106,9 +106,7 @@ def is_supported_knowledge_query(
 
     has_hint = _has_query_hint(normalized_query)
     best_overlap = 0
-    for entry in _load_scope_entries(
-        str((config or get_rag_config()).source_directory)
-    ):
+    for entry in _load_scope_entries(str((config or get_rag_config()).source_directory)):
         overlap = sum(1 for token in query_terms if _entry_matches_term(entry, token))
         if overlap > best_overlap:
             best_overlap = overlap
@@ -136,9 +134,7 @@ def is_supported_knowledge_follow_up_fragment(
     if _has_query_hint(normalized_query):
         return True
 
-    for entry in _load_scope_entries(
-        str((config or get_rag_config()).source_directory)
-    ):
+    for entry in _load_scope_entries(str((config or get_rag_config()).source_directory)):
         if any(_entry_matches_term(entry, token) for token in query_terms):
             return True
 
@@ -180,11 +176,7 @@ def _load_scope_entries(source_directory: str) -> tuple[_ScopeEntry, ...]:
 
 
 def _significant_terms(normalized_query: str) -> tuple[str, ...]:
-    return tuple(
-        token
-        for token in _tokenize(normalized_query)
-        if len(token) >= 4 and token not in _STOPWORDS
-    )
+    return tuple(token for token in _tokenize(normalized_query) if len(token) >= 4 and token not in _STOPWORDS)
 
 
 def _has_query_hint(normalized_query: str) -> bool:

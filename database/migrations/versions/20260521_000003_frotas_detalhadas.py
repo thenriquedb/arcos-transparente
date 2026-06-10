@@ -55,31 +55,15 @@ def upgrade() -> None:
         sa.Column("fornecedor", sa.String(length=255), nullable=True),
         sa.Column("cor_predominante", sa.String(length=40), nullable=True),
         sa.Column("valor_atual", sa.Numeric(15, 2), nullable=True),
-        sa.UniqueConstraint(
-            "codigo_veiculo", "placa_veiculo", name="uq_frota_codigo_placa"
-        ),
+        sa.UniqueConstraint("codigo_veiculo", "placa_veiculo", name="uq_frota_codigo_placa"),
     )
-    op.create_index(
-        "ix_frota_veiculos_codigo_veiculo", "frota_veiculos", ["codigo_veiculo"]
-    )
-    op.create_index(
-        "ix_frota_veiculos_placa_patrimonio", "frota_veiculos", ["placa_patrimonio"]
-    )
-    op.create_index(
-        "ix_frota_veiculos_placa_veiculo", "frota_veiculos", ["placa_veiculo"]
-    )
-    op.create_index(
-        "ix_frota_veiculos_unidade_gestora", "frota_veiculos", ["unidade_gestora"]
-    )
-    op.create_index(
-        "ix_frota_veiculos_tipo_veiculo", "frota_veiculos", ["tipo_veiculo"]
-    )
-    op.create_index(
-        "ix_frota_veiculos_data_aquisicao", "frota_veiculos", ["data_aquisicao"]
-    )
-    op.create_index(
-        "ix_frota_veiculos_situacao_veiculo", "frota_veiculos", ["situacao_veiculo"]
-    )
+    op.create_index("ix_frota_veiculos_codigo_veiculo", "frota_veiculos", ["codigo_veiculo"])
+    op.create_index("ix_frota_veiculos_placa_patrimonio", "frota_veiculos", ["placa_patrimonio"])
+    op.create_index("ix_frota_veiculos_placa_veiculo", "frota_veiculos", ["placa_veiculo"])
+    op.create_index("ix_frota_veiculos_unidade_gestora", "frota_veiculos", ["unidade_gestora"])
+    op.create_index("ix_frota_veiculos_tipo_veiculo", "frota_veiculos", ["tipo_veiculo"])
+    op.create_index("ix_frota_veiculos_data_aquisicao", "frota_veiculos", ["data_aquisicao"])
+    op.create_index("ix_frota_veiculos_situacao_veiculo", "frota_veiculos", ["situacao_veiculo"])
     op.create_index("ix_frota_veiculos_renavam", "frota_veiculos", ["renavam"])
     op.create_index("ix_frota_veiculos_chassi", "frota_veiculos", ["chassi"])
     op.create_index("ix_frota_veiculos_fornecedor", "frota_veiculos", ["fornecedor"])
@@ -122,9 +106,7 @@ def upgrade() -> None:
     )
     op.create_index("ix_frota_despesas_veiculo_id", "frota_despesas", ["veiculo_id"])
     op.create_index("ix_frota_despesas_data_evento", "frota_despesas", ["data_evento"])
-    op.create_index(
-        "ix_frota_despesas_tipo_despesa", "frota_despesas", ["tipo_despesa"]
-    )
+    op.create_index("ix_frota_despesas_tipo_despesa", "frota_despesas", ["tipo_despesa"])
 
 
 def downgrade() -> None:

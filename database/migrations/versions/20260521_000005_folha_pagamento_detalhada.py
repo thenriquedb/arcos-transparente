@@ -123,15 +123,9 @@ def upgrade() -> None:
             name="uq_folha_comp_servidor_cargo_lotacao",
         ),
     )
-    op.create_index(
-        "ix_folha_pagamentos_competencia", "folha_pagamentos", ["competencia"]
-    )
-    op.create_index(
-        "ix_folha_pagamentos_servidor_id", "folha_pagamentos", ["servidor_id"]
-    )
-    op.create_index(
-        "ix_folha_pagamentos_lotacao_id", "folha_pagamentos", ["lotacao_id"]
-    )
+    op.create_index("ix_folha_pagamentos_competencia", "folha_pagamentos", ["competencia"])
+    op.create_index("ix_folha_pagamentos_servidor_id", "folha_pagamentos", ["servidor_id"])
+    op.create_index("ix_folha_pagamentos_lotacao_id", "folha_pagamentos", ["lotacao_id"])
     op.create_index("ix_folha_pagamentos_cargo_id", "folha_pagamentos", ["cargo_id"])
 
 

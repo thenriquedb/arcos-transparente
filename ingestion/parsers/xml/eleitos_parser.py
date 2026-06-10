@@ -68,9 +68,7 @@ class EleitosParser:
                     registros.append(payload.model_dump(mode="python"))
 
         if invalidos:
-            logger.info(
-                f"Descartados {invalidos} registros invalidos de eleitos em {filepath}"
-            )
+            logger.info(f"Descartados {invalidos} registros invalidos de eleitos em {filepath}")
 
         return registros
 

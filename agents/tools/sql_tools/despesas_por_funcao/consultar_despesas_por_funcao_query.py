@@ -75,9 +75,7 @@ def load_filtered_despesas_por_funcao(
     """Carrega o relatório por função aplicando os filtros públicos declarados."""
 
     registros = list(session.execute(select(DespesaPorFuncao)).scalars())
-    return apply_declared_filters(
-        registros, filtros, _DESPESAS_POR_FUNCAO_FILTER_CONDITIONS
-    )
+    return apply_declared_filters(registros, filtros, _DESPESAS_POR_FUNCAO_FILTER_CONDITIONS)
 
 
 SORT_FIELD_GETTERS = {
@@ -114,8 +112,7 @@ def _field_explanations(campos: list[str]) -> dict[str, str]:
 
 def _financial_stage_explanations() -> dict[str, str]:
     return {
-        campo: DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS[campo]
-        for campo in DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS
+        campo: DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS[campo] for campo in DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS
     }
 
 
@@ -215,9 +212,7 @@ def consultar_despesas_por_funcao(
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
-            empty_suggestion=(
-                "Nenhum registro de despesas por funcao encontrado com os filtros."
-            ),
+            empty_suggestion=("Nenhum registro de despesas por funcao encontrado com os filtros."),
         )
 
     campos_retorno = params.campos or list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)
@@ -230,9 +225,7 @@ def consultar_despesas_por_funcao(
         offset=params.offset,
         campos=campos_retorno,
         explicacao_campos=_field_explanations(campos_retorno),
-        campos_financeiros_prioritarios=list(
-            DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS
-        ),
+        campos_financeiros_prioritarios=list(DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS),
         explicacao_estagios_despesa=_financial_stage_explanations(),
         orientacao_gasto_amplo=DESPESAS_POR_FUNCAO_BROAD_SPEND_GUIDANCE,
     )

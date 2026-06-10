@@ -57,9 +57,7 @@ class DespesasParser:
             registros.append(payload.model_dump(mode="python"))
 
         if invalidos:
-            logger.info(
-                f"Descartados {invalidos} documentos de despesa invalidos em {filepath}"
-            )
+            logger.info(f"Descartados {invalidos} documentos de despesa invalidos em {filepath}")
 
         return registros
 
@@ -87,43 +85,19 @@ class DespesasParser:
             "programa": self._txt(node, "Programa"),
             "tipo_acao": self._nested_txt(node, "Acao", "Tipo"),
             "descricao_acao": self._nested_txt(node, "Acao", "Descricao"),
-            "fonte_recurso_identificacao": self._nested_txt(
-                node, "FonteRecurso", "Identificacao"
-            ),
-            "fonte_recurso_descricao": self._nested_txt(
-                node, "FonteRecurso", "Descricao"
-            ),
+            "fonte_recurso_identificacao": self._nested_txt(node, "FonteRecurso", "Identificacao"),
+            "fonte_recurso_descricao": self._nested_txt(node, "FonteRecurso", "Descricao"),
             "esfera_administrativa": self._txt(node, "EsferaAdministrativa"),
-            "modalidade_aplicacao_identificacao": self._nested_txt(
-                node, "ModalidadeAplicacao", "Identificacao"
-            ),
-            "modalidade_aplicacao_descricao": self._nested_txt(
-                node, "ModalidadeAplicacao", "Descricao"
-            ),
-            "categoria_economica_identificacao": self._nested_txt(
-                node, "CategoriaEconomica", "Identificacao"
-            ),
-            "categoria_economica_descricao": self._nested_txt(
-                node, "CategoriaEconomica", "Descricao"
-            ),
-            "grupo_despesa_identificacao": self._nested_txt(
-                node, "GrupoDespesa", "Identificacao"
-            ),
-            "grupo_despesa_descricao": self._nested_txt(
-                node, "GrupoDespesa", "Descricao"
-            ),
-            "elemento_despesa_identificacao": self._nested_txt(
-                node, "ElementoDespesa", "Identificacao"
-            ),
-            "elemento_despesa_descricao": self._nested_txt(
-                node, "ElementoDespesa", "Descricao"
-            ),
-            "desdobramento_despesa_identificacao": self._nested_txt(
-                node, "DesdobramentoDespesa", "Identificacao"
-            ),
-            "desdobramento_despesa_descricao": self._nested_txt(
-                node, "DesdobramentoDespesa", "Descricao"
-            ),
+            "modalidade_aplicacao_identificacao": self._nested_txt(node, "ModalidadeAplicacao", "Identificacao"),
+            "modalidade_aplicacao_descricao": self._nested_txt(node, "ModalidadeAplicacao", "Descricao"),
+            "categoria_economica_identificacao": self._nested_txt(node, "CategoriaEconomica", "Identificacao"),
+            "categoria_economica_descricao": self._nested_txt(node, "CategoriaEconomica", "Descricao"),
+            "grupo_despesa_identificacao": self._nested_txt(node, "GrupoDespesa", "Identificacao"),
+            "grupo_despesa_descricao": self._nested_txt(node, "GrupoDespesa", "Descricao"),
+            "elemento_despesa_identificacao": self._nested_txt(node, "ElementoDespesa", "Identificacao"),
+            "elemento_despesa_descricao": self._nested_txt(node, "ElementoDespesa", "Descricao"),
+            "desdobramento_despesa_identificacao": self._nested_txt(node, "DesdobramentoDespesa", "Identificacao"),
+            "desdobramento_despesa_descricao": self._nested_txt(node, "DesdobramentoDespesa", "Descricao"),
             "numero_documento": self._txt(node, "NumeroEmpenho"),
             "data_documento": self._txt(node, "DataEmissaoEmpenho"),
             "categoria_documento": self._txt(node, "CategoriaEmpenho"),
@@ -170,12 +144,8 @@ class DespesasParser:
             "origem": origem,
             "exercicio": self._txt(node, "Exercicio"),
             "unidade_gestora": self._txt(node, "UnidadeGestora"),
-            "conta_extra_identificacao": self._nested_txt(
-                node, "ContaExtraorcamentaria", "Identificacao"
-            ),
-            "conta_extra_descricao": self._nested_txt(
-                node, "ContaExtraorcamentaria", "Descricao"
-            ),
+            "conta_extra_identificacao": self._nested_txt(node, "ContaExtraorcamentaria", "Identificacao"),
+            "conta_extra_descricao": self._nested_txt(node, "ContaExtraorcamentaria", "Descricao"),
             "numero_documento": self._txt(node, "NumeroDocumento"),
             "data_documento": self._txt(node, "DataEmissaoDocumento"),
             "credor": self._txt(node, "Credor"),
@@ -186,8 +156,7 @@ class DespesasParser:
             "data_homologacao": self._txt(node, "DataHomologacao"),
             "processo_compra": self._txt(node, "ProcessoCompra"),
             "numero_contrato": self._txt(node, "NumeroContrato"),
-            "valor_documento": self._txt(node, "ValorDocumenro")
-            or self._txt(node, "ValorDocumento"),
+            "valor_documento": self._txt(node, "ValorDocumenro") or self._txt(node, "ValorDocumento"),
             "valor_pago": self._txt(node, "ValorPago"),
             "valor_anulado": self._txt(node, "ValorAnulado"),
             "itens": self._parse_itens(node),
@@ -221,9 +190,7 @@ class DespesasParser:
                 "codigo_tipo_documento": self._txt(doc_node, "cod_tipo_documento"),
                 "descricao_tipo_documento": self._txt(doc_node, "desc_tipo_documento"),
                 "numero_documento": self._txt(doc_node, "num_documento"),
-                "serie_modelo_nota_fiscal": self._txt(
-                    doc_node, "serie_modelo_nota_fiscal"
-                ),
+                "serie_modelo_nota_fiscal": self._txt(doc_node, "serie_modelo_nota_fiscal"),
                 "descricao_serie": self._txt(doc_node, "desc_serie"),
                 "chave_acesso": self._txt(doc_node, "chave_acesso"),
                 "data_emissao_documento": self._txt(doc_node, "dt_emissao_documento"),
@@ -233,9 +200,7 @@ class DespesasParser:
                 "numero_sequencia": self._txt(doc_node, "nrSequencia"),
             }
             try:
-                documento = DespesaDocumentoComprobatorioInSchema.model_validate(
-                    payload_raw
-                )
+                documento = DespesaDocumentoComprobatorioInSchema.model_validate(payload_raw)
             except ValidationError:
                 continue
             documentos.append(documento.model_dump(mode="python"))

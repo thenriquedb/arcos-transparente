@@ -123,9 +123,7 @@ class DespesasPorFuncaoFiltroSchema(SqlToolBaseSchema):
 class ConsultarDespesasPorFuncaoParams(SqlToolBaseSchema):
     """Parametros validados da chamada da tool."""
 
-    filtros: DespesasPorFuncaoFiltroSchema = Field(
-        default_factory=DespesasPorFuncaoFiltroSchema
-    )
+    filtros: DespesasPorFuncaoFiltroSchema = Field(default_factory=DespesasPorFuncaoFiltroSchema)
     ordenar_por: str = "periodo_fim"
     ordem: str = "desc"
     limite: int = 10
@@ -190,9 +188,7 @@ class ConsultarDespesasPorFuncaoMetadata(SqlToolBaseSchema):
     ordem: str
     limite: int
     offset: int
-    campos: list[str] = Field(
-        default_factory=lambda: list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)
-    )
+    campos: list[str] = Field(default_factory=lambda: list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS))
     explicacao_campos: dict[str, str] = Field(default_factory=dict)
     campos_financeiros_prioritarios: list[str] = Field(default_factory=list)
     explicacao_estagios_despesa: dict[str, str] = Field(default_factory=dict)

@@ -78,12 +78,9 @@ def load_folha_pagamento(
                         session,
                         FolhaPagamentoRegistro,
                         filters=[
-                            FolhaPagamentoRegistro.competencia_ano
-                            == payload["competencia_ano"],
-                            FolhaPagamentoRegistro.competencia_mes_nome
-                            == payload["competencia_mes_nome"],
-                            FolhaPagamentoRegistro.servidor_id
-                            == payload["servidor_id"],
+                            FolhaPagamentoRegistro.competencia_ano == payload["competencia_ano"],
+                            FolhaPagamentoRegistro.competencia_mes_nome == payload["competencia_mes_nome"],
+                            FolhaPagamentoRegistro.servidor_id == payload["servidor_id"],
                             FolhaPagamentoRegistro.cargo_id == payload["cargo_id"],
                             FolhaPagamentoRegistro.lotacao_id == payload["lotacao_id"],
                         ],
@@ -103,9 +100,7 @@ def get_or_create_folha_dim(session, model, nome: str | None):
     if not nome:
         return None
 
-    existente = session.execute(
-        select(model).where(model.nome == nome)
-    ).scalar_one_or_none()
+    existente = session.execute(select(model).where(model.nome == nome)).scalar_one_or_none()
     if existente is not None:
         return existente
 

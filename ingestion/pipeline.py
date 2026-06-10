@@ -194,9 +194,7 @@ class IngestionPipeline:
         cnpj_cpf = sanitize_xml_payload(cnpj_cpf)
         nome = sanitize_xml_payload(nome)
         fornecedor = session.execute(
-            select(Fornecedor).where(
-                and_(Fornecedor.cnpj_cpf == cnpj_cpf, Fornecedor.nome == nome)
-            )
+            select(Fornecedor).where(and_(Fornecedor.cnpj_cpf == cnpj_cpf, Fornecedor.nome == nome))
         ).scalar_one_or_none()
         if fornecedor is not None:
             return fornecedor
@@ -235,9 +233,7 @@ class IngestionPipeline:
             return None
 
         existente = session.execute(
-            select(ReceitaNatureza).where(
-                ReceitaNatureza.identificacao == identificacao
-            )
+            select(ReceitaNatureza).where(ReceitaNatureza.identificacao == identificacao)
         ).scalar_one_or_none()
         if existente is not None:
             return existente

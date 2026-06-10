@@ -89,10 +89,7 @@ def build_contract_fallback_message(source_field: str, target_field: str) -> str
 
     source_label = SEARCH_FIELD_LABELS.get(source_field, source_field)
     target_label = SEARCH_FIELD_LABELS.get(target_field, target_field)
-    return (
-        f"Nenhum contrato foi encontrado por {source_label}. "
-        f"Exibindo resultados relacionados por {target_label}."
-    )
+    return f"Nenhum contrato foi encontrado por {source_label}. Exibindo resultados relacionados por {target_label}."
 
 
 def _apply_numero_filter(stmt, numero: str, available_columns: set[str] | None):
@@ -102,13 +99,9 @@ def _apply_numero_filter(stmt, numero: str, available_columns: set[str] | None):
     numero_expressions = [func.lower(func.coalesce(Contrato.numero, "")).like(pattern)]
     if available_columns is not None:
         if "numero_licitatorio" in available_columns:
-            numero_expressions.append(
-                func.lower(func.coalesce(Contrato.numero_licitatorio, "")).like(pattern)
-            )
+            numero_expressions.append(func.lower(func.coalesce(Contrato.numero_licitatorio, "")).like(pattern))
         if "numero_instrumento" in available_columns:
-            numero_expressions.append(
-                func.lower(func.coalesce(Contrato.numero_instrumento, "")).like(pattern)
-            )
+            numero_expressions.append(func.lower(func.coalesce(Contrato.numero_instrumento, "")).like(pattern))
     return stmt.where(or_(*numero_expressions))
 
 
@@ -122,16 +115,12 @@ def _apply_descricao_filter(
     for term in _normalized_filter_terms(descricao):
         descricao_expressions = [_text_contains_term(Contrato.descricao, term)]
         if include_descricao_despesa:
-            descricao_expressions.append(
-                _text_contains_term(Contrato.descricao_despesa, term)
-            )
+            descricao_expressions.append(_text_contains_term(Contrato.descricao_despesa, term))
 
         # O XML bruto entra apenas como ultimo apoio para nao perder termos
         # existentes no portal que ainda nao viraram colunas estruturadas.
         if include_xml_original:
-            descricao_expressions.append(
-                _text_contains_term(Contrato.xml_original, term)
-            )
+            descricao_expressions.append(_text_contains_term(Contrato.xml_original, term))
         stmt = stmt.where(or_(*descricao_expressions))
     return stmt
 
@@ -183,9 +172,7 @@ def apply_contratos_filters(
         for term in _normalized_filter_terms(filtros.fornecedor):
             stmt = stmt.where(_text_contains_term(Contrato.fornecedor, term))
     if filtros.documento_fornecedor:
-        stmt = stmt.where(
-            func.lower(Contrato.cnpj).like(f"%{filtros.documento_fornecedor.lower()}%")
-        )
+        stmt = stmt.where(func.lower(Contrato.cnpj).like(f"%{filtros.documento_fornecedor.lower()}%"))
     if filtros.categoria:
         for term in _normalized_filter_terms(filtros.categoria):
             stmt = stmt.where(_text_contains_term(Contrato.categoria, term))
@@ -231,9 +218,7 @@ def project_contrato_fields(
 
     if isinstance(contrato, Mapping):
         raw_payload = dict(contrato)
-        serialized = ContratoToolItem.model_validate(raw_payload).model_dump(
-            mode="json"
-        )
+        serialized = ContratoToolItem.model_validate(raw_payload).model_dump(mode="json")
         for key, value in raw_payload.items():
             if key not in serialized:
                 serialized[key] = value

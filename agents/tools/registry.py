@@ -120,11 +120,7 @@ def _to_langchain_tool(func: Callable):
 
     tool_name = getattr(func, "_tool_name", func.__name__)
     tool_scope = getattr(func, "_tool_scope", INTERNAL_SCOPE)
-    langchain_callable = (
-        _wrap_public_tool_with_observability(func)
-        if tool_scope == PUBLIC_SCOPE
-        else func
-    )
+    langchain_callable = _wrap_public_tool_with_observability(func) if tool_scope == PUBLIC_SCOPE else func
     langchain_tool = build_tool(tool_name)(langchain_callable)
     tags = list(getattr(func, "_tags", []))
     if tags:
@@ -155,26 +151,16 @@ def get_tools(
     filtered_tools = get_all_tools()
 
     if scope is not None:
-        filtered_tools = [
-            tool_obj
-            for tool_obj in filtered_tools
-            if f"scope:{scope}" in (tool_obj.tags or [])
-        ]
+        filtered_tools = [tool_obj for tool_obj in filtered_tools if f"scope:{scope}" in (tool_obj.tags or [])]
 
     if tags:
         required_tags = set(tags)
-        filtered_tools = [
-            tool_obj
-            for tool_obj in filtered_tools
-            if required_tags.issubset(set(tool_obj.tags or []))
-        ]
+        filtered_tools = [tool_obj for tool_obj in filtered_tools if required_tags.issubset(set(tool_obj.tags or []))]
 
     return filtered_tools
 
 
-def get_public_tools(
-    *, tags: list[str] | tuple[str, ...] | None = None
-) -> list[object]:
+def get_public_tools(*, tags: list[str] | tuple[str, ...] | None = None) -> list[object]:
     """Retorna apenas as tools publicas."""
 
     return get_tools(scope=PUBLIC_SCOPE, tags=tags)
@@ -184,11 +170,7 @@ def get_public_tools_by_name(tool_names: Sequence[str]) -> list[object]:
     """Retorna tools publicas preservando a ordem pedida pelo seletor."""
 
     tools_by_name = {_tool_name(tool_obj): tool_obj for tool_obj in get_public_tools()}
-    return [
-        tools_by_name[tool_name]
-        for tool_name in tool_names
-        if tool_name in tools_by_name
-    ]
+    return [tools_by_name[tool_name] for tool_name in tool_names if tool_name in tools_by_name]
 
 
 def get_public_tool_catalog(
@@ -223,9 +205,7 @@ def get_public_tool_catalog(
 
 def get_tools_by_tag(tag: str, *, scope: str | None = None) -> list[object]:
     """Retorna tools filtradas por tag — útil para agentes especializados."""
-    return [
-        tool_obj for tool_obj in get_tools(scope=scope) if tag in (tool_obj.tags or [])
-    ]
+    return [tool_obj for tool_obj in get_tools(scope=scope) if tag in (tool_obj.tags or [])]
 
 
 def _extract_doc_summary(func: Callable) -> str:
@@ -246,8 +226,7 @@ def _normalize_routing_metadata(
     if routing is None:
         if scope == PUBLIC_SCOPE:
             raise ValueError(
-                f"Public tool '{getattr(func, '_tool_name', func.__name__)}' "
-                "must declare routing metadata."
+                f"Public tool '{getattr(func, '_tool_name', func.__name__)}' must declare routing metadata."
             )
         return None
 
@@ -256,9 +235,7 @@ def _normalize_routing_metadata(
 
     examples = tuple(str(example).strip() for example in routing.get("examples", ()))
     hints = tuple(str(hint).strip() for hint in routing.get("hints", ()))
-    exclusions = tuple(
-        str(exclusion).strip() for exclusion in routing.get("exclusions", ())
-    )
+    exclusions = tuple(str(exclusion).strip() for exclusion in routing.get("exclusions", ()))
     if scope == PUBLIC_SCOPE and (not examples or not hints):
         raise ValueError(
             f"Public tool '{getattr(func, '_tool_name', func.__name__)}' "

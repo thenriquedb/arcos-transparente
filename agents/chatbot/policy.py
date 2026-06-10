@@ -96,9 +96,7 @@ def evaluate_deterministic_policy(
 ) -> DeterministicPolicyDecision:
     """Resolve bloqueios hard-coded e clarificacoes protegidas antes do seletor."""
 
-    prior_user_queries = tuple(
-        message.content for message in history if message.role == "user"
-    )
+    prior_user_queries = tuple(message.content for message in history if message.role == "user")
     prior_messages = tuple(
         (
             message.role,
@@ -389,9 +387,7 @@ def _reply_confirms_protected_acronym(
 
     normalized_expansion = normalize_conversation_text(expansion)
     acronym_pattern = re.compile(rf"\b{re.escape(acronym.lower())}\b")
-    return normalized_expansion in normalized_reply or (
-        acronym_pattern.search(normalized_reply) is not None
-    )
+    return normalized_expansion in normalized_reply or (acronym_pattern.search(normalized_reply) is not None)
 
 
 def _looks_like_public_clarification_prompt(content: str) -> bool:
@@ -401,15 +397,9 @@ def _looks_like_public_clarification_prompt(content: str) -> bool:
     normalized_content = normalize_conversation_text(content)
     if not normalized_content:
         return False
-    if any(
-        exclusion_hint in normalized_content
-        for exclusion_hint in _PUBLIC_CLARIFICATION_EXCLUSION_HINTS
-    ):
+    if any(exclusion_hint in normalized_content for exclusion_hint in _PUBLIC_CLARIFICATION_EXCLUSION_HINTS):
         return False
-    return any(
-        clarification_hint in normalized_content
-        for clarification_hint in _PUBLIC_CLARIFICATION_HINTS
-    )
+    return any(clarification_hint in normalized_content for clarification_hint in _PUBLIC_CLARIFICATION_HINTS)
 
 
 def _looks_like_public_clarification_answer(
@@ -424,17 +414,11 @@ def _looks_like_public_clarification_answer(
     if not reply_tokens or len(reply_tokens) > 10:
         return False
 
-    meaningful_reply_tokens = {
-        token
-        for token in reply_tokens
-        if token not in _PUBLIC_CLARIFICATION_REPLY_STOPWORDS
-    }
+    meaningful_reply_tokens = {token for token in reply_tokens if token not in _PUBLIC_CLARIFICATION_REPLY_STOPWORDS}
     if not meaningful_reply_tokens:
         return False
 
-    clarification_tokens = _content_tokens(
-        normalize_conversation_text(assistant_clarification)
-    )
+    clarification_tokens = _content_tokens(normalize_conversation_text(assistant_clarification))
     return any(token in clarification_tokens for token in meaningful_reply_tokens)
 
 

@@ -227,9 +227,7 @@ def test_consultar_servidores_ignora_diferenca_de_acentos_no_nome(
     )
 
     assert resultado["total"] == 1
-    assert resultado["resultados"][0]["nome"] == (
-        "Wellington Francelli Estevao Rodrigues Roque"
-    )
+    assert resultado["resultados"][0]["nome"] == ("Wellington Francelli Estevao Rodrigues Roque")
     assert resultado["resultados"][0]["cargo"] == "Prefeito Municipal"
 
     session.close()

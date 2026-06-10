@@ -13,12 +13,8 @@ from ingestion.parsers.csv.emendas_parlamentares_parser import (
 FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures"
 
 
-def test_emendas_parlamentares_csv_parser_parseia_linhas_e_cabecalhos_repetidos() -> (
-    None
-):
-    registros = EmendasParlamentaresCsvParser().parse(
-        str(FIXTURES_DIR / "emendas_parlamentares_sample.csv")
-    )
+def test_emendas_parlamentares_csv_parser_parseia_linhas_e_cabecalhos_repetidos() -> None:
+    registros = EmendasParlamentaresCsvParser().parse(str(FIXTURES_DIR / "emendas_parlamentares_sample.csv"))
 
     assert len(registros) == 3
     assert registros[0]["arquivo_origem"] == "emendas_parlamentares_sample.csv"
@@ -39,6 +35,4 @@ def test_emendas_parlamentares_csv_parser_falha_com_cabecalho_invalido() -> None
         ValueError,
         match="Cabecalho de emendas parlamentares CSV nao encontrado",
     ):
-        EmendasParlamentaresCsvParser().parse(
-            str(FIXTURES_DIR / "emendas_parlamentares_invalid_header.csv")
-        )
+        EmendasParlamentaresCsvParser().parse(str(FIXTURES_DIR / "emendas_parlamentares_invalid_header.csv"))

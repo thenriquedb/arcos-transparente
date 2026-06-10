@@ -37,9 +37,7 @@ class _LangSmithSpan:
     def finalize(self) -> None:
         error_message = None
         if self._error is not None:
-            error_message = (
-                f"{self._error.__class__.__name__}: {str(self._error).strip()}"
-            ).strip()
+            error_message = (f"{self._error.__class__.__name__}: {str(self._error).strip()}").strip()
         self._run.end(
             outputs=self._outputs or None,
             error=error_message,

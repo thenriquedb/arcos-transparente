@@ -37,9 +37,7 @@ def _try_route_agregacao(normalized_text: str) -> RouteDecision | None:
         )
 
     # Perguntas de "quantos" só viram agregação quando identificamos uma secretaria.
-    if any(
-        keyword in normalized_text for keyword in ("quantas", "quantos", "total de")
-    ):
+    if any(keyword in normalized_text for keyword in ("quantas", "quantos", "total de")):
         secretaria = _extract_secretaria(normalized_text)
         if secretaria:
             if secretaria == "saude":
@@ -70,9 +68,7 @@ def _try_route_agregacao(normalized_text: str) -> RouteDecision | None:
                 confident=True,
             )
 
-    if "salario" in normalized_text and any(
-        keyword in normalized_text for keyword in ("maiores", "maior", "top")
-    ):
+    if "salario" in normalized_text and any(keyword in normalized_text for keyword in ("maiores", "maior", "top")):
         return RouteDecision(
             domain="servidores",
             operation_type="consulta_lista",
@@ -111,8 +107,7 @@ def _try_route_lista(normalized_text: str) -> RouteDecision | None:
     """
     secretaria = _extract_secretaria(normalized_text)
     if secretaria and any(
-        keyword in normalized_text
-        for keyword in ("lista", "liste", "funcionario", "trabalha", "trabalham")
+        keyword in normalized_text for keyword in ("lista", "liste", "funcionario", "trabalha", "trabalham")
     ):
         return RouteDecision(
             domain="servidores",

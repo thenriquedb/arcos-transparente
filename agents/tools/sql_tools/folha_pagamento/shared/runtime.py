@@ -73,11 +73,7 @@ def serializar_servidor(
                 for registro in pagamentos_limitados
             ],
             "total_recebido": decimal_to_float(
-                sum(
-                    registro.liquido
-                    for registro in pagamentos_limitados
-                    if registro.liquido is not None
-                )
+                sum(registro.liquido for registro in pagamentos_limitados if registro.liquido is not None)
             ),
             "nota": (
                 f"Dados consultados em {date.today().isoformat()}. "
@@ -122,9 +118,7 @@ def _representante(servidores: list[FolhaServidor]) -> FolhaServidor:
 def _pagamentos_ordenados(
     servidores: list[FolhaServidor],
 ) -> list[FolhaPagamentoRegistro]:
-    pagamentos = [
-        pagamento for servidor in servidores for pagamento in servidor.pagamentos
-    ]
+    pagamentos = [pagamento for servidor in servidores for pagamento in servidor.pagamentos]
     pagamentos.sort(
         key=lambda registro: (
             registro.competencia_ano,

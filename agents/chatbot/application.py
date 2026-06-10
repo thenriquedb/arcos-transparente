@@ -210,8 +210,7 @@ class ChatbotApplication:
                         if stream_answer is None:
                             response = _answer_backend_with_selection(
                                 self.backend,
-                                question=prepared.backend_question
-                                or normalized_question,
+                                question=prepared.backend_question or normalized_question,
                                 session_id=self.session.id,
                                 selection=prepared.selection,
                             )
@@ -253,9 +252,7 @@ class ChatbotApplication:
                                     "status": "completed",
                                     "streaming": True,
                                     "selected_tool_names": (
-                                        list(prepared.selection.candidate_tool_names)
-                                        if prepared.selection
-                                        else []
+                                        list(prepared.selection.candidate_tool_names) if prepared.selection else []
                                     ),
                                     "response_preview": final_content,
                                 }
@@ -468,9 +465,7 @@ def _normalize_text(text: str) -> str:
     import unicodedata
 
     normalized = unicodedata.normalize("NFD", text)
-    without_accents = "".join(
-        char for char in normalized if unicodedata.category(char) != "Mn"
-    )
+    without_accents = "".join(char for char in normalized if unicodedata.category(char) != "Mn")
     return " ".join(without_accents.lower().strip().split())
 
 

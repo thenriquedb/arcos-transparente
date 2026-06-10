@@ -41,10 +41,7 @@ def _extract_patrimonios_filters(normalized_text: str) -> dict[str, object]:
 def _try_route_patrimonios_agregacao(normalized_text: str) -> RouteDecision | None:
     if not _is_patrimonios_query(normalized_text):
         return None
-    if not any(
-        keyword in normalized_text
-        for keyword in ("quanto", "total", "maior", "maiores", "por ", "quantos")
-    ):
+    if not any(keyword in normalized_text for keyword in ("quanto", "total", "maior", "maiores", "por ", "quantos")):
         return None
 
     if "valor" in normalized_text:

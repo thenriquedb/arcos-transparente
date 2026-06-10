@@ -37,9 +37,7 @@ ALLOWED_DESPESAS_POR_FUNCAO_METRICS = {
 class AgregarDespesasPorFuncaoParams(SqlToolBaseSchema):
     """Parametros validados da chamada da tool."""
 
-    filtros: DespesasPorFuncaoFiltroSchema = Field(
-        default_factory=DespesasPorFuncaoFiltroSchema
-    )
+    filtros: DespesasPorFuncaoFiltroSchema = Field(default_factory=DespesasPorFuncaoFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_valor_pago"
     ordenar_por: str = "metrica"
@@ -96,9 +94,7 @@ class AgregarDespesasPorFuncaoParams(SqlToolBaseSchema):
         if self.ordenar_por not in {"metrica", self.agrupar_por}:
             raise ValueError("ordenar_por deve ser 'metrica' ou igual a agrupar_por")
         if self.agrupar_por is None and self.ordenar_por != "metrica":
-            raise ValueError(
-                "ordenar_por deve ser 'metrica' quando agrupar_por nao for informado"
-            )
+            raise ValueError("ordenar_por deve ser 'metrica' quando agrupar_por nao for informado")
         return self
 
 

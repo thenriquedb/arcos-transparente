@@ -259,8 +259,7 @@ def test_agregar_diarias_por_mes(monkeypatch) -> None:
 
 def test_registry_expoe_tools_publicas_de_diarias() -> None:
     tool_names = {
-        getattr(tool_obj, "name", "")
-        for tool_obj in tools_registry.get_public_tools(tags=["domain:diarias"])
+        getattr(tool_obj, "name", "") for tool_obj in tools_registry.get_public_tools(tags=["domain:diarias"])
     }
 
     assert "consultar_diarias" in tool_names

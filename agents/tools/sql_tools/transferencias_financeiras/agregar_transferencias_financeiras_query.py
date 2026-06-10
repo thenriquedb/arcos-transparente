@@ -28,10 +28,7 @@ def _metric(registros: list[dict[str, Any]], metrica: str) -> Decimal | int:
     if metrica == "contagem":
         return len(registros)
     if metrica == "soma_programacao_inicial":
-        return sum(
-            Decimal(str(registro.get("programacao_inicial") or 0))
-            for registro in registros
-        )
+        return sum(Decimal(str(registro.get("programacao_inicial") or 0)) for registro in registros)
     return sum(Decimal(str(registro.get("valor") or 0)) for registro in registros)
 
 
@@ -55,9 +52,7 @@ GROUP_FIELD_GETTERS = {
 }
 METRIC_FIELD_GETTERS = {
     "soma_valor": lambda registro: Decimal(str(registro.get("valor") or 0)),
-    "soma_programacao_inicial": lambda registro: Decimal(
-        str(registro.get("programacao_inicial") or 0)
-    ),
+    "soma_programacao_inicial": lambda registro: Decimal(str(registro.get("programacao_inicial") or 0)),
 }
 
 
@@ -183,11 +178,7 @@ def agregar_transferencias_financeiras(
             source_count=execution.source_count,
             suggestion=suggestion,
         ),
-        project_group=(
-            _project_transferencia_financeira_group
-            if params.agrupar_por is not None
-            else None
-        ),
+        project_group=(_project_transferencia_financeira_group if params.agrupar_por is not None else None),
         agrupar_por=params.agrupar_por,
         metrica=params.metrica if params.agrupar_por is not None else None,
     )

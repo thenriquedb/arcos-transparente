@@ -26,12 +26,8 @@ def load_receitas(
     """Load receita arrecadacoes and lancamentos across the discovered file set."""
 
     resultado = LoadResult()
-    arquivos_arrec = [
-        arquivo for arquivo in arquivos if "arrecadacao" in arquivo.name.lower()
-    ]
-    arquivos_lanc = [
-        arquivo for arquivo in arquivos if "lancamento" in arquivo.name.lower()
-    ]
+    arquivos_arrec = [arquivo for arquivo in arquivos if "arrecadacao" in arquivo.name.lower()]
+    arquivos_lanc = [arquivo for arquivo in arquivos if "lancamento" in arquivo.name.lower()]
 
     for arquivo in arquivos_arrec:
         for registro in parser.parse_arrecadacoes(str(arquivo)):
@@ -50,33 +46,20 @@ def load_receitas(
                         "natureza_id": natureza.id if natureza else None,
                         "fonte_recurso": registro.get("fonte_recurso"),
                         "valor_previsto_bruto": registro.get("valor_previsto_bruto"),
-                        "valor_arrecadado_bruto": registro.get(
-                            "valor_arrecadado_bruto"
-                        ),
-                        "valor_previsto_deducoes": registro.get(
-                            "valor_previsto_deducoes"
-                        ),
-                        "valor_realizado_deducoes": registro.get(
-                            "valor_realizado_deducoes"
-                        ),
-                        "valor_previsto_liquido": registro.get(
-                            "valor_previsto_liquido"
-                        ),
-                        "valor_arrecadado_liquido": registro.get(
-                            "valor_arrecadado_liquido"
-                        ),
+                        "valor_arrecadado_bruto": registro.get("valor_arrecadado_bruto"),
+                        "valor_previsto_deducoes": registro.get("valor_previsto_deducoes"),
+                        "valor_realizado_deducoes": registro.get("valor_realizado_deducoes"),
+                        "valor_previsto_liquido": registro.get("valor_previsto_liquido"),
+                        "valor_arrecadado_liquido": registro.get("valor_arrecadado_liquido"),
                     }
                     _, status = upsert_by_filters(
                         session,
                         ReceitaArrecadacao,
                         filters=[
-                            ReceitaArrecadacao.data_arrecadacao
-                            == payload["data_arrecadacao"],
-                            ReceitaArrecadacao.unidade_gestora
-                            == payload["unidade_gestora"],
+                            ReceitaArrecadacao.data_arrecadacao == payload["data_arrecadacao"],
+                            ReceitaArrecadacao.unidade_gestora == payload["unidade_gestora"],
                             ReceitaArrecadacao.natureza_id == payload["natureza_id"],
-                            ReceitaArrecadacao.fonte_recurso
-                            == payload["fonte_recurso"],
+                            ReceitaArrecadacao.fonte_recurso == payload["fonte_recurso"],
                         ],
                         payload=payload,
                     )

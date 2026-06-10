@@ -15,18 +15,14 @@ from agents.routing.routes.beneficiario_spend import (
 _DIARIAS_ROUTE_CONFIG = BeneficiarioSpendRouteConfig(
     domain="diarias",
     domain_keywords=DIARIAS_DOMAIN_KEYWORDS,
-    beneficiario_pattern=re.compile(
-        r"\bdiarias\b\s+(?:do|da|de)\s+([a-z0-9 .&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)"
-    ),
+    beneficiario_pattern=re.compile(r"\bdiarias\b\s+(?:do|da|de)\s+([a-z0-9 .&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)"),
     aggregate_tool="agregar_diarias",
     list_tool="consultar_diarias",
 )
 
 
 def _try_route_diarias_agregacao(normalized_text: str) -> RouteDecision | None:
-    return try_route_beneficiario_spend_agregacao(
-        _DIARIAS_ROUTE_CONFIG, normalized_text
-    )
+    return try_route_beneficiario_spend_agregacao(_DIARIAS_ROUTE_CONFIG, normalized_text)
 
 
 def _try_route_diarias_lista(normalized_text: str) -> RouteDecision | None:

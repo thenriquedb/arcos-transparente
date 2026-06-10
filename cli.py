@@ -102,9 +102,7 @@ def _contagem_despesas_por_tipo(session) -> dict[str, int]:
 def db_init() -> None:
     """Executa migrations do Alembic."""
     subprocess.run(["alembic", "upgrade", "head"], check=True)
-    console.print(
-        "[green]Banco inicializado e migrations aplicadas com sucesso.[/green]"
-    )
+    console.print("[green]Banco inicializado e migrations aplicadas com sucesso.[/green]")
 
 
 @db_app.command("status")
@@ -117,16 +115,12 @@ def db_status() -> None:
     with get_session() as session:
         tabela.add_row("contratos", str(session.query(Contrato).count()))
         tabela.add_row("licitacoes", str(session.query(Licitacao).count()))
-        tabela.add_row(
-            "vencedores_licitacao", str(session.query(VencedorLicitacao).count())
-        )
+        tabela.add_row("vencedores_licitacao", str(session.query(VencedorLicitacao).count()))
         tabela.add_row(
             "instrumentos_contratuais",
             str(session.query(InstrumentoContratual).count()),
         )
-        tabela.add_row(
-            "materias_instrumento", str(session.query(MateriaInstrumento).count())
-        )
+        tabela.add_row("materias_instrumento", str(session.query(MateriaInstrumento).count()))
         tabela.add_row("fornecedores", str(session.query(Fornecedor).count()))
         tabela.add_row("frota_veiculos", str(session.query(FrotaVeiculo).count()))
         tabela.add_row("frota_despesas", str(session.query(FrotaDespesa).count()))
@@ -136,12 +130,8 @@ def db_status() -> None:
             str(session.query(EstoqueMovimentacao).count()),
         )
         tabela.add_row("receita_naturezas", str(session.query(ReceitaNatureza).count()))
-        tabela.add_row(
-            "receita_arrecadacoes", str(session.query(ReceitaArrecadacao).count())
-        )
-        tabela.add_row(
-            "receita_lancamentos", str(session.query(ReceitaLancamento).count())
-        )
+        tabela.add_row("receita_arrecadacoes", str(session.query(ReceitaArrecadacao).count()))
+        tabela.add_row("receita_lancamentos", str(session.query(ReceitaLancamento).count()))
         tabela.add_row(
             "transferencias_financeiras_movimentos",
             str(session.query(TransferenciaFinanceiraMovimento).count()),
@@ -153,17 +143,13 @@ def db_status() -> None:
         tabela.add_row("folha_servidores", str(session.query(FolhaServidor).count()))
         tabela.add_row("folha_lotacoes", str(session.query(FolhaLotacao).count()))
         tabela.add_row("folha_cargos", str(session.query(FolhaCargo).count()))
-        tabela.add_row(
-            "folha_pagamentos", str(session.query(FolhaPagamentoRegistro).count())
-        )
+        tabela.add_row("folha_pagamentos", str(session.query(FolhaPagamentoRegistro).count()))
         tabela.add_row("servidores", str(session.query(Servidor).count()))
         tabela.add_row(
             "planejamento_despesas",
             str(session.query(PlanejamentoDespesa).count()),
         )
-        tabela.add_row(
-            "despesa_documentos", str(session.query(DespesaDocumento).count())
-        )
+        tabela.add_row("despesa_documentos", str(session.query(DespesaDocumento).count()))
         tabela.add_row(
             "despesas_por_funcao",
             str(session.query(DespesaPorFuncao).count()),
@@ -182,9 +168,7 @@ def db_status() -> None:
         tabela.add_row("quadro_pessoal", str(session.query(QuadroPessoal).count()))
         tabela.add_row("eleitos", str(session.query(Eleito).count()))
         metadata = MetaData()
-        alembic_version = SQLATable(
-            "alembic_version", metadata, autoload_with=session.bind
-        )
+        alembic_version = SQLATable("alembic_version", metadata, autoload_with=session.bind)
         revisao = session.execute(alembic_version.select()).scalar_one_or_none()
 
     console.print(tabela)
@@ -201,9 +185,7 @@ def importar(
             "eleitos|transferencias_financeiras"
         ),
     ),
-    ano: Optional[int] = typer.Option(
-        default=None, help="Filtra por ano no nome do arquivo"
-    ),
+    ano: Optional[int] = typer.Option(default=None, help="Filtra por ano no nome do arquivo"),
     force: bool = typer.Option(default=False, help="Apaga dados antes de reimportar"),
     verbose: bool = typer.Option(
         default=False,
@@ -238,9 +220,7 @@ def importar(
         "eleitos",
         "transferencias_financeiras",
     ]
-    total_arquivos = sum(
-        len(pipeline._arquivos_por_tipo(t, ano)) for t in tipos_resolvidos
-    )
+    total_arquivos = sum(len(pipeline._arquivos_por_tipo(t, ano)) for t in tipos_resolvidos)
 
     with Progress() as progress:
         task = progress.add_task("Importando arquivos...", total=max(total_arquivos, 1))
@@ -281,9 +261,7 @@ def importar(
         with get_session() as session:
             subtotal = _contagem_despesas_por_tipo(session)
         if subtotal:
-            detalhes = ", ".join(
-                f"{tipo}={quantidade}" for tipo, quantidade in sorted(subtotal.items())
-            )
+            detalhes = ", ".join(f"{tipo}={quantidade}" for tipo, quantidade in sorted(subtotal.items()))
             console.print(f"Despesas por tipo -> {detalhes}")
 
 
@@ -304,9 +282,7 @@ def rag_index(
 
     color = "green" if status.state == "ready" else "yellow"
     console.print(f"[{color}]{status.message}[/{color}]")
-    console.print(
-        f"Chunks indexados: {status.total_chunks} | documentos: {status.document_count}"
-    )
+    console.print(f"Chunks indexados: {status.total_chunks} | documentos: {status.document_count}")
     console.print(f"Persistido em: [bold]{status.persist_directory}[/bold]")
 
 
@@ -328,9 +304,7 @@ def rag_status() -> None:
     console.print(f"Collection: [bold]{status.collection_name}[/bold]")
     console.print(f"Manifesto: [bold]{status.manifest_path}[/bold]")
     console.print(f"Persistência: [bold]{status.persist_directory}[/bold]")
-    console.print(
-        f"Chunks indexados: {status.total_chunks} | documentos: {status.document_count}"
-    )
+    console.print(f"Chunks indexados: {status.total_chunks} | documentos: {status.document_count}")
 
     if status.changed_files:
         console.print(f"Arquivos alterados: {', '.join(status.changed_files)}")

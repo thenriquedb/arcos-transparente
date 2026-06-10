@@ -40,17 +40,13 @@ GROUP_FIELD_GETTERS = {
     "material": lambda registro: registro.material,
 }
 METRIC_FIELD_GETTERS = {
-    "soma_entrada_quantidade": lambda registro: (
-        registro.entrada_quantidade or Decimal("0")
-    ),
+    "soma_entrada_quantidade": lambda registro: registro.entrada_quantidade or Decimal("0"),
     "soma_entrada_valor": lambda registro: registro.entrada_valor or Decimal("0"),
     "soma_movimentacao_quantidade": lambda registro: (
-        (registro.entrada_quantidade or Decimal("0"))
-        + (registro.saida_quantidade or Decimal("0"))
+        (registro.entrada_quantidade or Decimal("0")) + (registro.saida_quantidade or Decimal("0"))
     ),
     "soma_movimentacao_valor": lambda registro: (
-        (registro.entrada_valor or Decimal("0"))
-        + (registro.saida_valor or Decimal("0"))
+        (registro.entrada_valor or Decimal("0")) + (registro.saida_valor or Decimal("0"))
     ),
     "soma_saida_quantidade": lambda registro: registro.saida_quantidade or Decimal("0"),
     "soma_saida_valor": lambda registro: registro.saida_valor or Decimal("0"),
@@ -99,26 +95,18 @@ def _is_entrada_movimentacao(registro: EstoqueMovimentacao) -> bool:
 
 MOVEMENT_METRIC_FIELD_GETTERS = {
     "soma_entrada_quantidade": lambda registro: (
-        _abs_decimal(registro.quantidade)
-        if _is_entrada_movimentacao(registro)
-        else Decimal("0")
+        _abs_decimal(registro.quantidade) if _is_entrada_movimentacao(registro) else Decimal("0")
     ),
     "soma_entrada_valor": lambda registro: (
-        _abs_decimal(registro.valor_total)
-        if _is_entrada_movimentacao(registro)
-        else Decimal("0")
+        _abs_decimal(registro.valor_total) if _is_entrada_movimentacao(registro) else Decimal("0")
     ),
     "soma_movimentacao_quantidade": lambda registro: _abs_decimal(registro.quantidade),
     "soma_movimentacao_valor": lambda registro: _abs_decimal(registro.valor_total),
     "soma_saida_quantidade": lambda registro: (
-        _abs_decimal(registro.quantidade)
-        if _is_saida_movimentacao(registro)
-        else Decimal("0")
+        _abs_decimal(registro.quantidade) if _is_saida_movimentacao(registro) else Decimal("0")
     ),
     "soma_saida_valor": lambda registro: (
-        _abs_decimal(registro.valor_total)
-        if _is_saida_movimentacao(registro)
-        else Decimal("0")
+        _abs_decimal(registro.valor_total) if _is_saida_movimentacao(registro) else Decimal("0")
     ),
 }
 
@@ -160,9 +148,7 @@ def _build_companion_metrics(
         return {}
 
     group_getter = group_key_getters[agrupar_por]
-    selected_groups = {
-        _normalize_group_value(group_value) for group_value, _metric in execution_rows
-    }
+    selected_groups = {_normalize_group_value(group_value) for group_value, _metric in execution_rows}
     grouped_rows: dict[Any, list[Any]] = {}
     for registro in registros:
         group_value = _normalize_group_value(group_getter(registro))
@@ -279,20 +265,12 @@ def agregar_estoques(
         ordenar_por=params.ordenar_por,
         ordem=params.ordem,
         limite=params.limite,
-        group_key_getters=(
-            MOVEMENT_GROUP_FIELD_GETTERS if use_movimentacoes else GROUP_FIELD_GETTERS
-        ),
-        metric_getters=(
-            MOVEMENT_METRIC_FIELD_GETTERS if use_movimentacoes else METRIC_FIELD_GETTERS
-        ),
+        group_key_getters=(MOVEMENT_GROUP_FIELD_GETTERS if use_movimentacoes else GROUP_FIELD_GETTERS),
+        metric_getters=(MOVEMENT_METRIC_FIELD_GETTERS if use_movimentacoes else METRIC_FIELD_GETTERS),
         serialize_metric=_metric_to_json,
     )
-    group_key_getters = (
-        MOVEMENT_GROUP_FIELD_GETTERS if use_movimentacoes else GROUP_FIELD_GETTERS
-    )
-    metric_getters = (
-        MOVEMENT_METRIC_FIELD_GETTERS if use_movimentacoes else METRIC_FIELD_GETTERS
-    )
+    group_key_getters = MOVEMENT_GROUP_FIELD_GETTERS if use_movimentacoes else GROUP_FIELD_GETTERS
+    metric_getters = MOVEMENT_METRIC_FIELD_GETTERS if use_movimentacoes else METRIC_FIELD_GETTERS
     companion_metrics = _build_companion_metrics(
         registros,
         execution_rows=execution.rows,
@@ -325,14 +303,12 @@ def agregar_estoques(
         ),
         project_group=(
             (
-                lambda group_value, metric_value, agrupar_por, metrica: (
-                    _project_estoque_group(
-                        group_value,
-                        metric_value,
-                        agrupar_por,
-                        metrica,
-                        companion_metrics=companion_metrics,
-                    )
+                lambda group_value, metric_value, agrupar_por, metrica: _project_estoque_group(
+                    group_value,
+                    metric_value,
+                    agrupar_por,
+                    metrica,
+                    companion_metrics=companion_metrics,
                 )
             )
             if params.agrupar_por is not None

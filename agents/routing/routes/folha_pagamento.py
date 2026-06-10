@@ -21,9 +21,7 @@ def _try_route_historico(normalized_text: str) -> RouteDecision | None:
         "quantos servidores tem"    -> vai para _try_route_agregacao
     """
     nome_para_historico = _extract_nome_para_historico(normalized_text)
-    if nome_para_historico and all(
-        keyword not in normalized_text for keyword in ("maiores", "ranking", "top")
-    ):
+    if nome_para_historico and all(keyword not in normalized_text for keyword in ("maiores", "ranking", "top")):
         return RouteDecision(
             domain="folha_pagamento",
             operation_type="historico_detalhado",

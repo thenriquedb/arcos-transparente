@@ -39,9 +39,7 @@ def _movement_to_public_dict(
     return {
         "tipo_registro": "movimentacao",
         "ano": registro.exercicio,
-        "data": registro.data_movimento.isoformat()
-        if registro.data_movimento
-        else None,
+        "data": registro.data_movimento.isoformat() if registro.data_movimento else None,
         "identificacao": registro.identificacao,
         "unidade_concessora": registro.unidade_gestora_concessora,
         "unidade_recebedora": registro.unidade_gestora_recebedora,
@@ -84,9 +82,7 @@ def _emenda_to_public_dict(registro: EmendaParlamentar) -> dict[str, Any]:
 
 
 def _load_movimentacoes(session) -> list[dict[str, Any]]:
-    registros = list(
-        session.execute(select(TransferenciaFinanceiraMovimento)).scalars()
-    )
+    registros = list(session.execute(select(TransferenciaFinanceiraMovimento)).scalars())
     return [_movement_to_public_dict(registro) for registro in registros]
 
 
@@ -239,9 +235,7 @@ def consultar_transferencias_financeiras(
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
-            empty_suggestion=(
-                "Nenhum registro de transferencias financeiras encontrado com os filtros."
-            ),
+            empty_suggestion=("Nenhum registro de transferencias financeiras encontrado com os filtros."),
         )
 
     metadata = ConsultarTransferenciasFinanceirasMetadata(

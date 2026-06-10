@@ -20,9 +20,7 @@ class _TipoDiscoverySpec:
 
 
 _DISCOVERY_SPECS: dict[str, _TipoDiscoverySpec] = {
-    "receitas": _TipoDiscoverySpec(
-        "receitas", ("*arrecadacao*.xml", "*lancamento*.xml")
-    ),
+    "receitas": _TipoDiscoverySpec("receitas", ("*arrecadacao*.xml", "*lancamento*.xml")),
     "folha_pagamento": _TipoDiscoverySpec("servidores", ("*folha-pagamento*.xml",)),
     "planejamentos": _TipoDiscoverySpec(
         "despesas",
@@ -60,9 +58,7 @@ _DISCOVERY_SPECS: dict[str, _TipoDiscoverySpec] = {
 _YEAR_FILTER_EXEMPT_TIPOS = frozenset({"eleitos", "servidores"})
 
 
-def _collect(
-    data_dir: Path, subdir: str | None, patterns: tuple[str, ...]
-) -> list[Path]:
+def _collect(data_dir: Path, subdir: str | None, patterns: tuple[str, ...]) -> list[Path]:
     base = data_dir / subdir if subdir is not None else data_dir
     arquivos: list[Path] = []
     for pattern in patterns:

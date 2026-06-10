@@ -105,39 +105,23 @@ class ContratosFiltroSchema(SqlToolBaseSchema):
 
     @model_validator(mode="after")
     def _validate_ranges(self) -> "ContratosFiltroSchema":
-        if self.data_inicio is not None and (
-            self.data_inicio_inicio is not None or self.data_inicio_fim is not None
-        ):
-            raise ValueError(
-                "data_inicio nao pode ser usada junto com data_inicio_inicio ou data_inicio_fim"
-            )
+        if self.data_inicio is not None and (self.data_inicio_inicio is not None or self.data_inicio_fim is not None):
+            raise ValueError("data_inicio nao pode ser usada junto com data_inicio_inicio ou data_inicio_fim")
 
         if self.data_inicio_inicio is not None or self.data_inicio_fim is not None:
             if self.data_inicio_inicio is None or self.data_inicio_fim is None:
-                raise ValueError(
-                    "data_inicio_inicio e data_inicio_fim devem ser informadas juntas"
-                )
+                raise ValueError("data_inicio_inicio e data_inicio_fim devem ser informadas juntas")
             validate_date_period(self.data_inicio_inicio, self.data_inicio_fim)
 
-        if self.data_fim is not None and (
-            self.data_fim_inicio is not None or self.data_fim_fim is not None
-        ):
-            raise ValueError(
-                "data_fim nao pode ser usada junto com data_fim_inicio ou data_fim_fim"
-            )
+        if self.data_fim is not None and (self.data_fim_inicio is not None or self.data_fim_fim is not None):
+            raise ValueError("data_fim nao pode ser usada junto com data_fim_inicio ou data_fim_fim")
 
         if self.data_fim_inicio is not None or self.data_fim_fim is not None:
             if self.data_fim_inicio is None or self.data_fim_fim is None:
-                raise ValueError(
-                    "data_fim_inicio e data_fim_fim devem ser informadas juntas"
-                )
+                raise ValueError("data_fim_inicio e data_fim_fim devem ser informadas juntas")
             validate_date_period(self.data_fim_inicio, self.data_fim_fim)
 
-        if (
-            self.valor_min is not None
-            and self.valor_max is not None
-            and self.valor_min > self.valor_max
-        ):
+        if self.valor_min is not None and self.valor_max is not None and self.valor_min > self.valor_max:
             raise ValueError("valor_min deve ser menor ou igual a valor_max")
         return self
 
@@ -152,11 +136,7 @@ class ContratosFiltroSchema(SqlToolBaseSchema):
         alternativos ao mesmo tempo e devolver resultados confusos.
         """
 
-        active_fields = [
-            field_name
-            for field_name in TEXT_FALLBACK_TARGETS
-            if getattr(self, field_name) is not None
-        ]
+        active_fields = [field_name for field_name in TEXT_FALLBACK_TARGETS if getattr(self, field_name) is not None]
         if len(active_fields) != 1:
             return []
 

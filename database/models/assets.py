@@ -37,9 +37,7 @@ class Patrimonio(Base):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -47,30 +45,16 @@ class Patrimonio(Base):
         nullable=False,
     )
 
-    unidade_gestora: Mapped[str] = mapped_column(
-        String(255), nullable=False, index=True
-    )
+    unidade_gestora: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     placa: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
-    situacao_bem: Mapped[Optional[str]] = mapped_column(
-        String(80), nullable=True, index=True
-    )
+    situacao_bem: Mapped[Optional[str]] = mapped_column(String(80), nullable=True, index=True)
     comandatario: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     classificacao: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
     descricao_item: Mapped[str] = mapped_column(Text, nullable=False)
-    tipo_ingresso: Mapped[Optional[str]] = mapped_column(
-        String(80), nullable=True, index=True
-    )
-    data_aquisicao: Mapped[Optional[date]] = mapped_column(
-        Date, nullable=True, index=True
-    )
+    tipo_ingresso: Mapped[Optional[str]] = mapped_column(String(80), nullable=True, index=True)
+    data_aquisicao: Mapped[Optional[date]] = mapped_column(Date, nullable=True, index=True)
     data_baixa: Mapped[Optional[date]] = mapped_column(Date, nullable=True, index=True)
-    localizacao: Mapped[Optional[str]] = mapped_column(
-        String(255), nullable=True, index=True
-    )
+    localizacao: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
     status: Mapped[Optional[str]] = mapped_column(String(80), nullable=True, index=True)
-    valor_ingresso: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
-    valor_atualizado: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(15, 2), nullable=True
-    )
+    valor_ingresso: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    valor_atualizado: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)

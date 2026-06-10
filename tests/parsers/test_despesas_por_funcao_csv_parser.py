@@ -15,9 +15,7 @@ FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures"
 
 
 def test_despesas_por_funcao_csv_parser_parseia_funcoes_e_ignora_totais() -> None:
-    registros = DespesasPorFuncaoCsvParser().parse(
-        str(FIXTURES_DIR / "despesas_por_funcao_sample.csv")
-    )
+    registros = DespesasPorFuncaoCsvParser().parse(str(FIXTURES_DIR / "despesas_por_funcao_sample.csv"))
 
     assert len(registros) == 2
     assert registros[0]["arquivo_origem"] == "despesas_por_funcao_sample.csv"
@@ -37,13 +35,9 @@ def test_despesas_por_funcao_csv_parser_parseia_funcoes_e_ignora_totais() -> Non
     assert all(registro["funcao"] != "Totais" for registro in registros)
 
 
-def test_despesas_por_funcao_csv_parser_falha_quando_cabecalho_nao_e_suportado() -> (
-    None
-):
+def test_despesas_por_funcao_csv_parser_falha_quando_cabecalho_nao_e_suportado() -> None:
     with pytest.raises(
         ValueError,
         match="Cabecalho de despesas-por-funcao CSV nao encontrado",
     ):
-        DespesasPorFuncaoCsvParser().parse(
-            str(FIXTURES_DIR / "despesas_por_funcao_invalid_header.csv")
-        )
+        DespesasPorFuncaoCsvParser().parse(str(FIXTURES_DIR / "despesas_por_funcao_invalid_header.csv"))

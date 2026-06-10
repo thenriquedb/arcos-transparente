@@ -71,9 +71,7 @@ class FakeSearchChroma:
         limited = list(self.results)[:k]
         if score_threshold is None:
             return limited
-        return [
-            (document, score) for document, score in limited if score >= score_threshold
-        ]
+        return [(document, score) for document, score in limited if score >= score_threshold]
 
 
 class FailingSearchChroma:
@@ -103,9 +101,7 @@ def _make_config(tmp_path: Path, source_directory: Path) -> RagConfig:
 def test_discover_markdown_files_ignora_nao_markdown(tmp_path: Path) -> None:
     source_directory = tmp_path / "rag"
     source_directory.mkdir()
-    (source_directory / "telefones-uteis.md").write_text(
-        "# Telefones\n", encoding="utf-8"
-    )
+    (source_directory / "telefones-uteis.md").write_text("# Telefones\n", encoding="utf-8")
     (source_directory / "estrutura.csv").write_text("nome,telefone\n", encoding="utf-8")
     (source_directory / "regimento.pdf").write_bytes(b"%PDF")
 
@@ -146,9 +142,7 @@ def test_build_knowledge_index_cria_manifesto_e_estado_ready(tmp_path: Path) -> 
     }
     assert FakeBuildChroma.last_documents
     assert len(FakeBuildChroma.last_documents) == len(FakeBuildChroma.last_ids)
-    assert all(
-        "chunk_id" in document.metadata for document in FakeBuildChroma.last_documents
-    )
+    assert all("chunk_id" in document.metadata for document in FakeBuildChroma.last_documents)
 
 
 def test_build_knowledge_index_marca_stale_e_rebuild_atualiza(tmp_path: Path) -> None:
@@ -187,9 +181,7 @@ def test_build_knowledge_index_marca_stale_e_rebuild_atualiza(tmp_path: Path) ->
     status_ready = get_knowledge_index_status(config)
 
     assert status_ready.state == "ready"
-    assert (
-        manifest_antes.source_files[0].sha256 != manifest_depois.source_files[0].sha256
-    )
+    assert manifest_antes.source_files[0].sha256 != manifest_depois.source_files[0].sha256
 
 
 def test_get_knowledge_index_status_missing_e_empty(tmp_path: Path) -> None:

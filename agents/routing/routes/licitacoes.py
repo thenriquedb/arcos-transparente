@@ -28,9 +28,7 @@ def _try_route_licitacoes_agregacao(normalized_text: str) -> RouteDecision | Non
         return None
 
     # Perguntas do tipo "quais... e qual foi o total gasto?" ficam com a tool de lista.
-    if any(
-        keyword in normalized_text for keyword in ("todas", "todos", "quais")
-    ) and any(
+    if any(keyword in normalized_text for keyword in ("todas", "todos", "quais")) and any(
         keyword in normalized_text for keyword in ("total", "gasto", "gastos", "valor")
     ):
         return None
@@ -68,9 +66,7 @@ def _try_route_licitacoes_agregacao(normalized_text: str) -> RouteDecision | Non
             confident=True,
         )
 
-    if any(
-        keyword in normalized_text for keyword in ("quantas", "quantos", "total de")
-    ):
+    if any(keyword in normalized_text for keyword in ("quantas", "quantos", "total de")):
         filtros = _build_licitacoes_filters_from_query(normalized_text)
         return RouteDecision(
             domain="licitacoes",
@@ -144,15 +140,8 @@ def _try_route_licitacoes_lista(normalized_text: str) -> RouteDecision | None:
     ):
         incluir_detalhes = True
 
-    if filtros or any(
-        keyword in normalized_text
-        for keyword in ("lista", "liste", "quais", "detalhe", "mostre")
-    ):
-        limite = (
-            100
-            if any(keyword in normalized_text for keyword in ("todas", "todos"))
-            else 10
-        )
+    if filtros or any(keyword in normalized_text for keyword in ("lista", "liste", "quais", "detalhe", "mostre")):
+        limite = 100 if any(keyword in normalized_text for keyword in ("todas", "todos")) else 10
         return RouteDecision(
             domain="licitacoes",
             operation_type="consulta_lista",

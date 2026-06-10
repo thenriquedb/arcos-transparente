@@ -123,18 +123,13 @@ class AgregarEstoquesFiltroSchema(EstoqueFiltroSchema):
         return self
 
     def has_movement_filters(self) -> bool:
-        return any(
-            getattr(self, field_name) is not None
-            for field_name in _MOVEMENT_FILTER_FIELDS
-        )
+        return any(getattr(self, field_name) is not None for field_name in _MOVEMENT_FILTER_FIELDS)
 
 
 class AgregarEstoquesParams(SqlToolBaseSchema):
     """Parametros validados da chamada da tool."""
 
-    filtros: AgregarEstoquesFiltroSchema = Field(
-        default_factory=AgregarEstoquesFiltroSchema
-    )
+    filtros: AgregarEstoquesFiltroSchema = Field(default_factory=AgregarEstoquesFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_saldo_valor"
     ordenar_por: str = "metrica"
@@ -166,10 +161,7 @@ class AgregarEstoquesParams(SqlToolBaseSchema):
     def _normalize_metrica(cls, value: Any) -> str:
         normalized = clean_text(value) or "soma_saldo_valor"
         normalized = ESTOQUES_METRIC_ALIASES.get(normalized, normalized)
-        if (
-            normalized not in ALLOWED_ESTOQUES_METRICS
-            and normalized not in _DYNAMIC_METRIC_ALIASES
-        ):
+        if normalized not in ALLOWED_ESTOQUES_METRICS and normalized not in _DYNAMIC_METRIC_ALIASES:
             raise ValueError(f"metrica nao suportada: {normalized}")
         return normalized
 
@@ -200,29 +192,16 @@ class AgregarEstoquesParams(SqlToolBaseSchema):
             "total_quantidade",
         }:
             self.metrica = (
-                "soma_movimentacao_quantidade"
-                if self.filtros.has_movement_filters()
-                else "soma_saldo_quantidade"
+                "soma_movimentacao_quantidade" if self.filtros.has_movement_filters() else "soma_saldo_quantidade"
             )
         elif self.metrica in {"valor", "soma_valor", "total_valor"}:
-            self.metrica = (
-                "soma_movimentacao_valor"
-                if self.filtros.has_movement_filters()
-                else "soma_saldo_valor"
-            )
+            self.metrica = "soma_movimentacao_valor" if self.filtros.has_movement_filters() else "soma_saldo_valor"
         if self.ordenar_por not in {"metrica", self.agrupar_por}:
             raise ValueError("ordenar_por deve ser 'metrica' ou igual a agrupar_por")
         if self.agrupar_por is None and self.ordenar_por != "metrica":
-            raise ValueError(
-                "ordenar_por deve ser 'metrica' quando agrupar_por nao for informado"
-            )
-        if (
-            self.filtros.has_movement_filters()
-            and self.metrica not in _MOVEMENT_METRICS
-        ):
-            raise ValueError(
-                "filtros de movimentacao exigem metricas de entrada, saida, contagem ou movimentacao"
-            )
+            raise ValueError("ordenar_por deve ser 'metrica' quando agrupar_por nao for informado")
+        if self.filtros.has_movement_filters() and self.metrica not in _MOVEMENT_METRICS:
+            raise ValueError("filtros de movimentacao exigem metricas de entrada, saida, contagem ou movimentacao")
         return self
 
 

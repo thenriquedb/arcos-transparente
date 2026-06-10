@@ -90,7 +90,5 @@ def test_validate_date_period_aceita_periodo_valido() -> None:
 
 
 def test_validate_date_period_rejeita_periodo_invertido() -> None:
-    with pytest.raises(
-        ValueError, match="data_inicio deve ser menor ou igual a data_fim"
-    ):
+    with pytest.raises(ValueError, match="data_inicio deve ser menor ou igual a data_fim"):
         validate_date_period(date(2025, 2, 1), date(2025, 1, 31))

@@ -79,12 +79,8 @@ def _is_estoques_query(normalized_text: str) -> bool:
     if _contains_any(normalized_text, ESTOQUES_DOMAIN_KEYWORDS):
         return True
 
-    has_entity = any(
-        _contains_term(normalized_text, term) for term in _ESTOQUES_ENTITY_TERMS
-    )
-    has_stock_signal = any(
-        _contains_term(normalized_text, term) for term in _ESTOQUES_GENERIC_SIGNAL_TERMS
-    )
+    has_entity = any(_contains_term(normalized_text, term) for term in _ESTOQUES_ENTITY_TERMS)
+    has_stock_signal = any(_contains_term(normalized_text, term) for term in _ESTOQUES_GENERIC_SIGNAL_TERMS)
     return has_entity and has_stock_signal
 
 
@@ -169,9 +165,7 @@ def _extract_estoques_filters(normalized_text: str) -> dict[str, object]:
         )
     ) and (month_range := _extract_month_date_range(normalized_text)):
         filtros["data_movimento_inicio"], filtros["data_movimento_fim"] = month_range
-    if ("saude" in normalized_text or "fumusa" in normalized_text) and (
-        "almoxarifado" not in normalized_text
-    ):
+    if ("saude" in normalized_text or "fumusa" in normalized_text) and ("almoxarifado" not in normalized_text):
         filtros["origem"] = "saude"
     elif "prefeitura" in normalized_text:
         filtros["origem"] = "prefeitura"
@@ -235,28 +229,17 @@ def _extract_estoques_flow_metric(
 def _extract_estoques_metric(normalized_text: str, filtros: dict[str, object]) -> str:
     """Escolhe a métrica do agregado a partir dos sinais da pergunta."""
 
-    aggregate_ranking_intent = any(
-        token in normalized_text for token in _ESTOQUES_RANKING_TERMS
-    )
-    mentions_material_entity = any(
-        _contains_term(normalized_text, term) for term in _ESTOQUES_ENTITY_TERMS
-    )
-    mentions_value = any(
-        _contains_term(normalized_text, term) for term in _ESTOQUES_VALUE_SIGNAL_TERMS
-    )
+    aggregate_ranking_intent = any(token in normalized_text for token in _ESTOQUES_RANKING_TERMS)
+    mentions_material_entity = any(_contains_term(normalized_text, term) for term in _ESTOQUES_ENTITY_TERMS)
+    mentions_value = any(_contains_term(normalized_text, term) for term in _ESTOQUES_VALUE_SIGNAL_TERMS)
     mentions_quantity = any(
-        _contains_term(normalized_text, term)
-        for term in ("quantidade", "quantidades", "itens", "item", "unidades")
+        _contains_term(normalized_text, term) for term in ("quantidade", "quantidades", "itens", "item", "unidades")
     )
 
     if "quantas" in normalized_text or "quantos" in normalized_text:
         metrica = "contagem"
     elif "movimentacao" in normalized_text or "movimentacoes" in normalized_text:
-        metrica = (
-            "soma_movimentacao_valor"
-            if mentions_value
-            else "soma_movimentacao_quantidade"
-        )
+        metrica = "soma_movimentacao_valor" if mentions_value else "soma_movimentacao_quantidade"
     else:
         flow_metric = None
         for flow in ("entrada", "saida"):
@@ -276,15 +259,9 @@ def _extract_estoques_metric(normalized_text: str, filtros: dict[str, object]) -
         else:
             metrica = "soma_saldo_valor"
 
-    has_movement_scope = any(
-        key in filtros for key in _ESTOQUES_MOVEMENT_SCOPE_FILTER_KEYS
-    )
+    has_movement_scope = any(key in filtros for key in _ESTOQUES_MOVEMENT_SCOPE_FILTER_KEYS)
     if has_movement_scope and metrica in {"soma_saldo_quantidade", "soma_saldo_valor"}:
-        metrica = (
-            "soma_movimentacao_valor"
-            if metrica == "soma_saldo_valor"
-            else "soma_movimentacao_quantidade"
-        )
+        metrica = "soma_movimentacao_valor" if metrica == "soma_saldo_valor" else "soma_movimentacao_quantidade"
     return metrica
 
 
@@ -297,9 +274,7 @@ def _extract_estoques_group_by(normalized_text: str) -> str | None:
         return "unidade_medida"
     if "por ano" in normalized_text or "por exercicio" in normalized_text:
         return "ano"
-    if "por material" in normalized_text or any(
-        token in normalized_text for token in _ESTOQUES_RANKING_TERMS
-    ):
+    if "por material" in normalized_text or any(token in normalized_text for token in _ESTOQUES_RANKING_TERMS):
         return "material"
     return None
 
@@ -360,15 +335,9 @@ def _try_route_estoques_lista(normalized_text: str) -> RouteDecision | None:
         operation_type="consulta_lista",
         tool_name="consultar_estoques",
         tool_kwargs={
-            "filtros": {
-                k: v
-                for k, v in filtros.items()
-                if k != "almoxarifado" and k != "tipo_movimento"
-            },
+            "filtros": {k: v for k, v in filtros.items() if k != "almoxarifado" and k != "tipo_movimento"},
             "ordenar_por": "saldo_valor"
-            if any(
-                keyword in normalized_text for keyword in ("maior", "maiores", "saldo")
-            )
+            if any(keyword in normalized_text for keyword in ("maior", "maiores", "saldo"))
             else "periodo_fim",
             "ordem": "desc",
             "limite": 100

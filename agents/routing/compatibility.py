@@ -115,11 +115,7 @@ def evaluate_public_compatibility_guardrails(
     """Validate compatibility queries before narrowing public tools."""
 
     resolved_route = route or route_public_compatibility_query(query)
-    history_present = (
-        has_history
-        if has_history is not None
-        else bool(prior_user_queries or prior_messages)
-    )
+    history_present = has_history if has_history is not None else bool(prior_user_queries or prior_messages)
     return evaluate_public_query_guardrails(
         query,
         compatibility_route=resolved_route,

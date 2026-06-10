@@ -28,9 +28,7 @@ _CONTEXTUAL_REFERENCE_PATTERN = re.compile(
     r"neste|nesta|nestes|nestas"
     r")\b"
 )
-_ELLIPTICAL_YEAR_FOLLOW_UP_PATTERN = re.compile(
-    r"^(?:e\s+)?(?:(?:o|a|os|as)\s+)?(?:(?:de|do|da|em)\s+)?20\d{2}\??$"
-)
+_ELLIPTICAL_YEAR_FOLLOW_UP_PATTERN = re.compile(r"^(?:e\s+)?(?:(?:o|a|os|as)\s+)?(?:(?:de|do|da|em)\s+)?20\d{2}\??$")
 _PUBLIC_SPEND_SIGNAL_TERMS = (
     "custo",
     "custos",
@@ -173,11 +171,7 @@ def evaluate_public_query_guardrails(
     if has_history and contextual_follow_up and has_public_context_anchor:
         return GuardrailDecision(allowed=True, category="allowed")
 
-    if (
-        has_history
-        and has_public_context_anchor
-        and _looks_like_confirmation_reply(normalized_text, prior_messages)
-    ):
+    if has_history and has_public_context_anchor and _looks_like_confirmation_reply(normalized_text, prior_messages):
         return GuardrailDecision(allowed=True, category="allowed")
 
     if compatibility_route is not None and compatibility_route.confident:
@@ -317,10 +311,7 @@ def _looks_like_short_ranking_follow_up(normalized_text: str) -> bool:
         return False
     if not any(token in _SHORT_RANKING_TOKENS for token in tokens):
         return False
-    return all(
-        token in _SHORT_RANKING_TOKENS or token in _SHORT_RANKING_STOPWORDS
-        for token in tokens
-    )
+    return all(token in _SHORT_RANKING_TOKENS or token in _SHORT_RANKING_STOPWORDS for token in tokens)
 
 
 def _looks_like_confirmation_reply(

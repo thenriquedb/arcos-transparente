@@ -56,11 +56,7 @@ class BeneficiarioReportCsvParser:
         origem = self._infer_origem(filepath, metadata.get("unidade gestora"))
         categoria = (
             next(
-                (
-                    metadata[key]
-                    for key in self.categoria_metadata_keys
-                    if metadata.get(key)
-                ),
+                (metadata[key] for key in self.categoria_metadata_keys if metadata.get(key)),
                 None,
             )
             or self.default_categoria
@@ -70,9 +66,7 @@ class BeneficiarioReportCsvParser:
         registros: list[dict[str, Any]] = []
         invalidos = 0
 
-        for sequencia, row in enumerate(
-            self._iter_data_rows(rows, header_index), start=1
-        ):
+        for sequencia, row in enumerate(self._iter_data_rows(rows, header_index), start=1):
             payload_raw = {
                 "tipo_origem": self.tipo_origem,
                 "arquivo_origem": Path(filepath).name,
@@ -80,10 +74,7 @@ class BeneficiarioReportCsvParser:
                 "origem": origem,
                 "exercicio": metadata.get("exercicio"),
                 "unidade_gestora": metadata.get("unidade gestora"),
-                "numero_documento": (
-                    f"{self.documento_prefix}-"
-                    f"{metadata.get('exercicio')}-{sequencia:05d}"
-                ),
+                "numero_documento": (f"{self.documento_prefix}-{metadata.get('exercicio')}-{sequencia:05d}"),
                 "data_documento": periodo_fim or periodo_inicio,
                 "periodo_referencia_inicio": periodo_inicio,
                 "periodo_referencia_fim": periodo_fim or periodo_inicio,
@@ -102,9 +93,7 @@ class BeneficiarioReportCsvParser:
                 payload = DespesaDocumentoInSchema.model_validate(payload_raw)
             except ValidationError as exc:
                 invalidos += 1
-                logger.warning(
-                    f"Descartando linha invalida de {self.report_label} CSV: {exc}"
-                )
+                logger.warning(f"Descartando linha invalida de {self.report_label} CSV: {exc}")
                 continue
             registros.append(payload.model_dump(mode="python"))
 
@@ -142,16 +131,11 @@ class BeneficiarioReportCsvParser:
                     metadata[key] = value
 
         if header_index is None:
-            raise ValueError(
-                f"Cabecalho de {self.report_label} CSV nao encontrado no arquivo "
-                f"'{filepath}'."
-            )
+            raise ValueError(f"Cabecalho de {self.report_label} CSV nao encontrado no arquivo '{filepath}'.")
 
         for required_key in ("exercicio", "periodo", "unidade gestora"):
             if not metadata.get(required_key):
-                raise ValueError(
-                    f"Metadata obrigatoria '{required_key}' ausente em '{filepath}'."
-                )
+                raise ValueError(f"Metadata obrigatoria '{required_key}' ausente em '{filepath}'.")
 
         return metadata, header_index
 
@@ -177,9 +161,7 @@ class BeneficiarioReportCsvParser:
         if not periodo:
             return None, None
         if " a " in periodo:
-            inicio_txt, fim_txt = [
-                part.strip() for part in periodo.split(" a ", maxsplit=1)
-            ]
+            inicio_txt, fim_txt = [part.strip() for part in periodo.split(" a ", maxsplit=1)]
             inicio = parse_date(inicio_txt)
             fim = parse_date(fim_txt)
             return (
@@ -210,7 +192,5 @@ class BeneficiarioReportCsvParser:
 
     @staticmethod
     def _is_header_row(row: list[str]) -> bool:
-        normalized = tuple(
-            normalize_search_text(value) for value in row[: len(_EXPECTED_HEADER)]
-        )
+        normalized = tuple(normalize_search_text(value) for value in row[: len(_EXPECTED_HEADER)])
         return normalized == _EXPECTED_HEADER

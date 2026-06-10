@@ -42,16 +42,10 @@ def load_despesas(
                 itens = payload.pop("itens", [])
                 comprovatorios = payload.pop("documentos_comprobatorios", [])
                 payload["data_documento"] = to_date(payload["data_documento"])
-                payload["periodo_referencia_inicio"] = to_date(
-                    payload.get("periodo_referencia_inicio")
-                )
-                payload["periodo_referencia_fim"] = to_date(
-                    payload.get("periodo_referencia_fim")
-                )
+                payload["periodo_referencia_inicio"] = to_date(payload.get("periodo_referencia_inicio"))
+                payload["periodo_referencia_fim"] = to_date(payload.get("periodo_referencia_fim"))
                 payload["data_homologacao"] = to_date(payload.get("data_homologacao"))
-                payload["data_inicial_viagem"] = to_date(
-                    payload.get("data_inicial_viagem")
-                )
+                payload["data_inicial_viagem"] = to_date(payload.get("data_inicial_viagem"))
                 payload["data_final_viagem"] = to_date(payload.get("data_final_viagem"))
 
                 documento, status = upsert_by_filters(
@@ -60,8 +54,7 @@ def load_despesas(
                     filters=[
                         DespesaDocumento.tipo_origem == payload["tipo_origem"],
                         DespesaDocumento.arquivo_origem == payload["arquivo_origem"],
-                        DespesaDocumento.sequencia_origem
-                        == payload["sequencia_origem"],
+                        DespesaDocumento.sequencia_origem == payload["sequencia_origem"],
                     ],
                     payload=payload,
                 )
@@ -92,29 +85,17 @@ def load_despesas(
                     rows=[
                         {
                             "ordem": comprovatorio["ordem"],
-                            "data_liquidacao": to_date(
-                                comprovatorio.get("data_liquidacao")
-                            ),
-                            "codigo_tipo_documento": comprovatorio.get(
-                                "codigo_tipo_documento"
-                            ),
-                            "descricao_tipo_documento": comprovatorio.get(
-                                "descricao_tipo_documento"
-                            ),
+                            "data_liquidacao": to_date(comprovatorio.get("data_liquidacao")),
+                            "codigo_tipo_documento": comprovatorio.get("codigo_tipo_documento"),
+                            "descricao_tipo_documento": comprovatorio.get("descricao_tipo_documento"),
                             "numero_documento": comprovatorio.get("numero_documento"),
-                            "serie_modelo_nota_fiscal": comprovatorio.get(
-                                "serie_modelo_nota_fiscal"
-                            ),
+                            "serie_modelo_nota_fiscal": comprovatorio.get("serie_modelo_nota_fiscal"),
                             "descricao_serie": comprovatorio.get("descricao_serie"),
                             "chave_acesso": comprovatorio.get("chave_acesso"),
-                            "data_emissao_documento": to_date(
-                                comprovatorio.get("data_emissao_documento")
-                            ),
+                            "data_emissao_documento": to_date(comprovatorio.get("data_emissao_documento")),
                             "valor_documento": comprovatorio.get("valor_documento"),
                             "numero_empenho": comprovatorio.get("numero_empenho"),
-                            "codigo_unidade_gestora": comprovatorio.get(
-                                "codigo_unidade_gestora"
-                            ),
+                            "codigo_unidade_gestora": comprovatorio.get("codigo_unidade_gestora"),
                             "numero_sequencia": comprovatorio.get("numero_sequencia"),
                         }
                         for comprovatorio in comprovatorios

@@ -33,8 +33,7 @@ def load_observability_config_from_env() -> ObservabilityConfig:
     if provider != "langsmith":
         supported = ", ".join(SUPPORTED_OBSERVABILITY_PROVIDERS)
         raise ValueError(
-            f"Provider de observabilidade nao suportado: {provider}. "
-            f"Providers suportados nesta fase: {supported}."
+            f"Provider de observabilidade nao suportado: {provider}. Providers suportados nesta fase: {supported}."
         )
 
     return ObservabilityConfig(
@@ -64,9 +63,7 @@ def _normalize_provider(raw_value: str | None) -> str:
 def _read_required_provider_env(var_name: str) -> str:
     value = _read_optional_env(var_name)
     if value is None:
-        raise ValueError(
-            f"{var_name} deve ser informado quando OBSERVABILITY_PROVIDER=langsmith."
-        )
+        raise ValueError(f"{var_name} deve ser informado quando OBSERVABILITY_PROVIDER=langsmith.")
     return value
 
 

@@ -46,12 +46,8 @@ def _row_to_public_dict(registro: DespesaDocumento) -> dict[str, Any]:
     return {
         "origem": registro.origem,
         "ano": registro.exercicio,
-        "periodo_inicio": (
-            _period_start(registro).isoformat() if _period_start(registro) else None
-        ),
-        "periodo_fim": _period_end(registro).isoformat()
-        if _period_end(registro)
-        else None,
+        "periodo_inicio": (_period_start(registro).isoformat() if _period_start(registro) else None),
+        "periodo_fim": _period_end(registro).isoformat() if _period_end(registro) else None,
         "beneficiario": registro.credor,
         "unidade_gestora": registro.unidade_gestora,
         "categoria": registro.categoria_documento,
@@ -82,9 +78,7 @@ def load_filtered_passagens(
     """Carrega passagens aplicando os filtros públicos declarados."""
 
     registros = list(
-        session.execute(
-            select(DespesaDocumento).where(DespesaDocumento.tipo_origem == "passagem")
-        ).scalars()
+        session.execute(select(DespesaDocumento).where(DespesaDocumento.tipo_origem == "passagem")).scalars()
     )
     return apply_declared_filters(registros, filtros, _PASSAGENS_FILTER_CONDITIONS)
 
@@ -205,7 +199,5 @@ def consultar_passagens(
         execution=execution,
         project_row=project_passagem_fields,
         campos=params.campos,
-        pagination_message_builder=lambda shown, total: (
-            f"Mostrando {shown} de {total} passagens encontradas."
-        ),
+        pagination_message_builder=lambda shown, total: f"Mostrando {shown} de {total} passagens encontradas.",
     )

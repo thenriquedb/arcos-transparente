@@ -120,9 +120,7 @@ def _licitacao(
     )
 
 
-def test_shared_statement_lookup_flow_preserves_order_projection_and_pagination() -> (
-    None
-):
+def test_shared_statement_lookup_flow_preserves_order_projection_and_pagination() -> None:
     session = _build_session()
     session.add_all(
         [
@@ -180,9 +178,7 @@ def test_shared_statement_lookup_flow_preserves_order_projection_and_pagination(
     session.close()
 
 
-def test_shared_collection_lookup_flow_preserves_order_projection_and_pagination() -> (
-    None
-):
+def test_shared_collection_lookup_flow_preserves_order_projection_and_pagination() -> None:
     registros = [
         {
             "id": 1,
@@ -234,9 +230,7 @@ def test_shared_collection_lookup_flow_preserves_order_projection_and_pagination
     assert response["mensagem"] == "Mostrando 1 de 3 registros encontrados."
 
 
-def test_shared_collection_lookup_result_adds_empty_suggestion_only_when_page_is_empty() -> (
-    None
-):
+def test_shared_collection_lookup_result_adds_empty_suggestion_only_when_page_is_empty() -> None:
     execution = execute_collection_lookup_result(
         [],
         ordenar_por="valor",
@@ -412,15 +406,11 @@ def test_shared_lookup_flow_supports_mixed_record_collection_adopters() -> None:
     )
 
     assert response["total"] == 3
-    assert response["resultados"] == [
-        {"tipo_registro": "movimentacao", "valor": 552500.0}
-    ]
+    assert response["resultados"] == [{"tipo_registro": "movimentacao", "valor": 552500.0}]
     assert response["mensagem"] == "Mostrando 1 de 3 registros encontrados."
 
 
-def test_shared_statement_aggregate_flow_orders_groups_and_adds_group_pagination() -> (
-    None
-):
+def test_shared_statement_aggregate_flow_orders_groups_and_adds_group_pagination() -> None:
     session = _build_session()
     session.add_all(
         [
@@ -487,9 +477,7 @@ def test_shared_statement_aggregate_flow_orders_groups_and_adds_group_pagination
     session.close()
 
 
-def test_shared_collection_aggregate_flow_supports_total_only_and_empty_results() -> (
-    None
-):
+def test_shared_collection_aggregate_flow_supports_total_only_and_empty_results() -> None:
     registros = [
         {"categoria": "FUNDEB", "valor_recebido": 47000.0},
         {"categoria": "IPTU", "valor_recebido": 39000.0},
@@ -564,15 +552,10 @@ def test_shared_collection_aggregate_flow_supports_total_only_and_empty_results(
 
     assert empty_response["total_grupos"] == 0
     assert empty_response["resultados"] == []
-    assert (
-        empty_response["sugestao"]
-        == "Nenhum registro de receitas encontrado com os filtros."
-    )
+    assert empty_response["sugestao"] == "Nenhum registro de receitas encontrado com os filtros."
 
 
-def test_shared_statement_aggregate_flow_supports_new_statement_backed_adopters() -> (
-    None
-):
+def test_shared_statement_aggregate_flow_supports_new_statement_backed_adopters() -> None:
     session = _build_session()
     session.add_all(
         [
@@ -601,9 +584,7 @@ def test_shared_statement_aggregate_flow_supports_new_statement_backed_adopters(
     )
     session.commit()
 
-    metric_expression = func.coalesce(func.sum(Licitacao.valor_estimado), 0).label(
-        "soma_valor_estimado"
-    )
+    metric_expression = func.coalesce(func.sum(Licitacao.valor_estimado), 0).label("soma_valor_estimado")
     grouped_stmt = select(
         Licitacao.secretaria.label("secretaria"),
         metric_expression,
@@ -634,9 +615,7 @@ def test_shared_statement_aggregate_flow_supports_new_statement_backed_adopters(
     )
 
     assert response["total_grupos"] == 2
-    assert response["resultados"] == [
-        {"secretaria": "Obras", "soma_valor_estimado": 500000.0}
-    ]
+    assert response["resultados"] == [{"secretaria": "Obras", "soma_valor_estimado": 500000.0}]
     assert response["mensagem"] == "Mostrando 1 de 2 grupos encontrados."
 
     session.close()
@@ -658,9 +637,7 @@ def test_shared_collection_aggregate_flow_supports_new_mixed_record_adopters() -
         limite=1,
         group_key_getters={"autor": lambda row: row.get("autor")},
         metric_getters={"soma_valor": lambda row: row.get("valor") or Decimal("0")},
-        serialize_metric=lambda value: (
-            float(value) if isinstance(value, Decimal) else value
-        ),
+        serialize_metric=lambda value: float(value) if isinstance(value, Decimal) else value,
     )
     response = build_aggregate_response(
         response_type=AgregarTransferenciasFinanceirasResponse,

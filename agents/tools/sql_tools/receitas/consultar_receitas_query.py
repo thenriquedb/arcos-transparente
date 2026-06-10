@@ -139,19 +139,11 @@ def consultar_receitas(
         campos=params.campos or list(ALLOWED_RECEITA_FIELDS),
     )
 
-    tipo_label = (
-        "arrecadacoes"
-        if params.filtros.tipo_de_dado == "arrecadacao"
-        else "lancamentos"
-    )
+    tipo_label = "arrecadacoes" if params.filtros.tipo_de_dado == "arrecadacao" else "lancamentos"
     execution = LookupExecutionResult(
         total=total,
         rows=pagina,
-        suggestion=(
-            f"Nenhum registro de {tipo_label} encontrado com os filtros."
-            if not pagina
-            else None
-        ),
+        suggestion=(f"Nenhum registro de {tipo_label} encontrado com os filtros." if not pagina else None),
     )
     return build_lookup_response(
         response_type=ConsultarReceitasResponse,

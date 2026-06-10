@@ -123,10 +123,7 @@ def buscar_historico_de_pagamentos_do_servidor(
     if not params.nome and params.folha_servidor_id is None:
         return resposta_sem_resultados(
             query=nome,
-            mensagem=(
-                "Informe um nome de servidor ou selecione um `folha_servidor_id` "
-                "para realizar a busca."
-            ),
+            mensagem=("Informe um nome de servidor ou selecione um `folha_servidor_id` para realizar a busca."),
         )
 
     with session_manager.get_session() as session:
@@ -169,9 +166,7 @@ def buscar_historico_de_pagamentos_do_servidor(
         grupos_limitados = list(grupos.values())[: params.limite]
 
         if len(grupos) > 1:
-            candidatos = [
-                serializar_candidato_servidor(grupo) for grupo in grupos_limitados
-            ]
+            candidatos = [serializar_candidato_servidor(grupo) for grupo in grupos_limitados]
             return resposta_sem_resultados(
                 query=params.nome,
                 total=len(grupos),
@@ -202,11 +197,7 @@ def _responder_por_folha_servidor_id(
     """Responde a selecao direta de um candidato por `folha_servidor_id`."""
 
     representante = (
-        session.execute(
-            _base_folha_servidores_stmt().where(
-                FolhaServidor.id == params.folha_servidor_id
-            )
-        )
+        session.execute(_base_folha_servidores_stmt().where(FolhaServidor.id == params.folha_servidor_id))
         .unique()
         .scalars()
         .one_or_none()
@@ -214,10 +205,7 @@ def _responder_por_folha_servidor_id(
 
     if representante is None:
         return resposta_sem_resultados(
-            mensagem=(
-                "Nao encontrei o servidor selecionado para consultar o "
-                "historico de pagamentos."
-            )
+            mensagem=("Nao encontrei o servidor selecionado para consultar o historico de pagamentos.")
         )
 
     servidores = _carregar_servidores_por_nome(session, representante.nome)
@@ -246,9 +234,7 @@ def _buscar_grupos_por_nome(
         FolhaServidor.id.desc(),
     )
     for termo in termos:
-        candidatos_stmt = candidatos_stmt.where(
-            func.normalizar(FolhaServidor.nome).like(f"%{termo}%")
-        )
+        candidatos_stmt = candidatos_stmt.where(func.normalizar(FolhaServidor.nome).like(f"%{termo}%"))
 
     candidatos = session.execute(candidatos_stmt).unique().scalars().all()
     return _agrupar_servidores_por_nome(candidatos)
@@ -263,16 +249,13 @@ def _resposta_para_busca_vazia(
 ) -> dict[str, Any]:
     """Explica a ausencia de resultados distinguindo base vazia de nome ausente."""
 
-    total_servidores_folha = session.execute(
-        select(func.count(FolhaServidor.id))
-    ).scalar_one()
+    total_servidores_folha = session.execute(select(func.count(FolhaServidor.id))).scalar_one()
 
     if total_servidores_folha == 0:
         return resposta_sem_resultados(
             query=params.nome,
             mensagem=(
-                "A base local de folha de pagamento esta vazia. "
-                "Importe os XMLs de folha antes de consultar salarios."
+                "A base local de folha de pagamento esta vazia. Importe os XMLs de folha antes de consultar salarios."
             ),
         )
 
@@ -328,11 +311,7 @@ def _resolve_nome_por_cargo_politico(
         .scalars()
         .all()
     )
-    em_exercicio = [
-        eleito
-        for eleito in eleitos
-        if matches_text_query(eleito.mandato_status, "em exercicio")
-    ]
+    em_exercicio = [eleito for eleito in eleitos if matches_text_query(eleito.mandato_status, "em exercicio")]
 
     if not em_exercicio:
         return (

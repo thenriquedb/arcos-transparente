@@ -280,9 +280,7 @@ def test_agregar_estoques_aceita_aliases_de_nome_e_tipo_do_material(
         "ALCOOL 70",
         "LUVA DESCARTAVEL",
     }
-    assert all(
-        item["soma_saldo_quantidade"] == 12.0 for item in resultado["resultados"]
-    )
+    assert all(item["soma_saldo_quantidade"] == 12.0 for item in resultado["resultados"])
 
     session.close()
 
@@ -352,8 +350,7 @@ def test_consultar_movimentacoes_de_estoque_filtra_por_almoxarifado(
 
 def test_registry_expoe_tools_publicas_de_estoques() -> None:
     tool_names = {
-        getattr(tool_obj, "name", "")
-        for tool_obj in tools_registry.get_public_tools(tags=["domain:estoques"])
+        getattr(tool_obj, "name", "") for tool_obj in tools_registry.get_public_tools(tags=["domain:estoques"])
     }
 
     assert "consultar_estoques" in tool_names

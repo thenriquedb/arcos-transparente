@@ -160,16 +160,12 @@ class HybridToolSelector:
             Any,
         ]
         | None = None,
-        catalog_factory: Callable[[], list[PublicToolCatalogEntry]] = (
-            get_public_tool_catalog
-        ),
+        catalog_factory: Callable[[], list[PublicToolCatalogEntry]] = (get_public_tool_catalog),
         observability_provider: ObservabilityProvider | None = None,
     ) -> None:
         self._runner = runner or _run_model_selector
         self._catalog_factory = catalog_factory
-        self._observability_provider = (
-            observability_provider or NoOpObservabilityProvider()
-        )
+        self._observability_provider = observability_provider or NoOpObservabilityProvider()
 
     def set_observability_provider(
         self,
@@ -369,9 +365,7 @@ def _fallback_selection(
     reason_code: str,
 ) -> HybridToolSelection:
     fallback_tools = tuple(tools or get_public_tools())
-    fallback_tool_names = tuple(
-        tool_names or [getattr(tool_obj, "name", "") for tool_obj in fallback_tools]
-    )
+    fallback_tool_names = tuple(tool_names or [getattr(tool_obj, "name", "") for tool_obj in fallback_tools])
     return HybridToolSelection(
         action="allow",
         candidate_tools=fallback_tools,
@@ -440,14 +434,10 @@ def _select_with_heuristics(
         emenda_selection = _select_emenda_query_with_router(question)
         if emenda_selection is not None:
             return emenda_selection
-        contract_count_ranking_selection = _select_contract_count_ranking_with_router(
-            question
-        )
+        contract_count_ranking_selection = _select_contract_count_ranking_with_router(question)
         if contract_count_ranking_selection is not None:
             return contract_count_ranking_selection
-        contract_ranking_selection = _select_contract_value_ranking_with_router(
-            question
-        )
+        contract_ranking_selection = _select_contract_value_ranking_with_router(question)
         if contract_ranking_selection is not None:
             return contract_ranking_selection
         estoques_selection = _select_estoques_query_with_router(question)
@@ -480,9 +470,7 @@ def _select_event_spend_query(
     reading = read_query(question)
     if not reading.normalized_text:
         return None
-    if not any(
-        signal in reading.normalized_text for signal in _EVENT_SPEND_SIGNAL_TERMS
-    ):
+    if not any(signal in reading.normalized_text for signal in _EVENT_SPEND_SIGNAL_TERMS):
         return None
     if reading.licitacoes_objeto is None:
         return None
@@ -617,10 +605,7 @@ def _select_direct_spend_candidate_names(
         return ["consultar_passagens"]
     if route_tool_name == "agregar_despesas":
         return ["consultar_despesas"]
-    if (
-        "prefeitura gastou" in normalized_question
-        or "valor gasto" in normalized_question
-    ):
+    if "prefeitura gastou" in normalized_question or "valor gasto" in normalized_question:
         return ["consultar_despesas"]
     return None
 
@@ -659,8 +644,7 @@ def _select_contract_count_ranking_with_router(
         reason_code="heuristic_contract_count_ranking",
         route_filter=lambda route: (
             route.tool_kwargs.get("metrica") == "contagem"
-            and route.tool_kwargs.get("agrupar_por")
-            in {"fornecedor", "secretaria", "categoria"}
+            and route.tool_kwargs.get("agrupar_por") in {"fornecedor", "secretaria", "categoria"}
             and route.tool_kwargs.get("ordenar_por") == "metrica"
             and route.tool_kwargs.get("ordem") == "desc"
         ),
@@ -699,9 +683,7 @@ def _coerce_selector_payload(raw_decision: Any) -> HybridSelectorDecisionPayload
 
     if isinstance(raw_decision, BaseModel):
         try:
-            return HybridSelectorDecisionPayload.model_validate(
-                raw_decision.model_dump()
-            )
+            return HybridSelectorDecisionPayload.model_validate(raw_decision.model_dump())
         except ValidationError:
             return None
 

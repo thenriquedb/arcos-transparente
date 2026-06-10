@@ -47,14 +47,10 @@ class BeneficiarioSpendRouteConfig:
     beneficiario_pattern: re.Pattern[str]
     aggregate_tool: str
     list_tool: str
-    extra_group_by_cues: tuple[tuple[tuple[str, ...], str], ...] = field(
-        default_factory=tuple
-    )
+    extra_group_by_cues: tuple[tuple[tuple[str, ...], str], ...] = field(default_factory=tuple)
 
 
-def _is_domain_query(
-    config: BeneficiarioSpendRouteConfig, normalized_text: str
-) -> bool:
+def _is_domain_query(config: BeneficiarioSpendRouteConfig, normalized_text: str) -> bool:
     return _contains_any(normalized_text, config.domain_keywords)
 
 
@@ -87,9 +83,7 @@ def _extract_metric(normalized_text: str) -> str:
     return "soma_valor_pago"
 
 
-def _extract_group_by(
-    config: BeneficiarioSpendRouteConfig, normalized_text: str
-) -> str | None:
+def _extract_group_by(config: BeneficiarioSpendRouteConfig, normalized_text: str) -> str | None:
     for cues, group in _BASE_GROUP_BY_CUES + config.extra_group_by_cues:
         if any(cue in normalized_text for cue in cues):
             return group

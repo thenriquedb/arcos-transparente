@@ -148,11 +148,7 @@ def consultar_planejamento(
     execution = LookupExecutionResult(
         total=total,
         rows=pagina,
-        suggestion=(
-            "Nenhum registro de planejamento encontrado com os filtros."
-            if not pagina
-            else None
-        ),
+        suggestion=("Nenhum registro de planejamento encontrado com os filtros." if not pagina else None),
     )
     return build_lookup_response(
         response_type=ConsultarPlanejamentoResponse,

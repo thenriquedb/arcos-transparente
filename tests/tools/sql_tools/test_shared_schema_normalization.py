@@ -28,9 +28,7 @@ def test_consultar_eleitos_normaliza_filtros_compartilhados() -> None:
 
 def test_consultar_eleitos_rejeita_campos_invalidos() -> None:
     with pytest.raises(ValidationError, match="campos nao suportados"):
-        ConsultarEleitosParams.model_validate(
-            {"campos": ["nome_completo", "campo_inexistente"]}
-        )
+        ConsultarEleitosParams.model_validate({"campos": ["nome_completo", "campo_inexistente"]})
 
 
 def test_campos_planejamento_preserva_erro_de_lista() -> None:

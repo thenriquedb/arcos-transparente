@@ -13,10 +13,7 @@ from ingestion.parsers.xml.shared import (
 def test_read_xml_text_decodifica_iso_8859_1_e_remove_controles_invalidos(
     tmp_path,
 ) -> None:
-    xml = (
-        '<?xml version="1.0" encoding="ISO-8859-1"?>\n'
-        "<Root><Descricao>Atenção Básica\x00</Descricao></Root>"
-    )
+    xml = '<?xml version="1.0" encoding="ISO-8859-1"?>\n<Root><Descricao>Atenção Básica\x00</Descricao></Root>'
     arquivo = tmp_path / "amostra.xml"
     arquivo.write_text(xml, encoding="ISO-8859-1")
 
@@ -42,9 +39,7 @@ def test_read_xml_text_respeita_encoding_declarado_utf_8(tmp_path) -> None:
 
 def test_read_xml_text_respeita_bom_utf_8_sem_declaracao(tmp_path) -> None:
     arquivo = tmp_path / "bom.xml"
-    arquivo.write_bytes(
-        "<Root><Descricao>Servidor João</Descricao></Root>".encode("utf-8-sig")
-    )
+    arquivo.write_bytes("<Root><Descricao>Servidor João</Descricao></Root>".encode("utf-8-sig"))
 
     conteudo = read_xml_text(arquivo)
 
@@ -63,10 +58,7 @@ def test_read_xml_text_usa_fallback_iso_8859_1_sem_declaracao(tmp_path) -> None:
 
 
 def test_parse_xml_root_preserva_acentos_e_ignora_controles_invalidos(tmp_path) -> None:
-    xml = (
-        '<?xml version="1.0" encoding="ISO-8859-1"?>\n'
-        "<Root><Nome>Educação\x1f Infantil</Nome></Root>"
-    )
+    xml = '<?xml version="1.0" encoding="ISO-8859-1"?>\n<Root><Nome>Educação\x1f Infantil</Nome></Root>'
     arquivo = tmp_path / "raiz.xml"
     arquivo.write_text(xml, encoding="ISO-8859-1")
 
@@ -79,9 +71,7 @@ def test_read_xml_text_falha_quando_encoding_declarado_nao_eh_suportado(
     tmp_path,
 ) -> None:
     arquivo = tmp_path / "encoding-invalido.xml"
-    arquivo.write_bytes(
-        b'<?xml version="1.0" encoding="X-INVALIDO"?>\n<Root><Nome>Teste</Nome></Root>'
-    )
+    arquivo.write_bytes(b'<?xml version="1.0" encoding="X-INVALIDO"?>\n<Root><Nome>Teste</Nome></Root>')
 
     with pytest.raises(ValueError, match="encoding nao suportado: 'X-INVALIDO'"):
         read_xml_text(arquivo)
@@ -90,10 +80,7 @@ def test_read_xml_text_falha_quando_encoding_declarado_nao_eh_suportado(
 def test_read_xml_text_falha_quando_bytes_nao_batem_com_encoding_declarado(
     tmp_path,
 ) -> None:
-    xml = (
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        "<Root><Nome>Atenção Básica</Nome></Root>"
-    )
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n<Root><Nome>Atenção Básica</Nome></Root>'
     arquivo = tmp_path / "mismatch.xml"
     arquivo.write_bytes(xml.encode("ISO-8859-1"))
 
@@ -104,9 +91,7 @@ def test_read_xml_text_falha_quando_bytes_nao_batem_com_encoding_declarado(
         read_xml_text(arquivo)
 
 
-def test_sanitize_xml_payload_sanitiza_strings_aninhadas_sem_perder_whitespace() -> (
-    None
-):
+def test_sanitize_xml_payload_sanitiza_strings_aninhadas_sem_perder_whitespace() -> None:
     payload = {
         "descricao": "Linha 1\x00\nLinha 2",
         "filhos": [

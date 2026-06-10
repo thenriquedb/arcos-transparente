@@ -43,9 +43,7 @@ def _row_to_public_dict(registro: EstoqueMaterial) -> dict[str, Any]:
         "unidade_medida": registro.unidade_medida,
         "periodo_inicio": registro.periodo_inicio.isoformat(),
         "periodo_fim": registro.periodo_fim.isoformat(),
-        "saldo_anterior_quantidade": decimal_to_float(
-            registro.saldo_anterior_quantidade
-        ),
+        "saldo_anterior_quantidade": decimal_to_float(registro.saldo_anterior_quantidade),
         "saldo_anterior_valor": decimal_to_float(registro.saldo_anterior_valor),
         "entrada_quantidade": decimal_to_float(registro.entrada_quantidade),
         "entrada_valor": decimal_to_float(registro.entrada_valor),

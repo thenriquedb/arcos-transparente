@@ -68,9 +68,7 @@ def _somar_valor_estimado(licitacoes: list) -> float:
     Soma os valores estimados de uma lista de licitacoes.
     Ignora registros com valor None para evitar TypeError no sum().
     """
-    return float(
-        sum(l.valor_estimado for l in licitacoes if l.valor_estimado is not None)
-    )
+    return float(sum(l.valor_estimado for l in licitacoes if l.valor_estimado is not None))
 
 
 def _aplicar_aviso_valor_estimado_zero(
@@ -82,9 +80,7 @@ def _aplicar_aviso_valor_estimado_zero(
     Orienta o LLM a consultar contratos para verificar o valor real contratado.
     """
     for licitacao in resultados:
-        if "valor_estimado" in licitacao and _valor_estimado_e_zero(
-            licitacao.get("valor_estimado")
-        ):
+        if "valor_estimado" in licitacao and _valor_estimado_e_zero(licitacao.get("valor_estimado")):
             licitacao["aviso"] = _AVISO_VALOR_ESTIMADO_ZERO
     return resultados
 
@@ -92,12 +88,8 @@ def _aplicar_aviso_valor_estimado_zero(
 def _apply_lookup_detail_options(stmt):
     return stmt.options(
         selectinload(Licitacao.vencedores),
-        selectinload(Licitacao.instrumentos_contratuais).selectinload(
-            InstrumentoContratual.materias
-        ),
-        selectinload(Licitacao.instrumentos_contratuais).selectinload(
-            InstrumentoContratual.fornecedor
-        ),
+        selectinload(Licitacao.instrumentos_contratuais).selectinload(InstrumentoContratual.materias),
+        selectinload(Licitacao.instrumentos_contratuais).selectinload(InstrumentoContratual.fornecedor),
     )
 
 
@@ -273,9 +265,7 @@ def consultar_licitacoes(
             # Ignora None no sum para evitar TypeError
             valor_total_estimado = _somar_valor_estimado(todas_licitacoes_filtradas)
 
-            licitacoes = todas_licitacoes_filtradas[
-                params.offset : params.offset + params.limite
-            ]
+            licitacoes = todas_licitacoes_filtradas[params.offset : params.offset + params.limite]
         else:
             total, licitacoes = execute_statement_lookup(
                 session,
@@ -287,11 +277,7 @@ def consultar_licitacoes(
                 order_columns=BIDDING_ORDER_COLUMNS,
                 tie_breakers=(Licitacao.numero.asc(),),
                 load_rows=lambda db_session, stmt: (
-                    db_session.execute(
-                        _apply_lookup_detail_options(stmt)
-                        if params.incluir_detalhes
-                        else stmt
-                    )
+                    db_session.execute(_apply_lookup_detail_options(stmt) if params.incluir_detalhes else stmt)
                     .scalars()
                     .all()
                 ),
@@ -314,9 +300,7 @@ def consultar_licitacoes(
     execution = LookupExecutionResult(
         total=total,
         rows=licitacoes,
-        response_updates={
-            "valor_total_estimado": _valor_total_estimado_to_json(valor_total_estimado)
-        },
+        response_updates={"valor_total_estimado": _valor_total_estimado_to_json(valor_total_estimado)},
         suggestion=_SUGESTAO_SEM_RESULTADOS if not licitacoes else None,
     )
     return build_lookup_response(

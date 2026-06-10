@@ -42,9 +42,7 @@ SORT_FIELD_GETTERS = {
     "valor_recebido": lambda row: row.get("valor_recebido") or 0.0,
     "valor_lancado": lambda row: row.get("valor_lancado") or 0.0,
     "valor_em_divida_ativa": lambda row: row.get("valor_em_divida_ativa") or 0.0,
-    "valor_em_cobranca_judicial": (
-        lambda row: row.get("valor_em_cobranca_judicial") or 0.0
-    ),
+    "valor_em_cobranca_judicial": (lambda row: row.get("valor_em_cobranca_judicial") or 0.0),
 }
 
 GROUP_FIELD_GETTERS = {
@@ -61,9 +59,7 @@ METRIC_FIELD_GETTERS = {
     "soma_valor_recebido": lambda row: row.get("valor_recebido") or 0.0,
     "soma_valor_lancado": lambda row: row.get("valor_lancado") or 0.0,
     "soma_valor_em_divida_ativa": (lambda row: row.get("valor_em_divida_ativa") or 0.0),
-    "soma_valor_em_cobranca_judicial": (
-        lambda row: row.get("valor_em_cobranca_judicial") or 0.0
-    ),
+    "soma_valor_em_cobranca_judicial": (lambda row: row.get("valor_em_cobranca_judicial") or 0.0),
 }
 
 RECEITA_TEMA_ALIASES = {
@@ -84,9 +80,7 @@ def _get_search_terms(query: str | None) -> tuple[str, ...]:
     return RECEITA_TEMA_ALIASES.get(normalized, (query or "",))
 
 
-def _matches_fields(
-    record: dict[str, object], field_names: tuple[str, ...], query: str
-) -> bool:
+def _matches_fields(record: dict[str, object], field_names: tuple[str, ...], query: str) -> bool:
     search_terms = _get_search_terms(query)
     return any(
         matches_text_query(str(record.get(field_name) or ""), search_term)
@@ -95,9 +89,7 @@ def _matches_fields(
     )
 
 
-def _match_receita_filters(
-    record: dict[str, object], filtros: ReceitaFiltroSchema
-) -> bool:
+def _match_receita_filters(record: dict[str, object], filtros: ReceitaFiltroSchema) -> bool:
     if filtros.ano is not None and record.get("ano") != filtros.ano:
         return False
     if filtros.mes is not None and record.get("mes_num") != filtros.mes:
@@ -128,27 +120,15 @@ def _match_receita_filters(
     return True
 
 
-def load_filtered_receitas(
-    session, filtros: ReceitaFiltroSchema
-) -> list[dict[str, object]]:
+def load_filtered_receitas(session, filtros: ReceitaFiltroSchema) -> list[dict[str, object]]:
     """Carrega os registros do dominio aplicando os filtros publicos."""
 
     if filtros.tipo_de_dado == "lancamento":
         registros = session.execute(select(ReceitaLancamento)).scalars().all()
-        serializados = [
-            serializar_receita_lancamento(registro) for registro in registros
-        ]
+        serializados = [serializar_receita_lancamento(registro) for registro in registros]
     else:
-        stmt = select(ReceitaArrecadacao).options(
-            selectinload(ReceitaArrecadacao.natureza)
-        )
+        stmt = select(ReceitaArrecadacao).options(selectinload(ReceitaArrecadacao.natureza))
         registros = session.execute(stmt).scalars().all()
-        serializados = [
-            serializar_receita_arrecadacao(registro) for registro in registros
-        ]
+        serializados = [serializar_receita_arrecadacao(registro) for registro in registros]
 
-    return [
-        registro
-        for registro in serializados
-        if _match_receita_filters(registro, filtros)
-    ]
+    return [registro for registro in serializados if _match_receita_filters(registro, filtros)]

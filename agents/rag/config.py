@@ -53,9 +53,7 @@ def get_rag_config() -> RagConfig:
             DEFAULT_RAG_EMBEDDING_MODEL,
             treat_blank_as_missing=True,
         ).strip(),
-        embedding_dimensions=_parse_optional_int(
-            get_env_value("RAG_EMBEDDING_DIMENSIONS")
-        ),
+        embedding_dimensions=_parse_optional_int(get_env_value("RAG_EMBEDDING_DIMENSIONS")),
         chunk_size=_parse_positive_int(
             get_env_value("RAG_CHUNK_SIZE"),
             DEFAULT_RAG_CHUNK_SIZE,

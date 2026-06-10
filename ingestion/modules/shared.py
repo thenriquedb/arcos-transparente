@@ -74,8 +74,6 @@ def replace_child_rows(
 ) -> None:
     """Replace all child rows for one parent with the supplied projection."""
 
-    session.query(child_model).filter(
-        getattr(child_model, parent_field) == parent_id
-    ).delete()
+    session.query(child_model).filter(getattr(child_model, parent_field) == parent_id).delete()
     for row in rows:
         session.add(child_model(**{parent_field: parent_id, **row}))

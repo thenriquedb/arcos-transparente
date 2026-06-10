@@ -38,9 +38,7 @@ ALLOWED_TRANSFERENCIAS_METRICS = {
 class AgregarTransferenciasFinanceirasParams(SqlToolBaseSchema):
     """Parametros validados da chamada da tool."""
 
-    filtros: TransferenciasFinanceirasFiltroSchema = Field(
-        default_factory=TransferenciasFinanceirasFiltroSchema
-    )
+    filtros: TransferenciasFinanceirasFiltroSchema = Field(default_factory=TransferenciasFinanceirasFiltroSchema)
     agrupar_por: str | None = None
     metrica: str = "soma_valor"
     ordenar_por: str = "metrica"
@@ -100,9 +98,7 @@ class AgregarTransferenciasFinanceirasParams(SqlToolBaseSchema):
         if self.ordenar_por not in {"metrica", self.agrupar_por}:
             raise ValueError("ordenar_por deve ser 'metrica' ou igual a agrupar_por")
         if self.agrupar_por is None and self.ordenar_por != "metrica":
-            raise ValueError(
-                "ordenar_por deve ser 'metrica' quando agrupar_por nao for informado"
-            )
+            raise ValueError("ordenar_por deve ser 'metrica' quando agrupar_por nao for informado")
         return self
 
 

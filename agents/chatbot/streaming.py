@@ -64,34 +64,21 @@ def extract_stream_chunk_content(event: Any) -> str:
 
 
 def _is_langgraph_message_event(event: Any) -> bool:
-    return (
-        isinstance(event, (tuple, list))
-        and len(event) == 2
-        and isinstance(event[1], dict)
-    )
+    return isinstance(event, (tuple, list)) and len(event) == 2 and isinstance(event[1], dict)
 
 
 def _is_user_visible_stream_message(message: Any, metadata: dict[str, Any]) -> bool:
-    node_name = str(
-        metadata.get("langgraph_node")
-        or metadata.get("node")
-        or metadata.get("name")
-        or ""
-    ).lower()
+    node_name = str(metadata.get("langgraph_node") or metadata.get("node") or metadata.get("name") or "").lower()
     if node_name in {"tool", "tools"} or node_name.endswith(":tools"):
         return False
 
-    message_kind = str(
-        getattr(message, "type", None) or getattr(message, "role", None) or ""
-    ).lower()
+    message_kind = str(getattr(message, "type", None) or getattr(message, "role", None) or "").lower()
     if message_kind in {"tool", "human", "system"}:
         return False
 
     class_name = message.__class__.__name__.lower()
     hidden_message_classes = ("toolmessage", "humanmessage", "systemmessage")
-    return not any(
-        hidden_class in class_name for hidden_class in hidden_message_classes
-    )
+    return not any(hidden_class in class_name for hidden_class in hidden_message_classes)
 
 
 def content_to_text(content: Any) -> str:

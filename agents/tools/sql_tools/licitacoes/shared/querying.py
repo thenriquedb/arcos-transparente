@@ -17,10 +17,7 @@ def apply_licitacoes_filters(stmt, filtros: LicitacoesFiltroSchema):
 
     if filtros.data_abertura is not None:
         stmt = stmt.where(Licitacao.data_abertura == filtros.data_abertura)
-    elif (
-        filtros.data_abertura_inicio is not None
-        and filtros.data_abertura_fim is not None
-    ):
+    elif filtros.data_abertura_inicio is not None and filtros.data_abertura_fim is not None:
         stmt = stmt.where(
             Licitacao.data_abertura.between(
                 filtros.data_abertura_inicio,
@@ -29,21 +26,13 @@ def apply_licitacoes_filters(stmt, filtros: LicitacoesFiltroSchema):
         )
 
     if filtros.numero:
-        stmt = stmt.where(
-            func.lower(Licitacao.numero).like(f"%{filtros.numero.lower()}%")
-        )
+        stmt = stmt.where(func.lower(Licitacao.numero).like(f"%{filtros.numero.lower()}%"))
     if filtros.modalidade:
-        stmt = stmt.where(
-            func.lower(Licitacao.modalidade).like(f"%{filtros.modalidade.lower()}%")
-        )
+        stmt = stmt.where(func.lower(Licitacao.modalidade).like(f"%{filtros.modalidade.lower()}%"))
     if filtros.secretaria:
-        stmt = stmt.where(
-            func.lower(Licitacao.secretaria).like(f"%{filtros.secretaria.lower()}%")
-        )
+        stmt = stmt.where(func.lower(Licitacao.secretaria).like(f"%{filtros.secretaria.lower()}%"))
     if filtros.situacao:
-        stmt = stmt.where(
-            func.lower(Licitacao.situacao).like(f"%{filtros.situacao.lower()}%")
-        )
+        stmt = stmt.where(func.lower(Licitacao.situacao).like(f"%{filtros.situacao.lower()}%"))
     if filtros.valor_estimado_min is not None:
         stmt = stmt.where(Licitacao.valor_estimado >= filtros.valor_estimado_min)
     if filtros.valor_estimado_max is not None:
@@ -53,9 +42,7 @@ def apply_licitacoes_filters(stmt, filtros: LicitacoesFiltroSchema):
             exists(
                 select(VencedorLicitacao.id).where(
                     VencedorLicitacao.licitacao_id == Licitacao.id,
-                    func.lower(VencedorLicitacao.nome).like(
-                        f"%{filtros.fornecedor.lower()}%"
-                    ),
+                    func.lower(VencedorLicitacao.nome).like(f"%{filtros.fornecedor.lower()}%"),
                 )
             )
         )

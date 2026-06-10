@@ -158,9 +158,7 @@ _DESPESAS_POR_FUNCAO_METRIC_CUES: tuple[tuple[tuple[str, ...], str], ...] = (
 )
 
 
-def _extract_despesas_por_funcao_metric(
-    normalized_text: str, aggregation_text: str
-) -> str:
+def _extract_despesas_por_funcao_metric(normalized_text: str, aggregation_text: str) -> str:
     """Escolhe a métrica do relatório citada na pergunta (default: valor pago)."""
 
     if "quantas" in aggregation_text:
@@ -182,10 +180,7 @@ def _extract_despesas_por_funcao_group_by(aggregation_text: str) -> str | None:
         return "ano"
     if "por funcao" in aggregation_text or (
         "funcoes" in aggregation_text
-        and any(
-            token in aggregation_text
-            for token in ("quais", "maior", "maiores", "ranking")
-        )
+        and any(token in aggregation_text for token in ("quais", "maior", "maiores", "ranking"))
     ):
         return "funcao"
     return None
@@ -197,10 +192,7 @@ def _try_route_despesas_por_funcao_agregacao(
     if not _is_despesas_por_funcao_query(normalized_text):
         return None
     aggregation_text = strip_despesas_por_funcao_domain_keywords(normalized_text)
-    if not any(
-        keyword in aggregation_text
-        for keyword in ("quanto", "total", "maior", "maiores", "por ", "quantas")
-    ):
+    if not any(keyword in aggregation_text for keyword in ("quanto", "total", "maior", "maiores", "por ", "quantas")):
         return None
 
     filtros = _extract_despesas_por_funcao_filters(normalized_text)

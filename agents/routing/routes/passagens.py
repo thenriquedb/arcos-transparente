@@ -26,9 +26,7 @@ _PASSAGENS_ROUTE_CONFIG = BeneficiarioSpendRouteConfig(
 
 
 def _try_route_passagens_agregacao(normalized_text: str) -> RouteDecision | None:
-    return try_route_beneficiario_spend_agregacao(
-        _PASSAGENS_ROUTE_CONFIG, normalized_text
-    )
+    return try_route_beneficiario_spend_agregacao(_PASSAGENS_ROUTE_CONFIG, normalized_text)
 
 
 def _try_route_passagens_lista(normalized_text: str) -> RouteDecision | None:

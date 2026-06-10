@@ -29,10 +29,7 @@ def _metric(registros: list[QuadroPessoal], metrica: str) -> int:
         return sum(registro.vagas_criadas or 0 for registro in registros)
     if metrica == "soma_vagas_preenchidas":
         return sum(registro.vagas_preenchidas or 0 for registro in registros)
-    return sum(
-        (registro.vagas_criadas or 0) - (registro.vagas_preenchidas or 0)
-        for registro in registros
-    )
+    return sum((registro.vagas_criadas or 0) - (registro.vagas_preenchidas or 0) for registro in registros)
 
 
 GROUP_FIELD_GETTERS = {
@@ -43,9 +40,7 @@ GROUP_FIELD_GETTERS = {
 METRIC_FIELD_GETTERS = {
     "soma_vagas_criadas": lambda registro: registro.vagas_criadas or 0,
     "soma_vagas_preenchidas": lambda registro: registro.vagas_preenchidas or 0,
-    "saldo_vagas": lambda registro: (
-        (registro.vagas_criadas or 0) - (registro.vagas_preenchidas or 0)
-    ),
+    "saldo_vagas": lambda registro: (registro.vagas_criadas or 0) - (registro.vagas_preenchidas or 0),
 }
 
 
@@ -182,9 +177,7 @@ def agregar_quadro_pessoal(
             source_count=execution.source_count,
             suggestion=suggestion,
         ),
-        project_group=(
-            _project_quadro_pessoal_group if params.agrupar_por is not None else None
-        ),
+        project_group=(_project_quadro_pessoal_group if params.agrupar_por is not None else None),
         agrupar_por=params.agrupar_por,
         metrica=params.metrica if params.agrupar_por is not None else None,
     )

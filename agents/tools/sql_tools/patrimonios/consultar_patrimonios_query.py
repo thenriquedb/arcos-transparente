@@ -43,9 +43,7 @@ def _row_to_public_dict(registro: Patrimonio) -> dict[str, Any]:
         "status": registro.status,
         "situacao": registro.situacao_bem,
         "tipo_ingresso": registro.tipo_ingresso,
-        "data_aquisicao": registro.data_aquisicao.isoformat()
-        if registro.data_aquisicao
-        else None,
+        "data_aquisicao": registro.data_aquisicao.isoformat() if registro.data_aquisicao else None,
         "data_baixa": registro.data_baixa.isoformat() if registro.data_baixa else None,
         "valor_ingresso": decimal_to_float(registro.valor_ingresso),
         "valor_atualizado": decimal_to_float(registro.valor_atualizado),
@@ -72,9 +70,7 @@ _PATRIMONIOS_FILTER_CONDITIONS = (
 )
 
 
-def load_filtered_patrimonios(
-    session, filtros: PatrimonioFiltroSchema
-) -> list[Patrimonio]:
+def load_filtered_patrimonios(session, filtros: PatrimonioFiltroSchema) -> list[Patrimonio]:
     """Carrega bens patrimoniais aplicando os filtros públicos declarados."""
 
     registros = list(session.execute(select(Patrimonio)).scalars())
@@ -221,7 +217,5 @@ def consultar_patrimonios(
         execution=execution,
         project_row=project_patrimonio_fields,
         campos=params.campos,
-        pagination_message_builder=lambda shown, total: (
-            f"Mostrando {shown} de {total} bens encontrados."
-        ),
+        pagination_message_builder=lambda shown, total: f"Mostrando {shown} de {total} bens encontrados.",
     )

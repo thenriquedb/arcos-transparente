@@ -37,9 +37,7 @@ class FrotasParser:
                     "descricao": self._txt(node, "Descricao"),
                     "ano_fabricacao": self._int(node, "AnoFabricacao"),
                     "situacao_veiculo": self._txt(node, "SituacaoVeiculo"),
-                    "situacao_veiculo_patrimonio": self._txt(
-                        node, "SituacaoVeiculoPatrimonio"
-                    ),
+                    "situacao_veiculo_patrimonio": self._txt(node, "SituacaoVeiculoPatrimonio"),
                     "estado_conservacao": self._txt(node, "EstadoConservacao"),
                     "renavam": self._txt(node, "Renavam"),
                     "chassi": self._txt(node, "Chassi"),
@@ -62,9 +60,7 @@ class FrotasParser:
             despesas.append(
                 {
                     "descricao_evento": self._txt(node, "DescricaoEvento"),
-                    "quantidade_lancamento": self._decimal(
-                        node, "QuantidadeLancamento"
-                    ),
+                    "quantidade_lancamento": self._decimal(node, "QuantidadeLancamento"),
                     "valor_lancamento": self._decimal(node, "ValorLancamento"),
                     "data_evento": self._date(node, "DataEvento"),
                     "tp_despesa": self._txt(node, "tp_Despesa"),

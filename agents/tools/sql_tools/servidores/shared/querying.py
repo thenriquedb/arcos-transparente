@@ -36,10 +36,7 @@ def resolve_mes_de_referencia_padrao(
 ) -> tuple[object | None, bool]:
     if filtros.mes_de_referencia is not None:
         return filtros.mes_de_referencia, False
-    if (
-        filtros.mes_de_referencia_inicio is not None
-        and filtros.mes_de_referencia_fim is not None
-    ):
+    if filtros.mes_de_referencia_inicio is not None and filtros.mes_de_referencia_fim is not None:
         return None, False
 
     mes_de_referencia = obter_mes_de_referencia_mais_recente(session)
@@ -55,13 +52,8 @@ def apply_servidores_filters(
     """Aplica os filtros publicos do dominio sobre a consulta."""
 
     if mes_de_referencia_considerado is not None:
-        stmt = stmt.where(
-            FolhaServidor.competencia_referencia == mes_de_referencia_considerado
-        )
-    elif (
-        filtros.mes_de_referencia_inicio is not None
-        and filtros.mes_de_referencia_fim is not None
-    ):
+        stmt = stmt.where(FolhaServidor.competencia_referencia == mes_de_referencia_considerado)
+    elif filtros.mes_de_referencia_inicio is not None and filtros.mes_de_referencia_fim is not None:
         stmt = stmt.where(
             FolhaServidor.competencia_referencia.between(
                 filtros.mes_de_referencia_inicio,
@@ -92,14 +84,7 @@ def _apply_secretaria_filter(stmt, value: str):
     if not aliases:
         return _apply_text_contains_filter(stmt, FolhaServidor.secretaria, value)
 
-    return stmt.where(
-        or_(
-            *[
-                func.normalizar(FolhaServidor.secretaria).like(f"%{alias}%")
-                for alias in aliases
-            ]
-        )
-    )
+    return stmt.where(or_(*[func.normalizar(FolhaServidor.secretaria).like(f"%{alias}%") for alias in aliases]))
 
 
 def _apply_text_contains_filter(stmt, column, value: str):

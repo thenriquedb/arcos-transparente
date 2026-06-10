@@ -43,9 +43,7 @@ def _row_to_public_dict(registro: FrotaVeiculo) -> dict[str, Any]:
         "tipo_veiculo": registro.tipo_veiculo,
         "marca": registro.marca,
         "modelo": registro.modelo,
-        "data_aquisicao": registro.data_aquisicao.date().isoformat()
-        if registro.data_aquisicao
-        else None,
+        "data_aquisicao": registro.data_aquisicao.date().isoformat() if registro.data_aquisicao else None,
         "localizacao": registro.localizacao,
         "descricao": registro.descricao,
         "ano_fabricacao": registro.ano_fabricacao,
@@ -63,27 +61,18 @@ _FROTA_FILTER_CONDITIONS = (
     text_filter("unidade_responsavel", lambda r: r.unidade_gestora),
     predicate_filter(
         "placa",
-        lambda r, v: (
-            matches_text_query(r.placa_veiculo, v)
-            or matches_text_query(r.placa_patrimonio, v)
-        ),
+        lambda r, v: matches_text_query(r.placa_veiculo, v) or matches_text_query(r.placa_patrimonio, v),
     ),
     predicate_filter(
         "descricao",
-        lambda r, v: (
-            matches_text_query(r.descricao_material, v)
-            or matches_text_query(r.descricao, v)
-        ),
+        lambda r, v: matches_text_query(r.descricao_material, v) or matches_text_query(r.descricao, v),
     ),
     text_filter("tipo_veiculo", lambda r: r.tipo_veiculo),
     text_filter("marca", lambda r: r.marca),
     text_filter("modelo", lambda r: r.modelo),
     predicate_filter(
         "situacao",
-        lambda r, v: (
-            matches_text_query(r.situacao_veiculo, v)
-            or matches_text_query(r.situacao_veiculo_patrimonio, v)
-        ),
+        lambda r, v: matches_text_query(r.situacao_veiculo, v) or matches_text_query(r.situacao_veiculo_patrimonio, v),
     ),
     text_filter("localizacao", lambda r: r.localizacao),
     predicate_filter(
@@ -252,10 +241,7 @@ def consultar_frota(
 
     mensagem = None
     if total > params.offset + len(resultados):
-        mensagem = (
-            f"Exibindo {len(resultados)} de {total} veiculos encontrados. "
-            "Use limite e offset para navegar."
-        )
+        mensagem = f"Exibindo {len(resultados)} de {total} veiculos encontrados. Use limite e offset para navegar."
 
     return ConsultarFrotaResponse(
         total=total,

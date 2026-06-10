@@ -67,12 +67,8 @@ def read_query(text: str) -> QueryReading:
     return QueryReading(
         normalized_text=normalized_text,
         is_prompt_injection=_contains_prompt_injection(normalized_text),
-        scope_strong_hits=_count_keyword_hits(
-            normalized_text, SUPPORTED_SCOPE_STRONG_KEYWORDS
-        ),
-        scope_weak_hits=_count_keyword_hits(
-            normalized_text, SUPPORTED_SCOPE_WEAK_KEYWORDS
-        ),
+        scope_strong_hits=_count_keyword_hits(normalized_text, SUPPORTED_SCOPE_STRONG_KEYWORDS),
+        scope_weak_hits=_count_keyword_hits(normalized_text, SUPPORTED_SCOPE_WEAK_KEYWORDS),
         nome_historico=_extract_nome_para_historico(normalized_text),
         licitacoes_objeto=_extract_licitacoes_objeto(normalized_text),
         contratos_descricao=_extract_contratos_descricao(normalized_text),

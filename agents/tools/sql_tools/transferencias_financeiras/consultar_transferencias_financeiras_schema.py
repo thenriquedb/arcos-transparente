@@ -112,9 +112,7 @@ class TransferenciasFinanceirasFiltroSchema(SqlToolBaseSchema):
 class ConsultarTransferenciasFinanceirasParams(SqlToolBaseSchema):
     """Parametros validados da chamada da tool."""
 
-    filtros: TransferenciasFinanceirasFiltroSchema = Field(
-        default_factory=TransferenciasFinanceirasFiltroSchema
-    )
+    filtros: TransferenciasFinanceirasFiltroSchema = Field(default_factory=TransferenciasFinanceirasFiltroSchema)
     ordenar_por: str = "data"
     ordem: str = "desc"
     limite: int = 10
@@ -180,9 +178,7 @@ class ConsultarTransferenciasFinanceirasMetadata(SqlToolBaseSchema):
     ordem: str
     limite: int
     offset: int
-    campos: list[str] = Field(
-        default_factory=lambda: list(ALLOWED_TRANSFERENCIAS_FIELDS)
-    )
+    campos: list[str] = Field(default_factory=lambda: list(ALLOWED_TRANSFERENCIAS_FIELDS))
 
 
 class ConsultarTransferenciasFinanceirasResponse(SqlToolBaseSchema):

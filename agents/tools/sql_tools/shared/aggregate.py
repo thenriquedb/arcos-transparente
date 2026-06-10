@@ -59,9 +59,7 @@ def execute_statement_grouped(
     ).scalar_one()
 
     order_column = metric_expression if ordenar_por == "metrica" else group_column
-    ordered_stmt = grouped_stmt.order_by(
-        order_column.desc() if ordem == "desc" else order_column.asc()
-    ).limit(limite)
+    ordered_stmt = grouped_stmt.order_by(order_column.desc() if ordem == "desc" else order_column.asc()).limit(limite)
     rows = list(session.execute(ordered_stmt).all())
     return total_grupos, rows
 
@@ -216,9 +214,7 @@ def build_aggregate_response(
             for group_value, metric_value in execution.rows
         ]
     if execution.total_grupos > len(resultados):
-        messages.append(
-            f"Mostrando {len(resultados)} de {execution.total_grupos} grupos encontrados."
-        )
+        messages.append(f"Mostrando {len(resultados)} de {execution.total_grupos} grupos encontrados.")
 
     return response_type(
         total_grupos=execution.total_grupos,

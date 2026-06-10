@@ -10,9 +10,7 @@ from ingestion.parsers.xml.servidores_parser import ServidoresParser
 
 def test_parser_servidores_filtra_invalidos_sem_quebrar_lote() -> None:
     parser = ServidoresParser()
-    fixture_path = (
-        Path(__file__).resolve().parents[1] / "fixtures" / "servidores_sample.json"
-    )
+    fixture_path = Path(__file__).resolve().parents[1] / "fixtures" / "servidores_sample.json"
 
     registros = parser.parse(str(fixture_path))
 

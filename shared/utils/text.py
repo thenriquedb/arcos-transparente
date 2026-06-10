@@ -11,9 +11,7 @@ def normalize_search_text(value: str | None) -> str:
     if value is None:
         return ""
     normalized = unicodedata.normalize("NFD", value)
-    without_accents = "".join(
-        char for char in normalized if unicodedata.category(char) != "Mn"
-    )
+    without_accents = "".join(char for char in normalized if unicodedata.category(char) != "Mn")
     return without_accents.lower()
 
 

@@ -54,9 +54,7 @@ def _period_end(registro: DespesaDocumento) -> date:
 GROUP_FIELD_GETTERS = {
     "origem": lambda registro: registro.origem,
     "ano": lambda registro: registro.exercicio,
-    "mes": lambda registro: (
-        _period_end(registro).month if _period_end(registro) else None
-    ),
+    "mes": lambda registro: _period_end(registro).month if _period_end(registro) else None,
     "beneficiario": lambda registro: registro.credor,
     "unidade_gestora": lambda registro: registro.unidade_gestora,
     "categoria": lambda registro: registro.categoria_documento,
@@ -189,9 +187,7 @@ def agregar_passagens(
             source_count=execution.source_count,
             suggestion=suggestion,
         ),
-        project_group=(
-            _project_passagem_group if params.agrupar_por is not None else None
-        ),
+        project_group=(_project_passagem_group if params.agrupar_por is not None else None),
         agrupar_por=params.agrupar_por,
         metrica=params.metrica if params.agrupar_por is not None else None,
     )

@@ -135,11 +135,9 @@ def consultar_servidores(
     params = validated
 
     with session_manager.get_session() as session:
-        mes_de_referencia_considerado, mes_padrao_aplicado = (
-            resolve_mes_de_referencia_padrao(
-                session,
-                params.filtros,
-            )
+        mes_de_referencia_considerado, mes_padrao_aplicado = resolve_mes_de_referencia_padrao(
+            session,
+            params.filtros,
         )
 
         base_stmt = apply_servidores_filters(
@@ -173,11 +171,7 @@ def consultar_servidores(
     execution = LookupExecutionResult(
         total=total,
         rows=servidores,
-        suggestion=(
-            "Nenhum servidor encontrado com os filtros informados."
-            if not servidores
-            else None
-        ),
+        suggestion=("Nenhum servidor encontrado com os filtros informados." if not servidores else None),
     )
     return build_lookup_response(
         response_type=ConsultarServidoresResponse,

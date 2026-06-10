@@ -262,9 +262,7 @@ def test_migration_reestrutura_snapshot_de_servidores_em_folha(tmp_path) -> None
     )
 
     conn = sqlite3.connect(db_path)
-    colunas_folha = {
-        row[1] for row in conn.execute("PRAGMA table_info('folha_servidores')")
-    }
+    colunas_folha = {row[1] for row in conn.execute("PRAGMA table_info('folha_servidores')")}
     assert "servidor_id" not in colunas_folha
     assert {
         "cargo",
@@ -273,9 +271,7 @@ def test_migration_reestrutura_snapshot_de_servidores_em_folha(tmp_path) -> None
         "competencia_referencia",
     } <= colunas_folha
 
-    colunas_servidores = {
-        row[1] for row in conn.execute("PRAGMA table_info('servidores')")
-    }
+    colunas_servidores = {row[1] for row in conn.execute("PRAGMA table_info('servidores')")}
     assert "source_id" in colunas_servidores
     assert "cargo" not in colunas_servidores
 

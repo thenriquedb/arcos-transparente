@@ -357,9 +357,7 @@ def _normalize_public_object_candidate(raw_object: str) -> str | None:
 def _is_scope_or_department_object(candidate: str) -> bool:
     """Evita confundir secretaria/area publica com objeto contratual."""
 
-    return candidate.startswith("secretaria de ") or (
-        candidate in _PUBLIC_SCOPE_OBJECT_EXCLUSIONS
-    )
+    return candidate.startswith("secretaria de ") or (candidate in _PUBLIC_SCOPE_OBJECT_EXCLUSIONS)
 
 
 def _is_too_generic_public_object(candidate: str) -> bool:
@@ -370,9 +368,7 @@ def _is_too_generic_public_object(candidate: str) -> bool:
         return True
 
     meaningful_tokens = tuple(
-        token
-        for token in tokens
-        if token not in _LEADING_PUBLIC_OBJECT_ARTICLES and token != "e"
+        token for token in tokens if token not in _LEADING_PUBLIC_OBJECT_ARTICLES and token != "e"
     )
     if not meaningful_tokens:
         return True
@@ -561,9 +557,9 @@ def _extract_contrato_numero(normalized_text: str) -> str | None:
 def _extract_contrato_fornecedor(normalized_text: str) -> str | None:
     """Extrai um nome de fornecedor em perguntas focadas em contratos."""
 
-    if _extract_contratos_ranking_dimension(
+    if _extract_contratos_ranking_dimension(normalized_text) == "fornecedor" and _has_contratos_dimension_count_signal(
         normalized_text
-    ) == "fornecedor" and _has_contratos_dimension_count_signal(normalized_text):
+    ):
         return None
 
     patterns = [
@@ -608,10 +604,7 @@ def _extract_contratos_ranking_dimension(normalized_text: str) -> str | None:
 def _has_contratos_dimension_count_signal(normalized_text: str) -> bool:
     """Diferencia ranking por contagem de ranking de contratos individuais."""
 
-    if any(
-        pattern in normalized_text
-        for pattern in _CONTRATOS_DIMENSION_COUNT_SIGNAL_PATTERNS
-    ):
+    if any(pattern in normalized_text for pattern in _CONTRATOS_DIMENSION_COUNT_SIGNAL_PATTERNS):
         return True
     if any(term in normalized_text for term in ("valor", "media", "soma", "total")):
         return False
@@ -635,9 +628,7 @@ def _is_contratos_singular_dimension_ranking_query(
 ) -> bool:
     """Detecta formulacoes singulares para ampliar o limite e preservar empates."""
 
-    resolved_dimension = dimension or _extract_contratos_ranking_dimension(
-        normalized_text
-    )
+    resolved_dimension = dimension or _extract_contratos_ranking_dimension(normalized_text)
     singular_cues = {
         "fornecedor": ("qual fornecedor", "qual empresa"),
         "secretaria": ("qual secretaria",),
@@ -723,9 +714,7 @@ def _extract_trimestre_range(normalized_text: str) -> tuple[int, int] | None:
 def _extract_receitas_filters_from_query(normalized_text: str) -> dict[str, Any]:
     """Converte sinais do texto em filtros públicos da tool de receitas."""
 
-    filtros: dict[str, Any] = {
-        "tipo_de_dado": _extract_receitas_tipo_de_dado(normalized_text)
-    }
+    filtros: dict[str, Any] = {"tipo_de_dado": _extract_receitas_tipo_de_dado(normalized_text)}
 
     if year := _extract_year(normalized_text):
         filtros["ano"] = year
@@ -889,9 +878,7 @@ def _build_contratos_filters_from_query(normalized_text: str) -> dict[str, Any]:
     if year := _extract_year(normalized_text):
         filtros["data_inicio_inicio"] = f"{year}-01-01"
         filtros["data_inicio_fim"] = f"{year}-12-31"
-    elif vigencia_filters := _extract_contratos_active_vigencia_filters(
-        normalized_text
-    ):
+    elif vigencia_filters := _extract_contratos_active_vigencia_filters(normalized_text):
         filtros.update(vigencia_filters)
     return filtros
 
@@ -899,10 +886,7 @@ def _build_contratos_filters_from_query(normalized_text: str) -> dict[str, Any]:
 def _contains_prompt_injection(normalized_text: str) -> bool:
     """Aplica patterns defensivos para bloquear tentativas de prompt injection."""
 
-    return any(
-        re.search(pattern, normalized_text) is not None
-        for pattern in PROMPT_INJECTION_PATTERNS
-    )
+    return any(re.search(pattern, normalized_text) is not None for pattern in PROMPT_INJECTION_PATTERNS)
 
 
 def _count_keyword_hits(normalized_text: str, keywords: tuple[str, ...]) -> int:

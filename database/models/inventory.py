@@ -40,9 +40,7 @@ class EstoqueMaterial(Base):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -58,30 +56,14 @@ class EstoqueMaterial(Base):
     unidade_medida: Mapped[str] = mapped_column(String(80), nullable=False)
     periodo_inicio: Mapped[date] = mapped_column(Date, nullable=False)
     periodo_fim: Mapped[date] = mapped_column(Date, nullable=False, index=True)
-    saldo_anterior_quantidade: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 4), nullable=True
-    )
-    saldo_anterior_valor: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 4), nullable=True
-    )
-    entrada_quantidade: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 4), nullable=True
-    )
-    entrada_valor: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 4), nullable=True
-    )
-    saida_quantidade: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 4), nullable=True
-    )
-    saida_valor: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 4), nullable=True
-    )
-    saldo_quantidade: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 4), nullable=True
-    )
-    saldo_valor: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 4), nullable=True
-    )
+    saldo_anterior_quantidade: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
+    saldo_anterior_valor: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
+    entrada_quantidade: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
+    entrada_valor: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
+    saida_quantidade: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
+    saida_valor: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
+    saldo_quantidade: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
+    saldo_valor: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
 
     movimentacoes: Mapped[list["EstoqueMovimentacao"]] = relationship(
         back_populates="estoque_material",
@@ -107,9 +89,7 @@ class EstoqueMovimentacao(Base):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    criado_em: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     atualizado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -130,16 +110,8 @@ class EstoqueMovimentacao(Base):
     localizacao: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     classificacao: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     quantidade: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
-    valor_unitario: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 8), nullable=True
-    )
-    valor_total: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 4), nullable=True
-    )
-    custo_medio: Mapped[Optional[Decimal]] = mapped_column(
-        Numeric(18, 8), nullable=True
-    )
+    valor_unitario: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 8), nullable=True)
+    valor_total: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 4), nullable=True)
+    custo_medio: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 8), nullable=True)
 
-    estoque_material: Mapped["EstoqueMaterial"] = relationship(
-        back_populates="movimentacoes"
-    )
+    estoque_material: Mapped["EstoqueMaterial"] = relationship(back_populates="movimentacoes")

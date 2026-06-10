@@ -137,11 +137,9 @@ def agregar_servidores(
     params = validated
 
     with session_manager.get_session() as session:
-        mes_de_referencia_considerado, mes_padrao_aplicado = (
-            resolve_mes_de_referencia_padrao(
-                session,
-                params.filtros,
-            )
+        mes_de_referencia_considerado, mes_padrao_aplicado = resolve_mes_de_referencia_padrao(
+            session,
+            params.filtros,
         )
 
         metadata = AgregarServidoresMetadata(
@@ -176,11 +174,7 @@ def agregar_servidores(
                 execution=AggregateExecutionResult(
                     valor_total=decimal_or_int_to_json(valor_total),
                     source_count=total_match,
-                    suggestion=(
-                        "Nenhum servidor encontrado com os filtros informados."
-                        if total_match == 0
-                        else None
-                    ),
+                    suggestion=("Nenhum servidor encontrado com os filtros informados." if total_match == 0 else None),
                 ),
             )
 
@@ -222,11 +216,7 @@ def agregar_servidores(
             rows=rows,
             valor_total=decimal_or_int_to_json(valor_total),
             source_count=total_match,
-            suggestion=(
-                "Nenhum servidor encontrado com os filtros informados."
-                if not rows
-                else None
-            ),
+            suggestion=("Nenhum servidor encontrado com os filtros informados." if not rows else None),
         ),
         item_model=AgregacaoServidoresItem,
         agrupar_por=params.agrupar_por,

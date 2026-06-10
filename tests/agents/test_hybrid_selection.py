@@ -42,9 +42,7 @@ def test_hybrid_selector_restringe_para_candidates_validas() -> None:
     )
 
 
-def test_hybrid_selector_faz_fallback_para_catalogo_publico_em_baixa_confianca() -> (
-    None
-):
+def test_hybrid_selector_faz_fallback_para_catalogo_publico_em_baixa_confianca() -> None:
     selector = HybridToolSelector(
         runner=lambda *_args: {
             "action": "allow",
@@ -131,14 +129,10 @@ def test_hybrid_selector_prioriza_historico_de_salario_individual() -> None:
     assert selection.action == "allow"
     assert selection.used_fallback is False
     assert selection.reason_code == "heuristic_salary_history_query"
-    assert selection.candidate_tool_names == (
-        "buscar_historico_de_pagamentos_do_servidor",
-    )
+    assert selection.candidate_tool_names == ("buscar_historico_de_pagamentos_do_servidor",)
 
 
-def test_hybrid_selector_reaproveita_historico_em_confirmacao_de_contato_de_eleitos() -> (
-    None
-):
+def test_hybrid_selector_reaproveita_historico_em_confirmacao_de_contato_de_eleitos() -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
         raise AssertionError("heuristica deveria usar o historico")
 
@@ -200,9 +194,7 @@ def test_hybrid_selector_prioriza_ranking_de_contratos_por_dimensao(
     pergunta: str,
 ) -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
-        raise AssertionError(
-            "heuristica deveria resolver ranking agregado de contratos"
-        )
+        raise AssertionError("heuristica deveria resolver ranking agregado de contratos")
 
     selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
 
@@ -265,9 +257,7 @@ def test_hybrid_selector_prioriza_movimentacoes_de_estoque() -> None:
     assert selection.candidate_tool_names == ("consultar_movimentacoes_de_estoque",)
 
 
-def test_hybrid_selector_prioriza_agregacao_de_itens_mais_comuns_no_almoxarifado() -> (
-    None
-):
+def test_hybrid_selector_prioriza_agregacao_de_itens_mais_comuns_no_almoxarifado() -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
         raise AssertionError("heuristica deveria resolver agregacao de estoques")
 
@@ -548,9 +538,7 @@ def test_hybrid_selector_prioriza_despesas_por_funcao_em_gasto_por_urbanismo() -
     assert selection.candidate_tool_names == ("consultar_despesas_por_funcao",)
 
 
-def test_hybrid_selector_prioriza_despesas_por_funcao_em_investimento_por_alias() -> (
-    None
-):
+def test_hybrid_selector_prioriza_despesas_por_funcao_em_investimento_por_alias() -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
         raise AssertionError("heuristica deveria priorizar consulta detalhada")
 
