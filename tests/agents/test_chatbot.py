@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import date
+
 import pytest
 
 import agents.chatbot.agent as chatbot_agent
@@ -196,6 +198,31 @@ def test_system_prompt_pede_confirmacao_para_siglas_ambiguas() -> None:
     assert "siglas ou termos muito curtos e ambíguos" in prompt
     assert "NÃO execute a busca ainda" in prompt
     assert "Você quer dizer UPA como Unidade de Pronto Atendimento?" in prompt
+
+
+def test_system_prompt_injeta_data_atual_para_resolver_hoje() -> None:
+    # Regressão: sem a data atual no prompt, o LLM nao resolve "ativos hoje"
+    # e o filtro `vigente_em` recebe uma data defasada, zerando contratos.
+    prompt = chatbot_agent.carregar_system_prompt(hoje=date(2026, 6, 11))
+
+    assert "## Data Atual" in prompt
+    assert "11/06/2026" in prompt
+    assert "2026-06-11" in prompt
+    assert "vigente_em" in prompt
+
+
+def test_system_prompt_orienta_datas_relativas_para_todos_os_escopos() -> None:
+    prompt = chatbot_agent.carregar_system_prompt(hoje=date(2026, 6, 11))
+
+    assert "ontem" in prompt
+    assert "mês passado" in prompt
+    assert "ano passado" in prompt
+
+
+def test_system_prompt_usa_data_de_hoje_por_padrao() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert date.today().isoformat() in prompt
 
 
 def test_system_prompt_orienta_followups_de_contratos_e_licitacoes() -> None:

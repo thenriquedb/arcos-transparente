@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from datetime import date
 import re
 from typing import Any
 
 from agents.routing.conversation import normalize_conversation_text
 from shared.planejamento_entidades import extract_planejamento_entidade_alias
+from shared.utils.dates import current_date
 
 from .constants import (
     CONTRATOS_DOMAIN_KEYWORDS,
@@ -651,7 +651,7 @@ def _extract_contratos_active_vigencia_filters(
     if not _contains_any_term(normalized_text, _CONTRATOS_ACTIVITY_TERMS):
         return None
 
-    return {"vigente_em": date.today().isoformat()}
+    return {"vigente_em": current_date().isoformat()}
 
 
 def _extract_receitas_tipo_de_dado(normalized_text: str) -> str:
