@@ -312,6 +312,35 @@ def test_hybrid_selector_prioriza_candidates_de_custo_de_evento() -> None:
     )
 
 
+@pytest.mark.parametrize(
+    "pergunta",
+    [
+        "Qual foi o gasto com merenda escolar em 2025?",
+        "Qual foi o total gasto com alimentacao escolar em 2025?",
+        "Quanto foi gasto com pnae em 2025?",
+        "Quanto foi gasto com generos alimenticios da educacao em 2025?",
+    ],
+)
+def test_hybrid_selector_prioriza_planejamento_para_merenda_e_aliases_comuns(
+    pergunta: str,
+) -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver gasto de planejamento da merenda")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(pergunta, history=[])
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_planning_program_spend_query"
+    assert selection.candidate_tool_names == (
+        "agregar_planejamento",
+        "consultar_planejamento",
+        "consultar_despesas",
+    )
+
+
 def test_hybrid_selector_prioriza_candidates_de_objeto_contratual_nominal() -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
         raise AssertionError("heuristica deveria resolver objeto contratual nominal")

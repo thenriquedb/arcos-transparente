@@ -25,6 +25,7 @@ from agents.nlu.extractors import (
     _extract_nome_para_historico,
     _extract_planejamento_area,
     _extract_planejamento_entidade,
+    _extract_planejamento_programa,
     _extract_receitas_tema,
     _extract_receitas_unidade,
     _extract_secretaria,
@@ -53,6 +54,7 @@ class QueryReading:
     year: int | None
     planejamento_entidade: str | None
     planejamento_area: str | None
+    planejamento_programa: str | None
     receitas_tema: str | None
     receitas_unidade: str | None
 
@@ -77,6 +79,7 @@ def read_query(text: str) -> QueryReading:
         year=_extract_year(normalized_text),
         planejamento_entidade=_extract_planejamento_entidade(normalized_text),
         planejamento_area=_extract_planejamento_area(normalized_text),
+        planejamento_programa=_extract_planejamento_programa(normalized_text),
         receitas_tema=_extract_receitas_tema(normalized_text),
         receitas_unidade=_extract_receitas_unidade(normalized_text),
     )

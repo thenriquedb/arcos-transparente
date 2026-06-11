@@ -281,6 +281,9 @@ def test_system_prompt_orienta_gastos_amplos_com_lista_detalhada() -> None:
     assert "explique em linguagem simples o que significa cada campo" in prompt
     assert "não escolha silenciosamente só `valor_pago`" in prompt
     assert "`valor_em_liquidacao`" in prompt
+    assert "`merenda escolar`" in prompt
+    assert "`agregar_planejamento`" in prompt
+    assert "`documentos extras` podem trazer retenções, cancelamentos e despesas acessórias" in prompt
 
 
 def test_system_prompt_orienta_consultas_de_estoque() -> None:
@@ -1245,6 +1248,20 @@ def test_chatbot_application_permite_consulta_de_frota_sem_prefeitura_no_texto()
 
     assert response.content == "resposta para: Quais sao todos os veiculos da frota?"
     assert backend.calls == [("Quais sao todos os veiculos da frota?", "sessao-frota-sem-ancora")]
+
+
+def test_chatbot_application_permite_consulta_de_merenda_sem_retornar_help_message() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-merenda"),
+    )
+
+    response = app.ask("Qual foi o gasto com merenda escolar em 2025?")
+
+    assert response.content == "resposta para: Qual foi o gasto com merenda escolar em 2025?"
+    assert response.metadata["selection_reason_code"] == "heuristic_planning_program_spend_query"
+    assert backend.calls == [("Qual foi o gasto com merenda escolar em 2025?", "sessao-merenda")]
 
 
 def test_chatbot_application_stream_permite_followup_temporal_em_receitas() -> None:

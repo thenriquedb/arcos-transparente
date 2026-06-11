@@ -401,6 +401,9 @@ def _select_with_heuristics(
         salary_history_selection = _select_salary_history_with_router(question)
         if salary_history_selection is not None:
             return salary_history_selection
+        planning_spend_selection = _select_planning_spend_query(question)
+        if planning_spend_selection is not None:
+            return planning_spend_selection
         travel_spend_selection = _select_travel_spend_query(question)
         if travel_spend_selection is not None:
             return travel_spend_selection
@@ -441,6 +444,37 @@ def _select_salary_history_with_router(
     return _build_named_candidate_selection(
         [ToolName.BUSCAR_HISTORICO_DE_PAGAMENTOS_DO_SERVIDOR],
         reason_code="heuristic_salary_history_query",
+    )
+
+
+def _select_planning_spend_query(
+    question: str,
+) -> HybridToolSelection | None:
+    reading = read_query(question)
+    if not reading.normalized_text:
+        return None
+    if reading.planejamento_programa is None:
+        return None
+    if not any(signal in reading.normalized_text for signal in _EVENT_SPEND_SIGNAL_TERMS):
+        return None
+
+    aggregate_first = _looks_like_total_spend_question(reading.normalized_text)
+    candidate_tool_names = (
+        [
+            ToolName.AGREGAR_PLANEJAMENTO,
+            ToolName.CONSULTAR_PLANEJAMENTO,
+            ToolName.CONSULTAR_DESPESAS,
+        ]
+        if aggregate_first
+        else [
+            ToolName.CONSULTAR_PLANEJAMENTO,
+            ToolName.AGREGAR_PLANEJAMENTO,
+            ToolName.CONSULTAR_DESPESAS,
+        ]
+    )
+    return _build_named_candidate_selection(
+        candidate_tool_names,
+        reason_code="heuristic_planning_program_spend_query",
     )
 
 
@@ -542,6 +576,24 @@ def _is_explicit_aggregate_spend_request(normalized_question: str) -> bool:
     if any(term in aggregate_text for term in _SPEND_GROUPING_TERMS):
         return True
     return any(term in aggregate_text for term in _SPEND_AGGREGATION_TERMS)
+
+
+def _looks_like_total_spend_question(normalized_question: str) -> bool:
+    if _is_explicit_aggregate_spend_request(normalized_question):
+        return True
+    return any(
+        cue in normalized_question
+        for cue in (
+            "qual foi o gasto",
+            "qual o gasto",
+            "qual foi o valor gasto",
+            "quanto foi gasto",
+            "quanto a prefeitura gastou",
+            "quanto gastou",
+            "quanto custou",
+            "valor gasto",
+        )
+    )
 
 
 def _select_emenda_query_with_router(

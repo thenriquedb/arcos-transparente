@@ -9,7 +9,7 @@ from sqlalchemy import select
 from database.models import PlanejamentoDespesa
 from shared.planejamento_entidades import get_planejamento_entidade_search_terms
 from shared.utils.decimal_to_float import decimal_to_float
-from shared.utils.text import matches_text_query
+from shared.utils.text import matches_text_query, normalize_search_text
 
 from .filters import PlanejamentoFiltroSchema
 
@@ -105,12 +105,78 @@ def matches_planejamento_text_filters(
     return True
 
 
+def _canonical_rollup_value(value: object) -> object:
+    if isinstance(value, Decimal):
+        return value
+    return normalize_search_text(value if isinstance(value, str) else None)
+
+
+def _planejamento_rollup_key(registro: PlanejamentoDespesa) -> tuple[object, ...]:
+    return (
+        registro.origem,
+        registro.exercicio,
+        registro.mes_num,
+        normalize_search_text(registro.unidade_gestora),
+        normalize_search_text(registro.funcao),
+        normalize_search_text(registro.subfuncao),
+        normalize_search_text(registro.programa),
+        normalize_search_text(registro.tipo_acao),
+        normalize_search_text(registro.descricao_acao),
+        normalize_search_text(registro.fonte_recurso_identificacao),
+        normalize_search_text(registro.categoria_economica_identificacao),
+        normalize_search_text(registro.grupo_despesa_identificacao),
+        normalize_search_text(registro.elemento_despesa_identificacao),
+        _canonical_rollup_value(registro.dotacao_inicial),
+        _canonical_rollup_value(registro.creditos_adicionais),
+        _canonical_rollup_value(registro.dotacao_atualizada),
+        _canonical_rollup_value(registro.valor_empenhado),
+        _canonical_rollup_value(registro.valor_liquidacao),
+        _canonical_rollup_value(registro.valor_liquidado),
+        _canonical_rollup_value(registro.valor_pago),
+        _canonical_rollup_value(registro.valor_anulado),
+    )
+
+
+def _planejamento_specificity_key(registro: PlanejamentoDespesa) -> tuple[int, ...]:
+    unidade = normalize_search_text(registro.unidade)
+    orgao = normalize_search_text(registro.orgao)
+    unidade_gestora = normalize_search_text(registro.unidade_gestora)
+    departamento = normalize_search_text(registro.departamento)
+
+    unidade_especifica = int(bool(unidade) and unidade not in {orgao, unidade_gestora})
+    orgao_especifico = int(bool(orgao) and orgao != unidade_gestora)
+    departamento_especifico = int(bool(departamento))
+
+    return (
+        unidade_especifica,
+        len(unidade),
+        departamento_especifico,
+        len(departamento),
+        orgao_especifico,
+        len(orgao),
+        -registro.id,
+    )
+
+
+def collapse_planejamento_rollups(registros: list[PlanejamentoDespesa]) -> list[PlanejamentoDespesa]:
+    """Colapsa linhas hierárquicas duplicadas preservando a versão mais específica."""
+
+    colapsados: dict[tuple[object, ...], PlanejamentoDespesa] = {}
+    for registro in registros:
+        key = _planejamento_rollup_key(registro)
+        atual = colapsados.get(key)
+        if atual is None or _planejamento_specificity_key(registro) > _planejamento_specificity_key(atual):
+            colapsados[key] = registro
+    return list(colapsados.values())
+
+
 def load_filtered_planejamentos(session, filtros: PlanejamentoFiltroSchema):
     """Carrega os registros do dominio aplicando os filtros publicos."""
 
     stmt = apply_planejamento_sql_filters(select(PlanejamentoDespesa), filtros)
     registros = session.execute(stmt).scalars().all()
-    return [registro for registro in registros if matches_planejamento_text_filters(registro, filtros)]
+    filtrados = [registro for registro in registros if matches_planejamento_text_filters(registro, filtros)]
+    return collapse_planejamento_rollups(filtrados)
 
 
 def metric_to_json(value: int | Decimal) -> int | float:

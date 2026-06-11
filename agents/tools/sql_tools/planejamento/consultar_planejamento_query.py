@@ -67,7 +67,8 @@ def consultar_planejamento(
     `agregar_planejamento`.
 
     O filtro `origem` suporta ao menos `saude` e `prefeitura`.
-    Se `origem` nao for informado, o será ambos.
+    Se `origem` nao for informado, a consulta busca em todas as origens
+    disponiveis.
 
     Args:
         filtros: Objeto com filtros opcionais. Campos aceitos: `origem`, `ano`,

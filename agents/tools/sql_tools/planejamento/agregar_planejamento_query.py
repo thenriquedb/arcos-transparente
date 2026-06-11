@@ -68,7 +68,8 @@ def agregar_planejamento(
     `agregar_despesas`.
 
     O filtro `origem` suporta ao menos `saude` e `prefeitura`.
-    Se `origem` nao for informado, o padrao continua sendo `saude`.
+    Se `origem` nao for informado, a consulta agrega todas as origens
+    disponiveis.
 
     Args:
         filtros: Objeto com filtros opcionais. Campos aceitos: `origem`, `ano`,

@@ -25,6 +25,21 @@ def test_guardrails_permitem_consultas_de_estoque_sem_router(pergunta: str) -> N
 @pytest.mark.parametrize(
     "pergunta",
     [
+        "Qual foi o gasto com merenda escolar em 2025?",
+        "Quanto foi gasto com alimentacao escolar em 2025?",
+        "Qual foi o gasto com PNAE em 2025?",
+        "Qual foi o gasto com generos alimenticios da educacao em 2025?",
+    ],
+)
+def test_guardrails_permitem_consultas_de_planejamento_da_merenda(pergunta: str) -> None:
+    decision = evaluate_public_query_guardrails(pergunta)
+    assert decision.allowed is True
+    assert decision.category == "allowed"
+
+
+@pytest.mark.parametrize(
+    "pergunta",
+    [
         "Qual a capital da Franca?",
         "Como implementar uma lista encadeada em Python?",
         "qual material escolar e bom para desenho?",

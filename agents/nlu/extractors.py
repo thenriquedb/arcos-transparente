@@ -34,6 +34,32 @@ PLANEJAMENTO_AREA_ALIASES = {
     "comercio e servicos": ("comercio", "servicos"),
 }
 
+PLANEJAMENTO_PROGRAMA_ALIASES = {
+    "merenda escolar": (
+        "merenda escolar",
+        "programa de merenda escolar",
+        "alimentacao escolar",
+        "programa nacional de alimentacao escolar",
+        "pnae",
+        "distribuicao de merenda das escolas",
+        "distribuicao de merenda das creches",
+        "setor de merenda escolar",
+        "deposito de merenda escolar",
+    ),
+}
+
+_MERENDA_ESCOLAR_CONTEXT_TERMS = (
+    "educacao",
+    "escola",
+    "escolas",
+    "creche",
+    "creches",
+    "aluno",
+    "alunos",
+    "infantil",
+    "fundamental",
+)
+
 RECEITAS_TEMA_ALIASES = (
     "iptu",
     "issqn",
@@ -164,11 +190,14 @@ _PUBLIC_SCOPE_OBJECT_EXCLUSIONS = frozenset(
         "prefeitura",
         "previdencia",
         "previdencia social",
+        "programa nacional de alimentacao escolar",
+        "merenda escolar",
         "relatorio de despesas por funcao",
         "saude",
         "saneamento",
         "seguranca",
         "seguranca publica",
+        "setor de merenda escolar",
         "trabalho",
         "transporte",
         "urbanismo",
@@ -479,6 +508,21 @@ def _extract_planejamento_entidade(normalized_text: str) -> str | None:
     """Reconhece entidades de planejamento já conhecidas, como `fumusa`."""
 
     return extract_planejamento_entidade_alias(normalized_text)
+
+
+def _extract_planejamento_programa(normalized_text: str) -> str | None:
+    """Mapeia temas comuns do planejamento para um programa canônico."""
+
+    for programa, aliases in PLANEJAMENTO_PROGRAMA_ALIASES.items():
+        if any(alias in normalized_text for alias in aliases):
+            return programa
+
+    if "generos alimenticios" in normalized_text and any(
+        context_term in normalized_text for context_term in _MERENDA_ESCOLAR_CONTEXT_TERMS
+    ):
+        return "merenda escolar"
+
+    return None
 
 
 def _extract_planejamento_area(normalized_text: str) -> str | None:

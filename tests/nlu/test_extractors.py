@@ -3,6 +3,7 @@ from __future__ import annotations
 from agents.nlu.extractors import (
     _extract_limit,
     _extract_planejamento_entidade,
+    _extract_planejamento_programa,
     _extract_secretaria,
 )
 
@@ -20,3 +21,13 @@ def test_extract_secretaria_normaliza_para_secretaria_canonica() -> None:
 
 def test_extract_planejamento_entidade_reconhece_fumusa() -> None:
     assert _extract_planejamento_entidade("foi planejado algum recurso para a fumusa") == "fumusa"
+
+
+def test_extract_planejamento_programa_reconhece_merenda_e_aliases_comuns() -> None:
+    assert _extract_planejamento_programa("qual foi o gasto com merenda escolar em 2025?") == "merenda escolar"
+    assert _extract_planejamento_programa("quanto foi gasto com alimentacao escolar em 2025?") == "merenda escolar"
+    assert _extract_planejamento_programa("quanto foi gasto com pnae em 2025?") == "merenda escolar"
+    assert (
+        _extract_planejamento_programa("quanto foi gasto com generos alimenticios da educacao em 2025?")
+        == "merenda escolar"
+    )
