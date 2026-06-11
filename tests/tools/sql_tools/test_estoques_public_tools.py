@@ -9,7 +9,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.estoques as estoques_tools
-from agents.router import route_user_query, select_public_tools_for_query
 from agents.tools import registry as tools_registry
 from database import session as session_manager
 from database.models import Base, EstoqueMaterial, EstoqueMovimentacao
@@ -358,34 +357,30 @@ def test_registry_expoe_tools_publicas_de_estoques() -> None:
     assert "consultar_movimentacoes_de_estoque" in tool_names
 
 
-def test_query_de_estoques_rota_para_tool_publica_dedicada(monkeypatch) -> None:
+def test_agregar_estoques_saldo_total_anual(monkeypatch) -> None:
     session = _build_session()
     _seed_estoques(session)
     _patch_session(monkeypatch, session)
 
-    route = route_user_query("Qual o saldo total em estoque em 2025?")
-    tool = select_public_tools_for_query("Qual o saldo total em estoque em 2025?")[0]
-    resultado = tool.invoke(route.tool_kwargs)
+    resultado = estoques_tools.agregar_estoques(
+        filtros={"ano": 2025},
+        metrica="soma_saldo_valor",
+    )
 
-    assert route.tool_name == "agregar_estoques"
-    assert getattr(tool, "name", "") == "agregar_estoques"
     assert resultado["valor_total"] == 340.0
 
     session.close()
 
 
-def test_movimentacao_de_estoque_rota_para_lookup_dedicado(monkeypatch) -> None:
+def test_consultar_movimentacoes_de_estoque_lista_por_almoxarifado(monkeypatch) -> None:
     session = _build_session()
     _seed_estoques(session)
     _patch_session(monkeypatch, session)
 
-    query = "Liste as movimentacoes de estoque do almoxarifado saude em 2025."
-    route = route_user_query(query)
-    tool = select_public_tools_for_query(query)[0]
-    resultado = tool.invoke(route.tool_kwargs)
+    resultado = estoques_tools.consultar_movimentacoes_de_estoque(
+        filtros={"almoxarifado": "saude", "ano": 2025},
+    )
 
-    assert route.tool_name == "consultar_movimentacoes_de_estoque"
-    assert getattr(tool, "name", "") == "consultar_movimentacoes_de_estoque"
     assert resultado["total"] == 3
 
     session.close()

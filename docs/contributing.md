@@ -34,8 +34,10 @@ uv run pytest tests/pipeline/
 | `tests/pipeline/` | Testes de integração do pipeline completo (parser + schema + loader) |
 | `tests/loaders/` | Testes do `sql_loader` (batches, rollback, deduplicação) |
 | `tests/agents/test_chatbot.py` | Boundary pré-modelo, bootstrap do agente e contrato conversacional |
-| `tests/agents/test_router.py` | Heurísticas de compatibilidade do router legado |
+| `tests/agents/test_guardrails.py` | Guardrails de escopo, injection e perguntas vazias |
 | `tests/agents/test_hybrid_selection.py` | Seleção híbrida de tools |
+| `tests/agents/test_intents.py` | Predicados de intenção determinísticos por domínio |
+| `tests/nlu/` | Extractors e leitura de consulta (`QueryReading`) |
 
 Para testes manuais de ponta a ponta do comportamento do agente, use o conjunto de perguntas em [`docs/perguntas-teste-agente.md`](./perguntas-teste-agente.md).
 
@@ -90,7 +92,7 @@ uv run ruff format .
    - `routing.examples`: pelo menos duas perguntas representativas de cidadão
    - `routing.hints`: pistas curtas de seleção (domínio, forma de consulta, intenção)
 
-3. Adicione regras de compatibilidade no router **somente** se algum fluxo legado realmente precisar. Consulte [`docs/router-regras.md`](./router-regras.md) antes de criar heurísticas novas.
+3. A roteabilidade vem da `routing_metadata` da tool (`examples`/`hints`/`exclusions`) consumida pelo seletor híbrido — não há mais router determinístico a editar. Só adicione um predicado determinístico em `agents/nlu/intents.py` se a distinção for genuinamente ambígua e precisar de garantia testável (ex.: emenda vs. transferência).
 
 4. Cubra com testes mínimos:
    - registry (a tool aparece em `get_public_tools()`)

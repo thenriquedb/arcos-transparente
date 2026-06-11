@@ -11,12 +11,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from agents.routing.conversation import normalize_conversation_text
-from agents.routing.constants import (
+from agents.nlu.conversation import normalize_conversation_text
+from agents.nlu.constants import (
     SUPPORTED_SCOPE_STRONG_KEYWORDS,
     SUPPORTED_SCOPE_WEAK_KEYWORDS,
 )
-from agents.routing.extractors import (
+from agents.nlu.extractors import (
     _contains_prompt_injection,
     _count_keyword_hits,
     _extract_contrato_fornecedor,

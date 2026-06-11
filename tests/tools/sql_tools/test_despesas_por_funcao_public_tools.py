@@ -9,7 +9,6 @@ from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.despesas_por_funcao as despesas_por_funcao_tools
 from agents.tools import registry as tools_registry
-from agents.router import route_user_query, select_public_tools_for_query
 from database import session as session_manager
 from database.models import Base, DespesaPorFuncao
 
@@ -240,17 +239,13 @@ def test_consultar_despesas_por_funcao_detecta_funcao_sem_confundir_com_origem(
     session.commit()
     _patch_session(monkeypatch, session)
 
-    decision = route_user_query("Quanto a prefeitura gastou na saude em 2025?")
-    tool = select_public_tools_for_query("Quanto a prefeitura gastou na saude em 2025?")[0]
-    resultado = tool.invoke(decision.tool_kwargs)
+    resultado = despesas_por_funcao_tools.agregar_despesas_por_funcao(
+        filtros={"ano": 2025, "origem": "prefeitura", "funcao": "saude"},
+        metrica="soma_valor_pago",
+    )
 
-    assert decision.tool_name == "agregar_despesas_por_funcao"
-    assert decision.tool_kwargs["filtros"] == {
-        "ano": 2025,
-        "origem": "prefeitura",
-        "funcao": "saude",
-    }
-    assert getattr(tool, "name", "") == "agregar_despesas_por_funcao"
+    # Filtra a função "saude" apenas na origem "prefeitura", sem misturar com a
+    # linha cuja origem é "saude" e função "Administracao".
     assert resultado["valor_total"] == 550000.0
 
     session.close()
@@ -312,9 +307,7 @@ def test_registry_expoe_tools_publicas_de_despesas_por_funcao() -> None:
     assert "agregar_despesas_por_funcao" in tool_names
 
 
-def test_query_de_despesas_por_funcao_rota_para_tool_publica_dedicada(
-    monkeypatch,
-) -> None:
+def test_agregar_despesas_por_funcao_total_anual(monkeypatch) -> None:
     session = _build_session()
     session.add(
         DespesaPorFuncao(
@@ -332,14 +325,11 @@ def test_query_de_despesas_por_funcao_rota_para_tool_publica_dedicada(
     session.commit()
     _patch_session(monkeypatch, session)
 
-    pergunta = "Qual foi o total pago no relatorio de despesas por funcao em 2025?"
-    route = route_user_query(pergunta)
-    tool = select_public_tools_for_query(pergunta)[0]
-    resultado = tool.invoke(route.tool_kwargs)
+    resultado = despesas_por_funcao_tools.agregar_despesas_por_funcao(
+        filtros={"ano": 2025},
+        metrica="soma_valor_pago",
+    )
 
-    assert route.tool_name == "agregar_despesas_por_funcao"
-    assert route.tool_kwargs["agrupar_por"] is None
-    assert getattr(tool, "name", "") == "agregar_despesas_por_funcao"
     assert resultado["valor_total"] == 550000.0
 
     session.close()

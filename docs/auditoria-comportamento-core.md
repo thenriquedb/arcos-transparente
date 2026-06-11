@@ -20,7 +20,7 @@
 - "Quanto a prefeitura recebe de repasse?" (mesma classe)
 
 **Comportamento incorreto atual**
-`_extract_nome_para_historico` (`agents/routing/extractors.py:411`) tem o padrão catch‑all
+`_extract_nome_para_historico` (`agents/nlu/extractors.py`) tem o padrão catch‑all
 `(?:pesquise|busque|procure|pesquisar|buscar|procurar)\s+(?:por\s+)?([a-z\s]+?)(?:\?|$)`.
 Para "busque os contratos da saúde" retorna o falso "nome" `os contratos da saude`.
 `_try_route_historico` é o primeiro item de `ROUTE_PRIORITY_CHAIN`, então retorna rota
@@ -51,7 +51,7 @@ semântico da tool (rota de folha é a primeira da cadeia).
 de `_extract_nome_para_historico`, ou exigir termo de salário/pagamento concomitante e rejeitar
 candidatos que comecem com substantivos de domínio (contrato, licitação, despesa, diária etc.).
 
-**Regressões a adicionar (tests/agents/test_router.py, test_hybrid_selection.py):**
+**Regressões a adicionar (tests/agents/test_hybrid_selection.py, test_intents.py):**
 - "Busque os contratos da saúde" → não roteia para `buscar_historico_de_pagamentos_do_servidor`.
 - "Pesquise as licitações abertas" → domínio de licitações, não folha.
 - "Salário do João Silva" → ainda roteia para folha (proteção contra overcorreção).

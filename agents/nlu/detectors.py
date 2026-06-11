@@ -1,13 +1,128 @@
-"""Regras de roteamento para o relatorio `despesas-por-funcao`."""
+"""Detectores determinísticos de domínio reutilizados pela seleção híbrida.
+
+Estas funções identificam o domínio/forma de uma pergunta (estoques,
+transferências/emendas, despesas por função) e retornam apenas sinais simples
+(booleanos/strings) consumidos pelos predicados de `intents`. Foram extraídas
+das antigas regras de roteamento ao remover o router legado.
+"""
 
 from __future__ import annotations
 
 import re
 
-from agents.routing.constants import DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS
-from agents.routing.extractors import _contains_any, _extract_limit, _extract_year
-from agents.routing.models import RouteDecision
+from agents.nlu.constants import (
+    DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS,
+    ESTOQUES_DOMAIN_KEYWORDS,
+    TRANSFERENCIAS_FINANCEIRAS_DOMAIN_KEYWORDS,
+)
+from agents.nlu.extractors import (
+    _contains_any,
+    _contains_any_term,
+    _contains_term,
+)
 
+# --- Transferências financeiras / emendas ------------------------------------
+
+
+def _is_transferencias_financeiras_query(normalized_text: str) -> bool:
+    return _contains_any_term(
+        normalized_text,
+        TRANSFERENCIAS_FINANCEIRAS_DOMAIN_KEYWORDS,
+    )
+
+
+def _is_emenda_query(normalized_text: str) -> bool:
+    return _contains_any_term(
+        normalized_text,
+        (
+            "emenda",
+            "emendas",
+            "ementa",
+            "ementas",
+            "parlamentar",
+            "parlamentares",
+        ),
+    )
+
+
+# --- Estoques ----------------------------------------------------------------
+
+_ESTOQUES_MOVEMENT_KEYWORDS = (
+    "movimentacao",
+    "movimentacoes",
+    "requisicao",
+    "requisicoes",
+    "aplicacao imediata",
+    "nota fiscal de compra",
+    "almoxarifado",
+)
+_ESTOQUES_AGGREGATION_KEYWORDS = (
+    "quanto",
+    "total",
+    "totais",
+    "comum",
+    "comuns",
+    "frequente",
+    "frequentes",
+    "maior",
+    "maiores",
+    "mais",
+    "ranking",
+    "quantas",
+    "quantos",
+)
+_ESTOQUES_ENTITY_TERMS = (
+    "material",
+    "materiais",
+    "item",
+    "itens",
+    "produto",
+    "produtos",
+)
+_ESTOQUES_GENERIC_SIGNAL_TERMS = (
+    "saldo",
+    "entrada",
+    "entradas",
+    "saida",
+    "saidas",
+    "movimentacao",
+    "movimentacoes",
+    "almoxarifado",
+)
+
+
+def _is_estoques_query(normalized_text: str) -> bool:
+    if _contains_any(normalized_text, ESTOQUES_DOMAIN_KEYWORDS):
+        return True
+
+    has_entity = any(_contains_term(normalized_text, term) for term in _ESTOQUES_ENTITY_TERMS)
+    has_stock_signal = any(_contains_term(normalized_text, term) for term in _ESTOQUES_GENERIC_SIGNAL_TERMS)
+    return has_entity and has_stock_signal
+
+
+def _has_estoques_aggregate_intent(normalized_text: str) -> bool:
+    return any(keyword in normalized_text for keyword in _ESTOQUES_AGGREGATION_KEYWORDS)
+
+
+def _is_estoques_movement_history_query(normalized_text: str) -> bool:
+    if any(
+        keyword in normalized_text
+        for keyword in (
+            "requisicao",
+            "requisicoes",
+            "aplicacao imediata",
+            "nota fiscal de compra",
+        )
+    ):
+        return True
+    if "historico" in normalized_text:
+        return True
+    if any(keyword in normalized_text for keyword in _ESTOQUES_MOVEMENT_KEYWORDS):
+        return not _has_estoques_aggregate_intent(normalized_text)
+    return False
+
+
+# --- Despesas por função -----------------------------------------------------
 
 _DESPESAS_POR_FUNCAO_SPEND_SIGNAL_KEYWORDS = (
     "gasto",
@@ -59,14 +174,6 @@ _FUNCOES_DE_GOVERNO_ALIASES: tuple[tuple[str, tuple[str, ...]], ...] = (
 )
 
 
-def _extract_funcao_de_governo_alias(normalized_text: str) -> str | None:
-    for funcao, aliases in _FUNCOES_DE_GOVERNO_ALIASES:
-        for alias in aliases:
-            if re.search(rf"\b{re.escape(alias)}\b", normalized_text):
-                return funcao
-    return None
-
-
 def _extract_funcao_de_governo(normalized_text: str) -> str | None:
     for funcao, aliases in _FUNCOES_DE_GOVERNO_ALIASES:
         for alias in aliases:
@@ -110,43 +217,6 @@ def _is_despesas_por_funcao_query(normalized_text: str) -> bool:
     )
 
 
-def _extract_despesas_por_funcao_filters(normalized_text: str) -> dict[str, object]:
-    filtros: dict[str, object] = {}
-    if year := _extract_year(normalized_text):
-        filtros["ano"] = year
-    if "fumusa" in normalized_text:
-        filtros["origem"] = "saude"
-    elif "prefeitura" in normalized_text:
-        filtros["origem"] = "prefeitura"
-    elif "camara" in normalized_text:
-        filtros["origem"] = "camara"
-
-    unidade_match = re.search(
-        r"\bunidade gestora\b\s+(?:da|de|do)?\s*([a-z0-9 .&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
-        normalized_text,
-    )
-    if unidade_match is not None:
-        filtros["unidade_gestora"] = " ".join(unidade_match.group(1).split())
-
-    funcao_match = re.search(
-        r"\bfunc(?:ao|oes)\b\s+(?:da|de|do|na|no)?\s*([a-z0-9 .&/-]+?)(?=\s+\bem\b\s+\d{4}\b|\?|$)",
-        normalized_text,
-    )
-    if funcao_match is not None:
-        valor = " ".join(funcao_match.group(1).split())
-        valor_sem_pontuacao = valor.strip(" .")
-        if (
-            valor
-            and "despesas por funcao" not in valor
-            and re.fullmatch(r"(?:em\s+)?\d{4}", valor_sem_pontuacao) is None
-        ):
-            filtros["funcao"] = _extract_funcao_de_governo_alias(valor) or valor
-    elif funcao := _extract_funcao_de_governo(normalized_text):
-        filtros["funcao"] = funcao
-
-    return filtros
-
-
 # Ordem importa: pistas mais específicas ("dotacao inicial") antes das genéricas.
 _DESPESAS_POR_FUNCAO_METRIC_CUES: tuple[tuple[tuple[str, ...], str], ...] = (
     (("dotacao inicial",), "soma_dotacao_inicial"),
@@ -184,57 +254,3 @@ def _extract_despesas_por_funcao_group_by(aggregation_text: str) -> str | None:
     ):
         return "funcao"
     return None
-
-
-def _try_route_despesas_por_funcao_agregacao(
-    normalized_text: str,
-) -> RouteDecision | None:
-    if not _is_despesas_por_funcao_query(normalized_text):
-        return None
-    aggregation_text = strip_despesas_por_funcao_domain_keywords(normalized_text)
-    if not any(keyword in aggregation_text for keyword in ("quanto", "total", "maior", "maiores", "por ", "quantas")):
-        return None
-
-    filtros = _extract_despesas_por_funcao_filters(normalized_text)
-    metrica = _extract_despesas_por_funcao_metric(normalized_text, aggregation_text)
-    agrupar_por = _extract_despesas_por_funcao_group_by(aggregation_text)
-
-    return RouteDecision(
-        domain="despesas_por_funcao",
-        operation_type="agregacao_ranking",
-        tool_name="agregar_despesas_por_funcao",
-        tool_kwargs={
-            "filtros": filtros,
-            "agrupar_por": agrupar_por,
-            "metrica": metrica,
-            "ordenar_por": "metrica",
-            "ordem": "desc",
-            "limite": _extract_limit(normalized_text, default=10),
-        },
-        tags=["scope:public", "domain:despesas_por_funcao", "shape:aggregate"],
-        confident=True,
-    )
-
-
-def _try_route_despesas_por_funcao_lista(normalized_text: str) -> RouteDecision | None:
-    if not _is_despesas_por_funcao_query(normalized_text):
-        return None
-
-    filtros = _extract_despesas_por_funcao_filters(normalized_text)
-    return RouteDecision(
-        domain="despesas_por_funcao",
-        operation_type="consulta_lista",
-        tool_name="consultar_despesas_por_funcao",
-        tool_kwargs={
-            "filtros": filtros,
-            "ordenar_por": "valor_pago"
-            if any(keyword in normalized_text for keyword in ("maior", "maiores"))
-            else "periodo_fim",
-            "ordem": "desc",
-            "limite": 100
-            if any(keyword in normalized_text for keyword in ("todos", "todas"))
-            else _extract_limit(normalized_text, default=10),
-        },
-        tags=["scope:public", "domain:despesas_por_funcao", "shape:lookup"],
-        confident=True,
-    )

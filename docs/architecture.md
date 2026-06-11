@@ -6,7 +6,7 @@ O Arcos Transparente é uma pilha `XML/CSV → parser → schema → SQLite → 
 
 A camada de agente expõe **20 tools públicas** organizadas por domínio (servidores, contratos, licitações, despesas, receitas, planejamento, frota, patrimônio, estoques, quadro de pessoal, eleitos, transferências financeiras e conhecimento municipal). Cada domínio tem pelo menos uma tool de consulta/listagem e uma de agregação/ranking. Uma tool RAG (`consultar_conhecimento_municipal`) cobre o acervo markdown curado de telefones, horários de ônibus (intermunicipais e do Tarifa Zero), estrutura organizacional e FAQ.
 
-Antes de cada pergunta chegar ao modelo, um sistema de guardrails determinísticos rejeita perguntas fora do escopo, vazias ou com tentativa de injection. Uma política de seleção híbrida reduz a superfície de tools candidatas entregue ao agente, melhorando a precisão das escolhas. O router (`agents/router.py`) existe como camada de compatibilidade para fluxos legados e não é a autoridade principal de interpretação.
+Antes de cada pergunta chegar ao modelo, um sistema de guardrails determinísticos rejeita perguntas fora do escopo, vazias ou com tentativa de injection. Uma política de seleção híbrida reduz a superfície de tools candidatas entregue ao agente, melhorando a precisão das escolhas. A roteabilidade das tools vem da metadata de cada tool (`routing_metadata`) consumida pelo seletor; a camada de NLU (`agents/nlu/`) faz a leitura estruturada da pergunta (`QueryReading`) e expõe poucos predicados de intenção determinísticos (`agents/nlu/intents.py`) para as distinções genuinamente ambíguas.
 
 As interfaces de usuário vivem no pacote `ui/`, separado do pacote `agents/` — que permanece agnóstico de qualquer UI. A interface padrão é Streamlit (`ui/web.py`); há também uma CLI de chat (`ui/cli.py`, acessível por `python -m ui`). O runtime completo pode ser executado em Docker com um único `docker compose up app`, que executa bootstrap automático (`db init`, `importar`, `rag index`) antes de subir o Streamlit.
 
@@ -124,16 +124,15 @@ graph LR
     SQLTools --> DB
     RAGTool --> ChromaDB[(vector_store/)]
     HybSel --> Registry
+    HybSel --> NLU[agents/nlu/]
+    Guard --> NLU
+    Policy --> NLU
     Core --> Observ[agents/chatbot/observability/]
 
     Pipeline --> Parsers[ingestion/parsers/]
     Pipeline --> Schemas[ingestion/schemas/]
     Pipeline --> Loader[ingestion/loaders/sql_loader.py]
     Loader --> DB
-
-    Router[agents/router.py] --> Routes[agents/routing/routes/]
-    Routes --> Extractors[agents/routing/extractors.py]
-    Core -.->|compatibilidade| Router
 ```
 
 ---
@@ -168,13 +167,14 @@ arcos-transparente/
 │
 ├── agents/
 │   ├── guardrails.py               # Guardrails determinísticos pré-modelo
-│   ├── router.py                   # Fachada pública do router de compatibilidade
-│   ├── routing/
-│   │   ├── extractors.py           # Normalização e extração de entidades da query
-│   │   ├── models.py               # Tipos compartilhados do router
-│   │   ├── constants.py            # Palavras-chave e patterns globais
+│   ├── nlu/                        # Compreensão de linguagem natural (sem router)
 │   │   ├── reading.py              # QueryReading: fatos estruturados da query do cidadão
-│   │   └── routes/                 # Heurísticas de compatibilidade por domínio
+│   │   ├── extractors.py           # Normalização e extração de entidades da query
+│   │   ├── detectors.py            # Detectores determinísticos por domínio
+│   │   ├── intents.py              # Predicados de intenção p/ a seleção híbrida
+│   │   ├── conversation.py         # Normalização conversacional e confirmações
+│   │   ├── constants.py            # Palavras-chave de escopo e patterns globais
+│   │   └── models.py               # GuardrailDecision
 │   ├── chatbot/                    # Núcleo do chatbot, agnóstico de UI
 │   │   ├── agent.py                # Bootstrap do agente LangChain + provider de observabilidade
 │   │   ├── application.py          # ChatbotApplication: caso de uso de conversa (sem framework)
@@ -232,7 +232,7 @@ arcos-transparente/
 ├── vector_store/                   # Artefatos persistidos do Chroma (gerado por `rag index`)
 ├── database/                       # Banco SQLite (gerado por `db init`)
 └── tests/
-    ├── agents/                     # Testes do chatbot, router e seleção híbrida
+    ├── agents/                     # Testes do chatbot, guardrails, intents e seleção híbrida
     ├── parsers/                    # Testes unitários de parsers XML e CSV
     ├── pipeline/                   # Testes de integração do pipeline
     └── loaders/                    # Testes do loader SQL

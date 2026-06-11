@@ -24,8 +24,8 @@ O estado real do codigo neste momento e:
 - pipeline de ingestao em `ingestion/pipeline.py`
 - modelos SQLAlchemy em `database/models/`
 - migrations Alembic em `database/migrations/versions/`
-- chatbot em `agents/chatbot/`, com CLI e interface web local em Streamlit
-- router de compatibilidade em `agents/router.py` e `agents/routing/`
+- chatbot em `agents/chatbot/`, com CLI e interface web local em `ui/`
+- camada de NLU (leitura, extractors, detectores, intents) em `agents/nlu/`
 - tools SQL publicas em `agents/tools/sql_tools/`
 - indexacao e retrieval markdown-first em `agents/rag/`
 - bootstrap principal do agente em `agents/chatbot/agent.py`
@@ -172,21 +172,20 @@ Exemplo forte:
 - preserva `xml_original` para auditoria
 - mantem tabelas filhas para despesas orcamentarias e itens adquiridos
 
-### 5. Router deterministico antes do LLM
+### 5. Camada de NLU e seleção híbrida (sem router)
 
-O router deterministico ainda existe, mas hoje ele deve ser tratado como
-compatibilidade e apoio a testes legados. Ele:
+O router determinístico legado foi removido. A compreensão de linguagem natural
+mora em `agents/nlu/`:
 
-- normaliza o texto
-- detecta dominio e tipo de operacao quando algum fluxo ainda pede isso
-- compartilha as mesmas regras hard-coded de bloqueio para prompt injection,
-  pergunta vazia e fora de escopo
-- nao e a camada autoritativa para interpretar perguntas permitidas no chatbot atual
+- `reading.py` lê a pergunta uma vez em `QueryReading`
+- `extractors.py` normaliza e extrai entidades (nome, ano, secretaria, objeto, ...)
+- `detectors.py` e `intents.py` expõem detecção determinística por domínio e os
+  predicados de intenção consumidos pela seleção híbrida
 
-No chatbot atual, perguntas permitidas passam primeiro pela politica
-deterministica e pela selecao hibrida, e so depois seguem para o prompt e os
-contratos das tools. O router nao deve substituir essas camadas nem impor comportamento
-conversacional concorrente.
+No chatbot atual, perguntas permitidas passam pela política determinística e pela
+seleção híbrida (metadata da tool + predicados de intenção) e só depois seguem
+para o prompt e os contratos das tools. A roteabilidade de uma tool vem da sua
+`routing_metadata`, não de uma cadeia de prioridade determinística.
 
 ### 6. OpenAI e o caminho oficial desta fase
 
@@ -227,8 +226,8 @@ Cada tool publica precisa declarar no proprio `@register(...)`:
 - tags coerentes de dominio e forma de uso
 
 O seletor hibrido consome esse catalogo enriquecido. Uma nova tool publica
-selecionavel nao depende mais de editar a cadeia principal de heuristicas do
-router para entrar no fluxo principal do chatbot cidadao.
+selecionavel nao depende de editar nenhuma cadeia central de heuristicas para
+entrar no fluxo principal do chatbot cidadao.
 
 ### 7. Prompt versionado em arquivo
 
@@ -303,12 +302,12 @@ uv run python cli.py importar --tipo contratos --ano 2025
 - nao assumir que existe API web pronta
 - nao assumir que todo arquivo de `data/rag` ja e indexado; no v1 apenas markdown entra no indice
 - nao assumir que a importacao e incremental
-- nao assumir que o router define o comportamento principal do chatbot
+- nao assumir que existe um router determinístico: ele foi removido em favor da seleção híbrida
 - nao assumir que docs antigos da raiz descrevem o estado atual
 
 ## Sinais de Qualidade do Projeto
 
-- cobertura de testes distribuida em CLI, router, parsers, schemas, pipeline e tools
+- cobertura de testes distribuida em CLI, NLU, guardrails, seleção híbrida, parsers, schemas, pipeline e tools
 - uso consistente de `UniqueConstraint` para upsert
 - migrations versionadas por dominio
 - separacao clara entre parsing, schema, persistencia e consulta
@@ -322,7 +321,7 @@ Se voce for evoluir o projeto no Codex CLI, o caminho mais seguro costuma ser:
 1. confirmar o dominio afetado
 2. localizar parser, schema, modelo, migration e tool correspondentes
 3. ajustar testes primeiro ou junto da mudanca
-4. validar se o router tambem precisa evoluir
+4. validar se a metadata de roteamento da tool ou os predicados de `agents/nlu/intents.py` precisam evoluir
 5. revisar se a mudanca afeta documentacao em `docs/`
 
 Esse repositorio ja esta organizado o bastante para crescer por dominio. A principal disciplina necessaria e manter alinhados parser, modelo, migration, tool publica e testes.

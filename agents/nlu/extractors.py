@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from agents.routing.conversation import normalize_conversation_text
+from agents.nlu.conversation import normalize_conversation_text
 from shared.planejamento_entidades import extract_planejamento_entidade_alias
 from shared.utils.dates import current_date
 

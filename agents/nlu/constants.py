@@ -207,6 +207,16 @@ SUPPORTED_SCOPE_WEAK_KEYWORDS = (
     "procuradoria",
     "partido",
     "partidos",
+    "material",
+    "materiais",
+    "movimentacao",
+    "movimentacoes",
+    "entrada",
+    "entradas",
+    "saida",
+    "saidas",
+    "requisicao",
+    "requisicoes",
 )
 
 DESPESAS_DOMAIN_KEYWORDS = (

@@ -8,7 +8,7 @@ Em vez de criar uma tool para cada pergunta possível, o projeto passou a usar:
 
 - poucas tools públicas por domínio
 - orquestração principal pelo LLM, com guardrails hard-coded antes do modelo
-- um router leve só para compatibilidade e integrações legadas
+- seleção híbrida guiada pela metadata da própria tool (sem router determinístico)
 - helpers internos compartilhados para concentrar a lógica de filtro, agregação e serialização
 
 O objetivo prático é melhorar:
@@ -117,45 +117,33 @@ Conceitos importantes:
 
 Mesmo com suporte a `scope:internal`, a decisão atual foi remover os wrappers antigos de `servidores` em vez de mantê-los escondidos.
 
-### 2. Router
+### 2. Camada de NLU (`agents/nlu/`)
 
-Arquivos:
+O router determinístico legado foi removido. A compreensão de linguagem natural
+mora agora em `agents/nlu/`:
 
-- `agents/router.py`
-- `agents/routing/`
+- `agents/nlu/reading.py` — `read_query`/`QueryReading`: lê a pergunta uma vez em fatos estruturados
+- `agents/nlu/extractors.py` — normalização e extração de entidades (nome, ano, secretaria, objeto, etc.)
+- `agents/nlu/detectors.py` — detectores determinísticos por domínio (estoques, transferências/emendas, despesas por função)
+- `agents/nlu/intents.py` — predicados de intenção consumidos pela seleção híbrida
+- `agents/nlu/conversation.py` — normalização conversacional e confirmações
+- `agents/nlu/constants.py` — palavras-chave de escopo e patterns globais
+- `agents/nlu/models.py` — `GuardrailDecision`
 
-Responsabilidades:
+A roteabilidade de uma tool não depende mais de uma cadeia de prioridade
+determinística: ela vem da `routing_metadata` (`examples`/`hints`/`exclusions`)
+registrada com a própria tool e consumida pelo seletor híbrido. O padrão do
+chatbot cidadão é:
 
-- oferecer heurísticas de compatibilidade para classificação determinística
-- inferir domínio e tipo de operação quando uma integração legada ainda pedir isso
-- compartilhar os guardrails hard-coded sem se tornar a camada autoritativa de interpretação
-- sugerir subconjuntos de tools apenas para fluxos legados que ainda dependem desse atalho
-
-Organização interna atual:
-
-- `agents/router.py` funciona como fachada pública e orquestra a ordem de prioridade
-- `agents/routing/extractors.py` concentra normalização e extração
-- `agents/routing/routes/` separa as regras por domínio
-- `agents/routing/models.py` centraliza os tipos do router
-
-Guia de manutenção:
-
-- veja [Guia Curto Para Novas Regras Do Router](./router-regras.md)
-
-Hoje o router trabalha com estas classes:
-
-- `consulta_lista`
-- `agregacao_ranking`
-- `historico_detalhado`
-
-Nos fluxos legados, uma rota clara ainda pode sugerir um subconjunto pequeno de
-tools.
-No chatbot cidadão, o padrão agora é:
-
-1. aplicar uma política determinística antes do modelo
+1. aplicar guardrails e uma política determinística antes do modelo
 2. usar seleção híbrida para reduzir a superfície pública a poucas tools candidatas
 3. deixar a orquestração final com o prompt e os contratos das tools
 4. fazer fallback para toda a superfície pública apenas quando o seletor estiver com baixa confiança ou retornar algo inválido
+
+Para as poucas distinções genuinamente ambíguas que ainda valem determinismo
+testável (emenda vs. transferência, lista vs. agregado por função, ranking de
+contratos por valor vs. por contagem, métricas de estoque), `hybrid_selection`
+consulta os predicados de `agents/nlu/intents.py`.
 
 ### Precedência final de regras
 
@@ -163,13 +151,9 @@ O comportamento público do assistente segue esta ordem:
 
 1. guardrails hard-coded pré-modelo
 2. política determinística pré-seleção do runtime
-3. seleção híbrida de tools públicas
+3. seleção híbrida de tools públicas (metadata da tool + predicados de intenção)
 4. política conversacional do runtime e do system prompt
 5. contratos e descrições locais das tools
-6. heurísticas de compatibilidade do router
-
-Isso significa que o router não é mais a autoridade principal para definir
-como perguntas permitidas devem ser interpretadas.
 
 ### Guardrails compartilhados
 
@@ -223,7 +207,7 @@ Configuração atual do agente:
 - `LANGSMITH_ENDPOINT` permanece opcional
 - `.env.example` documenta o contrato canonico usado no bootstrap
 
-Com isso, o runtime cidadão deixa de depender do router para decidir o fluxo de perguntas permitidas.
+Com isso, o runtime cidadão não tem mais um router determinístico decidindo o fluxo de perguntas permitidas.
 
 ### Contrato de metadata para seleção híbrida
 
@@ -234,8 +218,8 @@ Cada tool pública registrada em `agents/tools/registry.py` precisa publicar:
 - `summary`: resumo derivado da docstring da própria tool
 
 Esse contrato vive junto do decorator `@register(...)` de cada tool pública.
-Adicionar uma nova tool pública selecionável não exige editar uma cadeia central
-de palavras-chave do router; basta registrar a tool com `scope=PUBLIC_SCOPE`,
+Adicionar uma nova tool pública selecionável não exige editar nenhuma cadeia
+central de palavras-chave; basta registrar a tool com `scope=PUBLIC_SCOPE`,
 tags coerentes e metadata de roteamento suficiente para o seletor híbrido.
 
 ### Observabilidade do runtime
@@ -480,9 +464,9 @@ agents/tools/sql_tools/planejamento/
 ```text
 Pergunta do usuário
     ->
-Router determinístico
+Guardrails + política determinística
     ->
-Seleção de poucas tools públicas
+Seleção híbrida (metadata da tool + predicados de intenção)
     ->
 Agente LangChain
     ->
@@ -500,12 +484,13 @@ Resposta estruturada
 Passo a passo:
 
 1. o usuário faz uma pergunta
-2. o router tenta identificar domínio e tipo de operação
-3. o bootstrap cria o agente com o menor conjunto útil de tools
-4. a tool escolhida valida entrada com Pydantic
-5. a consulta usa helpers compartilhados para aplicar filtros e ordenação
-6. o resultado é serializado em um contrato estável
-7. o agente responde usando esse payload
+2. guardrails e política determinística decidem bloquear, clarificar ou seguir
+3. a seleção híbrida reduz a superfície pública a poucas tools candidatas
+4. o bootstrap cria o agente com o menor conjunto útil de tools
+5. a tool escolhida valida entrada com Pydantic
+6. a consulta usa helpers compartilhados para aplicar filtros e ordenação
+7. o resultado é serializado em um contrato estável
+8. o agente responde usando esse payload
 
 ---
 
@@ -668,13 +653,13 @@ Exemplos:
 - `tags=["domain:licitacoes", "shape:lookup"]`
 - `tags=["domain:licitacoes", "shape:aggregate"]`
 
-### Passo 4. Ensinar o router, se a integração legada realmente precisar
+### Passo 4. Garantir a roteabilidade pela metadata da tool
 
-Adicionar regras determinísticas em `agents/router.py` para:
-
-- reconhecer o domínio em fluxos de compatibilidade
-- distinguir listagem, agregação e histórico quando esse atalho ainda trouxer valor
-- nunca substituir o prompt e os contratos das tools como autoridade do chatbot cidadão
+A `routing_metadata` (`examples`/`hints`/`exclusions`) do `@register(...)` é o que
+torna a tool selecionável pelo seletor híbrido. Só adicione um predicado em
+`agents/nlu/intents.py` quando a distinção for genuinamente ambígua e precisar de
+garantia determinística testável (ex.: emenda vs. transferência). Nunca recrie um
+router determinístico concorrente ao prompt e aos contratos das tools.
 
 ### Passo 5. Cobrir com testes
 
@@ -682,7 +667,7 @@ Os testes mínimos esperados são:
 
 - registry
 - chatbot/runtime
-- router de compatibilidade, quando aplicável
+- seleção híbrida / predicados de intenção, quando aplicável
 - schemas
 - tool pública
 
@@ -690,14 +675,16 @@ Os testes mínimos esperados são:
 
 ## Estratégia de Testes
 
-A arquitetura depende muito de contrato e roteamento, então os testes mais importantes são:
+A arquitetura depende muito de contrato e seleção, então os testes mais importantes são:
 
 - `tests/tools/test_registry.py`
   valida quais tools realmente existem
 - `tests/agents/test_chatbot.py`
   valida o boundary pre-modelo, o bootstrap do agente e o contrato conversacional principal
-- `tests/agents/test_router.py`
-  valida apenas as heurísticas de compatibilidade ainda preservadas
+- `tests/agents/test_hybrid_selection.py` e `tests/agents/test_intents.py`
+  validam a seleção híbrida e os predicados de intenção determinísticos
+- `tests/agents/test_guardrails.py`
+  valida escopo, injection e perguntas vazias
 - `tests/tools/sql_tools/test_servidores_public_tools.py`
   valida comportamento funcional das tools amplas
 - `tests/tools/sql_tools/test_contratos_public_tools.py`

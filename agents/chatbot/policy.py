@@ -8,8 +8,7 @@ import re
 from typing import Any, Literal, Protocol
 
 from agents.guardrails import evaluate_public_query_guardrails
-from agents.routing.compatibility import route_public_compatibility_query
-from agents.routing.conversation import (
+from agents.nlu.conversation import (
     looks_like_confirmation_text,
     normalize_conversation_text,
 )
@@ -205,10 +204,8 @@ def _evaluate_guardrail_for_policy_question(
     prior_user_queries: Sequence[str],
     prior_messages: Sequence[tuple[str, str, bool]],
 ):
-    compatibility_route = route_public_compatibility_query(question)
     return evaluate_public_query_guardrails(
         question,
-        compatibility_route=compatibility_route,
         has_history=bool(history),
         prior_user_queries=prior_user_queries,
         prior_messages=prior_messages,
