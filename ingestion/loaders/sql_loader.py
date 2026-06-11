@@ -5,15 +5,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
-from typing import Any, Optional
+from typing import Any
 
 from loguru import logger
-from sqlalchemy import Date, Numeric, String, Text, and_, select
+from sqlalchemy import ColumnElement, Date, Numeric, String, Text, and_, select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.schema import UniqueConstraint
 
-from database.models import Servidor
+from database.models import Base, Servidor
 from ingestion.parsers.xml.shared import sanitize_xml_payload
 
 
@@ -35,7 +35,7 @@ class SQLLoader:
         self.session = session
         self.batch_size = batch_size
 
-    def load(self, registros: list[dict[str, Any]], modelo: type) -> LoadResult:
+    def load(self, registros: list[dict[str, Any]], modelo: type[Base]) -> LoadResult:
         """Carrega registros no banco com upsert por índice único composto."""
         resultado = LoadResult()
         if not registros:
@@ -54,10 +54,7 @@ class SQLLoader:
                             ).scalar_one_or_none()
 
                             if existente is None:
-                                if duplicate := self._find_duplicate_before_insert(
-                                    payload,
-                                    modelo,
-                                ):
+                                if self._find_duplicate_before_insert(payload, modelo) is not None:
                                     resultado.ignorados += 1
                                     logger.warning(
                                         f"Ignorado (matricula ja cadastrada) em {modelo.__tablename__}: {payload}"
@@ -92,9 +89,9 @@ class SQLLoader:
 
         return resultado
 
-    def _build_unique_filter(self, payload: dict[str, Any], modelo: type) -> list[Any]:
+    def _build_unique_filter(self, payload: dict[str, Any], modelo: type[Base]) -> list[ColumnElement[bool]]:
         """Monta filtros SQL a partir da unique constraint composta do modelo."""
-        unique_constraint: Optional[UniqueConstraint] = None
+        unique_constraint: UniqueConstraint | None = None
         for constraint in modelo.__table__.constraints:
             if isinstance(constraint, UniqueConstraint):
                 unique_constraint = constraint
@@ -103,14 +100,14 @@ class SQLLoader:
         if unique_constraint is None:
             raise ValueError(f"Modelo {modelo.__name__} sem UniqueConstraint para upsert")
 
-        filters: list[Any] = []
+        filters: list[ColumnElement[bool]] = []
         for col in unique_constraint.columns:
             if col.name not in payload:
                 raise ValueError(f"Campo unico ausente no payload: {col.name}")
             filters.append(getattr(modelo, col.name) == payload[col.name])
         return filters
 
-    def _normalize_and_validate(self, registro: dict[str, Any], modelo: type) -> dict[str, Any]:
+    def _normalize_and_validate(self, registro: dict[str, Any], modelo: type[Base]) -> dict[str, Any]:
         """Normaliza e valida tipos de acordo com colunas do modelo."""
         registro = sanitize_xml_payload(registro)
         payload: dict[str, Any] = {}
@@ -160,8 +157,8 @@ class SQLLoader:
     def _find_duplicate_before_insert(
         self,
         payload: dict[str, Any],
-        modelo: type,
-    ) -> Any | None:
+        modelo: type[Base],
+    ) -> Base | None:
         """Aplica regras de deduplicacao que nao devem virar upsert."""
         if modelo is not Servidor:
             return None
@@ -173,7 +170,7 @@ class SQLLoader:
         return self.session.execute(select(Servidor).where(Servidor.matricula == matricula)).scalar_one_or_none()
 
     @staticmethod
-    def _apply_updates(instancia: Any, payload: dict[str, Any]) -> bool:
+    def _apply_updates(instancia: Base, payload: dict[str, Any]) -> bool:
         """Atualiza apenas campos alterados na instância existente."""
         mudou = False
         for chave, valor in payload.items():
