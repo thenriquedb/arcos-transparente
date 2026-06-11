@@ -571,6 +571,65 @@ def test_chatbot_application_clarifica_sigla_protegida_antes_do_backend() -> Non
     assert backend.calls == []
 
 
+def _historico_clarificacao_de_onibus() -> list[ChatMessage]:
+    return [
+        ChatMessage(role="user", content="qual o horario de onibus?"),
+        ChatMessage(
+            role="assistant",
+            content=("Você quer os horários do transporte municipal Tarifa Zero ou dos ônibus intermunicipais?"),
+        ),
+    ]
+
+
+@pytest.mark.parametrize(
+    "resposta",
+    [
+        "intermunicipais",
+        "os intermunicipais",
+        "municipais",
+        "quero os municipais",
+        "tarifa zero",
+        "o gratuito da cidade",
+    ],
+)
+def test_policy_resolve_resposta_de_tipo_de_onibus(resposta: str) -> None:
+    decisao = evaluate_deterministic_policy(
+        resposta,
+        history=_historico_clarificacao_de_onibus(),
+    )
+
+    assert decisao.action == "allow"
+    # A pergunta original é preservada para o backend buscar o tipo escolhido.
+    assert "horario de onibus" in (decisao.resolved_question or "")
+
+
+def test_policy_nao_resolve_resposta_alheia_a_clarificacao_de_onibus() -> None:
+    decisao = evaluate_deterministic_policy(
+        "qual a capital da franca?",
+        history=_historico_clarificacao_de_onibus(),
+    )
+
+    assert decisao.action == "block"
+
+
+def test_chatbot_application_resposta_de_tipo_de_onibus_chega_ao_backend() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-onibus-tipo"),
+    )
+    app.session.history.extend(_historico_clarificacao_de_onibus())
+
+    response = app.ask("intermunicipais")
+
+    assert response.guardrail_triggered is False
+    assert len(backend.calls) == 1
+    backend_question, session_id = backend.calls[0]
+    assert session_id == "sessao-onibus-tipo"
+    assert "horario de onibus" in backend_question
+    assert "intermunicipais" in backend_question
+
+
 def test_chatbot_application_reaproveita_sigla_confirmada_antes_da_selecao() -> None:
     backend = FakeBackend()
     app = ChatbotApplication(
