@@ -1,8 +1,8 @@
 """CLI simples para testar o chatbot do agente.
 
 Uso:
-    python -m agents.chatbot.cli
-    python -m agents.chatbot.cli --once "Liste os contratos de 2025"
+    python -m ui
+    python -m ui --once "Liste os contratos de 2025"
 """
 
 from __future__ import annotations
@@ -10,14 +10,15 @@ from __future__ import annotations
 import argparse
 from collections.abc import Callable, Sequence
 
-from agents.chatbot.core import ChatSession, ChatbotApplication
+from agents.chatbot import ChatbotApplication, ChatSession
+
 
 EXIT_COMMANDS = {"sair", "exit", "quit", ":q"}
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="python -m agents.chatbot.cli",
+        prog="python -m ui",
         description="Chat CLI simples para testar o agente Arcos Transparente.",
     )
     parser.add_argument(

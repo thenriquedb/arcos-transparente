@@ -17,7 +17,7 @@ cd arcos-transparente
 cp .env.example .env          # preencha OPENAI_API_KEY
 uv sync
 uv run python cli.py db init && uv run python cli.py importar && uv run python cli.py rag index
-uv run streamlit run agents/chatbot/web.py
+uv run streamlit run ui/web.py
 ```
 
 Ou via Docker:

@@ -4,7 +4,6 @@ import pytest
 
 import agents.chatbot.agent as chatbot_agent
 from agents.chatbot.help_messages import build_scope_help_message
-from agents.chatbot.cli import run_interactive, run_once
 from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
 from agents.chatbot.core import (
     ChatbotAgentBackend,
@@ -1368,30 +1367,3 @@ def test_chatbot_agent_backend_stream_nao_exibe_saida_de_tools() -> None:
     chunks = list(backend.stream_answer("quem e o prefeito?", session_id="thread-web"))
 
     assert chunks == ["O prefeito de Arcos e Wellington Francelli."]
-
-
-def test_cli_run_once_imprime_resposta() -> None:
-    output: list[str] = []
-    app = ChatbotApplication(
-        backend=FakeBackend(),
-        session=ChatSession(id="cli-test"),
-    )
-
-    exit_code = run_once(app, "Quanto foi contratado?", output.append)
-
-    assert exit_code == 0
-    assert output == ["resposta para: Quanto foi contratado?"]
-
-
-def test_cli_interativo_encerra_com_sair() -> None:
-    output: list[str] = []
-    inputs = iter(["sair"])
-
-    exit_code = run_interactive(
-        ChatbotApplication(backend=FakeBackend()),
-        input_func=lambda _prompt: next(inputs),
-        output=output.append,
-    )
-
-    assert exit_code == 0
-    assert output[-1] == "Encerrando chat."

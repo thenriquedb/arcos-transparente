@@ -8,7 +8,7 @@ A camada de agente expõe **20 tools públicas** organizadas por domínio (servi
 
 Antes de cada pergunta chegar ao modelo, um sistema de guardrails determinísticos rejeita perguntas fora do escopo, vazias ou com tentativa de injection. Uma política de seleção híbrida reduz a superfície de tools candidatas entregue ao agente, melhorando a precisão das escolhas. O router (`agents/router.py`) existe como camada de compatibilidade para fluxos legados e não é a autoridade principal de interpretação.
 
-A interface padrão é Streamlit (`agents/chatbot/web.py`). Existe também uma CLI de chat (`agents/chatbot/cli.py`). O runtime completo pode ser executado em Docker com um único `docker compose up app`, que executa bootstrap automático (`db init`, `importar`, `rag index`) antes de subir o Streamlit.
+As interfaces de usuário vivem no pacote `ui/`, separado do pacote `agents/` — que permanece agnóstico de qualquer UI. A interface padrão é Streamlit (`ui/web.py`); há também uma CLI de chat (`ui/cli.py`, acessível por `python -m ui`). O runtime completo pode ser executado em Docker com um único `docker compose up app`, que executa bootstrap automático (`db init`, `importar`, `rag index`) antes de subir o Streamlit.
 
 ```mermaid
 flowchart TD
@@ -16,8 +16,8 @@ flowchart TD
     B --> C[(SQLite\ntransparencia.db)]
     D[Acervo Markdown / PDF\ndata/rag/] --> E[RAG Indexer\nagents/rag/indexing.py]
     E --> F[(Chroma\nvector_store/)]
-    G[Cidadão] --> H[Streamlit Web\nagents/chatbot/web.py]
-    H --> I[ChatbotApplication\nagents/chatbot/core.py]
+    G[Cidadão] --> H[Streamlit Web\nui/web.py]
+    H --> I[ChatbotApplication\nagents/chatbot/application.py]
     I --> J{Guardrails\nDeterminísticos}
     J -- bloqueado --> G
     J -- permitido --> K[Seleção Híbrida\nhybrid_selection.py]
@@ -111,11 +111,13 @@ graph LR
     CLI --> DB[(database/)]
     CLI --> RAGIdx[agents/rag/indexing.py]
 
-    Web[agents/chatbot/web.py] --> Core[agents/chatbot/core.py]
+    Web[ui/web.py] --> Core[agents/chatbot/application.py]
+    UICLI[ui/cli.py] --> Core
+    Core --> Backend[agents/chatbot/backend.py]
     Core --> Guard[agents/guardrails.py]
     Core --> Policy[agents/chatbot/policy.py]
     Core --> HybSel[agents/chatbot/hybrid_selection.py]
-    Core --> AgentBoot[agents/chatbot/agent.py]
+    Backend --> AgentBoot[agents/chatbot/agent.py]
     AgentBoot --> Registry[agents/tools/registry.py]
     Registry --> SQLTools[agents/tools/sql_tools/]
     Registry --> RAGTool[agents/tools/rag_tools/]
@@ -173,13 +175,14 @@ arcos-transparente/
 │   │   ├── constants.py            # Palavras-chave e patterns globais
 │   │   ├── reading.py              # QueryReading: fatos estruturados da query do cidadão
 │   │   └── routes/                 # Heurísticas de compatibilidade por domínio
-│   ├── chatbot/
+│   ├── chatbot/                    # Núcleo do chatbot, agnóstico de UI
 │   │   ├── agent.py                # Bootstrap do agente LangChain + provider de observabilidade
-│   │   ├── core.py                 # ChatbotApplication: núcleo reutilizável (sem framework)
+│   │   ├── application.py          # ChatbotApplication: caso de uso de conversa (sem framework)
+│   │   ├── backend.py              # ChatbotAgentBackend: executa o agente
+│   │   ├── _shared.py              # Tipos compartilhados (ChatMessage, ChatResponse, ChatSession)
+│   │   ├── core.py                 # Shim de compatibilidade que reexporta a API pública
 │   │   ├── policy.py               # Política determinística pré-seleção
 │   │   ├── hybrid_selection.py     # Seleção híbrida de tools candidatas por embedding + hints
-│   │   ├── web.py                  # Interface Streamlit
-│   │   ├── cli.py                  # Interface CLI de chat
 │   │   ├── streaming.py            # Extração de chunks de streaming do agente
 │   │   └── observability/          # Provider plugável de observabilidade (noop / LangSmith)
 │   ├── tools/
@@ -209,6 +212,11 @@ arcos-transparente/
 │       ├── retrieval.py            # Retrieval semântico
 │       ├── config.py               # Configuração do diretório de persistência do Chroma
 │       └── scope.py                # Filtros de escopo do acervo RAG
+│
+├── ui/                             # Interfaces de usuário (agents/ é agnóstico de UI)
+│   ├── __main__.py                 # Entrypoint `python -m ui` → CLI de chat
+│   ├── cli.py                      # Interface CLI de chat
+│   └── web.py                      # Interface web Streamlit
 │
 ├── shared/
 │   ├── utils/

@@ -121,7 +121,7 @@ Exibe total de registros nas tabelas principais e a última migration aplicada.
 ### Interface Web (Streamlit)
 
 ```bash
-uv run streamlit run agents/chatbot/web.py
+uv run streamlit run ui/web.py
 ```
 
 O app abre em `http://localhost:8501` por padrão.
@@ -129,7 +129,7 @@ O app abre em `http://localhost:8501` por padrão.
 ### Interface CLI
 
 ```bash
-uv run python -m agents.chatbot
+uv run python -m ui
 ```
 
 ---

@@ -25,7 +25,7 @@ if [ "$#" -eq 0 ]; then
   fi
 
   set -- \
-    streamlit run agents/chatbot/web.py \
+    streamlit run ui/web.py \
     --server.address=0.0.0.0 \
     --server.port="${PORT:-8501}"
 fi

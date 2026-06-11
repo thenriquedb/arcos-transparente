@@ -3,8 +3,8 @@ from __future__ import annotations
 from contextlib import nullcontext
 from types import SimpleNamespace
 
-import agents.chatbot.web as chatbot_web
-from agents.chatbot.core import ChatResponse
+import ui.web as chatbot_web
+from agents.chatbot import ChatResponse
 
 
 class FakeSessionState(dict):
