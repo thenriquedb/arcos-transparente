@@ -2,4 +2,5 @@
 
 from .consultar_frota_query import consultar_frota
 
+
 __all__ = ["consultar_frota"]

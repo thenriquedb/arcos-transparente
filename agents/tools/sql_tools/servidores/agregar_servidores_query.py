@@ -6,6 +6,7 @@ from typing import Any
 
 from sqlalchemy import func, select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -16,6 +17,7 @@ from agents.tools.sql_tools.shared.aggregate import (
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import FolhaServidor
+from shared.utils.decimal_to_float import decimal_or_int_to_json
 
 from .agregar_servidores_schema import (
     AgregacaoServidoresItem,
@@ -23,8 +25,6 @@ from .agregar_servidores_schema import (
     AgregarServidoresParams,
     AgregarServidoresResponse,
 )
-from shared.utils.decimal_to_float import decimal_or_int_to_json
-
 from .shared.querying import (
     apply_servidores_filters,
     resolve_mes_de_referencia_padrao,
@@ -45,7 +45,7 @@ def _build_metric_expression(metrica: str):
 
 
 @register(
-    name="agregar_servidores",
+    name=ToolName.AGREGAR_SERVIDORES,
     scope=PUBLIC_SCOPE,
     tags=["domain:servidores", "shape:aggregate"],
     routing=routing_metadata(

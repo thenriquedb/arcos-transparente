@@ -3,15 +3,14 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Any
 
 from sqlalchemy import select
 
 from database.models import PlanejamentoDespesa
+from shared.planejamento_entidades import get_planejamento_entidade_search_terms
 from shared.utils.decimal_to_float import decimal_to_float
 from shared.utils.text import matches_text_query
 
-from shared.planejamento_entidades import get_planejamento_entidade_search_terms
 from .filters import PlanejamentoFiltroSchema
 
 
@@ -40,12 +39,12 @@ SORT_FIELD_GETTERS = {
     "programa": lambda row: row.programa or "",
     "acao": lambda row: row.descricao_acao or "",
     "grupo_de_gasto": lambda row: row.grupo_despesa_descricao or "",
-    "orcamento_inicial": lambda row: row.dotacao_inicial or Decimal("0"),
-    "orcamento_atualizado": lambda row: row.dotacao_atualizada or Decimal("0"),
-    "valor_comprometido": lambda row: row.valor_empenhado or Decimal("0"),
-    "valor_confirmado": lambda row: row.valor_liquidado or Decimal("0"),
-    "valor_pago": lambda row: row.valor_pago or Decimal("0"),
-    "valor_cancelado": lambda row: row.valor_anulado or Decimal("0"),
+    "orcamento_inicial": lambda row: row.dotacao_inicial or Decimal(0),
+    "orcamento_atualizado": lambda row: row.dotacao_atualizada or Decimal(0),
+    "valor_comprometido": lambda row: row.valor_empenhado or Decimal(0),
+    "valor_confirmado": lambda row: row.valor_liquidado or Decimal(0),
+    "valor_pago": lambda row: row.valor_pago or Decimal(0),
+    "valor_cancelado": lambda row: row.valor_anulado or Decimal(0),
 }
 
 GROUP_FIELD_GETTERS = {

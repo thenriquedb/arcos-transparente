@@ -17,6 +17,7 @@ from shared.utils.validation import (
     validate_date_period,
 )
 
+
 ALLOWED_CONTRACT_FIELDS = (
     "id",
     "numero",
@@ -104,7 +105,7 @@ class ContratosFiltroSchema(SqlToolBaseSchema):
         return parse_decimal(value)
 
     @model_validator(mode="after")
-    def _validate_ranges(self) -> "ContratosFiltroSchema":
+    def _validate_ranges(self) -> ContratosFiltroSchema:
         if self.data_inicio is not None and (self.data_inicio_inicio is not None or self.data_inicio_fim is not None):
             raise ValueError("data_inicio nao pode ser usada junto com data_inicio_inicio ou data_inicio_fim")
 
@@ -127,7 +128,7 @@ class ContratosFiltroSchema(SqlToolBaseSchema):
 
     def build_text_fallback_candidates(
         self,
-    ) -> list[tuple[str, "ContratosFiltroSchema"]]:
+    ) -> list[tuple[str, ContratosFiltroSchema]]:
         """
         Monta filtros alternativos para um unico termo textual sem match.
 

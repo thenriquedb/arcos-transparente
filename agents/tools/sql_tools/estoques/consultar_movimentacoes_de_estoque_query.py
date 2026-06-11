@@ -7,6 +7,7 @@ from typing import Any
 
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
@@ -25,10 +26,10 @@ from database.models import EstoqueMovimentacao
 from shared.utils.decimal_to_float import decimal_to_float
 
 from .consultar_movimentacoes_de_estoque_schema import (
+    DEFAULT_ESTOQUE_MOVEMENT_FIELDS,
     ConsultarMovimentacoesDeEstoqueMetadata,
     ConsultarMovimentacoesDeEstoqueParams,
     ConsultarMovimentacoesDeEstoqueResponse,
-    DEFAULT_ESTOQUE_MOVEMENT_FIELDS,
     EstoqueMovimentacaoFiltroSchema,
 )
 
@@ -81,8 +82,8 @@ SORT_FIELD_GETTERS = {
     "data_movimento": lambda registro: registro.data_movimento,
     "material": lambda registro: registro.estoque_material.material or "",
     "tipo_movimento": lambda registro: registro.tipo_movimento or "",
-    "quantidade": lambda registro: registro.quantidade or Decimal("0"),
-    "valor_total": lambda registro: registro.valor_total or Decimal("0"),
+    "quantidade": lambda registro: registro.quantidade or Decimal(0),
+    "valor_total": lambda registro: registro.valor_total or Decimal(0),
     "almoxarifado": lambda registro: registro.almoxarifado or "",
 }
 
@@ -102,7 +103,7 @@ def project_estoque_movimentacao_fields(
 
 
 @register(
-    name="consultar_movimentacoes_de_estoque",
+    name=ToolName.CONSULTAR_MOVIMENTACOES_DE_ESTOQUE,
     scope=PUBLIC_SCOPE,
     tags=["domain:estoques", "shape:lookup", "kind:movements"],
     routing=routing_metadata(

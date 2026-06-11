@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 from agents.rag.retrieval import KnowledgeRetriever
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 
 
 @register(
-    name="consultar_conhecimento_municipal",
+    name=ToolName.CONSULTAR_CONHECIMENTO_MUNICIPAL,
     scope=PUBLIC_SCOPE,
     tags=["domain:conhecimento_municipal", "shape:retrieval"],
     routing=routing_metadata(

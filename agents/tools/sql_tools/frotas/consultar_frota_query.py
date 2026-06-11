@@ -8,6 +8,7 @@ from typing import Any
 from pydantic import ValidationError
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
@@ -30,7 +31,7 @@ from .consultar_frota_schema import (
 
 
 def _total_despesas(registro: FrotaVeiculo) -> Decimal:
-    return sum(despesa.total_despesa or Decimal("0") for despesa in registro.despesas)
+    return sum(despesa.total_despesa or Decimal(0) for despesa in registro.despesas)
 
 
 def _row_to_public_dict(registro: FrotaVeiculo) -> dict[str, Any]:
@@ -110,7 +111,7 @@ def sort_frota(
             "placa_veiculo": registro.placa_veiculo or "",
             "tipo_veiculo": registro.tipo_veiculo or "",
             "modelo": registro.modelo or "",
-            "valor_atual": registro.valor_atual or Decimal("0"),
+            "valor_atual": registro.valor_atual or Decimal(0),
             "total_despesas": _total_despesas(registro),
         }
         return mapping[ordenar_por] or ""
@@ -131,7 +132,7 @@ def project_frota(
 
 
 @register(
-    name="consultar_frota",
+    name=ToolName.CONSULTAR_FROTA,
     scope=PUBLIC_SCOPE,
     tags=["domain:frotas", "shape:lookup"],
     routing=routing_metadata(

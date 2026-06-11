@@ -6,6 +6,7 @@ from typing import Any
 
 from sqlalchemy import func, select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -16,6 +17,7 @@ from agents.tools.sql_tools.shared.aggregate import (
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import Contrato
+from shared.utils.decimal_to_float import decimal_or_int_to_json
 
 from .agregar_contratos_schema import (
     AgregacaoContratosItem,
@@ -23,8 +25,6 @@ from .agregar_contratos_schema import (
     AgregarContratosParams,
     AgregarContratosResponse,
 )
-from shared.utils.decimal_to_float import decimal_or_int_to_json
-
 from .shared.querying import (
     GROUP_BY_COLUMNS,
     apply_contratos_filters,
@@ -229,7 +229,7 @@ def _responder_total_sem_grupo(
 
 
 @register(
-    name="agregar_contratos",
+    name=ToolName.AGREGAR_CONTRATOS,
     scope=PUBLIC_SCOPE,
     tags=["domain:contratos", "shape:aggregate"],
     routing=routing_metadata(

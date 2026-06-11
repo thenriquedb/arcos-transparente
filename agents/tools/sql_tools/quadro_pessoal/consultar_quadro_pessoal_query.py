@@ -6,6 +6,7 @@ from typing import Any
 
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
@@ -90,7 +91,7 @@ def project_quadro_pessoal_fields(
 
 
 @register(
-    name="consultar_quadro_pessoal",
+    name=ToolName.CONSULTAR_QUADRO_PESSOAL,
     scope=PUBLIC_SCOPE,
     tags=["domain:quadro_pessoal", "shape:lookup"],
     routing=routing_metadata(

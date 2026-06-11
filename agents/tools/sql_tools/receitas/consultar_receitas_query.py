@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
@@ -24,7 +25,7 @@ from .shared.runtime import project_receita_fields
 
 
 @register(
-    name="consultar_receitas",
+    name=ToolName.CONSULTAR_RECEITAS,
     scope=PUBLIC_SCOPE,
     tags=["domain:receitas", "shape:lookup"],
     routing=routing_metadata(

@@ -89,7 +89,7 @@ class AgregarPassagensParams(SqlToolBaseSchema):
         return normalize_limit(value, maximum=100)
 
     @model_validator(mode="after")
-    def _validate_aggregation(self) -> "AgregarPassagensParams":
+    def _validate_aggregation(self) -> AgregarPassagensParams:
         if self.ordenar_por not in {"metrica", self.agrupar_por}:
             raise ValueError("ordenar_por deve ser 'metrica' ou igual a agrupar_por")
         if self.agrupar_por is None and self.ordenar_por != "metrica":

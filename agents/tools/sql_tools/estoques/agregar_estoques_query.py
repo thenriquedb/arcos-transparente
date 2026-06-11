@@ -5,6 +5,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -40,18 +41,18 @@ GROUP_FIELD_GETTERS = {
     "material": lambda registro: registro.material,
 }
 METRIC_FIELD_GETTERS = {
-    "soma_entrada_quantidade": lambda registro: registro.entrada_quantidade or Decimal("0"),
-    "soma_entrada_valor": lambda registro: registro.entrada_valor or Decimal("0"),
+    "soma_entrada_quantidade": lambda registro: registro.entrada_quantidade or Decimal(0),
+    "soma_entrada_valor": lambda registro: registro.entrada_valor or Decimal(0),
     "soma_movimentacao_quantidade": lambda registro: (
-        (registro.entrada_quantidade or Decimal("0")) + (registro.saida_quantidade or Decimal("0"))
+        (registro.entrada_quantidade or Decimal(0)) + (registro.saida_quantidade or Decimal(0))
     ),
     "soma_movimentacao_valor": lambda registro: (
-        (registro.entrada_valor or Decimal("0")) + (registro.saida_valor or Decimal("0"))
+        (registro.entrada_valor or Decimal(0)) + (registro.saida_valor or Decimal(0))
     ),
-    "soma_saida_quantidade": lambda registro: registro.saida_quantidade or Decimal("0"),
-    "soma_saida_valor": lambda registro: registro.saida_valor or Decimal("0"),
-    "soma_saldo_quantidade": lambda registro: registro.saldo_quantidade or Decimal("0"),
-    "soma_saldo_valor": lambda registro: registro.saldo_valor or Decimal("0"),
+    "soma_saida_quantidade": lambda registro: registro.saida_quantidade or Decimal(0),
+    "soma_saida_valor": lambda registro: registro.saida_valor or Decimal(0),
+    "soma_saldo_quantidade": lambda registro: registro.saldo_quantidade or Decimal(0),
+    "soma_saldo_valor": lambda registro: registro.saldo_valor or Decimal(0),
 }
 MOVEMENT_GROUP_FIELD_GETTERS = {
     "origem": lambda registro: registro.estoque_material.origem,
@@ -71,7 +72,7 @@ COMPANION_METRICS = {
 
 def _abs_decimal(value: Decimal | None) -> Decimal:
     if value is None:
-        return Decimal("0")
+        return Decimal(0)
     return value.copy_abs()
 
 
@@ -95,18 +96,18 @@ def _is_entrada_movimentacao(registro: EstoqueMovimentacao) -> bool:
 
 MOVEMENT_METRIC_FIELD_GETTERS = {
     "soma_entrada_quantidade": lambda registro: (
-        _abs_decimal(registro.quantidade) if _is_entrada_movimentacao(registro) else Decimal("0")
+        _abs_decimal(registro.quantidade) if _is_entrada_movimentacao(registro) else Decimal(0)
     ),
     "soma_entrada_valor": lambda registro: (
-        _abs_decimal(registro.valor_total) if _is_entrada_movimentacao(registro) else Decimal("0")
+        _abs_decimal(registro.valor_total) if _is_entrada_movimentacao(registro) else Decimal(0)
     ),
     "soma_movimentacao_quantidade": lambda registro: _abs_decimal(registro.quantidade),
     "soma_movimentacao_valor": lambda registro: _abs_decimal(registro.valor_total),
     "soma_saida_quantidade": lambda registro: (
-        _abs_decimal(registro.quantidade) if _is_saida_movimentacao(registro) else Decimal("0")
+        _abs_decimal(registro.quantidade) if _is_saida_movimentacao(registro) else Decimal(0)
     ),
     "soma_saida_valor": lambda registro: (
-        _abs_decimal(registro.valor_total) if _is_saida_movimentacao(registro) else Decimal("0")
+        _abs_decimal(registro.valor_total) if _is_saida_movimentacao(registro) else Decimal(0)
     ),
 }
 
@@ -177,7 +178,7 @@ def _should_use_movimentacoes(params: AgregarEstoquesParams) -> bool:
 
 
 @register(
-    name="agregar_estoques",
+    name=ToolName.AGREGAR_ESTOQUES,
     scope=PUBLIC_SCOPE,
     tags=["domain:estoques", "shape:aggregate"],
     routing=routing_metadata(

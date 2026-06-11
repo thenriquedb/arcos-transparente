@@ -17,6 +17,7 @@ from shared.utils.validation import (
     validate_date_period,
 )
 
+
 ALLOWED_SERVER_FIELDS = (
     "id",
     "nome",
@@ -72,7 +73,7 @@ class ServidoresFiltroSchema(SqlToolBaseSchema):
         return parse_decimal(value)
 
     @model_validator(mode="after")
-    def _validate_ranges(self) -> "ServidoresFiltroSchema":
+    def _validate_ranges(self) -> ServidoresFiltroSchema:
         if self.mes_de_referencia is not None and (
             self.mes_de_referencia_inicio is not None or self.mes_de_referencia_fim is not None
         ):

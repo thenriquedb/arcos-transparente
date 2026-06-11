@@ -87,7 +87,7 @@ class EstoqueMovimentacaoFiltroSchema(SqlToolBaseSchema):
         return parse_date(value)
 
     @model_validator(mode="after")
-    def _validate_dates(self) -> "EstoqueMovimentacaoFiltroSchema":
+    def _validate_dates(self) -> EstoqueMovimentacaoFiltroSchema:
         if self.data_movimento_inicio and self.data_movimento_fim:
             validate_date_period(self.data_movimento_inicio, self.data_movimento_fim)
         return self

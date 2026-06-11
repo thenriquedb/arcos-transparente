@@ -1,11 +1,13 @@
 """Registro central de tools com escopo, tags e metadata de roteamento."""
 
+import functools
 import importlib
 import inspect
 import pkgutil
-import functools
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
+
+from langchain.tools import tool as build_tool
 
 from agents.chatbot.observability import (
     build_error_payload,
@@ -13,7 +15,7 @@ from agents.chatbot.observability import (
     get_current_observability_provider,
     summarize_result,
 )
-from langchain.tools import tool as build_tool
+
 
 TOOLS_PACKAGES = (
     "agents.tools.sql_tools",

@@ -7,6 +7,7 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
@@ -100,7 +101,7 @@ def _valor_total_estimado_to_json(valor_total_estimado: Any) -> float:
 
 
 @register(
-    name="consultar_licitacoes",
+    name=ToolName.CONSULTAR_LICITACOES,
     scope=PUBLIC_SCOPE,
     tags=["domain:licitacoes", "shape:lookup"],
     routing=routing_metadata(

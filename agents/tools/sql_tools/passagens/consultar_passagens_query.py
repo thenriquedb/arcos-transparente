@@ -8,16 +8,17 @@ from typing import Any
 
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
-from agents.tools.sql_tools.shared.lookup import (
-    build_lookup_response,
-    execute_collection_lookup_result,
-)
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
     equals_filter,
     predicate_filter,
     text_filter,
+)
+from agents.tools.sql_tools.shared.lookup import (
+    build_lookup_response,
+    execute_collection_lookup_result,
 )
 from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
@@ -85,9 +86,9 @@ def load_filtered_passagens(
 
 SORT_FIELD_GETTERS = {
     "periodo_fim": lambda registro: _period_end(registro),
-    "valor_empenhado": lambda registro: registro.valor_empenhado or Decimal("0"),
-    "valor_liquidado": lambda registro: registro.valor_liquidado or Decimal("0"),
-    "valor_pago": lambda registro: registro.valor_pago or Decimal("0"),
+    "valor_empenhado": lambda registro: registro.valor_empenhado or Decimal(0),
+    "valor_liquidado": lambda registro: registro.valor_liquidado or Decimal(0),
+    "valor_pago": lambda registro: registro.valor_pago or Decimal(0),
     "beneficiario": lambda registro: registro.credor or "",
     "categoria": lambda registro: registro.categoria_documento or "",
 }
@@ -108,7 +109,7 @@ def project_passagem_fields(
 
 
 @register(
-    name="consultar_passagens",
+    name=ToolName.CONSULTAR_PASSAGENS,
     scope=PUBLIC_SCOPE,
     tags=["domain:passagens", "shape:lookup"],
     routing=routing_metadata(

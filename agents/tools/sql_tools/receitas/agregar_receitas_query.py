@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -21,13 +22,13 @@ from .agregar_receitas_schema import (
 )
 from .shared.querying import (
     GROUP_FIELD_GETTERS,
-    load_filtered_receitas,
     METRIC_FIELD_GETTERS,
+    load_filtered_receitas,
 )
 
 
 @register(
-    name="agregar_receitas",
+    name=ToolName.AGREGAR_RECEITAS,
     scope=PUBLIC_SCOPE,
     tags=["domain:receitas", "shape:aggregate"],
     routing=routing_metadata(

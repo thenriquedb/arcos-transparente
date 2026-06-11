@@ -6,6 +6,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -38,7 +39,7 @@ def _metric(registros: list[DespesaDocumento], metrica: str) -> Decimal | int:
         "soma_valor_anulado": "valor_anulado",
     }
     field = field_by_metric[metrica]
-    return sum((getattr(registro, field) or Decimal("0")) for registro in registros)
+    return sum((getattr(registro, field) or Decimal(0)) for registro in registros)
 
 
 def _metric_to_json(value: Decimal | int) -> float | int:
@@ -60,10 +61,10 @@ GROUP_FIELD_GETTERS = {
     "categoria": lambda registro: registro.categoria_documento,
 }
 METRIC_FIELD_GETTERS = {
-    "soma_valor_empenhado": lambda registro: registro.valor_empenhado or Decimal("0"),
-    "soma_valor_liquidado": lambda registro: registro.valor_liquidado or Decimal("0"),
-    "soma_valor_pago": lambda registro: registro.valor_pago or Decimal("0"),
-    "soma_valor_anulado": lambda registro: registro.valor_anulado or Decimal("0"),
+    "soma_valor_empenhado": lambda registro: registro.valor_empenhado or Decimal(0),
+    "soma_valor_liquidado": lambda registro: registro.valor_liquidado or Decimal(0),
+    "soma_valor_pago": lambda registro: registro.valor_pago or Decimal(0),
+    "soma_valor_anulado": lambda registro: registro.valor_anulado or Decimal(0),
 }
 
 
@@ -77,7 +78,7 @@ def _project_passagem_group(
 
 
 @register(
-    name="agregar_passagens",
+    name=ToolName.AGREGAR_PASSAGENS,
     scope=PUBLIC_SCOPE,
     tags=["domain:passagens", "shape:aggregate"],
     routing=routing_metadata(

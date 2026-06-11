@@ -8,6 +8,7 @@ from typing import Any
 from pydantic import ValidationError
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.projection import project_public_rows
 from database import session as session_manager
@@ -21,6 +22,7 @@ from .consultar_eleitos_schema import (
     ConsultarEleitosResponse,
     EleitoFiltroSchema,
 )
+
 
 _TIPO_POLITICO_ALIASES = {
     "prefeito": "prefeito",
@@ -143,7 +145,7 @@ def _project_eleitos(
 
 
 @register(
-    name="consultar_eleitos",
+    name=ToolName.CONSULTAR_ELEITOS,
     scope=PUBLIC_SCOPE,
     tags=["domain:eleitos", "shape:lookup"],
     routing=routing_metadata(

@@ -99,7 +99,7 @@ class EstoqueFiltroSchema(SqlToolBaseSchema):
         return parse_number(value)
 
     @model_validator(mode="after")
-    def _validate_filters(self) -> "EstoqueFiltroSchema":
+    def _validate_filters(self) -> EstoqueFiltroSchema:
         if self.periodo_inicio and self.periodo_fim:
             validate_date_period(self.periodo_inicio, self.periodo_fim)
         range_pairs = (

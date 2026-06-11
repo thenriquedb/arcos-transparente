@@ -33,6 +33,7 @@ from agents.nlu.extractors import (
     _is_contratos_dimension_count_ranking_query,
     _is_contratos_query,
 )
+from agents.tools.names import ToolName
 
 
 _CONTRATOS_VALUE_RANKING_CUES = ("maiores", "maior", "top")
@@ -62,7 +63,7 @@ def contract_value_ranking_query(normalized_text: str) -> bool:
     )
 
 
-def emenda_tool(normalized_text: str) -> str | None:
+def emenda_tool(normalized_text: str) -> ToolName | None:
     """Tool de transferências para perguntas de emenda parlamentar (ou None)."""
 
     if not _is_transferencias_financeiras_query(normalized_text):
@@ -74,19 +75,23 @@ def emenda_tool(normalized_text: str) -> str | None:
         cue in normalized_text for cue in ("quais", "liste", "mostre")
     )
     is_aggregation = not blocks_aggregation and any(cue in normalized_text for cue in _TRANSFERENCIAS_AGGREGATION_CUES)
-    return "agregar_transferencias_financeiras" if is_aggregation else "consultar_transferencias_financeiras"
+    return (
+        ToolName.AGREGAR_TRANSFERENCIAS_FINANCEIRAS
+        if is_aggregation
+        else ToolName.CONSULTAR_TRANSFERENCIAS_FINANCEIRAS
+    )
 
 
-def estoque_tool(normalized_text: str) -> str | None:
+def estoque_tool(normalized_text: str) -> ToolName | None:
     """Tool de estoque sugerida (saldo, agregado ou movimentações), ou None."""
 
     if not _is_estoques_query(normalized_text):
         return None
     if _is_estoques_movement_history_query(normalized_text):
-        return "consultar_movimentacoes_de_estoque"
+        return ToolName.CONSULTAR_MOVIMENTACOES_DE_ESTOQUE
     if _has_estoques_aggregate_intent(normalized_text):
-        return "agregar_estoques"
-    return "consultar_estoques"
+        return ToolName.AGREGAR_ESTOQUES
+    return ToolName.CONSULTAR_ESTOQUES
 
 
 def is_function_spend_broad_total(normalized_text: str) -> bool:
@@ -107,21 +112,21 @@ def is_function_spend_broad_total(normalized_text: str) -> bool:
     return metrica == "soma_valor_pago" and agrupar_por is None
 
 
-def direct_spend_domain_tools(normalized_text: str) -> list[str] | None:
+def direct_spend_domain_tools(normalized_text: str) -> list[ToolName] | None:
     """Classifica um gasto amplo no domínio estruturado correto (lista detalhada)."""
 
     if _has_any_term(normalized_text, DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS):
-        return ["consultar_despesas_por_funcao"]
+        return [ToolName.CONSULTAR_DESPESAS_POR_FUNCAO]
     if _has_any_term(normalized_text, DIARIAS_DOMAIN_KEYWORDS):
-        return ["consultar_diarias"]
+        return [ToolName.CONSULTAR_DIARIAS]
     if _has_any_term(normalized_text, PASSAGENS_DOMAIN_KEYWORDS):
-        return ["consultar_passagens"]
+        return [ToolName.CONSULTAR_PASSAGENS]
     if _has_any_term(normalized_text, DESPESAS_DOMAIN_KEYWORDS):
-        return ["consultar_despesas"]
+        return [ToolName.CONSULTAR_DESPESAS]
     if _is_despesas_por_funcao_query(normalized_text):
-        return ["consultar_despesas_por_funcao"]
+        return [ToolName.CONSULTAR_DESPESAS_POR_FUNCAO]
     if "prefeitura gastou" in normalized_text or "valor gasto" in normalized_text:
-        return ["consultar_despesas"]
+        return [ToolName.CONSULTAR_DESPESAS]
     return None
 
 

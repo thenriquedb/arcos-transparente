@@ -6,6 +6,7 @@ from typing import Any
 
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
@@ -39,7 +40,7 @@ SERVER_ORDER_COLUMNS = {
 
 
 @register(
-    name="consultar_servidores",
+    name=ToolName.CONSULTAR_SERVIDORES,
     scope=PUBLIC_SCOPE,
     tags=["domain:servidores", "shape:lookup"],
     routing=routing_metadata(

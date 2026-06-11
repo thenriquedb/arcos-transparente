@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from sqlalchemy import func, inspect, or_
 
-from database.session import _normalizar_texto
 from database.models import Contrato
+from database.session import _normalizar_texto
 
 from .filters import ContratosFiltroSchema
 from .responses import ContratoToolItem

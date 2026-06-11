@@ -8,6 +8,7 @@ from typing import Any
 
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
@@ -162,7 +163,7 @@ def project_transferencia_financeira_fields(
 
 
 @register(
-    name="consultar_transferencias_financeiras",
+    name=ToolName.CONSULTAR_TRANSFERENCIAS_FINANCEIRAS,
     scope=PUBLIC_SCOPE,
     tags=["domain:transferencias_financeiras", "shape:lookup"],
     routing=routing_metadata(

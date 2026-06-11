@@ -19,6 +19,7 @@ from typing import Any
 
 from shared.utils.text import matches_text_query
 
+
 RowGetter = Callable[[Any], Any]
 
 
@@ -72,7 +73,7 @@ def min_filter(
     param: str,
     getter: RowGetter,
     *,
-    default: Any = Decimal("0"),
+    default: Any = Decimal(0),
 ) -> FilterCondition:
     """Limite inferior inclusivo, ativo quando o valor não é None."""
 
@@ -87,7 +88,7 @@ def max_filter(
     param: str,
     getter: RowGetter,
     *,
-    default: Any = Decimal("0"),
+    default: Any = Decimal(0),
 ) -> FilterCondition:
     """Limite superior inclusivo, ativo quando o valor não é None."""
 

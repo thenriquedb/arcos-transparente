@@ -27,6 +27,7 @@ from agents.nlu.constants import (
 )
 from agents.nlu.detectors import strip_despesas_por_funcao_domain_keywords
 from agents.nlu.reading import read_query
+from agents.tools.names import ToolName
 from agents.tools.registry import (
     PublicToolCatalogEntry,
     get_public_tool_catalog,
@@ -425,8 +426,8 @@ def _select_with_heuristics(
 
     return _build_named_candidate_selection(
         [
-            "consultar_eleitos",
-            "consultar_conhecimento_municipal",
+            ToolName.CONSULTAR_ELEITOS,
+            ToolName.CONSULTAR_CONHECIMENTO_MUNICIPAL,
         ],
         reason_code="heuristic_elected_contacts",
     )
@@ -438,7 +439,7 @@ def _select_salary_history_with_router(
     if read_query(question).nome_historico is None:
         return None
     return _build_named_candidate_selection(
-        ["buscar_historico_de_pagamentos_do_servidor"],
+        [ToolName.BUSCAR_HISTORICO_DE_PAGAMENTOS_DO_SERVIDOR],
         reason_code="heuristic_salary_history_query",
     )
 
@@ -456,9 +457,9 @@ def _select_event_spend_query(
 
     return _build_named_candidate_selection(
         [
-            "consultar_licitacoes",
-            "consultar_contratos",
-            "consultar_despesas",
+            ToolName.CONSULTAR_LICITACOES,
+            ToolName.CONSULTAR_CONTRATOS,
+            ToolName.CONSULTAR_DESPESAS,
         ],
         reason_code="heuristic_event_spend_query",
     )
@@ -482,9 +483,9 @@ def _select_travel_spend_query(
         return None
 
     candidate_tool_names = (
-        ["agregar_diarias", "agregar_passagens"]
+        [ToolName.AGREGAR_DIARIAS, ToolName.AGREGAR_PASSAGENS]
         if _is_explicit_aggregate_spend_request(normalized_question)
-        else ["consultar_diarias", "consultar_passagens"]
+        else [ToolName.CONSULTAR_DIARIAS, ToolName.CONSULTAR_PASSAGENS]
     )
     return _build_named_candidate_selection(
         candidate_tool_names,
@@ -531,7 +532,7 @@ def _select_function_spend_breakdown_query(
         return None
 
     return _build_named_candidate_selection(
-        ["consultar_despesas_por_funcao"],
+        [ToolName.CONSULTAR_DESPESAS_POR_FUNCAO],
         reason_code="heuristic_function_spend_breakdown",
     )
 
@@ -561,7 +562,7 @@ def _select_contract_value_ranking_with_router(
     if not intents.contract_value_ranking_query(normalize_conversation_text(question)):
         return None
     return _build_named_candidate_selection(
-        ["consultar_contratos"],
+        [ToolName.CONSULTAR_CONTRATOS],
         reason_code="heuristic_contract_value_ranking",
     )
 
@@ -572,7 +573,7 @@ def _select_contract_count_ranking_with_router(
     if not intents.contract_count_ranking_query(normalize_conversation_text(question)):
         return None
     return _build_named_candidate_selection(
-        ["agregar_contratos"],
+        [ToolName.AGREGAR_CONTRATOS],
         reason_code="heuristic_contract_count_ranking",
     )
 
