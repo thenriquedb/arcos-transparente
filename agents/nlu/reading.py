@@ -11,11 +11,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from agents.nlu.conversation import normalize_conversation_text
 from agents.nlu.constants import (
     SUPPORTED_SCOPE_STRONG_KEYWORDS,
     SUPPORTED_SCOPE_WEAK_KEYWORDS,
 )
+from agents.nlu.conversation import normalize_conversation_text
 from agents.nlu.extractors import (
     _contains_prompt_injection,
     _count_keyword_hits,

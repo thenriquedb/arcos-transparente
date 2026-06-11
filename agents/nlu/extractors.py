@@ -3,19 +3,12 @@
 from __future__ import annotations
 
 import re
-from typing import Any
 
-from agents.nlu.conversation import normalize_conversation_text
 from shared.planejamento_entidades import extract_planejamento_entidade_alias
-from shared.utils.dates import current_date
 
 from .constants import (
     CONTRATOS_DOMAIN_KEYWORDS,
-    LICITACOES_DOMAIN_KEYWORDS,
-    PLANEJAMENTO_DIRECT_KEYWORDS,
-    PLANEJAMENTO_ENTITY_HINT_KEYWORDS,
     PROMPT_INJECTION_PATTERNS,
-    RECEITAS_DOMAIN_KEYWORDS,
     SECRETARIAS_CONHECIDAS,
 )
 
@@ -295,21 +288,6 @@ _CONTRATOS_DIMENSION_COUNT_SIGNAL_PATTERNS = (
     "quantas contratos",
 )
 
-_CONTRATOS_ACTIVITY_TERMS = (
-    "ativo",
-    "ativos",
-    "atual",
-    "atuais",
-    "hoje",
-    "atualmente",
-)
-
-
-def _normalize(text: str) -> str:
-    """Remove acentos e normaliza caixa para simplificar match por texto."""
-
-    return normalize_conversation_text(text)
-
 
 def _contains_any(normalized_text: str, keywords: tuple[str, ...]) -> bool:
     """Retorna True quando qualquer palavra-chave aparece no texto normalizado."""
@@ -512,46 +490,10 @@ def _extract_planejamento_area(normalized_text: str) -> str | None:
     return None
 
 
-def _is_licitacoes_query(normalized_text: str) -> bool:
-    """Heurística simples para identificar perguntas sobre licitações."""
-
-    return _contains_any(normalized_text, LICITACOES_DOMAIN_KEYWORDS)
-
-
 def _is_contratos_query(normalized_text: str) -> bool:
     """Heurística simples para identificar perguntas sobre contratos."""
 
     return _contains_any(normalized_text, CONTRATOS_DOMAIN_KEYWORDS)
-
-
-def _is_receitas_query(normalized_text: str) -> bool:
-    """Heurística simples para identificar perguntas sobre receitas."""
-
-    return _contains_any(normalized_text, RECEITAS_DOMAIN_KEYWORDS)
-
-
-def _extract_licitacao_numero(normalized_text: str) -> str | None:
-    """Extrai número de licitação quando a pergunta cita o identificador."""
-
-    match = re.search(
-        r"\b(?:numero|n|licitacao|pregao)\b\s+([0-9][0-9./-]*)\b",
-        normalized_text,
-    )
-    if match is None:
-        return None
-    return match.group(1).strip()
-
-
-def _extract_contrato_numero(normalized_text: str) -> str | None:
-    """Extrai número de contrato quando a pergunta cita o identificador."""
-
-    match = re.search(
-        r"\b(?:contrato|numero|n)\b\s+([0-9][0-9./-]*)\b",
-        normalized_text,
-    )
-    if match is None:
-        return None
-    return match.group(1).strip()
 
 
 def _extract_contrato_fornecedor(normalized_text: str) -> str | None:
@@ -621,58 +563,6 @@ def _is_contratos_dimension_count_ranking_query(normalized_text: str) -> bool:
     return _has_contratos_dimension_count_signal(normalized_text)
 
 
-def _is_contratos_singular_dimension_ranking_query(
-    normalized_text: str,
-    *,
-    dimension: str | None = None,
-) -> bool:
-    """Detecta formulacoes singulares para ampliar o limite e preservar empates."""
-
-    resolved_dimension = dimension or _extract_contratos_ranking_dimension(normalized_text)
-    singular_cues = {
-        "fornecedor": ("qual fornecedor", "qual empresa"),
-        "secretaria": ("qual secretaria",),
-        "categoria": ("qual categoria",),
-    }.get(resolved_dimension, ())
-    return any(cue in normalized_text for cue in singular_cues)
-
-
-def _extract_contratos_active_vigencia_filters(
-    normalized_text: str,
-) -> dict[str, str] | None:
-    """Traduz `ativos hoje/atualmente` para vigência na data atual.
-
-    Um contrato está em vigência hoje quando começou até hoje e ainda não
-    terminou (`data_inicio <= hoje <= data_fim`, ou `data_fim` em aberto).
-    """
-
-    if _extract_year(normalized_text) is not None:
-        return None
-    if not _contains_any_term(normalized_text, _CONTRATOS_ACTIVITY_TERMS):
-        return None
-
-    return {"vigente_em": current_date().isoformat()}
-
-
-def _extract_receitas_tipo_de_dado(normalized_text: str) -> str:
-    """Escolhe entre arrecadação efetiva e valores apenas lançados."""
-
-    if any(
-        keyword in normalized_text
-        for keyword in (
-            "lancamento",
-            "lancamentos",
-            "lancado",
-            "lancada",
-            "lancou",
-            "divida ativa",
-            "cobranca judicial",
-        )
-    ):
-        return "lancamento"
-    return "arrecadacao"
-
-
 def _extract_receitas_unidade(normalized_text: str) -> str | None:
     """Identifica a unidade responsável mais citada em perguntas de receitas."""
 
@@ -702,131 +592,6 @@ _TRIMESTRE_RANGES: tuple[tuple[tuple[str, str], tuple[int, int]], ...] = (
 )
 
 
-def _extract_trimestre_range(normalized_text: str) -> tuple[int, int] | None:
-    """Mapeia menções a trimestres para o intervalo de meses correspondente."""
-
-    for cues, month_range in _TRIMESTRE_RANGES:
-        if any(cue in normalized_text for cue in cues):
-            return month_range
-    return None
-
-
-def _extract_receitas_filters_from_query(normalized_text: str) -> dict[str, Any]:
-    """Converte sinais do texto em filtros públicos da tool de receitas."""
-
-    filtros: dict[str, Any] = {"tipo_de_dado": _extract_receitas_tipo_de_dado(normalized_text)}
-
-    if year := _extract_year(normalized_text):
-        filtros["ano"] = year
-
-    if trimestre := _extract_trimestre_range(normalized_text):
-        filtros["mes_inicio"], filtros["mes_fim"] = trimestre
-
-    if unidade := _extract_receitas_unidade(normalized_text):
-        filtros["unidade_responsavel"] = unidade
-
-    if tema := _extract_receitas_tema(normalized_text):
-        filtros["tema"] = tema
-
-    return filtros
-
-
-def _extract_receitas_metric(normalized_text: str, tipo_de_dado: str) -> str:
-    """Seleciona a métrica compatível com o tipo de dado pedido."""
-
-    if any(keyword in normalized_text for keyword in ("quantos", "quantas")):
-        return "contagem"
-    if tipo_de_dado == "lancamento":
-        if "divida ativa" in normalized_text:
-            return "soma_valor_em_divida_ativa"
-        if "cobranca judicial" in normalized_text:
-            return "soma_valor_em_cobranca_judicial"
-        return "soma_valor_lancado"
-    if any(keyword in normalized_text for keyword in ("previsto", "previsao")):
-        return "soma_valor_previsto"
-    return "soma_valor_recebido"
-
-
-def _is_planejamento_query(normalized_text: str) -> bool:
-    """Detecta perguntas de planejamento por termos explícitos ou entidades."""
-
-    if _contains_any_term(normalized_text, PLANEJAMENTO_DIRECT_KEYWORDS):
-        return True
-
-    if _extract_planejamento_entidade(normalized_text) and _contains_any_term(
-        normalized_text,
-        PLANEJAMENTO_ENTITY_HINT_KEYWORDS,
-    ):
-        return True
-    if _contains_any_term(normalized_text, PLANEJAMENTO_ENTITY_HINT_KEYWORDS) and (
-        "prefeitura" in normalized_text
-        or _extract_planejamento_area(normalized_text) is not None
-        or _extract_secretaria(normalized_text) is not None
-    ):
-        return True
-
-    return "saude" in normalized_text and _contains_any(
-        normalized_text,
-        ("gasto", "gastos", "pago", "pagos", "planejado"),
-    )
-
-
-def _extract_planejamento_filters_from_query(normalized_text: str) -> dict[str, Any]:
-    """Converte sinais do texto em filtros públicos da tool de planejamento."""
-
-    entidade = _extract_planejamento_entidade(normalized_text)
-    area = _extract_planejamento_area(normalized_text)
-    secretaria = _extract_secretaria(normalized_text)
-
-    origem = "saude"
-    if entidade is not None:
-        origem = "saude"
-    elif "prefeitura" in normalized_text:
-        origem = "prefeitura"
-    elif area is not None and area != "saude":
-        origem = "prefeitura"
-    elif secretaria is not None and secretaria != "saude":
-        origem = "prefeitura"
-
-    filtros: dict[str, Any] = {"origem": origem}
-
-    if year := _extract_year(normalized_text):
-        filtros["ano"] = year
-
-    # Trimestres são transformados em intervalo de meses para a tool pública.
-    if trimestre := _extract_trimestre_range(normalized_text):
-        filtros["mes_inicio"], filtros["mes_fim"] = trimestre
-
-    if entidade is not None:
-        filtros["entidade"] = entidade
-
-    if area is not None and entidade is None:
-        filtros["area"] = area
-    elif origem == "prefeitura" and secretaria is not None and secretaria != "saude":
-        filtros["entidade"] = secretaria
-    elif "saude" in normalized_text and entidade is None:
-        filtros["area"] = "saude"
-
-    return filtros
-
-
-def _extract_planejamento_metric(normalized_text: str) -> str:
-    """Escolhe a métrica mais adequada para perguntas agregadas de planejamento."""
-
-    if "inicial" in normalized_text:
-        return "soma_orcamento_inicial"
-    if "empenhado" in normalized_text or "comprometido" in normalized_text:
-        return "soma_valor_comprometido"
-    if "liquidado" in normalized_text or "confirmado" in normalized_text:
-        return "soma_valor_confirmado"
-    if _contains_any(
-        normalized_text,
-        ("pago", "pagos", "gasto", "investido", "investida", "investimento"),
-    ):
-        return "soma_valor_pago"
-    return "soma_orcamento_atualizado"
-
-
 def _extract_licitacoes_objeto(normalized_text: str) -> str | None:
     """Extrai alguns objetos recorrentes de licitações com alto valor prático."""
 
@@ -843,44 +608,6 @@ def _extract_contratos_descricao(normalized_text: str) -> str | None:
         normalized_text,
         contexts=("contratos", "spend", "relation"),
     )
-
-
-def _build_licitacoes_filters_from_query(normalized_text: str) -> dict[str, Any]:
-    """Monta filtros públicos de licitações com base na pergunta do usuário."""
-
-    filtros: dict[str, Any] = {}
-    if numero := _extract_licitacao_numero(normalized_text):
-        filtros["numero"] = numero
-        return filtros
-    if secretaria := _extract_secretaria(normalized_text):
-        filtros["secretaria"] = secretaria
-    if objeto := _extract_licitacoes_objeto(normalized_text):
-        filtros["objeto"] = objeto
-    if year := _extract_year(normalized_text):
-        filtros["data_abertura_inicio"] = f"{year}-01-01"
-        filtros["data_abertura_fim"] = f"{year}-12-31"
-    return filtros
-
-
-def _build_contratos_filters_from_query(normalized_text: str) -> dict[str, Any]:
-    """Monta filtros públicos de contratos com base na pergunta do usuário."""
-
-    filtros: dict[str, Any] = {}
-    if numero := _extract_contrato_numero(normalized_text):
-        filtros["numero"] = numero
-        return filtros
-    if fornecedor := _extract_contrato_fornecedor(normalized_text):
-        filtros["fornecedor"] = fornecedor
-    if secretaria := _extract_secretaria(normalized_text):
-        filtros["secretaria"] = secretaria
-    if descricao := _extract_contratos_descricao(normalized_text):
-        filtros["descricao"] = descricao
-    if year := _extract_year(normalized_text):
-        filtros["data_inicio_inicio"] = f"{year}-01-01"
-        filtros["data_inicio_fim"] = f"{year}-12-31"
-    elif vigencia_filters := _extract_contratos_active_vigencia_filters(normalized_text):
-        filtros.update(vigencia_filters)
-    return filtros
 
 
 def _contains_prompt_injection(normalized_text: str) -> bool:

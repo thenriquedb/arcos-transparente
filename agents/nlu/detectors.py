@@ -21,6 +21,7 @@ from agents.nlu.extractors import (
     _contains_term,
 )
 
+
 # --- Transferências financeiras / emendas ------------------------------------
 
 

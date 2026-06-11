@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
 import re
+from collections.abc import Sequence
 
 from shared.utils.text import normalize_search_text
+
 
 CONFIRMATION_TOKENS = frozenset(
     {
