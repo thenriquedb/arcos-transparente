@@ -14,10 +14,14 @@ from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
         examples=[
             "Qual o telefone da ouvidoria?",
             "Qual o horario do onibus para Formiga?",
+            "Quais os horarios do onibus Tarifa Zero?",
         ],
         hints=[
             "telefone util",
             "horario de onibus",
+            "onibus tarifa zero",
+            "transporte coletivo urbano",
+            "onibus urbano",
             "faq municipal",
             "estrutura organizacional",
             "acervo markdown",
@@ -32,8 +36,9 @@ def consultar_conhecimento_municipal(
     Recupera trechos do acervo markdown local com conhecimento municipal curado.
 
     Use esta tool para perguntas documentais sobre telefones úteis, horários de
-    ônibus, estrutura organizacional, competências institucionais, papel da
-    Câmara, perguntas frequentes e outros conteúdos textuais já curados em
+    ônibus (intermunicipais e do transporte coletivo urbano Tarifa Zero),
+    estrutura organizacional, competências institucionais, papel da Câmara,
+    perguntas frequentes e outros conteúdos textuais já curados em
     `data/rag/**/*.md`.
     Ao responder com base nesta tool, cite explicitamente `titulo_documento`,
     `arquivo_fonte` ou `secao` para deixar a fonte auditável ao cidadão.

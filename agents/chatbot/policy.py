@@ -69,6 +69,14 @@ _PUBLIC_CLARIFICATION_REPLY_STOPWORDS = frozenset(
         "saber",
     }
 )
+_BUS_TYPE_REPLY_STEMS = (
+    "intermunicip",
+    "municip",
+    "tarifa zero",
+    "urban",
+    "gratuit",
+    "rodoviari",
+)
 
 
 class HistoryMessage(Protocol):
@@ -399,7 +407,27 @@ def _looks_like_public_clarification_prompt(content: str) -> bool:
         return False
     if any(exclusion_hint in normalized_content for exclusion_hint in _PUBLIC_CLARIFICATION_EXCLUSION_HINTS):
         return False
+    if _looks_like_bus_type_clarification_prompt(normalized_content):
+        return True
     return any(clarification_hint in normalized_content for clarification_hint in _PUBLIC_CLARIFICATION_HINTS)
+
+
+def _looks_like_bus_type_clarification_prompt(normalized_content: str) -> bool:
+    """Reconhece a pergunta que confirma o tipo de ônibus antes de buscar.
+
+    Horário de ônibus é ambíguo entre o transporte municipal (Tarifa Zero) e o
+    intermunicipal. Quando o assistente pede essa distinção, a resposta curta do
+    cidadão ("intermunicipais", "tarifa zero") precisa ser resolvida aqui em vez
+    de cair no guardrail de fora de escopo.
+    """
+
+    has_intermunicipal = "intermunicip" in normalized_content
+    has_municipal = (
+        "tarifa zero" in normalized_content
+        or "urban" in normalized_content
+        or re.search(r"(?<!inter)municip", normalized_content) is not None
+    )
+    return has_intermunicipal and has_municipal
 
 
 def _looks_like_public_clarification_answer(
@@ -418,8 +446,25 @@ def _looks_like_public_clarification_answer(
     if not meaningful_reply_tokens:
         return False
 
-    clarification_tokens = _content_tokens(normalize_conversation_text(assistant_clarification))
+    normalized_clarification = normalize_conversation_text(assistant_clarification)
+    if _looks_like_bus_type_clarification_prompt(normalized_clarification) and _reply_indicates_bus_type(
+        normalized_reply
+    ):
+        return True
+
+    clarification_tokens = _content_tokens(normalized_clarification)
     return any(token in clarification_tokens for token in meaningful_reply_tokens)
+
+
+def _reply_indicates_bus_type(normalized_reply: str) -> bool:
+    """Detecta o tipo de ônibus na resposta por radical, tolerando plural e verbo.
+
+    O match por token exato falha em "quero os municipais" quando a pergunta usou
+    "municipal"; usar radicais ("municip", "intermunicip", "tarifa zero", ...)
+    resolve a preferência sem depender da forma exata.
+    """
+
+    return any(stem in normalized_reply for stem in _BUS_TYPE_REPLY_STEMS)
 
 
 def _build_public_clarification_resolution(

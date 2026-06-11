@@ -73,6 +73,7 @@ _SCHEDULE_HINT_TERMS = frozenset(
         "horario",
         "horarios",
         "onibus",
+        "tarifa",
         "linha",
         "linhas",
         "rodoviario",

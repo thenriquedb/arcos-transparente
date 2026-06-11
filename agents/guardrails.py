@@ -129,7 +129,8 @@ def evaluate_public_query_guardrails(
                 "passagens, estoques e almoxarifado, frota e veículos, "
                 "patrimônio, planejamento, receitas, transferências "
                 "financeiras, emendas parlamentares, políticos eleitos, "
-                "telefones úteis ou horários de ônibus."
+                "telefones úteis ou horários de ônibus (intermunicipais e do "
+                "Tarifa Zero)."
             ),
         )
 

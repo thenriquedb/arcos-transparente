@@ -7,6 +7,7 @@ import pytest
 import agents.chatbot.agent as chatbot_agent
 from agents.chatbot.help_messages import build_scope_help_message
 from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
+from agents.chatbot.policy import evaluate_deterministic_policy
 from agents.chatbot.core import (
     ChatbotAgentBackend,
     ChatMessage,
@@ -299,6 +300,22 @@ def test_scope_help_message_inclui_estoques() -> None:
     assert "maior quantidade no estoque" in help_message
 
 
+def test_scope_help_message_inclui_tarifa_zero() -> None:
+    help_message = build_scope_help_message()
+
+    assert "Tarifa Zero" in help_message
+
+
+def test_system_prompt_distingue_onibus_municipal_e_intermunicipal() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "Municipal / Tarifa Zero" in prompt
+    assert "Intermunicipal" in prompt
+    # Deve pedir confirmação do tipo antes de buscar quando a pergunta for crua.
+    assert 'apenas "horário de ônibus"' in prompt
+    assert "NÃO faça a busca ainda" in prompt
+
+
 def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
     prompt = chatbot_agent.carregar_system_prompt()
 
@@ -403,7 +420,8 @@ def test_chatbot_application_stream_bloqueia_pergunta_vazia_sem_chamar_backend()
             "passagens, estoques e almoxarifado, frota e veículos, "
             "patrimônio, planejamento, receitas, transferências "
             "financeiras, emendas parlamentares, políticos eleitos, "
-            "telefones úteis ou horários de ônibus."
+            "telefones úteis ou horários de ônibus (intermunicipais e do "
+            "Tarifa Zero)."
         )
     ]
     assert backend.calls == []

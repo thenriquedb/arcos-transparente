@@ -267,7 +267,7 @@ Arquivo: `agents/tools/rag_tools/consultar_conhecimento_municipal.py`
 Serve para:
 
 - recuperar trechos do acervo markdown local em `data/rag/**/*.md`
-- responder perguntas sobre telefones úteis, horários de ônibus, estrutura organizacional e FAQ municipal
+- responder perguntas sobre telefones úteis, horários de ônibus (intermunicipais e do transporte coletivo urbano Tarifa Zero), estrutura organizacional e FAQ municipal
 - citar a origem textual usada na resposta final
 - complementar respostas híbridas quando o cidadão mistura contexto documental com dados estruturados
 

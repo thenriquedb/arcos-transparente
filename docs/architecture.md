@@ -4,7 +4,7 @@
 
 O Arcos Transparente é uma pilha `XML/CSV → parser → schema → SQLite → tools SQL + RAG → agente LangChain → Streamlit`. Os dados públicos do portal da transparência de Arcos (MG) são ingeridos por um pipeline offline e normalizados em um banco SQLite relacional. Quando um cidadão faz uma pergunta via interface web, um agente ReAct (LangChain + LangGraph) seleciona as tools adequadas, executa queries SQL ou recuperação semântica, e devolve a resposta em linguagem natural.
 
-A camada de agente expõe **20 tools públicas** organizadas por domínio (servidores, contratos, licitações, despesas, receitas, planejamento, frota, patrimônio, estoques, quadro de pessoal, eleitos, transferências financeiras e conhecimento municipal). Cada domínio tem pelo menos uma tool de consulta/listagem e uma de agregação/ranking. Uma tool RAG (`consultar_conhecimento_municipal`) cobre o acervo markdown curado de telefones, horários, estrutura organizacional e FAQ.
+A camada de agente expõe **20 tools públicas** organizadas por domínio (servidores, contratos, licitações, despesas, receitas, planejamento, frota, patrimônio, estoques, quadro de pessoal, eleitos, transferências financeiras e conhecimento municipal). Cada domínio tem pelo menos uma tool de consulta/listagem e uma de agregação/ranking. Uma tool RAG (`consultar_conhecimento_municipal`) cobre o acervo markdown curado de telefones, horários de ônibus (intermunicipais e do Tarifa Zero), estrutura organizacional e FAQ.
 
 Antes de cada pergunta chegar ao modelo, um sistema de guardrails determinísticos rejeita perguntas fora do escopo, vazias ou com tentativa de injection. Uma política de seleção híbrida reduz a superfície de tools candidatas entregue ao agente, melhorando a precisão das escolhas. O router (`agents/router.py`) existe como camada de compatibilidade para fluxos legados e não é a autoridade principal de interpretação.
 
@@ -226,7 +226,7 @@ arcos-transparente/
 ├── data/
 │   ├── xml/                        # Arquivos XML do portal da transparência (por domínio)
 │   └── rag/
-│       ├── md/                     # Acervo markdown curado (telefones, horários, FAQ, etc.)
+│       ├── md/                     # Acervo markdown curado (telefones, horários de ônibus incl. Tarifa Zero, FAQ, etc.)
 │       └── pdf/                    # Documentos PDF curados (PMS, regimento interno, etc.)
 │
 ├── vector_store/                   # Artefatos persistidos do Chroma (gerado por `rag index`)
