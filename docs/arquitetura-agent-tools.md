@@ -123,7 +123,7 @@ O router determinístico legado foi removido. A compreensão de linguagem natura
 mora agora em `agents/nlu/`:
 
 - `agents/nlu/reading.py` — `read_query`/`QueryReading`: lê a pergunta uma vez em fatos estruturados
-- `agents/nlu/extractors.py` — normalização e extração de entidades (nome, ano, secretaria, objeto, etc.)
+- `agents/nlu/extractors/` — extração de entidades por escopo (nome, ano, secretaria, objeto público, planejamento, contratos, receitas), reexportada por `__init__`
 - `agents/nlu/detectors.py` — detectores determinísticos por domínio (estoques, transferências/emendas, despesas por função)
 - `agents/nlu/intents.py` — predicados de intenção consumidos pela seleção híbrida
 - `agents/nlu/conversation.py` — normalização conversacional e confirmações

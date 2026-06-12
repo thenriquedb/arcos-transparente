@@ -169,7 +169,7 @@ arcos-transparente/
 │   ├── guardrails.py               # Guardrails determinísticos pré-modelo
 │   ├── nlu/                        # Compreensão de linguagem natural (sem router)
 │   │   ├── reading.py              # QueryReading: fatos estruturados da query do cidadão
-│   │   ├── extractors.py           # Normalização e extração de entidades da query
+│   │   ├── extractors/             # Extração de entidades por escopo (text, planejamento, contratos, ...)
 │   │   ├── detectors.py            # Detectores determinísticos por domínio
 │   │   ├── intents.py              # Predicados de intenção p/ a seleção híbrida
 │   │   ├── conversation.py         # Normalização conversacional e confirmações

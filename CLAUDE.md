@@ -75,10 +75,12 @@ user question
   - `observability/` — pluggable provider (`noop` default / `langsmith`).
 - `agents/guardrails.py` — hard-coded pre-model guardrails.
 - `agents/nlu/` — natural-language understanding (replaced the removed `agents/routing/`):
-  `reading.py` (`read_query`/`QueryReading`), `extractors.py`, `detectors.py`
-  (deterministic per-domain detectors), `intents.py` (intent predicates returning
-  `ToolName`), `conversation.py`, `constants.py` (scope keywords), `models.py`
-  (`GuardrailDecision`).
+  `reading.py` (`read_query`/`QueryReading`), `extractors/` (a package split by
+  scope: `text`, `public_object`, `secretaria`, `historico`, `planejamento`,
+  `contratos`, `receitas`; its `__init__` re-exports the flat `_extract_*` API),
+  `detectors.py` (deterministic per-domain detectors), `intents.py` (intent
+  predicates returning `ToolName`), `conversation.py`, `constants.py` (scope
+  keywords), `models.py` (`GuardrailDecision`).
 - `agents/tools/` — `registry.py` (`@register` decorator, scope/tags/routing
   metadata, discovery), **`names.py` (`ToolName` enum — single source of truth)**,
   `sql_tools/<domain>/` (one folder per domain), `rag_tools/`.

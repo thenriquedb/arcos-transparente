@@ -221,6 +221,10 @@ def _looks_like_public_spend_query(reading: QueryReading) -> bool:
         return True
     if reading.planejamento_programa is not None:
         return True
+    if reading.planejamento_acao is not None:
+        return True
+    if reading.planejamento_fonte_recurso is not None:
+        return True
     if reading.planejamento_area is not None:
         return True
     if reading.planejamento_entidade is not None:
@@ -337,6 +341,10 @@ def _has_public_filter_hint(reading: QueryReading) -> bool:
     if reading.planejamento_area is not None:
         return True
     if reading.planejamento_programa is not None:
+        return True
+    if reading.planejamento_acao is not None:
+        return True
+    if reading.planejamento_fonte_recurso is not None:
         return True
     if reading.receitas_tema is not None:
         return True

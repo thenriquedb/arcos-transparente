@@ -453,7 +453,14 @@ def _select_planning_spend_query(
     reading = read_query(question)
     if not reading.normalized_text:
         return None
-    if reading.planejamento_programa is None:
+    has_planning_specific_filter = any(
+        (
+            reading.planejamento_programa,
+            reading.planejamento_acao,
+            reading.planejamento_fonte_recurso,
+        )
+    )
+    if not has_planning_specific_filter:
         return None
     if not any(signal in reading.normalized_text for signal in _EVENT_SPEND_SIGNAL_TERMS):
         return None

@@ -178,7 +178,7 @@ O router determinístico legado foi removido. A compreensão de linguagem natura
 mora em `agents/nlu/`:
 
 - `reading.py` lê a pergunta uma vez em `QueryReading`
-- `extractors.py` normaliza e extrai entidades (nome, ano, secretaria, objeto, ...)
+- `extractors/` (pacote por escopo) normaliza e extrai entidades (nome, ano, secretaria, objeto, planejamento, contratos, ...)
 - `detectors.py` e `intents.py` expõem detecção determinística por domínio e os
   predicados de intenção consumidos pela seleção híbrida
 

@@ -319,6 +319,11 @@ def test_hybrid_selector_prioriza_candidates_de_custo_de_evento() -> None:
         "Qual foi o total gasto com alimentacao escolar em 2025?",
         "Quanto foi gasto com pnae em 2025?",
         "Quanto foi gasto com generos alimenticios da educacao em 2025?",
+        "Quanto foi gasto com transporte escolar em 2025?",
+        "Quanto foi gasto com CAPS em 2025?",
+        "Quanto foi gasto com CRAS em 2025?",
+        "Quanto foi gasto com FUNDEB em 2025?",
+        "Quanto foi gasto com FNAS em 2025?",
     ],
 )
 def test_hybrid_selector_prioriza_planejamento_para_merenda_e_aliases_comuns(
