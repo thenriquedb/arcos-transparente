@@ -21,6 +21,7 @@ _SENSITIVE_KEYWORDS = (
     "password",
     "secret",
     "token",
+    "credential",
 )
 
 

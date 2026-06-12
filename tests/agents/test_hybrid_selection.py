@@ -625,3 +625,123 @@ def test_hybrid_selector_respeita_pedido_expresso_de_total_em_gasto() -> None:
     assert selection.used_fallback is False
     assert selection.reason_code == "explicit_total_request"
     assert selection.candidate_tool_names == ("agregar_diarias",)
+
+
+# --- Resiliência quando o seletor LLM falha ou retorna lixo (C3) -------------
+#
+# O seletor model-based envolve uma chamada de rede real ao LLM. Em produção ele
+# vai eventualmente lançar exceção, dar timeout ou devolver algo não-JSON. Estes
+# testes garantem que cada caminho degrada para a superfície pública completa em
+# vez de quebrar a requisição.
+
+
+def _expose_all_public_tools(selection) -> None:
+    """Asserções comuns: caiu em fallback expondo toda a superfície pública."""
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is True
+    assert _tool_names(selection.candidate_tools) == _tool_names(get_public_tools())
+
+
+def test_hybrid_selector_runner_lanca_excecao_cai_em_fallback() -> None:
+    def _runner_que_estoura(*_args, **_kwargs):
+        raise RuntimeError("LLM timeout")
+
+    selector = HybridToolSelector(runner=_runner_que_estoura)
+
+    selection = selector.select("Pergunta valida", history=[])
+
+    _expose_all_public_tools(selection)
+    assert selection.reason_code == "selector_error"
+
+
+def test_hybrid_selector_output_nao_coercivel_cai_em_fallback() -> None:
+    selector = HybridToolSelector(runner=lambda *_args: 12345)
+
+    selection = selector.select("Pergunta valida", history=[])
+
+    _expose_all_public_tools(selection)
+    assert selection.reason_code == "invalid_selector_output"
+
+
+def test_hybrid_selector_json_malformado_cai_em_fallback() -> None:
+    selector = HybridToolSelector(runner=lambda *_args: '{"action": "allow"')
+
+    selection = selector.select("Pergunta valida", history=[])
+
+    _expose_all_public_tools(selection)
+    assert selection.reason_code == "invalid_selector_output"
+
+
+def test_hybrid_selector_payload_com_action_invalida_cai_em_fallback() -> None:
+    selector = HybridToolSelector(
+        runner=lambda *_args: {"action": "frobnicate", "candidate_tool_names": ["consultar_contratos"]}
+    )
+
+    selection = selector.select("Pergunta valida", history=[])
+
+    _expose_all_public_tools(selection)
+    assert selection.reason_code == "invalid_selector_output"
+
+
+def test_hybrid_selector_clarify_sem_mensagem_cai_em_fallback() -> None:
+    selector = HybridToolSelector(
+        runner=lambda *_args: {
+            "action": "clarify",
+            "candidate_tool_names": [],
+            "confidence": "medium",
+        }
+    )
+
+    selection = selector.select("Pergunta valida", history=[])
+
+    _expose_all_public_tools(selection)
+    assert selection.reason_code == "missing_selector_message"
+
+
+def test_hybrid_selector_allow_sem_candidatas_cai_em_fallback() -> None:
+    # Sem reason_code no payload -> usa o default "empty_candidate_set".
+    selector = HybridToolSelector(
+        runner=lambda *_args: {
+            "action": "allow",
+            "candidate_tool_names": [],
+            "confidence": "high",
+        }
+    )
+
+    selection = selector.select("Pergunta valida", history=[])
+
+    _expose_all_public_tools(selection)
+    assert selection.reason_code == "empty_candidate_set"
+
+
+def test_hybrid_selector_catalogo_vazio_cai_em_fallback_sem_chamar_modelo() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("não deve chamar o modelo com catálogo vazio")
+
+    selector = HybridToolSelector(
+        runner=_runner_nao_deve_ser_chamado,
+        catalog_factory=lambda: [],
+    )
+
+    selection = selector.select("Pergunta valida", history=[])
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is True
+    assert selection.reason_code == "empty_catalog"
+    assert _tool_names(selection.candidate_tools) == _tool_names(get_public_tools())
+
+
+def test_hybrid_selector_aceita_json_string_valida_do_modelo() -> None:
+    # Caminho real de produção: o LLM devolve TEXTO (JSON), não um dict.
+    selector = HybridToolSelector(
+        runner=lambda *_args: (
+            '{"action": "allow", "candidate_tool_names": ["consultar_contratos"], "confidence": "high"}'
+        )
+    )
+
+    selection = selector.select("Pergunta valida", history=[])
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.candidate_tool_names == ("consultar_contratos",)
