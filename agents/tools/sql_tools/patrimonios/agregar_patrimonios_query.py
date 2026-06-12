@@ -5,6 +5,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -30,7 +31,7 @@ def _metric(registros: list[Patrimonio], metrica: str) -> Decimal | int:
         "soma_valor_atualizado": "valor_atualizado",
         "soma_valor_ingresso": "valor_ingresso",
     }[metrica]
-    return sum((getattr(registro, field) or Decimal("0")) for registro in registros)
+    return sum((getattr(registro, field) or Decimal(0)) for registro in registros)
 
 
 def _metric_to_json(value: Decimal | int) -> float | int:
@@ -46,8 +47,8 @@ GROUP_FIELD_GETTERS = {
     "classificacao": lambda registro: registro.classificacao,
 }
 METRIC_FIELD_GETTERS = {
-    "soma_valor_atualizado": lambda registro: registro.valor_atualizado or Decimal("0"),
-    "soma_valor_ingresso": lambda registro: registro.valor_ingresso or Decimal("0"),
+    "soma_valor_atualizado": lambda registro: registro.valor_atualizado or Decimal(0),
+    "soma_valor_ingresso": lambda registro: registro.valor_ingresso or Decimal(0),
 }
 
 
@@ -61,7 +62,7 @@ def _project_patrimonio_group(
 
 
 @register(
-    name="agregar_patrimonios",
+    name=ToolName.AGREGAR_PATRIMONIOS,
     scope=PUBLIC_SCOPE,
     tags=["domain:patrimonios", "shape:aggregate"],
     routing=routing_metadata(

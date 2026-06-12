@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any, Literal, TypeVar
 
-from sqlalchemy import and_, select
+from sqlalchemy import ColumnElement, and_, select
 from sqlalchemy.orm import Session
 
+from database.models import Base
 from ingestion.loaders.sql_loader import LoadResult
 
+
 UpsertStatus = Literal["inserted", "updated", "ignored"]
+ModelT = TypeVar("ModelT", bound=Base)
 
 
 def merge_load_results(target: LoadResult, partial: LoadResult) -> None:
@@ -33,7 +36,7 @@ def apply_upsert_status(result: LoadResult, status: UpsertStatus) -> None:
     result.ignorados += 1
 
 
-def apply_payload_updates(instance: Any, payload: dict[str, Any]) -> bool:
+def apply_payload_updates(instance: Base, payload: dict[str, Any]) -> bool:
     """Update only changed fields and report whether anything changed."""
 
     changed = False
@@ -46,11 +49,11 @@ def apply_payload_updates(instance: Any, payload: dict[str, Any]) -> bool:
 
 def upsert_by_filters(
     session: Session,
-    model: type,
+    model: type[ModelT],
     *,
-    filters: list[Any],
+    filters: list[ColumnElement[bool]],
     payload: dict[str, Any],
-) -> tuple[Any, UpsertStatus]:
+) -> tuple[ModelT, UpsertStatus]:
     """Create or update one parent row based on explicit identity filters."""
 
     existing = session.execute(select(model).where(and_(*filters))).scalar_one_or_none()
@@ -66,10 +69,10 @@ def upsert_by_filters(
 
 def replace_child_rows(
     session: Session,
-    child_model: type,
+    child_model: type[Base],
     *,
     parent_field: str,
-    parent_id: Any,
+    parent_id: int,
     rows: list[dict[str, Any]],
 ) -> None:
     """Replace all child rows for one parent with the supplied projection."""

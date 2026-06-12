@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from datetime import date
+
 import pytest
 
 import agents.chatbot.agent as chatbot_agent
 from agents.chatbot.help_messages import build_scope_help_message
 from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
+from agents.chatbot.policy import evaluate_deterministic_policy
 from agents.chatbot.core import (
     ChatbotAgentBackend,
     ChatMessage,
@@ -198,6 +201,31 @@ def test_system_prompt_pede_confirmacao_para_siglas_ambiguas() -> None:
     assert "Você quer dizer UPA como Unidade de Pronto Atendimento?" in prompt
 
 
+def test_system_prompt_injeta_data_atual_para_resolver_hoje() -> None:
+    # Regressão: sem a data atual no prompt, o LLM nao resolve "ativos hoje"
+    # e o filtro `vigente_em` recebe uma data defasada, zerando contratos.
+    prompt = chatbot_agent.carregar_system_prompt(hoje=date(2026, 6, 11))
+
+    assert "## Data Atual" in prompt
+    assert "11/06/2026" in prompt
+    assert "2026-06-11" in prompt
+    assert "vigente_em" in prompt
+
+
+def test_system_prompt_orienta_datas_relativas_para_todos_os_escopos() -> None:
+    prompt = chatbot_agent.carregar_system_prompt(hoje=date(2026, 6, 11))
+
+    assert "ontem" in prompt
+    assert "mês passado" in prompt
+    assert "ano passado" in prompt
+
+
+def test_system_prompt_usa_data_de_hoje_por_padrao() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert date.today().isoformat() in prompt
+
+
 def test_system_prompt_orienta_followups_de_contratos_e_licitacoes() -> None:
     prompt = chatbot_agent.carregar_system_prompt()
 
@@ -253,6 +281,9 @@ def test_system_prompt_orienta_gastos_amplos_com_lista_detalhada() -> None:
     assert "explique em linguagem simples o que significa cada campo" in prompt
     assert "não escolha silenciosamente só `valor_pago`" in prompt
     assert "`valor_em_liquidacao`" in prompt
+    assert "`merenda escolar`" in prompt
+    assert "`agregar_planejamento`" in prompt
+    assert "`documentos extras` podem trazer retenções, cancelamentos e despesas acessórias" in prompt
 
 
 def test_system_prompt_orienta_consultas_de_estoque() -> None:
@@ -270,6 +301,22 @@ def test_scope_help_message_inclui_estoques() -> None:
 
     assert "Estoques e almoxarifado" in help_message
     assert "maior quantidade no estoque" in help_message
+
+
+def test_scope_help_message_inclui_tarifa_zero() -> None:
+    help_message = build_scope_help_message()
+
+    assert "Tarifa Zero" in help_message
+
+
+def test_system_prompt_distingue_onibus_municipal_e_intermunicipal() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "Municipal / Tarifa Zero" in prompt
+    assert "Intermunicipal" in prompt
+    # Deve pedir confirmação do tipo antes de buscar quando a pergunta for crua.
+    assert 'apenas "horário de ônibus"' in prompt
+    assert "NÃO faça a busca ainda" in prompt
 
 
 def test_system_prompt_documenta_fronteira_sql_vs_rag() -> None:
@@ -376,7 +423,8 @@ def test_chatbot_application_stream_bloqueia_pergunta_vazia_sem_chamar_backend()
             "passagens, estoques e almoxarifado, frota e veículos, "
             "patrimônio, planejamento, receitas, transferências "
             "financeiras, emendas parlamentares, políticos eleitos, "
-            "telefones úteis ou horários de ônibus."
+            "telefones úteis ou horários de ônibus (intermunicipais e do "
+            "Tarifa Zero)."
         )
     ]
     assert backend.calls == []
@@ -524,6 +572,65 @@ def test_chatbot_application_clarifica_sigla_protegida_antes_do_backend() -> Non
     assert response.guardrail_triggered is False
     assert response.metadata["policy_category"] == "protected_acronym"
     assert backend.calls == []
+
+
+def _historico_clarificacao_de_onibus() -> list[ChatMessage]:
+    return [
+        ChatMessage(role="user", content="qual o horario de onibus?"),
+        ChatMessage(
+            role="assistant",
+            content=("Você quer os horários do transporte municipal Tarifa Zero ou dos ônibus intermunicipais?"),
+        ),
+    ]
+
+
+@pytest.mark.parametrize(
+    "resposta",
+    [
+        "intermunicipais",
+        "os intermunicipais",
+        "municipais",
+        "quero os municipais",
+        "tarifa zero",
+        "o gratuito da cidade",
+    ],
+)
+def test_policy_resolve_resposta_de_tipo_de_onibus(resposta: str) -> None:
+    decisao = evaluate_deterministic_policy(
+        resposta,
+        history=_historico_clarificacao_de_onibus(),
+    )
+
+    assert decisao.action == "allow"
+    # A pergunta original é preservada para o backend buscar o tipo escolhido.
+    assert "horario de onibus" in (decisao.resolved_question or "")
+
+
+def test_policy_nao_resolve_resposta_alheia_a_clarificacao_de_onibus() -> None:
+    decisao = evaluate_deterministic_policy(
+        "qual a capital da franca?",
+        history=_historico_clarificacao_de_onibus(),
+    )
+
+    assert decisao.action == "block"
+
+
+def test_chatbot_application_resposta_de_tipo_de_onibus_chega_ao_backend() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-onibus-tipo"),
+    )
+    app.session.history.extend(_historico_clarificacao_de_onibus())
+
+    response = app.ask("intermunicipais")
+
+    assert response.guardrail_triggered is False
+    assert len(backend.calls) == 1
+    backend_question, session_id = backend.calls[0]
+    assert session_id == "sessao-onibus-tipo"
+    assert "horario de onibus" in backend_question
+    assert "intermunicipais" in backend_question
 
 
 def test_chatbot_application_reaproveita_sigla_confirmada_antes_da_selecao() -> None:
@@ -1141,6 +1248,20 @@ def test_chatbot_application_permite_consulta_de_frota_sem_prefeitura_no_texto()
 
     assert response.content == "resposta para: Quais sao todos os veiculos da frota?"
     assert backend.calls == [("Quais sao todos os veiculos da frota?", "sessao-frota-sem-ancora")]
+
+
+def test_chatbot_application_permite_consulta_de_merenda_sem_retornar_help_message() -> None:
+    backend = FakeBackend()
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-merenda"),
+    )
+
+    response = app.ask("Qual foi o gasto com merenda escolar em 2025?")
+
+    assert response.content == "resposta para: Qual foi o gasto com merenda escolar em 2025?"
+    assert response.metadata["selection_reason_code"] == "heuristic_planning_program_spend_query"
+    assert backend.calls == [("Qual foi o gasto com merenda escolar em 2025?", "sessao-merenda")]
 
 
 def test_chatbot_application_stream_permite_followup_temporal_em_receitas() -> None:

@@ -322,6 +322,104 @@ Comportamento esperado:
 
 ---
 
+## Frota — Agregações e Despesas
+
+Perguntas para validar agregações da frota e o histórico detalhado de manutenções.
+
+**Agregações:**
+- Qual tipo de veículo gera mais despesa de manutenção?
+- Qual secretaria tem a frota mais cara de manter?
+- Quais os 5 veículos com maior gasto total?
+- Quantos veículos há por tipo?
+- Qual a soma de despesas da frota da saúde?
+
+**Despesas por veículo:**
+- Qual o histórico de manutenção da ambulância placa ABC-1234?
+- Quais foram os gastos com combustível da frota em 2025?
+- Quantas manutenções o veículo de placa XYZ teve no último ano?
+- Liste as despesas de manutenção dos caminhões.
+- Quais eventos de despesa ocorreram com a frota da educação em 2024?
+
+Comportamento esperado:
+
+- usar `agregar_frota` para rankings, totais e contagens por tipo, secretaria, situação ou localização
+- usar `consultar_despesas_frota` para histórico individual de manutenção e gasto de um veículo
+- usar `consultar_frota` apenas quando a pergunta pedir dados cadastrais (marca, modelo, situação)
+- nunca somar manualmente os eventos de `consultar_despesas_frota`; usar `agregar_frota` com `metrica="soma_total_despesas"`
+
+---
+
+## Folha de Pagamento — Por Cargo e Por Lotação
+
+Perguntas para validar detalhamento salarial por cargo e por unidade organizacional.
+
+**Por cargo:**
+- Qual cargo tem maior massa salarial na prefeitura?
+- Quais os cargos com maior soma de líquido em 2025?
+- Quantos servidores distintos ocupam o cargo de Agente de Saúde?
+- Mostre os vencimentos totais do cargo de professor em março/2025.
+- Quais descontos os fiscais tributários tiveram em 2024?
+
+**Por lotação:**
+- Qual secretaria tem maior massa salarial em 2025?
+- Ranking de lotações por total de líquido pago.
+- Qual unidade organizacional tem mais servidores na folha?
+- Qual a massa salarial da Secretaria de Saúde em 2025?
+- Evolução mensal do gasto com folha na Secretaria de Educação em 2024.
+
+Comportamento esperado:
+
+- usar `agregar_folha_cargos` para rankings e totais por cargo
+- usar `consultar_folha_cargos` para listar registros detalhados de proventos, descontos e líquido por cargo
+- usar `agregar_folha_lotacoes` para rankings e totais por secretaria/lotação
+- usar `consultar_folha_lotacoes` para listar registros detalhados por unidade organizacional
+- diferenciar `lotacao` (unidade real de alocação na folha) de `secretaria` (campo livre em `consultar_servidores`)
+- nunca usar `consultar_servidores` para proventos ou descontos — esses campos não existem nessa tool
+
+---
+
+## Histórico Funcional de Servidores
+
+Perguntas para validar dados funcionais como admissão, desligamento, cessão e vínculo.
+
+- Quando o servidor João Silva foi admitido na prefeitura?
+- Quais servidores foram desligados em 2024?
+- Quais servidores estão em cessão para outros órgãos?
+- Quantos servidores foram admitidos em 2023?
+- Quais servidores têm vínculo CLT?
+- Liste servidores com cargo de professor admitidos após 2020.
+- Quais servidores foram admitidos entre 2022 e 2024?
+- Mostre os servidores da lotação da saúde que estão cedidos.
+
+Comportamento esperado:
+
+- usar `consultar_historico_funcional_servidor` para data de admissão, desligamento, cessão, vínculo e situação funcional
+- não usar `consultar_servidores` para perguntas sobre admissão ou desligamento — esses campos não existem nessa tool
+- não usar `buscar_historico_de_pagamentos_do_servidor` para dados funcionais — essa tool traz apenas pagamentos
+- para filtrar servidores em cessão, usar `filtros={"em_cessao": true}`
+
+---
+
+## Itens Adquiridos em Contratos
+
+Perguntas para validar a consulta granular de objetos adquiridos por contrato.
+
+- Quais itens foram comprados no contrato 45/2025?
+- Qual o preço unitário pago por cadeiras escolares no último contrato da educação?
+- Listar todos os contratos que adquiriram álcool gel em 2024.
+- Quais materiais foram adquiridos pela Secretaria de Saúde em 2025?
+- Qual a quantidade de uniformes adquiridos pela prefeitura em 2024?
+- Quais itens compõem o contrato da merenda escolar?
+
+Comportamento esperado:
+
+- usar `consultar_itens_adquiridos_contrato` para ver o que foi comprado num contrato específico
+- filtrar por `identificacao` para buscar contratos que adquiriram determinado material
+- usar `consultar_contratos` quando a pergunta for sobre valor total, vigência ou fornecedor do contrato em si
+- avisar que nem todos os contratos importados têm itens registrados
+
+---
+
 ## Contrato com Valor Zero
 
 Perguntas para validar o comportamento quando um contrato retorna valor R$ 0,00.

@@ -5,11 +5,17 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 
 from ingestion.loaders.sql_loader import LoadResult, SQLLoader
 
 from .shared import merge_load_results
+
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
+
+    from ingestion.pipeline import IngestionPipeline
 
 DiscoverFiles = Callable[[Path, int | None], list[Path]]
 FileProcessedHook = Callable[[str, Path], None]
@@ -20,8 +26,8 @@ LoadFiles = Callable[["AdapterRuntime", list[Path]], LoadResult]
 class AdapterRuntime:
     """Concrete runtime dependencies passed to each modulo de ingestao adapter."""
 
-    pipeline: Any
-    session: Any
+    pipeline: IngestionPipeline
+    session: Session
     loader: SQLLoader
     ano: int | None
     on_file_processed: FileProcessedHook | None = None

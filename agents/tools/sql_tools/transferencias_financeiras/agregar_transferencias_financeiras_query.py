@@ -5,6 +5,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -66,7 +67,7 @@ def _project_transferencia_financeira_group(
 
 
 @register(
-    name="agregar_transferencias_financeiras",
+    name=ToolName.AGREGAR_TRANSFERENCIAS_FINANCEIRAS,
     scope=PUBLIC_SCOPE,
     tags=["domain:transferencias_financeiras", "shape:aggregate"],
     routing=routing_metadata(

@@ -82,8 +82,10 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
     assert public_tool_names == {
         "consultar_servidores",
         "agregar_servidores",
+        "consultar_historico_funcional_servidor",
         "consultar_contratos",
         "agregar_contratos",
+        "consultar_itens_adquiridos_contrato",
         "consultar_licitacoes",
         "agregar_licitacoes",
         "consultar_receitas",
@@ -107,6 +109,12 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
         "agregar_quadro_pessoal",
         "consultar_eleitos",
         "consultar_frota",
+        "agregar_frota",
+        "consultar_despesas_frota",
+        "consultar_folha_cargos",
+        "agregar_folha_cargos",
+        "consultar_folha_lotacoes",
+        "agregar_folha_lotacoes",
         "consultar_transferencias_financeiras",
         "agregar_transferencias_financeiras",
         "buscar_historico_de_pagamentos_do_servidor",
@@ -120,8 +128,10 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
     assert tool_names == {
         "consultar_servidores",
         "agregar_servidores",
+        "consultar_historico_funcional_servidor",
         "consultar_contratos",
         "agregar_contratos",
+        "consultar_itens_adquiridos_contrato",
         "consultar_licitacoes",
         "agregar_licitacoes",
         "consultar_receitas",
@@ -145,6 +155,12 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
         "agregar_quadro_pessoal",
         "consultar_eleitos",
         "consultar_frota",
+        "agregar_frota",
+        "consultar_despesas_frota",
+        "consultar_folha_cargos",
+        "agregar_folha_cargos",
+        "consultar_folha_lotacoes",
+        "agregar_folha_lotacoes",
         "consultar_transferencias_financeiras",
         "agregar_transferencias_financeiras",
         "buscar_historico_de_pagamentos_do_servidor",
@@ -180,7 +196,7 @@ def test_get_all_tools_nao_duplica_tools_em_chamadas_repetidas() -> None:
 def test_catalogo_publico_expoe_metadados_de_roteamento_para_todas_as_tools() -> None:
     catalog = get_public_tool_catalog()
 
-    assert len(catalog) == 31
+    assert len(catalog) == 39
     for entry in catalog:
         assert entry.routing.summary
         assert len(entry.routing.examples) >= 2

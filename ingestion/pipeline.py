@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from datetime import date, datetime
 from pathlib import Path
-from typing import Any, Callable, Optional
+from typing import Any
 
 from sqlalchemy import and_, select
 
@@ -13,14 +14,18 @@ from database.session import get_session
 from ingestion.loaders.sql_loader import LoadResult, SQLLoader
 from ingestion.modules import (
     contratos as contratos_module,
-    despesas as despesas_module,
+)
+
+from ingestion.modules import (
     estoques as estoques_module,
     folha_pagamento as folha_pagamento_module,
+    despesas as despesas_module,
     frotas as frotas_module,
     licitacoes as licitacoes_module,
     receitas as receitas_module,
     transferencias_financeiras as transferencias_module,
 )
+
 from ingestion.modules.adapters import AdapterRuntime
 from ingestion.modules.discovery import discover_files_for_tipo
 from ingestion.modules.registry import build_adapter_registry
@@ -81,9 +86,9 @@ class IngestionPipeline:
 
     def run(
         self,
-        tipos: Optional[list[str]] = None,
-        ano: Optional[int] = None,
-        on_file_processed: Optional[Callable[[str, Path], None]] = None,
+        tipos: list[str] | None = None,
+        ano: int | None = None,
+        on_file_processed: Callable[[str, Path], None] | None = None,
     ) -> dict[str, LoadResult]:
         """Executa importação com filtros por tipo e ano."""
 
@@ -133,7 +138,7 @@ class IngestionPipeline:
             to_date=self._to_date,
         )
 
-    def _load_receitas(self, session, ano: Optional[int]) -> LoadResult:
+    def _load_receitas(self, session, ano: int | None) -> LoadResult:
         """Carrega arrecadações e lançamentos de receitas."""
 
         return receitas_module.load_receitas(
@@ -164,7 +169,7 @@ class IngestionPipeline:
     def _load_transferencias_financeiras(
         self,
         session,
-        ano: Optional[int],
+        ano: int | None,
     ) -> LoadResult:
         """Carrega movimentos de transferencias e emendas parlamentares."""
 
@@ -176,7 +181,7 @@ class IngestionPipeline:
             parser_csv=self.emendas_parlamentares_csv_parser,
         )
 
-    def _load_folha_pagamento(self, session, ano: Optional[int]) -> LoadResult:
+    def _load_folha_pagamento(self, session, ano: int | None) -> LoadResult:
         """Carrega folha de pagamento em modelo dimensional."""
 
         return folha_pagamento_module.load_folha_pagamento(
@@ -205,7 +210,7 @@ class IngestionPipeline:
         return fornecedor
 
     @staticmethod
-    def _to_date(value: Any) -> Any:
+    def _to_date(value: str | date | None) -> date | None:
         """Converte string ISO para date quando necessário."""
 
         if isinstance(value, str):
@@ -213,7 +218,7 @@ class IngestionPipeline:
         return value
 
     @staticmethod
-    def _to_datetime(value: Any) -> Any:
+    def _to_datetime(value: str | datetime | None) -> datetime | None:
         """Converte string ISO para datetime quando necessário."""
 
         if isinstance(value, str):
@@ -224,7 +229,7 @@ class IngestionPipeline:
     def _get_or_create_natureza(
         session,
         natureza: dict[str, Any],
-    ) -> Optional[ReceitaNatureza]:
+    ) -> ReceitaNatureza | None:
         """Busca ou cria natureza de receita por identificação."""
 
         natureza = sanitize_xml_payload(natureza)
@@ -249,7 +254,7 @@ class IngestionPipeline:
         return instancia
 
     @staticmethod
-    def _get_or_create_folha_dim(session, model, nome: Optional[str]):
+    def _get_or_create_folha_dim(session, model, nome: str | None):
         """Busca ou cria dimensão textual da folha."""
 
         return folha_pagamento_module.get_or_create_folha_dim(session, model, nome)
@@ -258,8 +263,8 @@ class IngestionPipeline:
     def _get_or_create_folha_servidor(
         session,
         nome: str,
-        cargo: Optional[str],
-        lotacao: Optional[str],
+        cargo: str | None,
+        lotacao: str | None,
         competencia_referencia: date,
         salario_base,
     ) -> FolhaServidor:
@@ -284,7 +289,7 @@ class IngestionPipeline:
             despesas_por_funcao_csv_parser=self.despesas_por_funcao_csv_parser,
         )
 
-    def _arquivos_por_tipo(self, tipo: str, ano: Optional[int]) -> list[Path]:
+    def _arquivos_por_tipo(self, tipo: str, ano: int | None) -> list[Path]:
         """Descobre arquivos de entrada por tipo e ano."""
 
         return discover_files_for_tipo(self.data_dir, tipo, ano)

@@ -410,3 +410,139 @@ def test_agregar_planejamento_suporta_prefeitura_por_origem(
     assert resultado["valor_total"] == 7345.67
 
     session.close()
+
+
+def test_consultar_planejamento_colapsa_rollups_hierarquicos_duplicados(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _planejamento(
+                origem="prefeitura",
+                funcao="Educação",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="PREFEITURA MUNICIPAL",
+                unidade="PREFEITURA MUNICIPAL",
+                programa="Programa de Merenda Escolar",
+                mes="NOVEMBRO",
+                mes_num=11,
+                subfuncao="Educação Infantil",
+                acao="Distribuição de Merenda das Creches",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("1090.00"),
+                valor_pago=Decimal("44875.35"),
+            ),
+            _planejamento(
+                origem="prefeitura",
+                funcao="Educação",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="PREFEITURA MUNICIPAL",
+                unidade="SECRETARIA MUNICIPAL DE EDUCACAO",
+                programa="Programa de Merenda Escolar",
+                mes="NOVEMBRO",
+                mes_num=11,
+                subfuncao="Educação Infantil",
+                acao="Distribuição de Merenda das Creches",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("1090.00"),
+                valor_pago=Decimal("44875.35"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"ano": 2025, "programa": "merenda escolar"},
+        campos=["unidade", "programa", "acao", "valor_pago"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "unidade": "SECRETARIA MUNICIPAL DE EDUCACAO",
+            "programa": "Programa de Merenda Escolar",
+            "acao": "Distribuição de Merenda das Creches",
+            "valor_pago": 44875.35,
+        }
+    ]
+
+    session.close()
+
+
+def test_agregar_planejamento_nao_dobra_totais_em_rollups_hierarquicos(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _planejamento(
+                origem="prefeitura",
+                funcao="Educação",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="PREFEITURA MUNICIPAL",
+                unidade="PREFEITURA MUNICIPAL",
+                programa="Programa de Merenda Escolar",
+                mes="NOVEMBRO",
+                mes_num=11,
+                subfuncao="Educação Infantil",
+                acao="Distribuição de Merenda das Creches",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("1090.00"),
+                valor_pago=Decimal("44875.35"),
+            ),
+            _planejamento(
+                origem="prefeitura",
+                funcao="Educação",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="PREFEITURA MUNICIPAL",
+                unidade="SECRETARIA MUNICIPAL DE EDUCACAO",
+                programa="Programa de Merenda Escolar",
+                mes="NOVEMBRO",
+                mes_num=11,
+                subfuncao="Educação Infantil",
+                acao="Distribuição de Merenda das Creches",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("1090.00"),
+                valor_pago=Decimal("44875.35"),
+            ),
+            _planejamento(
+                origem="prefeitura",
+                funcao="Educação",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="PREFEITURA MUNICIPAL",
+                unidade="PREFEITURA MUNICIPAL",
+                programa="Programa de Merenda Escolar",
+                mes="NOVEMBRO",
+                mes_num=11,
+                subfuncao="Ensino Fundamental",
+                acao="Distribuição de Merenda das Escolas",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("4883.00"),
+                valor_pago=Decimal("88944.53"),
+            ),
+            _planejamento(
+                origem="prefeitura",
+                funcao="Educação",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="PREFEITURA MUNICIPAL",
+                unidade="SECRETARIA MUNICIPAL DE EDUCACAO",
+                programa="Programa de Merenda Escolar",
+                mes="NOVEMBRO",
+                mes_num=11,
+                subfuncao="Ensino Fundamental",
+                acao="Distribuição de Merenda das Escolas",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("4883.00"),
+                valor_pago=Decimal("88944.53"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.agregar_planejamento(
+        filtros={"ano": 2025, "programa": "merenda escolar"},
+        metrica="soma_valor_pago",
+    )
+
+    assert resultado["valor_total"] == 133819.88
+
+    session.close()

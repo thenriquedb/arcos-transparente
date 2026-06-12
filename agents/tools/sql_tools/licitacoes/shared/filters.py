@@ -90,7 +90,7 @@ class LicitacoesFiltroSchema(LicitacoesToolBaseSchema):
         return parse_decimal(value)
 
     @model_validator(mode="after")
-    def _validate_ranges(self) -> "LicitacoesFiltroSchema":
+    def _validate_ranges(self) -> LicitacoesFiltroSchema:
         if self.data_abertura is not None and (
             self.data_abertura_inicio is not None or self.data_abertura_fim is not None
         ):

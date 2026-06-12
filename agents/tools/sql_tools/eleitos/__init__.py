@@ -2,6 +2,7 @@
 
 from .consultar_eleitos_query import consultar_eleitos
 
+
 __all__ = [
     "consultar_eleitos",
 ]

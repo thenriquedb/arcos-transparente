@@ -7,6 +7,7 @@ from typing import Any
 
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
@@ -27,13 +28,13 @@ from database.models import DespesaPorFuncao
 from shared.utils.decimal_to_float import decimal_to_float
 
 from .consultar_despesas_por_funcao_schema import (
-    ConsultarDespesasPorFuncaoMetadata,
-    ConsultarDespesasPorFuncaoParams,
-    ConsultarDespesasPorFuncaoResponse,
     DEFAULT_DESPESAS_POR_FUNCAO_FIELDS,
     DESPESAS_POR_FUNCAO_BROAD_SPEND_GUIDANCE,
     DESPESAS_POR_FUNCAO_FIELD_EXPLANATIONS,
     DESPESAS_POR_FUNCAO_FINANCIAL_STAGE_FIELDS,
+    ConsultarDespesasPorFuncaoMetadata,
+    ConsultarDespesasPorFuncaoParams,
+    ConsultarDespesasPorFuncaoResponse,
     DespesasPorFuncaoFiltroSchema,
 )
 
@@ -81,10 +82,10 @@ def load_filtered_despesas_por_funcao(
 SORT_FIELD_GETTERS = {
     "periodo_fim": lambda registro: registro.periodo_fim,
     "funcao": lambda registro: registro.funcao or "",
-    "dotacao_atualizada": lambda registro: registro.dotacao_atualizada or Decimal("0"),
-    "valor_empenhado": lambda registro: registro.valor_empenhado or Decimal("0"),
-    "valor_liquidado": lambda registro: registro.valor_liquidado or Decimal("0"),
-    "valor_pago": lambda registro: registro.valor_pago or Decimal("0"),
+    "dotacao_atualizada": lambda registro: registro.dotacao_atualizada or Decimal(0),
+    "valor_empenhado": lambda registro: registro.valor_empenhado or Decimal(0),
+    "valor_liquidado": lambda registro: registro.valor_liquidado or Decimal(0),
+    "valor_pago": lambda registro: registro.valor_pago or Decimal(0),
 }
 
 
@@ -117,7 +118,7 @@ def _financial_stage_explanations() -> dict[str, str]:
 
 
 @register(
-    name="consultar_despesas_por_funcao",
+    name=ToolName.CONSULTAR_DESPESAS_POR_FUNCAO,
     scope=PUBLIC_SCOPE,
     tags=["domain:despesas_por_funcao", "shape:lookup"],
     routing=routing_metadata(

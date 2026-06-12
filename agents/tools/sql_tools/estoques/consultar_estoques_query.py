@@ -7,11 +7,8 @@ from typing import Any
 
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
-from agents.tools.sql_tools.shared.lookup import (
-    build_lookup_response,
-    execute_collection_lookup_result,
-)
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
     equals_filter,
@@ -20,6 +17,10 @@ from agents.tools.sql_tools.shared.filtering import (
     predicate_filter,
     text_filter,
 )
+from agents.tools.sql_tools.shared.lookup import (
+    build_lookup_response,
+    execute_collection_lookup_result,
+)
 from agents.tools.sql_tools.shared.projection import project_public_fields
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
@@ -27,10 +28,10 @@ from database.models import EstoqueMaterial
 from shared.utils.decimal_to_float import decimal_to_float
 
 from .consultar_estoques_schema import (
+    DEFAULT_ESTOQUES_FIELDS,
     ConsultarEstoquesMetadata,
     ConsultarEstoquesParams,
     ConsultarEstoquesResponse,
-    DEFAULT_ESTOQUES_FIELDS,
     EstoqueFiltroSchema,
 )
 
@@ -85,10 +86,10 @@ def load_filtered_estoques(
 SORT_FIELD_GETTERS = {
     "periodo_fim": lambda registro: registro.periodo_fim,
     "material": lambda registro: registro.material or "",
-    "entrada_valor": lambda registro: registro.entrada_valor or Decimal("0"),
-    "saida_valor": lambda registro: registro.saida_valor or Decimal("0"),
-    "saldo_quantidade": lambda registro: registro.saldo_quantidade or Decimal("0"),
-    "saldo_valor": lambda registro: registro.saldo_valor or Decimal("0"),
+    "entrada_valor": lambda registro: registro.entrada_valor or Decimal(0),
+    "saida_valor": lambda registro: registro.saida_valor or Decimal(0),
+    "saldo_quantidade": lambda registro: registro.saldo_quantidade or Decimal(0),
+    "saldo_valor": lambda registro: registro.saldo_valor or Decimal(0),
 }
 
 
@@ -107,7 +108,7 @@ def project_estoque_fields(
 
 
 @register(
-    name="consultar_estoques",
+    name=ToolName.CONSULTAR_ESTOQUES,
     scope=PUBLIC_SCOPE,
     tags=["domain:estoques", "shape:lookup", "kind:summary"],
     routing=routing_metadata(

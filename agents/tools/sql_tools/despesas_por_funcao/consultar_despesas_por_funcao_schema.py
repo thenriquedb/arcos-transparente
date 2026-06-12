@@ -108,7 +108,7 @@ class DespesasPorFuncaoFiltroSchema(SqlToolBaseSchema):
         return parse_decimal(value)
 
     @model_validator(mode="after")
-    def _validate_period_and_range(self) -> "DespesasPorFuncaoFiltroSchema":
+    def _validate_period_and_range(self) -> DespesasPorFuncaoFiltroSchema:
         if self.periodo_inicio and self.periodo_fim:
             validate_date_period(self.periodo_inicio, self.periodo_fim)
         if (

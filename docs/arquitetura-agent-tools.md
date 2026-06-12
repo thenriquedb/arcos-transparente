@@ -8,7 +8,7 @@ Em vez de criar uma tool para cada pergunta possível, o projeto passou a usar:
 
 - poucas tools públicas por domínio
 - orquestração principal pelo LLM, com guardrails hard-coded antes do modelo
-- um router leve só para compatibilidade e integrações legadas
+- seleção híbrida guiada pela metadata da própria tool (sem router determinístico)
 - helpers internos compartilhados para concentrar a lógica de filtro, agregação e serialização
 
 O objetivo prático é melhorar:
@@ -51,28 +51,64 @@ Exemplos:
 
 ## Superfície Pública Atual
 
-Atualmente o chatbot cidadão enxerga 20 tools públicas:
+Atualmente o chatbot cidadão enxerga 39 tools públicas:
 
+**Servidores e folha**
 1. `consultar_servidores`
 2. `agregar_servidores`
-3. `consultar_contratos`
-4. `agregar_contratos`
-5. `consultar_licitacoes`
-6. `agregar_licitacoes`
-7. `consultar_planejamento`
-8. `agregar_planejamento`
-9. `consultar_receitas`
-10. `agregar_receitas`
-11. `consultar_despesas`
-12. `agregar_despesas`
-13. `consultar_patrimonios`
-14. `agregar_patrimonios`
-15. `consultar_quadro_pessoal`
-16. `agregar_quadro_pessoal`
-17. `consultar_eleitos`
-18. `consultar_frota`
-19. `buscar_historico_de_pagamentos_do_servidor`
-20. `consultar_conhecimento_municipal`
+3. `consultar_historico_funcional_servidor`
+4. `buscar_historico_de_pagamentos_do_servidor`
+5. `consultar_folha_cargos`
+6. `agregar_folha_cargos`
+7. `consultar_folha_lotacoes`
+8. `agregar_folha_lotacoes`
+
+**Contratos e licitações**
+9. `consultar_contratos`
+10. `agregar_contratos`
+11. `consultar_itens_adquiridos_contrato`
+12. `consultar_licitacoes`
+13. `agregar_licitacoes`
+
+**Despesas e planejamento**
+14. `consultar_despesas`
+15. `agregar_despesas`
+16. `consultar_despesas_por_funcao`
+17. `agregar_despesas_por_funcao`
+18. `consultar_planejamento`
+19. `agregar_planejamento`
+
+**Receitas e transferências**
+20. `consultar_receitas`
+21. `agregar_receitas`
+22. `consultar_transferencias_financeiras`
+23. `agregar_transferencias_financeiras`
+
+**Frota**
+24. `consultar_frota`
+25. `agregar_frota`
+26. `consultar_despesas_frota`
+
+**Diárias e passagens**
+27. `consultar_diarias`
+28. `agregar_diarias`
+29. `consultar_passagens`
+30. `agregar_passagens`
+
+**Estoques e patrimônio**
+31. `consultar_estoques`
+32. `agregar_estoques`
+33. `consultar_movimentacoes_de_estoque`
+34. `consultar_patrimonios`
+35. `agregar_patrimonios`
+
+**Quadro de pessoal e eleitos**
+36. `consultar_quadro_pessoal`
+37. `agregar_quadro_pessoal`
+38. `consultar_eleitos`
+
+**Conhecimento municipal (RAG)**
+39. `consultar_conhecimento_municipal`
 
 Isso vale tanto para:
 
@@ -117,45 +153,33 @@ Conceitos importantes:
 
 Mesmo com suporte a `scope:internal`, a decisão atual foi remover os wrappers antigos de `servidores` em vez de mantê-los escondidos.
 
-### 2. Router
+### 2. Camada de NLU (`agents/nlu/`)
 
-Arquivos:
+O router determinístico legado foi removido. A compreensão de linguagem natural
+mora agora em `agents/nlu/`:
 
-- `agents/router.py`
-- `agents/routing/`
+- `agents/nlu/reading.py` — `read_query`/`QueryReading`: lê a pergunta uma vez em fatos estruturados
+- `agents/nlu/extractors/` — extração de entidades por escopo (nome, ano, secretaria, objeto público, planejamento, contratos, receitas), reexportada por `__init__`
+- `agents/nlu/detectors.py` — detectores determinísticos por domínio (estoques, transferências/emendas, despesas por função)
+- `agents/nlu/intents.py` — predicados de intenção consumidos pela seleção híbrida
+- `agents/nlu/conversation.py` — normalização conversacional e confirmações
+- `agents/nlu/constants.py` — palavras-chave de escopo e patterns globais
+- `agents/nlu/models.py` — `GuardrailDecision`
 
-Responsabilidades:
+A roteabilidade de uma tool não depende mais de uma cadeia de prioridade
+determinística: ela vem da `routing_metadata` (`examples`/`hints`/`exclusions`)
+registrada com a própria tool e consumida pelo seletor híbrido. O padrão do
+chatbot cidadão é:
 
-- oferecer heurísticas de compatibilidade para classificação determinística
-- inferir domínio e tipo de operação quando uma integração legada ainda pedir isso
-- compartilhar os guardrails hard-coded sem se tornar a camada autoritativa de interpretação
-- sugerir subconjuntos de tools apenas para fluxos legados que ainda dependem desse atalho
-
-Organização interna atual:
-
-- `agents/router.py` funciona como fachada pública e orquestra a ordem de prioridade
-- `agents/routing/extractors.py` concentra normalização e extração
-- `agents/routing/routes/` separa as regras por domínio
-- `agents/routing/models.py` centraliza os tipos do router
-
-Guia de manutenção:
-
-- veja [Guia Curto Para Novas Regras Do Router](./router-regras.md)
-
-Hoje o router trabalha com estas classes:
-
-- `consulta_lista`
-- `agregacao_ranking`
-- `historico_detalhado`
-
-Nos fluxos legados, uma rota clara ainda pode sugerir um subconjunto pequeno de
-tools.
-No chatbot cidadão, o padrão agora é:
-
-1. aplicar uma política determinística antes do modelo
+1. aplicar guardrails e uma política determinística antes do modelo
 2. usar seleção híbrida para reduzir a superfície pública a poucas tools candidatas
 3. deixar a orquestração final com o prompt e os contratos das tools
 4. fazer fallback para toda a superfície pública apenas quando o seletor estiver com baixa confiança ou retornar algo inválido
+
+Para as poucas distinções genuinamente ambíguas que ainda valem determinismo
+testável (emenda vs. transferência, lista vs. agregado por função, ranking de
+contratos por valor vs. por contagem, métricas de estoque), `hybrid_selection`
+consulta os predicados de `agents/nlu/intents.py`.
 
 ### Precedência final de regras
 
@@ -163,13 +187,9 @@ O comportamento público do assistente segue esta ordem:
 
 1. guardrails hard-coded pré-modelo
 2. política determinística pré-seleção do runtime
-3. seleção híbrida de tools públicas
+3. seleção híbrida de tools públicas (metadata da tool + predicados de intenção)
 4. política conversacional do runtime e do system prompt
 5. contratos e descrições locais das tools
-6. heurísticas de compatibilidade do router
-
-Isso significa que o router não é mais a autoridade principal para definir
-como perguntas permitidas devem ser interpretadas.
 
 ### Guardrails compartilhados
 
@@ -223,7 +243,7 @@ Configuração atual do agente:
 - `LANGSMITH_ENDPOINT` permanece opcional
 - `.env.example` documenta o contrato canonico usado no bootstrap
 
-Com isso, o runtime cidadão deixa de depender do router para decidir o fluxo de perguntas permitidas.
+Com isso, o runtime cidadão não tem mais um router determinístico decidindo o fluxo de perguntas permitidas.
 
 ### Contrato de metadata para seleção híbrida
 
@@ -234,8 +254,8 @@ Cada tool pública registrada em `agents/tools/registry.py` precisa publicar:
 - `summary`: resumo derivado da docstring da própria tool
 
 Esse contrato vive junto do decorator `@register(...)` de cada tool pública.
-Adicionar uma nova tool pública selecionável não exige editar uma cadeia central
-de palavras-chave do router; basta registrar a tool com `scope=PUBLIC_SCOPE`,
+Adicionar uma nova tool pública selecionável não exige editar nenhuma cadeia
+central de palavras-chave; basta registrar a tool com `scope=PUBLIC_SCOPE`,
 tags coerentes e metadata de roteamento suficiente para o seletor híbrido.
 
 ### Observabilidade do runtime
@@ -267,7 +287,7 @@ Arquivo: `agents/tools/rag_tools/consultar_conhecimento_municipal.py`
 Serve para:
 
 - recuperar trechos do acervo markdown local em `data/rag/**/*.md`
-- responder perguntas sobre telefones úteis, horários de ônibus, estrutura organizacional e FAQ municipal
+- responder perguntas sobre telefones úteis, horários de ônibus (intermunicipais e do transporte coletivo urbano Tarifa Zero), estrutura organizacional e FAQ municipal
 - citar a origem textual usada na resposta final
 - complementar respostas híbridas quando o cidadão mistura contexto documental com dados estruturados
 
@@ -339,6 +359,18 @@ Serve para:
 - agrupamento por ano de inicio
 - soma e media de valor contratado
 
+#### `consultar_itens_adquiridos_contrato`
+
+Arquivo: `agents/tools/sql_tools/contratos/consultar_itens_adquiridos_contrato_query.py`
+
+Serve para:
+
+- listar os materiais, produtos ou serviços adquiridos em um contrato específico
+- buscar contratos que compraram determinado tipo de item pela identificação do material
+- filtrar por fornecedor, secretaria ou período de início do contrato
+- ver quantidade, valor unitário e valor total por item
+- auditoria granular de objetos contratados
+
 #### `consultar_licitacoes`
 
 Arquivo: `agents/tools/sql_tools/licitacoes/consultar_licitacoes_query.py`
@@ -387,6 +419,65 @@ Serve para:
 - ranking de ações, programas, subáreas e grupos de gasto
 - soma de orçamento inicial, orçamento atualizado, valor comprometido, valor confirmado e valor pago
 
+#### `consultar_historico_funcional_servidor`
+
+Arquivo: `agents/tools/sql_tools/servidores/consultar_historico_funcional_servidor_query.py`
+
+Serve para:
+
+- buscar data de admissão e data de desligamento de um servidor
+- listar servidores por situação funcional (ativo, cedido, exonerado)
+- filtrar por forma de contratação ou vínculo empregatício
+- listar servidores em cessão para outros órgãos
+- ver regime de aposentadoria, horário de trabalho e carga horária
+- filtragens por intervalos de data de admissão ou desligamento
+
+Observação: expõe dados funcionais da tabela `servidores` (cadastro estrutural), que são diferentes do snapshot mensal em `folha_servidores`. Use esta tool para perguntas sobre quando um servidor entrou ou saiu; use `buscar_historico_de_pagamentos_do_servidor` para quanto recebeu.
+
+#### `consultar_folha_cargos`
+
+Arquivo: `agents/tools/sql_tools/folha_pagamento/consultar_folha_cargos_query.py`
+
+Serve para:
+
+- listar registros mensais de folha detalhados por cargo
+- ver proventos, vantagens, vencimentos totais, descontos e líquido por cargo
+- filtrar por cargo, servidor, ano e mês de competência
+- uso quando a pergunta mencionar cargo e pedir detalhes de folha
+
+#### `agregar_folha_cargos`
+
+Arquivo: `agents/tools/sql_tools/folha_pagamento/agregar_folha_cargos_query.py`
+
+Serve para:
+
+- ranking de cargos por massa salarial, vencimentos, descontos ou líquido
+- contagem de servidores distintos por cargo
+- soma de salário base ou vencimentos totais por cargo
+- responder perguntas como "qual cargo representa maior massa salarial?"
+
+#### `consultar_folha_lotacoes`
+
+Arquivo: `agents/tools/sql_tools/folha_pagamento/consultar_folha_lotacoes_query.py`
+
+Serve para:
+
+- listar registros mensais de folha detalhados por lotação/secretaria
+- ver proventos, vantagens, vencimentos totais, descontos e líquido por unidade organizacional
+- filtrar por lotação, servidor, cargo, ano e mês
+- a lotação é a unidade organizacional real de alocação — mais granular do que o campo `secretaria` em `folha_servidores`
+
+#### `agregar_folha_lotacoes`
+
+Arquivo: `agents/tools/sql_tools/folha_pagamento/agregar_folha_lotacoes_query.py`
+
+Serve para:
+
+- ranking de secretarias ou unidades por massa salarial ou líquido pago
+- contagem de servidores distintos por lotação
+- responder perguntas como "qual secretaria tem maior massa salarial?"
+- totalização sem agrupamento quando filtrado por lotação específica
+
 #### `buscar_historico_de_pagamentos_do_servidor`
 
 Arquivo: `agents/tools/sql_tools/folha_pagamento/buscar_historico_de_pagamentos_do_servidor_query.py`
@@ -410,12 +501,30 @@ agents/tools/sql_tools/servidores/
 ├── consultar_servidores_schema.py
 ├── agregar_servidores_query.py
 ├── agregar_servidores_schema.py
+├── consultar_historico_funcional_servidor_query.py
+├── consultar_historico_funcional_servidor_schema.py
 └── shared/
     ├── base.py
     ├── filters.py
     ├── querying.py
     ├── responses.py
     └── runtime.py
+```
+
+### Folha de Pagamento
+
+```text
+agents/tools/sql_tools/folha_pagamento/
+├── __init__.py
+├── buscar_historico_de_pagamentos_do_servidor_query.py
+├── consultar_folha_cargos_query.py
+├── consultar_folha_cargos_schema.py
+├── agregar_folha_cargos_query.py
+├── agregar_folha_cargos_schema.py
+├── consultar_folha_lotacoes_query.py
+├── consultar_folha_lotacoes_schema.py
+├── agregar_folha_lotacoes_query.py
+└── agregar_folha_lotacoes_schema.py
 ```
 
 ### Licitações
@@ -443,6 +552,8 @@ agents/tools/sql_tools/contratos/
 ├── consultar_contratos_schema.py
 ├── agregar_contratos_query.py
 ├── agregar_contratos_schema.py
+├── consultar_itens_adquiridos_contrato_query.py
+├── consultar_itens_adquiridos_contrato_schema.py
 └── shared/
     ├── base.py
     ├── filters.py
@@ -467,6 +578,19 @@ agents/tools/sql_tools/planejamento/
     └── runtime.py
 ```
 
+### Frota
+
+```text
+agents/tools/sql_tools/frotas/
+├── __init__.py
+├── consultar_frota_query.py
+├── consultar_frota_schema.py
+├── agregar_frota_query.py
+├── agregar_frota_schema.py
+├── consultar_despesas_frota_query.py
+└── consultar_despesas_frota_schema.py
+```
+
 ### Convenção
 
 - cada capability pública tem seu próprio par `*_query.py` + `*_schema.py`
@@ -480,9 +604,9 @@ agents/tools/sql_tools/planejamento/
 ```text
 Pergunta do usuário
     ->
-Router determinístico
+Guardrails + política determinística
     ->
-Seleção de poucas tools públicas
+Seleção híbrida (metadata da tool + predicados de intenção)
     ->
 Agente LangChain
     ->
@@ -500,12 +624,13 @@ Resposta estruturada
 Passo a passo:
 
 1. o usuário faz uma pergunta
-2. o router tenta identificar domínio e tipo de operação
-3. o bootstrap cria o agente com o menor conjunto útil de tools
-4. a tool escolhida valida entrada com Pydantic
-5. a consulta usa helpers compartilhados para aplicar filtros e ordenação
-6. o resultado é serializado em um contrato estável
-7. o agente responde usando esse payload
+2. guardrails e política determinística decidem bloquear, clarificar ou seguir
+3. a seleção híbrida reduz a superfície pública a poucas tools candidatas
+4. o bootstrap cria o agente com o menor conjunto útil de tools
+5. a tool escolhida valida entrada com Pydantic
+6. a consulta usa helpers compartilhados para aplicar filtros e ordenação
+7. o resultado é serializado em um contrato estável
+8. o agente responde usando esse payload
 
 ---
 
@@ -613,6 +738,72 @@ Além disso:
 
 ---
 
+## Regras de Filtros em `frotas`
+
+O domínio de frotas divide-se em três tools com responsabilidades distintas.
+
+Por isso:
+
+- `consultar_frota` é para dados cadastrais dos veículos (marca, modelo, placa, situação, valor atual)
+- `agregar_frota` é para rankings e totais por tipo de veículo, unidade responsável, situação ou localização
+- `consultar_despesas_frota` é para o histórico de eventos de manutenção, combustível e outros gastos por veículo
+- nunca misture dados cadastrais com histórico de despesas na mesma tool
+
+Além disso:
+
+- filtro por `placa` faz match parcial — `"ABC"` encontra qualquer placa que contenha esse trecho
+- `soma_total_despesas` em `agregar_frota` acumula todos os eventos de despesa do veículo
+- `total_despesa` em `consultar_despesas_frota` é o valor do evento individual, não o acumulado
+
+---
+
+## Regras de Filtros em `folha_pagamento` (cargos e lotações)
+
+As tools de folha por cargo e lotação expõem dados da tabela `folha_pagamentos` com joins nas respectivas tabelas de cargo e lotação.
+
+Por isso:
+
+- `consultar_folha_cargos` e `agregar_folha_cargos` usam a tabela `folha_cargos` — o cargo contábil do registro de folha
+- `consultar_folha_lotacoes` e `agregar_folha_lotacoes` usam a tabela `folha_lotacoes` — a unidade organizacional de alocação real
+- a `lotacao` das tools de folha é mais granular do que o campo `secretaria` em `consultar_servidores`; uma mesma secretaria pode ter várias lotações distintas
+- `contagem` em `agregar_folha_*` conta servidores distintos (não linhas de folha)
+- as métricas de folha — `salario_base`, `proventos`, `vantagens`, `vencimentos_totais`, `descontos`, `liquido` — não estão disponíveis em `consultar_servidores` ou `agregar_servidores`
+
+Além disso:
+
+- filtragem por ano e mês de competência é fortemente recomendada para reduzir volume
+- quando comparar secretarias por gasto, prefira `agregar_folha_lotacoes` a `agregar_servidores`, pois as métricas financeiras são mais precisas
+
+---
+
+## Regras de Filtros em `consultar_historico_funcional_servidor`
+
+A tabela `servidores` armazena o cadastro funcional estrutural dos servidores, diferente dos snapshots mensais de `folha_servidores`.
+
+Por isso:
+
+- use esta tool para perguntas sobre admissão, desligamento, situação funcional, cessão, vínculo e regime de aposentadoria
+- use `buscar_historico_de_pagamentos_do_servidor` para perguntas sobre quanto um servidor recebeu
+- use `consultar_servidores` para o snapshot mensal mais recente com salário base e secretaria
+- `em_cessao=true` filtra servidores com `data_inicio_cessao` preenchida — não depende de situação funcional textual
+- filtros de data (`data_admissao_inicio/fim`, `data_desligamento_inicio/fim`) operam sobre datas reais do cadastro, não sobre competência de folha
+
+---
+
+## Regras de Filtros em `consultar_itens_adquiridos_contrato`
+
+A tabela `contrato_itens_adquiridos` armazena os itens especificados em cada contrato com FK para `contratos`.
+
+Por isso:
+
+- use esta tool quando a pergunta pedir o que foi comprado num contrato, não apenas o valor total
+- o filtro `identificacao` é o campo de texto livre do item — aceita busca parcial case-insensitive
+- um contrato pode ter zero ou muitos itens; nem todos os contratos importados têm itens registrados
+- `valor_total` do item é quantidade × valor unitário, diferente do `valor` do contrato pai
+- para dados do contrato em si (valor total, vigência, fornecedor, modalidade), use `consultar_contratos`
+
+---
+
 ## Quando Criar uma Tool Nova
 
 Criar uma tool nova deve ser exceção.
@@ -668,13 +859,13 @@ Exemplos:
 - `tags=["domain:licitacoes", "shape:lookup"]`
 - `tags=["domain:licitacoes", "shape:aggregate"]`
 
-### Passo 4. Ensinar o router, se a integração legada realmente precisar
+### Passo 4. Garantir a roteabilidade pela metadata da tool
 
-Adicionar regras determinísticas em `agents/router.py` para:
-
-- reconhecer o domínio em fluxos de compatibilidade
-- distinguir listagem, agregação e histórico quando esse atalho ainda trouxer valor
-- nunca substituir o prompt e os contratos das tools como autoridade do chatbot cidadão
+A `routing_metadata` (`examples`/`hints`/`exclusions`) do `@register(...)` é o que
+torna a tool selecionável pelo seletor híbrido. Só adicione um predicado em
+`agents/nlu/intents.py` quando a distinção for genuinamente ambígua e precisar de
+garantia determinística testável (ex.: emenda vs. transferência). Nunca recrie um
+router determinístico concorrente ao prompt e aos contratos das tools.
 
 ### Passo 5. Cobrir com testes
 
@@ -682,7 +873,7 @@ Os testes mínimos esperados são:
 
 - registry
 - chatbot/runtime
-- router de compatibilidade, quando aplicável
+- seleção híbrida / predicados de intenção, quando aplicável
 - schemas
 - tool pública
 
@@ -690,14 +881,16 @@ Os testes mínimos esperados são:
 
 ## Estratégia de Testes
 
-A arquitetura depende muito de contrato e roteamento, então os testes mais importantes são:
+A arquitetura depende muito de contrato e seleção, então os testes mais importantes são:
 
 - `tests/tools/test_registry.py`
   valida quais tools realmente existem
 - `tests/agents/test_chatbot.py`
   valida o boundary pre-modelo, o bootstrap do agente e o contrato conversacional principal
-- `tests/agents/test_router.py`
-  valida apenas as heurísticas de compatibilidade ainda preservadas
+- `tests/agents/test_hybrid_selection.py` e `tests/agents/test_intents.py`
+  validam a seleção híbrida e os predicados de intenção determinísticos
+- `tests/agents/test_guardrails.py`
+  valida escopo, injection e perguntas vazias
 - `tests/tools/sql_tools/test_servidores_public_tools.py`
   valida comportamento funcional das tools amplas
 - `tests/tools/sql_tools/test_contratos_public_tools.py`

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
@@ -20,14 +21,14 @@ from .consultar_planejamento_schema import (
 )
 from .shared.filters import ALLOWED_PLANNING_FIELDS
 from .shared.querying import (
-    load_filtered_planejamentos,
     SORT_FIELD_GETTERS,
+    load_filtered_planejamentos,
 )
 from .shared.runtime import project_planejamento_fields
 
 
 @register(
-    name="consultar_planejamento",
+    name=ToolName.CONSULTAR_PLANEJAMENTO,
     scope=PUBLIC_SCOPE,
     tags=["domain:planejamento", "shape:lookup"],
     routing=routing_metadata(
@@ -66,7 +67,8 @@ def consultar_planejamento(
     `agregar_planejamento`.
 
     O filtro `origem` suporta ao menos `saude` e `prefeitura`.
-    Se `origem` nao for informado, o será ambos.
+    Se `origem` nao for informado, a consulta busca em todas as origens
+    disponiveis.
 
     Args:
         filtros: Objeto com filtros opcionais. Campos aceitos: `origem`, `ano`,

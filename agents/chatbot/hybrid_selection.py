@@ -5,7 +5,6 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 import json
-import re
 from typing import Any, Literal, Protocol
 
 from pydantic import BaseModel, Field, ValidationError
@@ -16,22 +15,19 @@ from agents.chatbot.observability import (
     ObservabilityProvider,
     build_event_payload,
 )
-from agents.routing.compatibility import route_public_compatibility_query
-from agents.routing.conversation import (
+from agents.nlu import intents
+from agents.nlu.conversation import (
     looks_like_confirmation_text,
     normalize_conversation_terms,
     normalize_conversation_text,
 )
-from agents.routing.constants import (
-    DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS,
-    DESPESAS_DOMAIN_KEYWORDS,
+from agents.nlu.constants import (
     DIARIAS_DOMAIN_KEYWORDS,
     PASSAGENS_DOMAIN_KEYWORDS,
 )
-from agents.routing.reading import read_query
-from agents.routing.routes.despesas_por_funcao import (
-    strip_despesas_por_funcao_domain_keywords,
-)
+from agents.nlu.detectors import strip_despesas_por_funcao_domain_keywords
+from agents.nlu.reading import read_query
+from agents.tools.names import ToolName
 from agents.tools.registry import (
     PublicToolCatalogEntry,
     get_public_tool_catalog,
@@ -396,23 +392,6 @@ def _build_named_candidate_selection(
     )
 
 
-def _select_from_compatibility_route(
-    question: str,
-    *,
-    allowed_tool_names: Sequence[str],
-    reason_code: str,
-    route_filter: Callable[[object], bool] | None = None,
-) -> HybridToolSelection | None:
-    route = route_public_compatibility_query(question)
-    if not route.confident or route.tool_name not in allowed_tool_names:
-        return None
-    if route_filter is not None and not route_filter(route):
-        return None
-    if route.tool_name is None:
-        return None
-    return _build_named_candidate_selection([route.tool_name], reason_code=reason_code)
-
-
 def _select_with_heuristics(
     question: str,
     *,
@@ -422,6 +401,9 @@ def _select_with_heuristics(
         salary_history_selection = _select_salary_history_with_router(question)
         if salary_history_selection is not None:
             return salary_history_selection
+        planning_spend_selection = _select_planning_spend_query(question)
+        if planning_spend_selection is not None:
+            return planning_spend_selection
         travel_spend_selection = _select_travel_spend_query(question)
         if travel_spend_selection is not None:
             return travel_spend_selection
@@ -447,8 +429,8 @@ def _select_with_heuristics(
 
     return _build_named_candidate_selection(
         [
-            "consultar_eleitos",
-            "consultar_conhecimento_municipal",
+            ToolName.CONSULTAR_ELEITOS,
+            ToolName.CONSULTAR_CONHECIMENTO_MUNICIPAL,
         ],
         reason_code="heuristic_elected_contacts",
     )
@@ -457,10 +439,49 @@ def _select_with_heuristics(
 def _select_salary_history_with_router(
     question: str,
 ) -> HybridToolSelection | None:
-    return _select_from_compatibility_route(
-        question,
-        allowed_tool_names=("buscar_historico_de_pagamentos_do_servidor",),
+    if read_query(question).nome_historico is None:
+        return None
+    return _build_named_candidate_selection(
+        [ToolName.BUSCAR_HISTORICO_DE_PAGAMENTOS_DO_SERVIDOR],
         reason_code="heuristic_salary_history_query",
+    )
+
+
+def _select_planning_spend_query(
+    question: str,
+) -> HybridToolSelection | None:
+    reading = read_query(question)
+    if not reading.normalized_text:
+        return None
+    has_planning_specific_filter = any(
+        (
+            reading.planejamento_programa,
+            reading.planejamento_acao,
+            reading.planejamento_fonte_recurso,
+        )
+    )
+    if not has_planning_specific_filter:
+        return None
+    if not any(signal in reading.normalized_text for signal in _EVENT_SPEND_SIGNAL_TERMS):
+        return None
+
+    aggregate_first = _looks_like_total_spend_question(reading.normalized_text)
+    candidate_tool_names = (
+        [
+            ToolName.AGREGAR_PLANEJAMENTO,
+            ToolName.CONSULTAR_PLANEJAMENTO,
+            ToolName.CONSULTAR_DESPESAS,
+        ]
+        if aggregate_first
+        else [
+            ToolName.CONSULTAR_PLANEJAMENTO,
+            ToolName.AGREGAR_PLANEJAMENTO,
+            ToolName.CONSULTAR_DESPESAS,
+        ]
+    )
+    return _build_named_candidate_selection(
+        candidate_tool_names,
+        reason_code="heuristic_planning_program_spend_query",
     )
 
 
@@ -477,9 +498,9 @@ def _select_event_spend_query(
 
     return _build_named_candidate_selection(
         [
-            "consultar_licitacoes",
-            "consultar_contratos",
-            "consultar_despesas",
+            ToolName.CONSULTAR_LICITACOES,
+            ToolName.CONSULTAR_CONTRATOS,
+            ToolName.CONSULTAR_DESPESAS,
         ],
         reason_code="heuristic_event_spend_query",
     )
@@ -503,9 +524,9 @@ def _select_travel_spend_query(
         return None
 
     candidate_tool_names = (
-        ["agregar_diarias", "agregar_passagens"]
+        [ToolName.AGREGAR_DIARIAS, ToolName.AGREGAR_PASSAGENS]
         if _is_explicit_aggregate_spend_request(normalized_question)
-        else ["consultar_diarias", "consultar_passagens"]
+        else [ToolName.CONSULTAR_DIARIAS, ToolName.CONSULTAR_PASSAGENS]
     )
     return _build_named_candidate_selection(
         candidate_tool_names,
@@ -528,11 +549,7 @@ def _select_broad_spend_query(
     if _is_explicit_aggregate_spend_request(normalized_question):
         return None
 
-    route = route_public_compatibility_query(question)
-    direct_domain_candidate_names = _select_direct_spend_candidate_names(
-        normalized_question,
-        route_tool_name=route.tool_name if route.confident else None,
-    )
+    direct_domain_candidate_names = intents.direct_spend_domain_tools(normalized_question)
     if direct_domain_candidate_names is None:
         return None
 
@@ -552,19 +569,11 @@ def _select_function_spend_breakdown_query(
     `valor_empenhado`, `valor_em_liquidacao`, `valor_liquidado` e `valor_pago`.
     """
 
-    route = route_public_compatibility_query(question)
-    if not route.confident or route.tool_name != "agregar_despesas_por_funcao":
-        return None
-
-    tool_kwargs = getattr(route, "tool_kwargs", {})
-    # Agrupamento ou métrica de estágio explícita é um agregado legítimo.
-    if tool_kwargs.get("agrupar_por") is not None:
-        return None
-    if tool_kwargs.get("metrica") != "soma_valor_pago":
+    if not intents.is_function_spend_broad_total(normalize_conversation_text(question)):
         return None
 
     return _build_named_candidate_selection(
-        ["consultar_despesas_por_funcao"],
+        [ToolName.CONSULTAR_DESPESAS_POR_FUNCAO],
         reason_code="heuristic_function_spend_breakdown",
     )
 
@@ -576,91 +585,66 @@ def _is_explicit_aggregate_spend_request(normalized_question: str) -> bool:
     return any(term in aggregate_text for term in _SPEND_AGGREGATION_TERMS)
 
 
-def _select_direct_spend_candidate_names(
-    normalized_question: str,
-    *,
-    route_tool_name: str | None,
-) -> list[str] | None:
-    if _has_any_term(normalized_question, DESPESAS_POR_FUNCAO_DOMAIN_KEYWORDS):
-        return ["consultar_despesas_por_funcao"]
-    if _has_any_term(normalized_question, DIARIAS_DOMAIN_KEYWORDS):
-        return ["consultar_diarias"]
-    if _has_any_term(normalized_question, PASSAGENS_DOMAIN_KEYWORDS):
-        return ["consultar_passagens"]
-    if _has_any_term(normalized_question, DESPESAS_DOMAIN_KEYWORDS):
-        return ["consultar_despesas"]
-    if route_tool_name == "consultar_despesas_por_funcao":
-        return ["consultar_despesas_por_funcao"]
-    if route_tool_name == "consultar_diarias":
-        return ["consultar_diarias"]
-    if route_tool_name == "consultar_passagens":
-        return ["consultar_passagens"]
-    if route_tool_name == "consultar_despesas":
-        return ["consultar_despesas"]
-    if route_tool_name == "agregar_despesas_por_funcao":
-        return ["consultar_despesas_por_funcao"]
-    if route_tool_name == "agregar_diarias":
-        return ["consultar_diarias"]
-    if route_tool_name == "agregar_passagens":
-        return ["consultar_passagens"]
-    if route_tool_name == "agregar_despesas":
-        return ["consultar_despesas"]
-    if "prefeitura gastou" in normalized_question or "valor gasto" in normalized_question:
-        return ["consultar_despesas"]
-    return None
+def _looks_like_total_spend_question(normalized_question: str) -> bool:
+    if _is_explicit_aggregate_spend_request(normalized_question):
+        return True
+    return any(
+        cue in normalized_question
+        for cue in (
+            "qual foi o gasto",
+            "qual o gasto",
+            "qual foi o valor gasto",
+            "quanto foi gasto",
+            "quanto a prefeitura gastou",
+            "quanto gastou",
+            "quanto custou",
+            "valor gasto",
+        )
+    )
 
 
 def _select_emenda_query_with_router(
     question: str,
 ) -> HybridToolSelection | None:
-    return _select_from_compatibility_route(
-        question,
-        allowed_tool_names=(
-            "agregar_transferencias_financeiras",
-            "consultar_transferencias_financeiras",
-        ),
+    tool_name = intents.emenda_tool(normalize_conversation_text(question))
+    if tool_name is None:
+        return None
+    return _build_named_candidate_selection(
+        [tool_name],
         reason_code="heuristic_emenda_query",
-        route_filter=_route_has_emenda_filter,
     )
 
 
 def _select_contract_value_ranking_with_router(
     question: str,
 ) -> HybridToolSelection | None:
-    return _select_from_compatibility_route(
-        question,
-        allowed_tool_names=("consultar_contratos",),
+    if not intents.contract_value_ranking_query(normalize_conversation_text(question)):
+        return None
+    return _build_named_candidate_selection(
+        [ToolName.CONSULTAR_CONTRATOS],
         reason_code="heuristic_contract_value_ranking",
-        route_filter=lambda route: route.tool_kwargs.get("ordenar_por") == "valor",
     )
 
 
 def _select_contract_count_ranking_with_router(
     question: str,
 ) -> HybridToolSelection | None:
-    return _select_from_compatibility_route(
-        question,
-        allowed_tool_names=("agregar_contratos",),
+    if not intents.contract_count_ranking_query(normalize_conversation_text(question)):
+        return None
+    return _build_named_candidate_selection(
+        [ToolName.AGREGAR_CONTRATOS],
         reason_code="heuristic_contract_count_ranking",
-        route_filter=lambda route: (
-            route.tool_kwargs.get("metrica") == "contagem"
-            and route.tool_kwargs.get("agrupar_por") in {"fornecedor", "secretaria", "categoria"}
-            and route.tool_kwargs.get("ordenar_por") == "metrica"
-            and route.tool_kwargs.get("ordem") == "desc"
-        ),
     )
 
 
 def _select_estoques_query_with_router(
     question: str,
 ) -> HybridToolSelection | None:
-    return _select_from_compatibility_route(
-        question,
-        allowed_tool_names=(
-            "agregar_estoques",
-            "consultar_estoques",
-            "consultar_movimentacoes_de_estoque",
-        ),
+    tool_name = intents.estoque_tool(normalize_conversation_text(question))
+    if tool_name is None:
+        return None
+    return _build_named_candidate_selection(
+        [tool_name],
         reason_code="heuristic_estoques_query",
     )
 
@@ -744,11 +728,6 @@ def _is_elected_contact_query(
         return True
 
     return False
-
-
-def _route_has_emenda_filter(route: object) -> bool:
-    filtros = getattr(route, "tool_kwargs", {}).get("filtros", {})
-    return isinstance(filtros, dict) and filtros.get("tipo_registro") == "emenda"
 
 
 def _has_any_term(text: str, terms: Sequence[str]) -> bool:

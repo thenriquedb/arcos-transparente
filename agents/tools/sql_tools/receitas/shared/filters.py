@@ -135,7 +135,7 @@ class ReceitaFiltroSchema(SqlToolBaseSchema):
         return parse_decimal(value)
 
     @model_validator(mode="after")
-    def _validate_ranges(self) -> "ReceitaFiltroSchema":
+    def _validate_ranges(self) -> ReceitaFiltroSchema:
         if self.mes is not None and (self.mes_inicio is not None or self.mes_fim is not None):
             raise ValueError("mes nao pode ser usado junto com mes_inicio/mes_fim")
         if self.mes_inicio is not None or self.mes_fim is not None:

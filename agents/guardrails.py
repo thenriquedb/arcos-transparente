@@ -6,7 +6,7 @@ from collections.abc import Sequence
 import re
 
 from agents.chatbot.help_messages import build_scope_help_message
-from agents.routing.conversation import (
+from agents.nlu.conversation import (
     looks_like_confirmation_reply,
     normalize_conversation_text,
 )
@@ -14,8 +14,8 @@ from agents.rag.scope import (
     is_supported_knowledge_follow_up_fragment,
     is_supported_knowledge_query,
 )
-from agents.routing.reading import QueryReading, read_query
-from agents.routing.models import GuardrailDecision, RouteDecision
+from agents.nlu.reading import QueryReading, read_query
+from agents.nlu.models import GuardrailDecision
 
 _CONTEXTUAL_REFERENCE_PATTERN = re.compile(
     r"\b(?:"
@@ -109,7 +109,6 @@ _SHORT_RANKING_STOPWORDS = frozenset(
 def evaluate_public_query_guardrails(
     query: str,
     *,
-    compatibility_route: RouteDecision | None = None,
     has_history: bool = False,
     prior_user_queries: Sequence[str] = (),
     prior_messages: Sequence[tuple[str, str, bool]] = (),
@@ -129,7 +128,8 @@ def evaluate_public_query_guardrails(
                 "passagens, estoques e almoxarifado, frota e veículos, "
                 "patrimônio, planejamento, receitas, transferências "
                 "financeiras, emendas parlamentares, políticos eleitos, "
-                "telefones úteis ou horários de ônibus."
+                "telefones úteis ou horários de ônibus (intermunicipais e do "
+                "Tarifa Zero)."
             ),
         )
 
@@ -172,9 +172,6 @@ def evaluate_public_query_guardrails(
         return GuardrailDecision(allowed=True, category="allowed")
 
     if has_history and has_public_context_anchor and _looks_like_confirmation_reply(normalized_text, prior_messages):
-        return GuardrailDecision(allowed=True, category="allowed")
-
-    if compatibility_route is not None and compatibility_route.confident:
         return GuardrailDecision(allowed=True, category="allowed")
 
     if strong_hits >= 1 or weak_hits >= 2:
@@ -221,6 +218,16 @@ def _looks_like_public_spend_query(reading: QueryReading) -> bool:
     if reading.licitacoes_objeto is not None:
         return True
     if reading.contratos_descricao is not None:
+        return True
+    if reading.planejamento_programa is not None:
+        return True
+    if reading.planejamento_acao is not None:
+        return True
+    if reading.planejamento_fonte_recurso is not None:
+        return True
+    if reading.planejamento_area is not None:
+        return True
+    if reading.planejamento_entidade is not None:
         return True
     return False
 
@@ -332,6 +339,12 @@ def _has_public_filter_hint(reading: QueryReading) -> bool:
     if reading.planejamento_entidade is not None:
         return True
     if reading.planejamento_area is not None:
+        return True
+    if reading.planejamento_programa is not None:
+        return True
+    if reading.planejamento_acao is not None:
+        return True
+    if reading.planejamento_fonte_recurso is not None:
         return True
     if reading.receitas_tema is not None:
         return True

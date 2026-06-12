@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -21,14 +22,14 @@ from .agregar_planejamento_schema import (
 )
 from .shared.querying import (
     GROUP_FIELD_GETTERS,
-    load_filtered_planejamentos,
     METRIC_FIELD_GETTERS,
+    load_filtered_planejamentos,
     metric_to_json,
 )
 
 
 @register(
-    name="agregar_planejamento",
+    name=ToolName.AGREGAR_PLANEJAMENTO,
     scope=PUBLIC_SCOPE,
     tags=["domain:planejamento", "shape:aggregate"],
     routing=routing_metadata(
@@ -67,7 +68,8 @@ def agregar_planejamento(
     `agregar_despesas`.
 
     O filtro `origem` suporta ao menos `saude` e `prefeitura`.
-    Se `origem` nao for informado, o padrao continua sendo `saude`.
+    Se `origem` nao for informado, a consulta agrega todas as origens
+    disponiveis.
 
     Args:
         filtros: Objeto com filtros opcionais. Campos aceitos: `origem`, `ano`,

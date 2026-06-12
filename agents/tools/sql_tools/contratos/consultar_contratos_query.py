@@ -6,6 +6,7 @@ from typing import Any
 
 from sqlalchemy import literal, select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
@@ -28,11 +29,11 @@ from .consultar_contratos_schema import (
 from .shared.filters import ALLOWED_CONTRACT_FIELDS, ContratosFiltroSchema
 from .shared.querying import (
     apply_contratos_filters,
-    build_contrato_details_unavailable_message,
     build_contract_fallback_message,
+    build_contrato_details_unavailable_message,
     build_descricao_despesa_unavailable_message,
-    contratos_supports_detalhes_completos,
     contratos_supports_descricao_despesa,
+    contratos_supports_detalhes_completos,
     contratos_supports_xml_original,
     get_contratos_available_columns,
     project_contrato_fields,
@@ -331,7 +332,7 @@ def _build_consulta_suggestion(
 
 
 @register(
-    name="consultar_contratos",
+    name=ToolName.CONSULTAR_CONTRATOS,
     scope=PUBLIC_SCOPE,
     tags=["domain:contratos", "shape:lookup"],
     routing=routing_metadata(
@@ -417,7 +418,10 @@ def consultar_contratos(
         filtros: Objeto com filtros opcionais. Campos aceitos: `numero`,
             `fornecedor`, `documento_fornecedor`, `categoria`, `secretaria`,
             `descricao`, `data_inicio`, `data_inicio_inicio`, `data_inicio_fim`,
-            `valor_min` e `valor_max`. Datas em `YYYY-MM-DD`.
+            `data_fim`, `data_fim_inicio`, `data_fim_fim`, `vigente_em`,
+            `valor_min` e `valor_max`. Datas em `YYYY-MM-DD`. Use `vigente_em`
+            para contratos em vigência numa data (ex.: "ativos hoje"): filtra
+            `data_inicio <= vigente_em <= data_fim`, ou `data_fim` em aberto.
         ordenar_por: Campo de ordenacao. Aceita `numero`, `fornecedor`, `valor`,
             `data_inicio`, `data_fim`, `categoria` ou `secretaria`.
         ordem: Direcao da ordenacao: `asc` ou `desc`.

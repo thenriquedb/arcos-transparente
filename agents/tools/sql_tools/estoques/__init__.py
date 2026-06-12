@@ -6,6 +6,7 @@ from .consultar_movimentacoes_de_estoque_query import (
     consultar_movimentacoes_de_estoque,
 )
 
+
 __all__ = [
     "agregar_estoques",
     "consultar_estoques",

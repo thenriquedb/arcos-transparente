@@ -14,6 +14,7 @@ from .responses import (
     PagamentoMensalItem,
 )
 
+
 _PLACEHOLDER = "nao_informado"
 
 

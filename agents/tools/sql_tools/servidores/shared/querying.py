@@ -6,12 +6,13 @@ from typing import Any
 
 from sqlalchemy import func, or_
 
-from database.session import _normalizar_texto
-from database.models import FolhaServidor
 from agents.tools.sql_tools.shared.projection import project_public_fields
+from database.models import FolhaServidor
+from database.session import _normalizar_texto
 
 from .filters import ServidoresFiltroSchema
 from .runtime import obter_mes_de_referencia_mais_recente, serializar_servidor
+
 
 _SECRETARIA_THEME_ALIASES: dict[str, tuple[str, ...]] = {
     "saude": (

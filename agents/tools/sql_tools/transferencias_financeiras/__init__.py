@@ -7,6 +7,7 @@ from .consultar_transferencias_financeiras_query import (
     consultar_transferencias_financeiras,
 )
 
+
 __all__ = [
     "consultar_transferencias_financeiras",
     "agregar_transferencias_financeiras",

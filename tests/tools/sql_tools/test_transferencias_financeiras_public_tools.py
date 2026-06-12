@@ -8,7 +8,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.transferencias_financeiras as transferencias_tools
-from agents.router import route_user_query, select_public_tools_for_query
 from agents.tools import registry as tools_registry
 from database import session as session_manager
 from database.models import Base, EmendaParlamentar, TransferenciaFinanceiraMovimento
@@ -372,7 +371,7 @@ def test_registry_expoe_tools_publicas_de_transferencias_financeiras() -> None:
     assert "agregar_transferencias_financeiras" in tool_names
 
 
-def test_query_de_transferencias_financeiras_rota_para_tool_publica_dedicada(
+def test_agregar_transferencias_financeiras_total_para_camara(
     monkeypatch,
 ) -> None:
     session = _build_session()
@@ -396,12 +395,11 @@ def test_query_de_transferencias_financeiras_rota_para_tool_publica_dedicada(
     session.commit()
     _patch_session(monkeypatch, session)
 
-    route = route_user_query("Quanto foi transferido para a camara em 2026?")
-    tool = select_public_tools_for_query("Quanto foi transferido para a camara em 2026?")[0]
-    resultado = tool.invoke(route.tool_kwargs)
+    resultado = transferencias_tools.agregar_transferencias_financeiras(
+        filtros={"tipo_registro": "movimentacao", "ano": 2026, "unidade_recebedora": "camara"},
+        metrica="soma_valor",
+    )
 
-    assert route.tool_name == "agregar_transferencias_financeiras"
-    assert getattr(tool, "name", "") == "agregar_transferencias_financeiras"
     assert resultado["valor_total"] == 552500.0
 
     session.close()

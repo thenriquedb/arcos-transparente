@@ -6,6 +6,7 @@ from typing import Any
 
 from sqlalchemy import func, select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -16,6 +17,7 @@ from agents.tools.sql_tools.shared.aggregate import (
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import Contrato
+from shared.utils.decimal_to_float import decimal_or_int_to_json
 
 from .agregar_contratos_schema import (
     AgregacaoContratosItem,
@@ -23,8 +25,6 @@ from .agregar_contratos_schema import (
     AgregarContratosParams,
     AgregarContratosResponse,
 )
-from shared.utils.decimal_to_float import decimal_or_int_to_json
-
 from .shared.querying import (
     GROUP_BY_COLUMNS,
     apply_contratos_filters,
@@ -229,7 +229,7 @@ def _responder_total_sem_grupo(
 
 
 @register(
-    name="agregar_contratos",
+    name=ToolName.AGREGAR_CONTRATOS,
     scope=PUBLIC_SCOPE,
     tags=["domain:contratos", "shape:aggregate"],
     routing=routing_metadata(
@@ -272,7 +272,10 @@ def agregar_contratos(
         filtros: Objeto com filtros opcionais. Campos aceitos: `numero`,
             `fornecedor`, `documento_fornecedor`, `categoria`, `secretaria`,
             `descricao`, `data_inicio`, `data_inicio_inicio`, `data_inicio_fim`,
-            `valor_min` e `valor_max`. Datas em `YYYY-MM-DD`.
+            `data_fim`, `data_fim_inicio`, `data_fim_fim`, `vigente_em`,
+            `valor_min` e `valor_max`. Datas em `YYYY-MM-DD`. Use `vigente_em`
+            para contratos em vigência numa data (ex.: "ativos hoje"): filtra
+            `data_inicio <= vigente_em <= data_fim`, ou `data_fim` em aberto.
         agrupar_por: Campo opcional de agrupamento. Aceita `secretaria`,
             `categoria`, `fornecedor` ou `ano_inicio`. Se nao for informado,
             a tool retorna um `valor_total`.

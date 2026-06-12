@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from datetime import date
 
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
@@ -20,6 +21,7 @@ from shared.runtime_config import (
     load_project_env,
     read_required_env,
 )
+from shared.utils.dates import build_current_date_prompt_block
 
 SUPPORTED_LLM_PROVIDER = "openai"
 SYSTEM_PROMPT_PATH = get_chatbot_system_prompt_path()
@@ -64,8 +66,9 @@ def criar_modelo_llm():
     )
 
 
-def carregar_system_prompt() -> str:
-    return SYSTEM_PROMPT_PATH.read_text(encoding="utf-8").strip()
+def carregar_system_prompt(*, hoje: date | None = None) -> str:
+    base = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8").strip()
+    return f"{base}\n\n{build_current_date_prompt_block(hoje)}"
 
 
 def criar_agente_chatbot(*, tools: Sequence[object] | None = None):

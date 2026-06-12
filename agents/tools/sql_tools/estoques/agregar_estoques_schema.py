@@ -117,7 +117,7 @@ class AgregarEstoquesFiltroSchema(EstoqueFiltroSchema):
         return parse_date(value)
 
     @model_validator(mode="after")
-    def _validate_movement_dates(self) -> "AgregarEstoquesFiltroSchema":
+    def _validate_movement_dates(self) -> AgregarEstoquesFiltroSchema:
         if self.data_movimento_inicio and self.data_movimento_fim:
             validate_date_period(self.data_movimento_inicio, self.data_movimento_fim)
         return self
@@ -184,7 +184,7 @@ class AgregarEstoquesParams(SqlToolBaseSchema):
         return normalize_limit(value, maximum=100)
 
     @model_validator(mode="after")
-    def _validate_aggregation(self) -> "AgregarEstoquesParams":
+    def _validate_aggregation(self) -> AgregarEstoquesParams:
         if self.metrica in {
             "quantidade",
             "quantidade_total",

@@ -8,6 +8,7 @@ from typing import Any
 
 from sqlalchemy import select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
@@ -79,8 +80,8 @@ def load_filtered_patrimonios(session, filtros: PatrimonioFiltroSchema) -> list[
 
 SORT_FIELD_GETTERS = {
     "data_aquisicao": lambda registro: registro.data_aquisicao or date.min,
-    "valor_atualizado": lambda registro: registro.valor_atualizado or Decimal("0"),
-    "valor_ingresso": lambda registro: registro.valor_ingresso or Decimal("0"),
+    "valor_atualizado": lambda registro: registro.valor_atualizado or Decimal(0),
+    "valor_ingresso": lambda registro: registro.valor_ingresso or Decimal(0),
     "descricao": lambda registro: registro.descricao_item or "",
     "localizacao": lambda registro: registro.localizacao or "",
     "placa": lambda registro: registro.placa or "",
@@ -102,7 +103,7 @@ def project_patrimonio_fields(
 
 
 @register(
-    name="consultar_patrimonios",
+    name=ToolName.CONSULTAR_PATRIMONIOS,
     scope=PUBLIC_SCOPE,
     tags=["domain:patrimonios", "shape:lookup"],
     routing=routing_metadata(

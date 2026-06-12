@@ -9,10 +9,11 @@ from pydantic import ValidationError
 from sqlalchemy import func, select
 from sqlalchemy.orm import joinedload
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from database import session as session_manager
-from database.session import _normalizar_texto
 from database.models import Eleito, FolhaPagamentoRegistro, FolhaServidor
+from database.session import _normalizar_texto
 from shared.utils.text import matches_text_query, normalize_search_text
 
 from .shared.params import BuscarHistoricoPagamentosServidorParams
@@ -22,6 +23,7 @@ from .shared.runtime import (
     serializar_candidato_servidor,
     serializar_servidor,
 )
+
 
 _CARGO_POLITICO_ALIASES = {
     "prefeito": "prefeito",
@@ -39,7 +41,7 @@ _CARGO_POLITICO_ALIASES = {
 
 
 @register(
-    name="buscar_historico_de_pagamentos_do_servidor",
+    name=ToolName.BUSCAR_HISTORICO_DE_PAGAMENTOS_DO_SERVIDOR,
     scope=PUBLIC_SCOPE,
     tags=["domain:folha", "shape:history"],
     routing=routing_metadata(

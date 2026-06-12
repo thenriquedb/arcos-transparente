@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -54,7 +55,7 @@ def _project_quadro_pessoal_group(
 
 
 @register(
-    name="agregar_quadro_pessoal",
+    name=ToolName.AGREGAR_QUADRO_PESSOAL,
     scope=PUBLIC_SCOPE,
     tags=["domain:quadro_pessoal", "shape:aggregate"],
     routing=routing_metadata(

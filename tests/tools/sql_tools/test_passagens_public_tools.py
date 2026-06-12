@@ -9,7 +9,6 @@ from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.passagens as passagens_tools
 from agents.tools import registry as tools_registry
-from agents.router import route_user_query, select_public_tools_for_query
 from database import session as session_manager
 from database.models import Base, DespesaDocumento
 
@@ -267,7 +266,7 @@ def test_registry_expoe_tools_publicas_de_passagens() -> None:
     assert "agregar_passagens" in tool_names
 
 
-def test_query_de_passagens_rota_para_tool_publica_dedicada(monkeypatch) -> None:
+def test_agregar_passagens_total_anual(monkeypatch) -> None:
     session = _build_session()
     session.add(
         DespesaDocumento(
@@ -289,19 +288,11 @@ def test_query_de_passagens_rota_para_tool_publica_dedicada(monkeypatch) -> None
     session.commit()
     _patch_session(monkeypatch, session)
 
-    route = route_user_query("Quanto foi pago em passagens em 2026?")
-    tool = select_public_tools_for_query("Quanto foi pago em passagens em 2026?")[0]
-    resultado = tool.invoke(route.tool_kwargs)
+    resultado = passagens_tools.agregar_passagens(
+        filtros={"ano": 2026},
+        metrica="soma_valor_pago",
+    )
 
-    assert route.tool_name == "agregar_passagens"
-    assert getattr(tool, "name", "") == "agregar_passagens"
     assert resultado["valor_total"] == 1500.09
 
     session.close()
-
-
-def test_query_de_viagens_rota_para_passagens_por_mes() -> None:
-    route = route_user_query("Quanto foi pago em viagens por mes em 2026?")
-
-    assert route.tool_name == "agregar_passagens"
-    assert route.tool_kwargs["agrupar_por"] == "mes"

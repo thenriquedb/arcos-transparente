@@ -6,6 +6,7 @@ from typing import Any
 
 from sqlalchemy import func, select
 
+from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
@@ -16,6 +17,7 @@ from agents.tools.sql_tools.shared.aggregate import (
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import Licitacao
+from shared.utils.decimal_to_float import decimal_or_int_to_json
 from shared.utils.text import matches_text_query
 
 from .agregar_licitacoes_schema import (
@@ -24,8 +26,6 @@ from .agregar_licitacoes_schema import (
     AgregarLicitacoesParams,
     AgregarLicitacoesResponse,
 )
-from shared.utils.decimal_to_float import decimal_or_int_to_json
-
 from .shared.querying import apply_licitacoes_filters
 
 
@@ -101,7 +101,7 @@ def _build_object_filter_execution(
 
 
 @register(
-    name="agregar_licitacoes",
+    name=ToolName.AGREGAR_LICITACOES,
     scope=PUBLIC_SCOPE,
     tags=["domain:licitacoes", "shape:aggregate"],
     routing=routing_metadata(
