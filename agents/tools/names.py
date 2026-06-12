@@ -73,6 +73,22 @@ class ToolName(StrEnum):
 
     # Frota
     CONSULTAR_FROTA = "consultar_frota"
+    AGREGAR_FROTA = "agregar_frota"
+
+    # Folha de pagamento por cargo e lotação
+    CONSULTAR_FOLHA_CARGOS = "consultar_folha_cargos"
+    AGREGAR_FOLHA_CARGOS = "agregar_folha_cargos"
+    CONSULTAR_FOLHA_LOTACOES = "consultar_folha_lotacoes"
+    AGREGAR_FOLHA_LOTACOES = "agregar_folha_lotacoes"
+
+    # Histórico funcional de servidor
+    CONSULTAR_HISTORICO_FUNCIONAL_SERVIDOR = "consultar_historico_funcional_servidor"
+
+    # Itens adquiridos em contratos
+    CONSULTAR_ITENS_ADQUIRIDOS_CONTRATO = "consultar_itens_adquiridos_contrato"
+
+    # Despesas por veículo de frota
+    CONSULTAR_DESPESAS_FROTA = "consultar_despesas_frota"
 
     # Eleitos
     CONSULTAR_ELEITOS = "consultar_eleitos"

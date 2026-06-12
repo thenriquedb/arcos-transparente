@@ -51,28 +51,64 @@ Exemplos:
 
 ## Superfície Pública Atual
 
-Atualmente o chatbot cidadão enxerga 20 tools públicas:
+Atualmente o chatbot cidadão enxerga 39 tools públicas:
 
+**Servidores e folha**
 1. `consultar_servidores`
 2. `agregar_servidores`
-3. `consultar_contratos`
-4. `agregar_contratos`
-5. `consultar_licitacoes`
-6. `agregar_licitacoes`
-7. `consultar_planejamento`
-8. `agregar_planejamento`
-9. `consultar_receitas`
-10. `agregar_receitas`
-11. `consultar_despesas`
-12. `agregar_despesas`
-13. `consultar_patrimonios`
-14. `agregar_patrimonios`
-15. `consultar_quadro_pessoal`
-16. `agregar_quadro_pessoal`
-17. `consultar_eleitos`
-18. `consultar_frota`
-19. `buscar_historico_de_pagamentos_do_servidor`
-20. `consultar_conhecimento_municipal`
+3. `consultar_historico_funcional_servidor`
+4. `buscar_historico_de_pagamentos_do_servidor`
+5. `consultar_folha_cargos`
+6. `agregar_folha_cargos`
+7. `consultar_folha_lotacoes`
+8. `agregar_folha_lotacoes`
+
+**Contratos e licitações**
+9. `consultar_contratos`
+10. `agregar_contratos`
+11. `consultar_itens_adquiridos_contrato`
+12. `consultar_licitacoes`
+13. `agregar_licitacoes`
+
+**Despesas e planejamento**
+14. `consultar_despesas`
+15. `agregar_despesas`
+16. `consultar_despesas_por_funcao`
+17. `agregar_despesas_por_funcao`
+18. `consultar_planejamento`
+19. `agregar_planejamento`
+
+**Receitas e transferências**
+20. `consultar_receitas`
+21. `agregar_receitas`
+22. `consultar_transferencias_financeiras`
+23. `agregar_transferencias_financeiras`
+
+**Frota**
+24. `consultar_frota`
+25. `agregar_frota`
+26. `consultar_despesas_frota`
+
+**Diárias e passagens**
+27. `consultar_diarias`
+28. `agregar_diarias`
+29. `consultar_passagens`
+30. `agregar_passagens`
+
+**Estoques e patrimônio**
+31. `consultar_estoques`
+32. `agregar_estoques`
+33. `consultar_movimentacoes_de_estoque`
+34. `consultar_patrimonios`
+35. `agregar_patrimonios`
+
+**Quadro de pessoal e eleitos**
+36. `consultar_quadro_pessoal`
+37. `agregar_quadro_pessoal`
+38. `consultar_eleitos`
+
+**Conhecimento municipal (RAG)**
+39. `consultar_conhecimento_municipal`
 
 Isso vale tanto para:
 
@@ -323,6 +359,18 @@ Serve para:
 - agrupamento por ano de inicio
 - soma e media de valor contratado
 
+#### `consultar_itens_adquiridos_contrato`
+
+Arquivo: `agents/tools/sql_tools/contratos/consultar_itens_adquiridos_contrato_query.py`
+
+Serve para:
+
+- listar os materiais, produtos ou serviços adquiridos em um contrato específico
+- buscar contratos que compraram determinado tipo de item pela identificação do material
+- filtrar por fornecedor, secretaria ou período de início do contrato
+- ver quantidade, valor unitário e valor total por item
+- auditoria granular de objetos contratados
+
 #### `consultar_licitacoes`
 
 Arquivo: `agents/tools/sql_tools/licitacoes/consultar_licitacoes_query.py`
@@ -371,6 +419,65 @@ Serve para:
 - ranking de ações, programas, subáreas e grupos de gasto
 - soma de orçamento inicial, orçamento atualizado, valor comprometido, valor confirmado e valor pago
 
+#### `consultar_historico_funcional_servidor`
+
+Arquivo: `agents/tools/sql_tools/servidores/consultar_historico_funcional_servidor_query.py`
+
+Serve para:
+
+- buscar data de admissão e data de desligamento de um servidor
+- listar servidores por situação funcional (ativo, cedido, exonerado)
+- filtrar por forma de contratação ou vínculo empregatício
+- listar servidores em cessão para outros órgãos
+- ver regime de aposentadoria, horário de trabalho e carga horária
+- filtragens por intervalos de data de admissão ou desligamento
+
+Observação: expõe dados funcionais da tabela `servidores` (cadastro estrutural), que são diferentes do snapshot mensal em `folha_servidores`. Use esta tool para perguntas sobre quando um servidor entrou ou saiu; use `buscar_historico_de_pagamentos_do_servidor` para quanto recebeu.
+
+#### `consultar_folha_cargos`
+
+Arquivo: `agents/tools/sql_tools/folha_pagamento/consultar_folha_cargos_query.py`
+
+Serve para:
+
+- listar registros mensais de folha detalhados por cargo
+- ver proventos, vantagens, vencimentos totais, descontos e líquido por cargo
+- filtrar por cargo, servidor, ano e mês de competência
+- uso quando a pergunta mencionar cargo e pedir detalhes de folha
+
+#### `agregar_folha_cargos`
+
+Arquivo: `agents/tools/sql_tools/folha_pagamento/agregar_folha_cargos_query.py`
+
+Serve para:
+
+- ranking de cargos por massa salarial, vencimentos, descontos ou líquido
+- contagem de servidores distintos por cargo
+- soma de salário base ou vencimentos totais por cargo
+- responder perguntas como "qual cargo representa maior massa salarial?"
+
+#### `consultar_folha_lotacoes`
+
+Arquivo: `agents/tools/sql_tools/folha_pagamento/consultar_folha_lotacoes_query.py`
+
+Serve para:
+
+- listar registros mensais de folha detalhados por lotação/secretaria
+- ver proventos, vantagens, vencimentos totais, descontos e líquido por unidade organizacional
+- filtrar por lotação, servidor, cargo, ano e mês
+- a lotação é a unidade organizacional real de alocação — mais granular do que o campo `secretaria` em `folha_servidores`
+
+#### `agregar_folha_lotacoes`
+
+Arquivo: `agents/tools/sql_tools/folha_pagamento/agregar_folha_lotacoes_query.py`
+
+Serve para:
+
+- ranking de secretarias ou unidades por massa salarial ou líquido pago
+- contagem de servidores distintos por lotação
+- responder perguntas como "qual secretaria tem maior massa salarial?"
+- totalização sem agrupamento quando filtrado por lotação específica
+
 #### `buscar_historico_de_pagamentos_do_servidor`
 
 Arquivo: `agents/tools/sql_tools/folha_pagamento/buscar_historico_de_pagamentos_do_servidor_query.py`
@@ -394,12 +501,30 @@ agents/tools/sql_tools/servidores/
 ├── consultar_servidores_schema.py
 ├── agregar_servidores_query.py
 ├── agregar_servidores_schema.py
+├── consultar_historico_funcional_servidor_query.py
+├── consultar_historico_funcional_servidor_schema.py
 └── shared/
     ├── base.py
     ├── filters.py
     ├── querying.py
     ├── responses.py
     └── runtime.py
+```
+
+### Folha de Pagamento
+
+```text
+agents/tools/sql_tools/folha_pagamento/
+├── __init__.py
+├── buscar_historico_de_pagamentos_do_servidor_query.py
+├── consultar_folha_cargos_query.py
+├── consultar_folha_cargos_schema.py
+├── agregar_folha_cargos_query.py
+├── agregar_folha_cargos_schema.py
+├── consultar_folha_lotacoes_query.py
+├── consultar_folha_lotacoes_schema.py
+├── agregar_folha_lotacoes_query.py
+└── agregar_folha_lotacoes_schema.py
 ```
 
 ### Licitações
@@ -427,6 +552,8 @@ agents/tools/sql_tools/contratos/
 ├── consultar_contratos_schema.py
 ├── agregar_contratos_query.py
 ├── agregar_contratos_schema.py
+├── consultar_itens_adquiridos_contrato_query.py
+├── consultar_itens_adquiridos_contrato_schema.py
 └── shared/
     ├── base.py
     ├── filters.py
@@ -449,6 +576,19 @@ agents/tools/sql_tools/planejamento/
     ├── filters.py
     ├── querying.py
     └── runtime.py
+```
+
+### Frota
+
+```text
+agents/tools/sql_tools/frotas/
+├── __init__.py
+├── consultar_frota_query.py
+├── consultar_frota_schema.py
+├── agregar_frota_query.py
+├── agregar_frota_schema.py
+├── consultar_despesas_frota_query.py
+└── consultar_despesas_frota_schema.py
 ```
 
 ### Convenção
@@ -595,6 +735,72 @@ Além disso:
 - `mes` exato não pode coexistir com intervalo `mes_inicio/mes_fim`
 - `agregar_planejamento` deve ser usado para totais e rankings
 - `consultar_planejamento` deve ser usado para listas de ações, programas e linhas mensais
+
+---
+
+## Regras de Filtros em `frotas`
+
+O domínio de frotas divide-se em três tools com responsabilidades distintas.
+
+Por isso:
+
+- `consultar_frota` é para dados cadastrais dos veículos (marca, modelo, placa, situação, valor atual)
+- `agregar_frota` é para rankings e totais por tipo de veículo, unidade responsável, situação ou localização
+- `consultar_despesas_frota` é para o histórico de eventos de manutenção, combustível e outros gastos por veículo
+- nunca misture dados cadastrais com histórico de despesas na mesma tool
+
+Além disso:
+
+- filtro por `placa` faz match parcial — `"ABC"` encontra qualquer placa que contenha esse trecho
+- `soma_total_despesas` em `agregar_frota` acumula todos os eventos de despesa do veículo
+- `total_despesa` em `consultar_despesas_frota` é o valor do evento individual, não o acumulado
+
+---
+
+## Regras de Filtros em `folha_pagamento` (cargos e lotações)
+
+As tools de folha por cargo e lotação expõem dados da tabela `folha_pagamentos` com joins nas respectivas tabelas de cargo e lotação.
+
+Por isso:
+
+- `consultar_folha_cargos` e `agregar_folha_cargos` usam a tabela `folha_cargos` — o cargo contábil do registro de folha
+- `consultar_folha_lotacoes` e `agregar_folha_lotacoes` usam a tabela `folha_lotacoes` — a unidade organizacional de alocação real
+- a `lotacao` das tools de folha é mais granular do que o campo `secretaria` em `consultar_servidores`; uma mesma secretaria pode ter várias lotações distintas
+- `contagem` em `agregar_folha_*` conta servidores distintos (não linhas de folha)
+- as métricas de folha — `salario_base`, `proventos`, `vantagens`, `vencimentos_totais`, `descontos`, `liquido` — não estão disponíveis em `consultar_servidores` ou `agregar_servidores`
+
+Além disso:
+
+- filtragem por ano e mês de competência é fortemente recomendada para reduzir volume
+- quando comparar secretarias por gasto, prefira `agregar_folha_lotacoes` a `agregar_servidores`, pois as métricas financeiras são mais precisas
+
+---
+
+## Regras de Filtros em `consultar_historico_funcional_servidor`
+
+A tabela `servidores` armazena o cadastro funcional estrutural dos servidores, diferente dos snapshots mensais de `folha_servidores`.
+
+Por isso:
+
+- use esta tool para perguntas sobre admissão, desligamento, situação funcional, cessão, vínculo e regime de aposentadoria
+- use `buscar_historico_de_pagamentos_do_servidor` para perguntas sobre quanto um servidor recebeu
+- use `consultar_servidores` para o snapshot mensal mais recente com salário base e secretaria
+- `em_cessao=true` filtra servidores com `data_inicio_cessao` preenchida — não depende de situação funcional textual
+- filtros de data (`data_admissao_inicio/fim`, `data_desligamento_inicio/fim`) operam sobre datas reais do cadastro, não sobre competência de folha
+
+---
+
+## Regras de Filtros em `consultar_itens_adquiridos_contrato`
+
+A tabela `contrato_itens_adquiridos` armazena os itens especificados em cada contrato com FK para `contratos`.
+
+Por isso:
+
+- use esta tool quando a pergunta pedir o que foi comprado num contrato, não apenas o valor total
+- o filtro `identificacao` é o campo de texto livre do item — aceita busca parcial case-insensitive
+- um contrato pode ter zero ou muitos itens; nem todos os contratos importados têm itens registrados
+- `valor_total` do item é quantidade × valor unitário, diferente do `valor` do contrato pai
+- para dados do contrato em si (valor total, vigência, fornecedor, modalidade), use `consultar_contratos`
 
 ---
 

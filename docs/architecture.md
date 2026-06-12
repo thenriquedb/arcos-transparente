@@ -4,7 +4,7 @@
 
 O Arcos Transparente é uma pilha `XML/CSV → parser → schema → SQLite → tools SQL + RAG → agente LangChain → Streamlit`. Os dados públicos do portal da transparência de Arcos (MG) são ingeridos por um pipeline offline e normalizados em um banco SQLite relacional. Quando um cidadão faz uma pergunta via interface web, um agente ReAct (LangChain + LangGraph) seleciona as tools adequadas, executa queries SQL ou recuperação semântica, e devolve a resposta em linguagem natural.
 
-A camada de agente expõe **20 tools públicas** organizadas por domínio (servidores, contratos, licitações, despesas, receitas, planejamento, frota, patrimônio, estoques, quadro de pessoal, eleitos, transferências financeiras e conhecimento municipal). Cada domínio tem pelo menos uma tool de consulta/listagem e uma de agregação/ranking. Uma tool RAG (`consultar_conhecimento_municipal`) cobre o acervo markdown curado de telefones, horários de ônibus (intermunicipais e do Tarifa Zero), estrutura organizacional e FAQ.
+A camada de agente expõe **39 tools públicas** organizadas por domínio (servidores e folha, contratos, licitações, despesas, receitas, planejamento, frota, patrimônio, estoques, quadro de pessoal, eleitos, transferências financeiras e conhecimento municipal). Cada domínio tem pelo menos uma tool de consulta/listagem e uma de agregação/ranking. Uma tool RAG (`consultar_conhecimento_municipal`) cobre o acervo markdown curado de telefones, horários de ônibus (intermunicipais e do Tarifa Zero), estrutura organizacional e FAQ.
 
 Antes de cada pergunta chegar ao modelo, um sistema de guardrails determinísticos rejeita perguntas fora do escopo, vazias ou com tentativa de injection. Uma política de seleção híbrida reduz a superfície de tools candidatas entregue ao agente, melhorando a precisão das escolhas. A roteabilidade das tools vem da metadata de cada tool (`routing_metadata`) consumida pelo seletor; a camada de NLU (`agents/nlu/`) faz a leitura estruturada da pergunta (`QueryReading`) e expõe poucos predicados de intenção determinísticos (`agents/nlu/intents.py`) para as distinções genuinamente ambíguas.
 
@@ -189,15 +189,15 @@ arcos-transparente/
 │   │   ├── registry.py             # Registro e descoberta de tools (@register decorator)
 │   │   ├── sql_tools/              # Tools SQL públicas por domínio
 │   │   │   ├── shared/             # Helpers compartilhados entre tools SQL
-│   │   │   ├── servidores/         # consultar_servidores, agregar_servidores
-│   │   │   ├── contratos/          # consultar_contratos, agregar_contratos
+│   │   │   ├── servidores/         # consultar_servidores, agregar_servidores, consultar_historico_funcional_servidor
+│   │   │   ├── contratos/          # consultar_contratos, agregar_contratos, consultar_itens_adquiridos_contrato
 │   │   │   ├── licitacoes/         # consultar_licitacoes, agregar_licitacoes
 │   │   │   ├── planejamento/       # consultar_planejamento, agregar_planejamento
 │   │   │   ├── despesas/           # consultar_despesas, agregar_despesas
 │   │   │   ├── receitas/           # consultar_receitas, agregar_receitas
-│   │   │   ├── folha_pagamento/    # buscar_historico_de_pagamentos_do_servidor
+│   │   │   ├── folha_pagamento/    # buscar_historico_*, consultar/agregar_folha_cargos, consultar/agregar_folha_lotacoes
 │   │   │   ├── eleitos/            # consultar_eleitos
-│   │   │   ├── frotas/             # consultar_frota
+│   │   │   ├── frotas/             # consultar_frota, agregar_frota, consultar_despesas_frota
 │   │   │   ├── estoques/           # consultar_estoques, agregar_estoques, consultar_movimentacoes_de_estoque
 │   │   │   ├── patrimonios/        # consultar_patrimonios, agregar_patrimonios
 │   │   │   ├── quadro_pessoal/     # consultar_quadro_pessoal, agregar_quadro_pessoal
@@ -242,15 +242,21 @@ arcos-transparente/
 
 ## Superfície Pública de Tools
 
-O agente cidadão enxerga as seguintes 20+ tools públicas, distribuídas por domínio:
+O agente cidadão enxerga 39 tools públicas distribuídas por domínio:
 
 | Tool | Domínio | Tipo |
 |------|---------|------|
 | `consultar_servidores` | Servidores | Listagem / filtro |
 | `agregar_servidores` | Servidores | Contagem / ranking |
+| `consultar_historico_funcional_servidor` | Servidores | Dados funcionais (admissão, cessão, vínculo) |
 | `buscar_historico_de_pagamentos_do_servidor` | Folha de pagamento | Histórico individual |
+| `consultar_folha_cargos` | Folha de pagamento | Listagem por cargo |
+| `agregar_folha_cargos` | Folha de pagamento | Ranking / totais por cargo |
+| `consultar_folha_lotacoes` | Folha de pagamento | Listagem por lotação/secretaria |
+| `agregar_folha_lotacoes` | Folha de pagamento | Ranking / totais por lotação |
 | `consultar_contratos` | Contratos | Listagem / filtro |
 | `agregar_contratos` | Contratos | Contagem / ranking |
+| `consultar_itens_adquiridos_contrato` | Contratos | Itens comprados por contrato |
 | `consultar_licitacoes` | Licitações | Listagem / filtro |
 | `agregar_licitacoes` | Licitações | Contagem / ranking |
 | `consultar_planejamento` | Planejamento | Listagem / filtro |
@@ -259,15 +265,26 @@ O agente cidadão enxerga as seguintes 20+ tools públicas, distribuídas por do
 | `agregar_receitas` | Receitas | Totais / ranking |
 | `consultar_despesas` | Despesas | Listagem / filtro |
 | `agregar_despesas` | Despesas | Totais / ranking |
+| `consultar_despesas_por_funcao` | Despesas por função | Listagem por função de governo |
+| `agregar_despesas_por_funcao` | Despesas por função | Totais / ranking por função |
+| `consultar_transferencias_financeiras` | Transferências / emendas | Listagem / filtro |
+| `agregar_transferencias_financeiras` | Transferências / emendas | Totais / ranking |
+| `consultar_frota` | Frota | Dados cadastrais de veículos |
+| `agregar_frota` | Frota | Ranking / totais por tipo ou secretaria |
+| `consultar_despesas_frota` | Frota | Histórico de manutenção e gastos por veículo |
+| `consultar_diarias` | Diárias | Listagem / filtro |
+| `agregar_diarias` | Diárias | Totais / ranking |
+| `consultar_passagens` | Passagens | Listagem / filtro |
+| `agregar_passagens` | Passagens | Totais / ranking |
+| `consultar_estoques` | Estoques | Saldos sumarizados |
+| `agregar_estoques` | Estoques | Totais / ranking |
+| `consultar_movimentacoes_de_estoque` | Estoques | Histórico diário de movimentações |
 | `consultar_patrimonios` | Patrimônios | Listagem / filtro |
 | `agregar_patrimonios` | Patrimônios | Contagem / ranking |
 | `consultar_quadro_pessoal` | Quadro de pessoal | Listagem / filtro |
 | `agregar_quadro_pessoal` | Quadro de pessoal | Contagem / ranking |
 | `consultar_eleitos` | Eleitos | Lookup |
-| `consultar_frota` | Frota | Listagem / filtro |
 | `consultar_conhecimento_municipal` | Acervo markdown / RAG | Recuperação semântica |
-
-Para cada domínio adicional (diárias, passagens, estoques, transferências financeiras, despesas por função), existem tools de consulta e agregação análogas registradas no mesmo registry.
 
 Para detalhes de arquitetura de tools, registro e como adicionar novos domínios, consulte [docs/arquitetura-agent-tools.md](./arquitetura-agent-tools.md).
 
