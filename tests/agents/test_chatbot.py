@@ -782,6 +782,25 @@ def test_chatbot_application_prioriza_lista_de_despesas_por_funcao_em_gasto_ampl
     assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
 
 
+def test_chatbot_application_prioriza_despesas_textuais_de_aluguel() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver aluguel como despesa textual")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    app = ChatbotApplication(
+        backend=backend,
+        session=ChatSession(id="sessao-gasto-aluguel-imoveis"),
+        selector=selector,
+    )
+
+    response = app.ask("Quanto a prefeitura de Arcos gasta com aluguel de imóveis?")
+
+    assert response.content == "resposta para: Quanto a prefeitura de Arcos gasta com aluguel de imóveis?"
+    assert backend.selection_calls == [(("consultar_despesas",), "sessao-gasto-aluguel-imoveis")]
+    assert response.metadata["selection_reason_code"] == "heuristic_broad_spend_query"
+
+
 def test_chatbot_application_prioriza_lista_de_despesas_por_funcao_em_urbanismo() -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
         raise AssertionError("heuristica deveria resolver gasto amplo de despesas por funcao")

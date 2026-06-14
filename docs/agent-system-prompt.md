@@ -168,7 +168,7 @@ Antes de acionar uma tool, verifique o recorte temporal. Se faltar e o volume pu
 ## 7. Memória e Contexto Entre Mensagens
 
 - **Anáforas** ("ele", "dela", "essa secretaria", "nessa área"): resolva pelo histórico sem reperguntar.
-- **Refinamentos com elipse** ("E em 2024?", "E na saúde?", "E as maiores?"): reutilize o último contexto público válido, não trate como pedido novo.
+- **Refinamentos com elipse** ("E em 2025?", "E na saúde?", "E as maiores?"): reutilize o último contexto público válido, não trate como pedido novo.
 - **Refinamento de lista** ("qual desses é da secretaria de obras?"): filtre a partir do que já foi exibido, sem reiniciar a consulta.
 - **Siglas confirmadas** e **nomes de servidor/eleito já mencionados**: reutilize sem reperguntar.
 

@@ -11,7 +11,7 @@ import agents.tools.sql_tools.despesas as despesas_tools
 import agents.tools.sql_tools.patrimonios as patrimonios_tools
 import agents.tools.sql_tools.quadro_pessoal as quadro_tools
 from database import session as session_manager
-from database.models import Base, DespesaDocumento, Patrimonio, QuadroPessoal
+from database.models import Base, DespesaDocumento, DespesaDocumentoItem, Patrimonio, QuadroPessoal
 
 
 def _build_session():
@@ -104,6 +104,48 @@ def test_consultar_e_agregar_despesas_filtram_diarias(monkeypatch) -> None:
     assert consulta["resultados"] == [{"numero": "000332", "credor": "MARIA DE SOUZA", "valor_pago": 24.0}]
     assert consulta["mensagem"] == "Mostrando 1 de 2 despesas encontradas."
     assert agregacao["valor_total"] == 42.0
+
+    session.close()
+
+
+def test_consultar_despesas_tolera_plural_irregular_na_descricao(monkeypatch) -> None:
+    session = _build_session()
+    documento = DespesaDocumento(
+        tipo_origem="documento_extra",
+        arquivo_origem="documentos-extras-prefeitura-2025.xml",
+        sequencia_origem=2,
+        origem="prefeitura",
+        exercicio=2025,
+        unidade_gestora="PREFEITURA MUNICIPAL",
+        numero_documento="000076",
+        data_documento=date(2025, 1, 7),
+        credor="INSS",
+        valor_documento=Decimal("1000.00"),
+        valor_pago=Decimal("1000.00"),
+        itens=[
+            DespesaDocumentoItem(
+                ordem=1,
+                descricao_item="Valor que se empenha referente aluguel de imóvel destinado ao Almoxarifado da Saúde.",
+            )
+        ],
+    )
+    session.add(documento)
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    consulta = despesas_tools.consultar_despesas(
+        filtros={"tipo": "documento_extra", "descricao": "aluguel de imóveis"},
+        campos=["numero", "descricao", "credor"],
+    )
+
+    assert consulta["total"] == 1
+    assert consulta["resultados"] == [
+        {
+            "numero": "000076",
+            "descricao": "Valor que se empenha referente aluguel de imóvel destinado ao Almoxarifado da Saúde.",
+            "credor": "INSS",
+        }
+    ]
 
     session.close()
 

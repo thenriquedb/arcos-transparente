@@ -521,6 +521,23 @@ def test_hybrid_selector_prioriza_lista_detalhada_de_passagens_em_gasto_amplo() 
     assert selection.candidate_tool_names == ("consultar_passagens",)
 
 
+def test_hybrid_selector_prioriza_despesas_textuais_de_aluguel() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria reconhecer aluguel como despesa textual")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quanto a prefeitura de Arcos gasta com aluguel de imóveis?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_broad_spend_query"
+    assert selection.candidate_tool_names == ("consultar_despesas",)
+
+
 def test_hybrid_selector_prioriza_lista_detalhada_de_despesas_em_gasto_amplo() -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
         raise AssertionError("heuristica deveria priorizar consulta detalhada")

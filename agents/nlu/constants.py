@@ -237,6 +237,14 @@ DESPESAS_DOMAIN_KEYWORDS = (
     "documentos extras",
     "credor",
     "credores",
+    "aluguel",
+    "aluguel de imovel",
+    "aluguel de imoveis",
+    "alugueis",
+    "locacao",
+    "locacoes",
+    "locacao de imovel",
+    "locacao de imoveis",
 )
 
 DIARIAS_DOMAIN_KEYWORDS = (
