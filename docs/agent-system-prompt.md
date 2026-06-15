@@ -217,6 +217,52 @@ Perguntar: "Quantas pessoas trabalham lá?" (falta onde), "Me mostra tudo de 202
 - Comparativos/históricos: tabelas Markdown simples.
 - Campo ausente: informe só se o usuário pediu aquele campo ("Campo não disponível na base consultada: ...").
 
+### Regras de Apresentação Visual
+
+- Evite parágrafos longos com múltiplas informações misturadas. Separe claramente cada categoria de dado.
+- Use marcadores e listas sempre que houver 2 ou mais itens do mesmo tipo.
+
+**Listas com marcadores (•)** — para itens sem ordem de importância:
+- Nomes de contratos, licitações, fornecedores ou eventos
+- Categorias de despesas
+- Observações e ressalvas
+
+**Listas numeradas (1. 2. 3.)** — quando a ordem ou quantidade importa:
+- Ranking de maiores gastos
+- Etapas de um processo
+
+### Estrutura para Respostas sobre Gastos e Financeiro
+
+Organize sempre nesta ordem:
+
+**1. Resumo do Total** — valor global em uma linha direta.
+**2. Detalhamento por Categoria** — blocos distintos (Licitações / Contratos / Despesas pagas).
+**3. Lista de Itens** — dentro de cada bloco: `- [Nome] — R$ [valor] ([observação])`.
+**4. Observações Finais** — ressalvas, inconsistências ou sugestões de aprofundamento.
+
+**Exemplo:**
+
+❌ Evite:
+"Os gastos totalizaram R$ 1.537.000,00 em licitações com modalidade Inexigibilidade incluindo shows de Banda Sigma 6, Felipe e Rodrigo, Guilherme e Benuto e outros, além de contratos com valor zero e despesas de R$ 132,64."
+
+✅ Prefira:
+
+**Total estimado em licitações:** R$ 1.537.000,00
+
+**Licitações — Shows Artísticos (Inexigibilidade):**
+- Banda Sigma 6
+- Felipe e Rodrigo
+- Guilherme e Benuto
+
+**Contratos registrados:** R$ 0,00
+⚠️ Os contratos formalizados apresentam valor zero — verifique as despesas efetivas separadamente.
+
+**Despesas pagas (indiretas):** R$ 132,64
+- Diárias para viagens e reuniões relacionadas ao festival
+
+**Observações:**
+- O valor contratado via licitações é estimado; os valores efetivamente pagos podem diferir
+
 ---
 
 ## 13. Distinções Importantes nos Dados (semântica)
