@@ -17,10 +17,14 @@ from enum import StrEnum
 class ToolName(StrEnum):
     """Nome canônico de cada tool pública (membro é uma `str` real)."""
 
-    # Servidores e folha
+    # Servidores e folha (Prefeitura)
     CONSULTAR_SERVIDORES = "consultar_servidores"
     AGREGAR_SERVIDORES = "agregar_servidores"
     BUSCAR_HISTORICO_DE_PAGAMENTOS_DO_SERVIDOR = "buscar_historico_de_pagamentos_do_servidor"
+
+    # Servidores da Camara Municipal
+    CONSULTAR_SERVIDORES_CAMARA = "consultar_servidores_camara"
+    AGREGAR_SERVIDORES_CAMARA = "agregar_servidores_camara"
 
     # Contratos
     CONSULTAR_CONTRATOS = "consultar_contratos"

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+from decimal import Decimal
 from typing import Optional
 
 from sqlalchemy import (
@@ -10,6 +11,7 @@ from sqlalchemy import (
     DateTime,
     Index,
     Integer,
+    Numeric,
     String,
     UniqueConstraint,
     func,
@@ -95,3 +97,64 @@ class QuadroPessoal(Base):
     regime_contratacao: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
     vagas_criadas: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     vagas_preenchidas: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+
+
+class ServidorCamara(Base):
+    """Snapshot mensal de cada servidor da Câmara Municipal importado do CSV."""
+
+    __tablename__ = "servidores_camara"
+    __table_args__ = (
+        UniqueConstraint("matricula", "competencia_referencia", name="uq_servidor_camara_matricula_comp"),
+        Index("ix_servidores_camara_nome", "nome"),
+        Index("ix_servidores_camara_cargo", "cargo"),
+        Index("ix_servidores_camara_lotacao", "lotacao"),
+        Index("ix_servidores_camara_competencia_referencia", "competencia_referencia"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    atualizado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+    competencia_referencia: Mapped[date] = mapped_column(Date, nullable=False)
+    matricula: Mapped[str] = mapped_column(String(50), nullable=False)
+    nome: Mapped[str] = mapped_column(String(255), nullable=False)
+    cargo: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    lotacao: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    vinculo: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    situacao_funcional: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    data_admissao: Mapped[date | None] = mapped_column(Date, nullable=True)
+    salario_base: Mapped[Decimal | None] = mapped_column(Numeric(15, 2), nullable=True)
+    proventos: Mapped[Decimal | None] = mapped_column(Numeric(15, 2), nullable=True)
+    vantagens: Mapped[Decimal | None] = mapped_column(Numeric(15, 2), nullable=True)
+    proventos_totais: Mapped[Decimal | None] = mapped_column(Numeric(15, 2), nullable=True)
+    descontos: Mapped[Decimal | None] = mapped_column(Numeric(15, 2), nullable=True)
+    liquido: Mapped[Decimal | None] = mapped_column(Numeric(15, 2), nullable=True)
+
+
+class SalarioPorCargoCamara(Base):
+    """Tabela de remuneração dos cargos e funções da Câmara Municipal."""
+
+    __tablename__ = "salarios_por_cargo_camara"
+    __table_args__ = (
+        UniqueConstraint("codigo", "competencia_referencia", name="uq_salario_cargo_camara_codigo_comp"),
+        Index("ix_salarios_cargo_camara_competencia", "competencia_referencia"),
+        Index("ix_salarios_cargo_camara_descricao", "descricao"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    criado_em: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    atualizado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+    competencia_referencia: Mapped[date] = mapped_column(Date, nullable=False)
+    codigo: Mapped[str] = mapped_column(String(20), nullable=False)
+    descricao: Mapped[str] = mapped_column(String(255), nullable=False)

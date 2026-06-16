@@ -82,6 +82,8 @@ def test_get_public_tools_reduz_superficie_para_capabilidades_publicas() -> None
     assert public_tool_names == {
         "consultar_servidores",
         "agregar_servidores",
+        "consultar_servidores_camara",
+        "agregar_servidores_camara",
         "consultar_historico_funcional_servidor",
         "consultar_contratos",
         "agregar_contratos",
@@ -128,6 +130,8 @@ def test_get_all_tools_converge_para_mesma_superficie_publica() -> None:
     assert tool_names == {
         "consultar_servidores",
         "agregar_servidores",
+        "consultar_servidores_camara",
+        "agregar_servidores_camara",
         "consultar_historico_funcional_servidor",
         "consultar_contratos",
         "agregar_contratos",
@@ -196,7 +200,7 @@ def test_get_all_tools_nao_duplica_tools_em_chamadas_repetidas() -> None:
 def test_catalogo_publico_expoe_metadados_de_roteamento_para_todas_as_tools() -> None:
     catalog = get_public_tool_catalog()
 
-    assert len(catalog) == 39
+    assert len(catalog) == 41
     for entry in catalog:
         assert entry.routing.summary
         assert len(entry.routing.examples) >= 2
