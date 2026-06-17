@@ -5,16 +5,16 @@ from datetime import date
 import pytest
 
 import agents.chatbot.agent as chatbot_agent
-from agents.chatbot.help_messages import build_scope_help_message
-from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
-from agents.chatbot.policy import evaluate_deterministic_policy
 from agents.chatbot.core import (
     ChatbotAgentBackend,
+    ChatbotApplication,
     ChatMessage,
     ChatResponse,
     ChatSession,
-    ChatbotApplication,
 )
+from agents.chatbot.help_messages import build_scope_help_message
+from agents.chatbot.hybrid_selection import HybridToolSelection, HybridToolSelector
+from agents.chatbot.policy import evaluate_deterministic_policy
 from agents.tools.registry import get_public_tools, get_public_tools_by_name
 
 
@@ -190,7 +190,7 @@ def test_system_prompt_orienta_salario_de_cargo_eleito_sem_pedir_nome() -> None:
 
     assert "NÃO peça o nome ao usuário" in prompt
     assert "Primeiro use `consultar_eleitos`" in prompt
-    assert "depois chame `buscar_historico_de_pagamentos_do_servidor`" in prompt
+    assert "depois use a regra de entidade acima" in prompt
 
 
 def test_system_prompt_pede_confirmacao_para_siglas_ambiguas() -> None:

@@ -13,19 +13,16 @@ from shared.utils.text import normalize_search_text
 from .shared import read_csv_text
 
 
-def _parse_utf8_csv_rows(filepath: str) -> list[list[str]]:
+def _parse_csv_rows(filepath: str) -> list[list[str]]:
     import csv
     from io import StringIO
 
     from .shared import clean_excel_csv_cell
 
-    text = read_csv_text(filepath, encoding="utf-8")
+    # Arquivo exportado pelo portal em ISO-8859-1
+    text = read_csv_text(filepath)
     reader = csv.reader(StringIO(text), delimiter=";")
     return [[clean_excel_csv_cell(cell) for cell in row] for row in reader]
-
-
-# Variantes de "Mês" apos normalize_search_text com diferentes encodings
-_MES_VARIANTS = frozenset({"mes", "mes"})
 
 
 _EXPECTED_HEADER = ("codigo", "descricao do cargo")
@@ -35,7 +32,7 @@ class SalarioPorCargoCamaraParser:
     """Converte a tabela de remuneracao de cargos da Camara em registros canonicos."""
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
-        rows = _parse_utf8_csv_rows(filepath)
+        rows = _parse_csv_rows(filepath)
         if not rows:
             raise ValueError(f"Arquivo vazio: {filepath}")
 

@@ -13,13 +13,14 @@ from shared.utils.text import normalize_search_text
 from .shared import read_csv_text
 
 
-def _parse_utf8_csv_rows(filepath: str) -> list[list[str]]:
+def _parse_csv_rows(filepath: str) -> list[list[str]]:
     import csv
     from io import StringIO
 
     from .shared import clean_excel_csv_cell
 
-    text = read_csv_text(filepath, encoding="utf-8")
+    # Arquivo exportado pelo portal em UTF-8 com BOM; utf-8-sig descarta o BOM automaticamente
+    text = read_csv_text(filepath, encoding="utf-8-sig")
     reader = csv.reader(StringIO(text), delimiter=";")
     return [[clean_excel_csv_cell(cell) for cell in row] for row in reader]
 
@@ -61,7 +62,7 @@ class ServidoresCamaraCsvParser:
     """Converte o CSV mensal de servidores da Camara em registros canonicos."""
 
     def parse(self, filepath: str) -> list[dict[str, Any]]:
-        rows = _parse_utf8_csv_rows(filepath)
+        rows = _parse_csv_rows(filepath)
         if not rows:
             raise ValueError(f"Arquivo vazio: {filepath}")
 

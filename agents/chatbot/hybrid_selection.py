@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import json
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
-import json
 from typing import Any, Literal, Protocol
 
 from pydantic import BaseModel, Field, ValidationError
@@ -16,14 +16,14 @@ from agents.chatbot.observability import (
     build_event_payload,
 )
 from agents.nlu import intents
+from agents.nlu.constants import (
+    DIARIAS_DOMAIN_KEYWORDS,
+    PASSAGENS_DOMAIN_KEYWORDS,
+)
 from agents.nlu.conversation import (
     looks_like_confirmation_text,
     normalize_conversation_terms,
     normalize_conversation_text,
-)
-from agents.nlu.constants import (
-    DIARIAS_DOMAIN_KEYWORDS,
-    PASSAGENS_DOMAIN_KEYWORDS,
 )
 from agents.nlu.detectors import strip_despesas_por_funcao_domain_keywords
 from agents.nlu.reading import read_query
@@ -34,6 +34,7 @@ from agents.tools.registry import (
     get_public_tools,
     get_public_tools_by_name,
 )
+
 
 SelectorAction = Literal["allow", "clarify", "block"]
 SelectorConfidence = Literal["high", "medium", "low"]
@@ -113,6 +114,29 @@ _SPEND_GROUPING_TERMS = (
     "por area",
     "por funcao",
     "por tipo",
+)
+_SERVIDOR_LOOKUP_TERMS = (
+    "servidor",
+    "servidora",
+    "funcionario",
+    "funcionaria",
+)
+_SERVIDOR_CAMARA_TERMS = (
+    "camara",
+    "legislativo",
+)
+_SERVIDOR_PREFEITURA_TERMS = ("prefeitura",)
+_SERVIDOR_AGGREGATE_SIGNALS = (
+    "quantos",
+    "quantas",
+    "total",
+    "soma",
+    "ranking",
+    "contagem",
+    "por cargo",
+    "por lotacao",
+    "por secretaria",
+    "massa salarial",
 )
 
 
@@ -425,6 +449,9 @@ def _select_with_heuristics(
         estoques_selection = _select_estoques_query_with_router(question)
         if estoques_selection is not None:
             return estoques_selection
+        servidor_cross_search_selection = _select_servidor_cross_search(question)
+        if servidor_cross_search_selection is not None:
+            return servidor_cross_search_selection
         return None
 
     return _build_named_candidate_selection(
@@ -436,14 +463,40 @@ def _select_with_heuristics(
     )
 
 
+def _resolve_servidor_entity_context(normalized_text: str) -> str | None:
+    """Detecta contexto de entidade numa query de servidor.
+
+    Retorna ``'camara'``, ``'prefeitura'`` ou ``None`` (ambíguo).
+    Usado por todas as heurísticas de servidor para decidir se aplica
+    cross-search (ambas as bases) ou roteamento direto para uma entidade.
+    """
+    if _has_any_term(normalized_text, _SERVIDOR_CAMARA_TERMS):
+        return "camara"
+    if _has_any_term(normalized_text, _SERVIDOR_PREFEITURA_TERMS):
+        return "prefeitura"
+    return None
+
+
 def _select_salary_history_with_router(
     question: str,
 ) -> HybridToolSelection | None:
     if read_query(question).nome_historico is None:
         return None
+    normalized = normalize_conversation_text(question)
+    entity = _resolve_servidor_entity_context(normalized)
+    if entity == "camara":
+        return _build_named_candidate_selection(
+            [ToolName.CONSULTAR_SERVIDORES_CAMARA],
+            reason_code="heuristic_salary_history_query",
+        )
+    if entity == "prefeitura":
+        return _build_named_candidate_selection(
+            [ToolName.BUSCAR_HISTORICO_DE_PAGAMENTOS_DO_SERVIDOR],
+            reason_code="heuristic_salary_history_query",
+        )
     return _build_named_candidate_selection(
-        [ToolName.BUSCAR_HISTORICO_DE_PAGAMENTOS_DO_SERVIDOR],
-        reason_code="heuristic_salary_history_query",
+        [ToolName.BUSCAR_HISTORICO_DE_PAGAMENTOS_DO_SERVIDOR, ToolName.CONSULTAR_SERVIDORES_CAMARA],
+        reason_code="heuristic_salary_history_cross_search",
     )
 
 
@@ -646,6 +699,29 @@ def _select_estoques_query_with_router(
     return _build_named_candidate_selection(
         [tool_name],
         reason_code="heuristic_estoques_query",
+    )
+
+
+def _select_servidor_cross_search(
+    question: str,
+) -> HybridToolSelection | None:
+    """Garante candidatos duplos ao buscar servidor por nome sem contexto de entidade.
+
+    Quando a pergunta menciona um termo de domínio de servidor (servidor, funcionário…)
+    mas NÃO especifica câmara ou prefeitura via ``_resolve_servidor_entity_context``,
+    e NÃO é uma agregação, expõe ambas as tools de lookup para o agente consultar
+    as duas bases.
+    """
+    normalized = normalize_conversation_text(question)
+    if not _has_any_term(normalized, _SERVIDOR_LOOKUP_TERMS):
+        return None
+    if _has_any_term(normalized, _SERVIDOR_AGGREGATE_SIGNALS):
+        return None
+    if _resolve_servidor_entity_context(normalized) is not None:
+        return None
+    return _build_named_candidate_selection(
+        [ToolName.CONSULTAR_SERVIDORES, ToolName.CONSULTAR_SERVIDORES_CAMARA],
+        reason_code="heuristic_servidor_cross_search",
     )
 
 

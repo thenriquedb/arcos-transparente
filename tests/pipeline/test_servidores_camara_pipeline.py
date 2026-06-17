@@ -116,7 +116,7 @@ def test_pipeline_importa_salario_por_cargo_camara(monkeypatch, tmp_path) -> Non
         '="22";="ADVOGADO"\n'
         '="1";="Vereador"\n'
         '="PRONIM TB - 16/06/2026 - Pessoal"\n',
-        encoding="utf-8",
+        encoding="iso-8859-1",
     )
 
     session = _build_session()
