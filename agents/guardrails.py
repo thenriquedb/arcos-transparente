@@ -146,6 +146,11 @@ def evaluate_public_query_guardrails(
             ),
         )
 
+    # Salary/payment query with a named person detected by the NLU extractor
+    # is unambiguously in scope — skip keyword counting.
+    if reading.nome_historico is not None:
+        return GuardrailDecision(allowed=True, category="allowed")
+
     strong_hits = reading.scope_strong_hits
     weak_hits = reading.scope_weak_hits
 

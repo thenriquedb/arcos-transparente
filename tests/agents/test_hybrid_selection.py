@@ -115,9 +115,9 @@ def test_hybrid_selector_prioriza_contato_de_eleitos_sem_chamar_modelo() -> None
     )
 
 
-def test_hybrid_selector_prioriza_historico_de_salario_individual() -> None:
+def test_hybrid_selector_cross_search_salario_sem_entidade() -> None:
     def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
-        raise AssertionError("heuristica deveria resolver salario individual")
+        raise AssertionError("heuristica deveria cruzar as bases de salario")
 
     selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
 
@@ -128,8 +128,45 @@ def test_hybrid_selector_prioriza_historico_de_salario_individual() -> None:
 
     assert selection.action == "allow"
     assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_salary_history_cross_search"
+    assert set(selection.candidate_tool_names) == {
+        "buscar_historico_de_pagamentos_do_servidor",
+        "consultar_servidores_camara",
+    }
+
+
+def test_hybrid_selector_salario_com_prefeitura_explicita_roteia_so_historico() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver salario da prefeitura")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quanto ganha o servidor da prefeitura João Silva?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
     assert selection.reason_code == "heuristic_salary_history_query"
     assert selection.candidate_tool_names == ("buscar_historico_de_pagamentos_do_servidor",)
+
+
+def test_hybrid_selector_salario_com_camara_explicita_roteia_so_camara() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver salario da camara")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quanto ganha o servidor da camara João Silva?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_salary_history_query"
+    assert selection.candidate_tool_names == ("consultar_servidores_camara",)
 
 
 def test_hybrid_selector_reaproveita_historico_em_confirmacao_de_contato_de_eleitos() -> None:
@@ -621,6 +658,77 @@ def test_hybrid_selector_prioriza_lista_detalhada_de_despesas_por_funcao() -> No
     assert selection.used_fallback is False
     assert selection.reason_code == "heuristic_broad_spend_query"
     assert selection.candidate_tool_names == ("consultar_despesas_por_funcao",)
+
+
+def test_hybrid_selector_cross_search_servidor_por_nome_sem_entidade() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria cruzar as bases de servidores")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quais são os dados do servidor João Silva?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_servidor_cross_search"
+    assert set(selection.candidate_tool_names) == {
+        "consultar_servidores",
+        "consultar_servidores_camara",
+    }
+
+
+def test_hybrid_selector_cross_search_nao_dispara_com_entidade_explicita_prefeitura() -> None:
+    selector = HybridToolSelector(
+        runner=lambda *_args: {
+            "action": "allow",
+            "candidate_tool_names": ["consultar_servidores"],
+            "confidence": "high",
+        }
+    )
+
+    selection = selector.select(
+        "Quais servidores da prefeitura?",
+        history=[],
+    )
+
+    assert selection.reason_code != "heuristic_servidor_cross_search"
+
+
+def test_hybrid_selector_cross_search_nao_dispara_com_entidade_explicita_camara() -> None:
+    selector = HybridToolSelector(
+        runner=lambda *_args: {
+            "action": "allow",
+            "candidate_tool_names": ["consultar_servidores_camara"],
+            "confidence": "high",
+        }
+    )
+
+    selection = selector.select(
+        "Quais servidores da camara municipal?",
+        history=[],
+    )
+
+    assert selection.reason_code != "heuristic_servidor_cross_search"
+
+
+def test_hybrid_selector_cross_search_nao_dispara_para_agregacao() -> None:
+    selector = HybridToolSelector(
+        runner=lambda *_args: {
+            "action": "allow",
+            "candidate_tool_names": ["agregar_servidores"],
+            "confidence": "high",
+        }
+    )
+
+    selection = selector.select(
+        "Quantos servidores trabalham no municipio?",
+        history=[],
+    )
+
+    assert selection.reason_code != "heuristic_servidor_cross_search"
 
 
 def test_hybrid_selector_respeita_pedido_expresso_de_total_em_gasto() -> None:

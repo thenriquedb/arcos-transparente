@@ -15,6 +15,8 @@ from .planejamentos import ADAPTER as PLANEJAMENTOS_ADAPTER
 from .quadro_pessoal import ADAPTER as QUADRO_PESSOAL_ADAPTER
 from .receitas import ADAPTER as RECEITAS_ADAPTER
 from .servidores import ADAPTER as SERVIDORES_ADAPTER
+from .servidores_camara import ADAPTER as SERVIDORES_CAMARA_ADAPTER
+from .salario_por_cargo_camara import ADAPTER as SALARIO_POR_CARGO_CAMARA_ADAPTER
 from .transferencias_financeiras import (
     ADAPTER as TRANSFERENCIAS_FINANCEIRAS_ADAPTER,
 )
@@ -29,6 +31,8 @@ def build_adapter_registry() -> dict[str, IngestionTypeAdapter]:
         "frotas": FROTAS_ADAPTER,
         "estoques": ESTOQUES_ADAPTER,
         "servidores": SERVIDORES_ADAPTER,
+        "servidores_camara": SERVIDORES_CAMARA_ADAPTER,
+        "salario_por_cargo_camara": SALARIO_POR_CARGO_CAMARA_ADAPTER,
         "receitas": RECEITAS_ADAPTER,
         "folha_pagamento": FOLHA_PAGAMENTO_ADAPTER,
         "planejamentos": PLANEJAMENTOS_ADAPTER,

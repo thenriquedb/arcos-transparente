@@ -35,7 +35,7 @@ from database.models.revenue import (
     ReceitaLancamento,
     ReceitaNatureza,
 )
-from database.models.server import QuadroPessoal, Servidor
+from database.models.server import QuadroPessoal, Servidor, ServidorCamara, SalarioPorCargoCamara
 from database.models.transfers import (
     EmendaParlamentar,
     TransferenciaFinanceiraMovimento,
@@ -58,6 +58,8 @@ __all__ = [
     "MateriaInstrumento",
     "Servidor",
     "QuadroPessoal",
+    "ServidorCamara",
+    "SalarioPorCargoCamara",
     "FrotaVeiculo",
     "FrotaDespesa",
     "EstoqueMaterial",

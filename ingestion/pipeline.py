@@ -37,6 +37,8 @@ from ingestion.parsers.csv.emendas_parlamentares_parser import (
     EmendasParlamentaresCsvParser,
 )
 from ingestion.parsers.csv.passagens_parser import PassagensCsvParser
+from ingestion.parsers.csv.salario_por_cargo_camara_parser import SalarioPorCargoCamaraParser
+from ingestion.parsers.csv.servidores_camara_parser import ServidoresCamaraCsvParser
 from ingestion.parsers.xml.contratos_parser import ContratosParser
 from ingestion.parsers.xml.despesas_parser import DespesasParser
 from ingestion.parsers.xml.eleitos_parser import EleitosParser
@@ -81,6 +83,8 @@ class IngestionPipeline:
         self.passagens_csv_parser = PassagensCsvParser()
         self.despesas_por_funcao_csv_parser = DespesasPorFuncaoCsvParser()
         self.emendas_parlamentares_csv_parser = EmendasParlamentaresCsvParser()
+        self.servidores_camara_csv_parser = ServidoresCamaraCsvParser()
+        self.salario_por_cargo_camara_parser = SalarioPorCargoCamaraParser()
 
         self.tipo_adapters = build_adapter_registry()
 

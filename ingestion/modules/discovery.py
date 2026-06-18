@@ -47,6 +47,8 @@ _DISCOVERY_SPECS: dict[str, _TipoDiscoverySpec] = {
         ("recebimentos-*.xml", "emendas-parlamentares-*.csv"),
     ),
     "servidores": _TipoDiscoverySpec("servidores", ("relacao-servidores*.json",)),
+    "servidores_camara": _TipoDiscoverySpec("servidores", ("servidores-camara-*.csv",)),
+    "salario_por_cargo_camara": _TipoDiscoverySpec("servidores", ("salarios-por-cargo-camara-*.csv",)),
     "contratos": _TipoDiscoverySpec(
         "administracao",
         ("*contrato*.xml",),
@@ -55,7 +57,7 @@ _DISCOVERY_SPECS: dict[str, _TipoDiscoverySpec] = {
 }
 
 # Tipos cujos arquivos nao carregam o ano no nome e por isso nao sao filtrados.
-_YEAR_FILTER_EXEMPT_TIPOS = frozenset({"eleitos", "servidores"})
+_YEAR_FILTER_EXEMPT_TIPOS = frozenset({"eleitos", "servidores", "salario_por_cargo_camara"})
 
 
 def _collect(data_dir: Path, subdir: str | None, patterns: tuple[str, ...]) -> list[Path]:
@@ -135,6 +137,14 @@ def discover_receitas_files(data_dir: Path, ano: int | None) -> list[Path]:
 
 def discover_servidores_files(data_dir: Path, ano: int | None) -> list[Path]:
     return discover_files_for_tipo(data_dir, "servidores", ano)
+
+
+def discover_servidores_camara_files(data_dir: Path, ano: int | None) -> list[Path]:
+    return discover_files_for_tipo(data_dir, "servidores_camara", ano)
+
+
+def discover_salario_por_cargo_camara_files(data_dir: Path, ano: int | None) -> list[Path]:
+    return discover_files_for_tipo(data_dir, "salario_por_cargo_camara", ano)
 
 
 def discover_transferencias_financeiras_files(
