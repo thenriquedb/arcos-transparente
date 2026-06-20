@@ -361,6 +361,8 @@ def test_hybrid_selector_prioriza_candidates_de_custo_de_evento() -> None:
         "Quanto foi gasto com CRAS em 2025?",
         "Quanto foi gasto com FUNDEB em 2025?",
         "Quanto foi gasto com FNAS em 2025?",
+        "Qual foi o gasto com limpeza urbana em 2026?",
+        "Quanto foi gasto com fmas em 2025?",
     ],
 )
 def test_hybrid_selector_prioriza_planejamento_para_merenda_e_aliases_comuns(
@@ -379,7 +381,6 @@ def test_hybrid_selector_prioriza_planejamento_para_merenda_e_aliases_comuns(
     assert selection.candidate_tool_names == (
         "agregar_planejamento",
         "consultar_planejamento",
-        "consultar_despesas",
     )
 
 
