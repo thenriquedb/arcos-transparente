@@ -10,6 +10,7 @@ from sqlalchemy import select
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
     predicate_filter,
@@ -229,6 +230,12 @@ def consultar_transferencias_financeiras(
 
     with session_manager.get_session() as session:
         registros = load_filtered_transferencias_financeiras(session, params.filtros)
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="transferencias_financeiras",
+            filters=params.filtros,
+            default_suggestion="Nenhum registro de transferencias financeiras encontrado com os filtros.",
+        )
         execution = execute_collection_lookup_result(
             registros,
             ordenar_por=params.ordenar_por,
@@ -236,7 +243,7 @@ def consultar_transferencias_financeiras(
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
-            empty_suggestion=("Nenhum registro de transferencias financeiras encontrado com os filtros."),
+            empty_suggestion=empty_suggestion,
         )
 
     metadata = ConsultarTransferenciasFinanceirasMetadata(

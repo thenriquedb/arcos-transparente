@@ -8,6 +8,7 @@ from sqlalchemy import select
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
     build_lookup_response,
@@ -157,6 +158,12 @@ def consultar_servidores(
             tie_breakers=(FolhaServidor.nome.asc(),),
             load_rows=lambda db_session, stmt: db_session.execute(stmt).scalars().all(),
         )
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="servidores",
+            filters=params.filtros,
+            default_suggestion="Nenhum servidor encontrado com os filtros informados.",
+        )
 
     metadata = ConsultarServidoresMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -172,7 +179,7 @@ def consultar_servidores(
     execution = LookupExecutionResult(
         total=total,
         rows=servidores,
-        suggestion=("Nenhum servidor encontrado com os filtros informados." if not servidores else None),
+        suggestion=(empty_suggestion if not servidores else None),
     )
     return build_lookup_response(
         response_type=ConsultarServidoresResponse,

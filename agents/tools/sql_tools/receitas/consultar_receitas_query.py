@@ -6,6 +6,7 @@ from typing import Any
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
     build_lookup_response,
@@ -118,6 +119,7 @@ def consultar_receitas(
     if isinstance(validated, dict):
         return validated
     params = validated
+    tipo_label = "arrecadacoes" if params.filtros.tipo_de_dado == "arrecadacao" else "lancamentos"
 
     with session_manager.get_session() as session:
         registros = load_filtered_receitas(session, params.filtros)
@@ -130,6 +132,12 @@ def consultar_receitas(
             sort_key_getters=SORT_FIELD_GETTERS,
             tie_breaker_getters=(lambda row: row.get("id") or 0,),
         )
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="receitas",
+            filters=params.filtros,
+            default_suggestion=f"Nenhum registro de {tipo_label} encontrado com os filtros.",
+        )
 
     metadata = ConsultarReceitasMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -140,11 +148,10 @@ def consultar_receitas(
         campos=params.campos or list(ALLOWED_RECEITA_FIELDS),
     )
 
-    tipo_label = "arrecadacoes" if params.filtros.tipo_de_dado == "arrecadacao" else "lancamentos"
     execution = LookupExecutionResult(
         total=total,
         rows=pagina,
-        suggestion=(f"Nenhum registro de {tipo_label} encontrado com os filtros." if not pagina else None),
+        suggestion=(empty_suggestion if not pagina else None),
     )
     return build_lookup_response(
         response_type=ConsultarReceitasResponse,

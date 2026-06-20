@@ -22,6 +22,7 @@ from .agregar_despesas_por_funcao_schema import (
     AgregarDespesasPorFuncaoResponse,
 )
 from .consultar_despesas_por_funcao_query import load_filtered_despesas_por_funcao
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 
 
 def _metric(registros: list[DespesaPorFuncao], metrica: str) -> Decimal | int:
@@ -146,6 +147,12 @@ def agregar_despesas_por_funcao(
 
     with session_manager.get_session() as session:
         registros = load_filtered_despesas_por_funcao(session, params.filtros)
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="despesas_por_funcao",
+            filters=params.filtros,
+            default_suggestion="Nenhum registro de despesas por funcao encontrado com os filtros.",
+        )
 
     metadata = AgregarDespesasPorFuncaoMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -168,7 +175,7 @@ def agregar_despesas_por_funcao(
         serialize_metric=_metric_to_json,
     )
     suggestion = (
-        "Nenhum registro de despesas por funcao encontrado com os filtros."
+        empty_suggestion
         if (
             (params.agrupar_por is None and execution.source_count == 0)
             or (params.agrupar_por is not None and not execution.rows)

@@ -356,7 +356,10 @@ def test_consultar_transferencias_financeiras_retorna_sugestao_sem_resultados(
 
     assert resultado["total"] == 0
     assert resultado["resultados"] == []
-    assert resultado["sugestao"] == "Nenhum registro de transferencias financeiras encontrado com os filtros."
+    assert resultado["sugestao"] == (
+        "Os arquivos-fonte de emendas parlamentares existem no ambiente, mas esse dominio ainda nao foi "
+        "importado no banco local. Reimporte a base SQLite antes de responder essa pergunta."
+    )
 
     session.close()
 

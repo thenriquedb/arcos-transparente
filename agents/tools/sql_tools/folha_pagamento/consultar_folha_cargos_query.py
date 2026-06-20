@@ -10,6 +10,7 @@ from sqlalchemy.orm import joinedload
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.validation import validate_tool_params
 from database import session as session_manager
 from database.models import FolhaCargo, FolhaPagamentoRegistro
@@ -184,6 +185,12 @@ def consultar_folha_cargos(
         resultados = [_row_to_public_dict(r) for r in pagina]
         if params.campos:
             resultados = [{k: v for k, v in row.items() if k in params.campos} for row in resultados]
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="folha_cargos",
+            filters=params.filtros,
+            default_suggestion="Nenhum registro de folha encontrado com os filtros.",
+        )
 
     metadata = ConsultarFolhaCargosMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -203,5 +210,5 @@ def consultar_folha_cargos(
         resultados=resultados,
         metadata=metadata,
         mensagem=mensagem,
-        sugestao=("Nenhum registro de folha encontrado com os filtros." if not resultados else None),
+        sugestao=(empty_suggestion if not resultados else None),
     ).model_dump(mode="json")

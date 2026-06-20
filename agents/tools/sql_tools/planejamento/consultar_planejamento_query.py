@@ -6,6 +6,7 @@ from typing import Any
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
     build_lookup_response,
@@ -137,6 +138,12 @@ def consultar_planejamento(
             sort_key_getters=SORT_FIELD_GETTERS,
             tie_breaker_getters=(lambda row: row.id,),
         )
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="planejamento",
+            filters=params.filtros,
+            default_suggestion="Nenhum registro de planejamento encontrado com os filtros.",
+        )
 
     metadata = ConsultarPlanejamentoMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -150,7 +157,7 @@ def consultar_planejamento(
     execution = LookupExecutionResult(
         total=total,
         rows=pagina,
-        suggestion=("Nenhum registro de planejamento encontrado com os filtros." if not pagina else None),
+        suggestion=(empty_suggestion if not pagina else None),
     )
     return build_lookup_response(
         response_type=ConsultarPlanejamentoResponse,
