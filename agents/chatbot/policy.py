@@ -76,6 +76,25 @@ _BUS_TYPE_REPLY_STEMS = (
     "gratuit",
     "rodoviari",
 )
+_TEMPORAL_CLARIFICATION_HINTS = (
+    "qual periodo",
+    "que periodo",
+    "qual ano",
+    "ano especifico",
+    "periodo prefere",
+    "periodo voce quer",
+    "periodo que voce quer",
+    "intervalo",
+    "recorte temporal",
+)
+_TEMPORAL_REPLY_PATTERN = re.compile(
+    r"^(?:"
+    r"(?:em\s+)?\d{4}|"
+    r"(?:de|entre)\s+\d{4}\s+(?:a|e)\s+\d{4}|"
+    r"(?:de\s+)?[a-zç]+\s+a\s+[a-zç]+\s+de\s+\d{4}|"
+    r"(?:primeiro|segundo|terceiro|quarto)\s+trimestre\s+de\s+\d{4}"
+    r")$"
+)
 
 
 class HistoryMessage(Protocol):
@@ -406,6 +425,8 @@ def _looks_like_public_clarification_prompt(content: str) -> bool:
         return False
     if _looks_like_bus_type_clarification_prompt(normalized_content):
         return True
+    if _looks_like_temporal_clarification_prompt(normalized_content):
+        return True
     return any(clarification_hint in normalized_content for clarification_hint in _PUBLIC_CLARIFICATION_HINTS)
 
 
@@ -448,6 +469,10 @@ def _looks_like_public_clarification_answer(
         normalized_reply
     ):
         return True
+    if _looks_like_temporal_clarification_prompt(normalized_clarification) and _reply_indicates_temporal_scope(
+        normalized_reply
+    ):
+        return True
 
     clarification_tokens = _content_tokens(normalized_clarification)
     return any(token in clarification_tokens for token in meaningful_reply_tokens)
@@ -462,6 +487,16 @@ def _reply_indicates_bus_type(normalized_reply: str) -> bool:
     """
 
     return any(stem in normalized_reply for stem in _BUS_TYPE_REPLY_STEMS)
+
+
+def _looks_like_temporal_clarification_prompt(normalized_clarification: str) -> bool:
+    return any(hint in normalized_clarification for hint in _TEMPORAL_CLARIFICATION_HINTS)
+
+
+def _reply_indicates_temporal_scope(normalized_reply: str) -> bool:
+    if re.search(r"\b\d{4}\b", normalized_reply) is None:
+        return False
+    return _TEMPORAL_REPLY_PATTERN.fullmatch(normalized_reply) is not None
 
 
 def _build_public_clarification_resolution(

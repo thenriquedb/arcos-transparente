@@ -523,13 +523,11 @@ def _select_planning_spend_query(
         [
             ToolName.AGREGAR_PLANEJAMENTO,
             ToolName.CONSULTAR_PLANEJAMENTO,
-            ToolName.CONSULTAR_DESPESAS,
         ]
         if aggregate_first
         else [
             ToolName.CONSULTAR_PLANEJAMENTO,
             ToolName.AGREGAR_PLANEJAMENTO,
-            ToolName.CONSULTAR_DESPESAS,
         ]
     )
     return _build_named_candidate_selection(

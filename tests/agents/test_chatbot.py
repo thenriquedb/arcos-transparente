@@ -1012,6 +1012,79 @@ def test_chatbot_application_permite_followup_de_ano_apos_clarificacao_de_diaria
     ]
 
 
+def test_policy_resolve_resposta_temporal_curta_apos_clarificacao_de_periodo() -> None:
+    decision = evaluate_deterministic_policy(
+        "2026",
+        history=[
+            ChatMessage(role="user", content="Quais foram os gastos com limpeza urbana?"),
+            ChatMessage(
+                role="assistant",
+                content=(
+                    "Para te responder certinho, preciso saber o período que você quer "
+                    "consultar sobre os gastos com limpeza urbana. Pode ser um ano "
+                    'específico ou intervalo, por exemplo, "em 2025" ou "de janeiro '
+                    'a março de 2026". Qual período prefere?'
+                ),
+            ),
+        ],
+    )
+
+    assert decision.action == "allow"
+    assert decision.resolved_question == (
+        "Quais foram os gastos com limpeza urbana?\n\n"
+        "Considere a seguinte preferencia ja informada pelo usuario para a "
+        "mesma pergunta: 2026"
+    )
+
+
+def test_chatbot_application_reancora_periodo_curto_em_planejamento() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver follow-up temporal de planejamento")
+
+    backend = SelectionAwareBackend()
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+    session = ChatSession(id="sessao-followup-planejamento-periodo")
+    session.history.extend(
+        [
+            ChatMessage(role="user", content="Quais foram os gastos com limpeza urbana?"),
+            ChatMessage(
+                role="assistant",
+                content=(
+                    "Para te responder certinho, preciso saber o período que você quer "
+                    "consultar sobre os gastos com limpeza urbana. Pode ser um ano "
+                    'específico ou intervalo, por exemplo, "em 2025" ou "de janeiro '
+                    'a março de 2026". Qual período prefere?'
+                ),
+            ),
+        ]
+    )
+    app = ChatbotApplication(
+        backend=backend,
+        session=session,
+        selector=selector,
+    )
+
+    resposta = app.ask("2026")
+    pergunta_resolvida = (
+        "Quais foram os gastos com limpeza urbana?\n\n"
+        "Considere a seguinte preferencia ja informada pelo usuario para a "
+        "mesma pergunta: 2026"
+    )
+
+    assert resposta.content == f"resposta para: {pergunta_resolvida}"
+    assert backend.calls == [(pergunta_resolvida, "sessao-followup-planejamento-periodo")]
+    assert backend.selection_calls == [
+        (
+            (
+                "consultar_planejamento",
+                "agregar_planejamento",
+            ),
+            "sessao-followup-planejamento-periodo",
+        )
+    ]
+    assert resposta.metadata["selection_reason_code"] == "heuristic_planning_program_spend_query"
+
+
 def test_chatbot_application_permite_confirmacao_curta_apos_clarificacao_publica() -> None:
     backend = FakeBackend()
     app = ChatbotApplication(

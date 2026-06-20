@@ -3,6 +3,7 @@ from __future__ import annotations
 from agents.nlu.extractors import (
     _extract_limit,
     _extract_planejamento_acao,
+    _extract_planejamento_area,
     _extract_planejamento_entidade,
     _extract_planejamento_fonte_recurso,
     _extract_planejamento_programa,
@@ -44,6 +45,23 @@ def test_extract_planejamento_programa_reconhece_aliases_comuns_da_base() -> Non
         _extract_planejamento_programa("quanto foi gasto com ensino universitario e profissionalizante em 2025?")
         == "ensino universitario e profissionalizante"
     )
+    assert _extract_planejamento_programa("quanto foi gasto com as acoes de saude fumusa em 2025?") == (
+        "promocao de acoes de saude"
+    )
+    assert _extract_planejamento_programa("quanto foi gasto com fmas em 2025?") == (
+        "fundo municipal de assistencia social"
+    )
+    assert _extract_planejamento_programa("quanto foi gasto com turismo em 2025?") == (
+        "cultura esporte lazer e turismo"
+    )
+    assert _extract_planejamento_programa("quanto foi gasto com meio ambiente em 2025?") == "meio ambiente"
+    assert _extract_planejamento_programa("quanto foi gasto com desenvolvimento sustentavel em 2025?") == (
+        "planejamento e desenvolvimento sustentavel"
+    )
+    assert _extract_planejamento_programa("quanto foi gasto com acoes judiciais em 2025?") == "acoes judiciais"
+    assert _extract_planejamento_programa("quanto foi gasto com acoes complementares de educacao em 2025?") == (
+        "acoes complementares de educacao"
+    )
 
 
 def test_extract_planejamento_acao_reconhece_aliases_comuns_da_base() -> None:
@@ -61,6 +79,17 @@ def test_extract_planejamento_acao_reconhece_aliases_comuns_da_base() -> None:
     assert _extract_planejamento_acao("quanto foi gasto com ifmg em 2025?") == "ifmg"
     assert _extract_planejamento_acao("quanto foi gasto com caixas escolares em 2025?") == "caixas escolares"
     assert _extract_planejamento_acao("quanto foi gasto com fundeb 70 em 2025?") == "fundeb 70"
+    assert _extract_planejamento_acao("quanto foi gasto com limpeza publica em 2025?") == "limpeza publica"
+    assert _extract_planejamento_acao("quanto foi gasto com servicos administrativos de saude em 2025?") == (
+        "servicos administrativos de saude"
+    )
+    assert _extract_planejamento_acao("quanto foi gasto com assistencia especializada em 2025?") == (
+        "assistencia especializada"
+    )
+    assert _extract_planejamento_acao("quanto foi gasto com transporte escolar em 2025?") == "transporte escolar"
+    assert _extract_planejamento_acao("quanto foi gasto com gestao e operacionalizacao do sus em 2025?") == (
+        "gestao e operacionalizacao do sus"
+    )
 
 
 def test_extract_planejamento_fonte_recurso_reconhece_aliases_comuns_da_base() -> None:
@@ -73,3 +102,8 @@ def test_extract_planejamento_fonte_recurso_reconhece_aliases_comuns_da_base() -
     assert _extract_planejamento_fonte_recurso("quanto foi gasto com fnas em 2025?") == (
         "fundo nacional de assistencia social"
     )
+
+
+def test_extract_planejamento_area_reconhece_aliases_comuns_da_base() -> None:
+    assert _extract_planejamento_area("quanto foi gasto com urbanismo em 2025?") == "urbanismo"
+    assert _extract_planejamento_area("quanto foi gasto com encargos especiais em 2025?") == "encargos especiais"

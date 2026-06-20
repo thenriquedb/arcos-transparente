@@ -6,6 +6,16 @@ from decimal import Decimal
 
 from sqlalchemy import select
 
+from agents.nlu.extractors.planejamento import (
+    _extract_planejamento_acao,
+    _extract_planejamento_area,
+    _extract_planejamento_fonte_recurso,
+    _extract_planejamento_programa,
+    get_planejamento_acao_search_terms,
+    get_planejamento_area_search_terms,
+    get_planejamento_fonte_recurso_search_terms,
+    get_planejamento_programa_search_terms,
+)
 from database.models import PlanejamentoDespesa
 from shared.planejamento_entidades import get_planejamento_entidade_search_terms
 from shared.utils.decimal_to_float import decimal_to_float
@@ -23,6 +33,35 @@ TEXT_FILTER_FIELDS = {
     "categoria_de_gasto": "categoria_economica_descricao",
     "fonte_recurso": "fonte_recurso_descricao",
 }
+
+TEXT_FILTER_SEARCH_TERMS = {
+    "area": get_planejamento_area_search_terms,
+    "programa": get_planejamento_programa_search_terms,
+    "acao": get_planejamento_acao_search_terms,
+    "fonte_recurso": get_planejamento_fonte_recurso_search_terms,
+}
+
+# Dimensões temáticas que têm dicionário de aliases próprio. Cada entrada liga o
+# nome do filtro público ao campo do modelo, ao extractor que reconhece o valor
+# canônico e ao getter que expande os termos de busca.
+ALIASED_TEXT_DIMENSIONS = (
+    ("area", "funcao", _extract_planejamento_area, get_planejamento_area_search_terms),
+    ("programa", "programa", _extract_planejamento_programa, get_planejamento_programa_search_terms),
+    ("acao", "descricao_acao", _extract_planejamento_acao, get_planejamento_acao_search_terms),
+    (
+        "fonte_recurso",
+        "fonte_recurso_descricao",
+        _extract_planejamento_fonte_recurso,
+        get_planejamento_fonte_recurso_search_terms,
+    ),
+)
+
+# Filtros temáticos que o agente costuma confundir entre si: um programa pode ser
+# informado como `area` ou `acao` (ex.: "limpeza urbana" é um *programa*, mas a
+# função orçamentária é "Urbanismo"). Para esses, o casamento reancora o valor no
+# campo canônico da dimensão a que ele realmente pertence, de modo que a consulta
+# encontre os dados independentemente da dimensão escolhida pelo agente.
+_CROSS_DIMENSION_FILTER_FIELDS = frozenset({"area", "programa", "acao"})
 
 ENTIDADE_TEXT_FIELDS = (
     "programa",
@@ -100,9 +139,60 @@ def matches_planejamento_text_filters(
 
     for filtro_nome, attr_name in TEXT_FILTER_FIELDS.items():
         query = getattr(filtros, filtro_nome)
-        if query and not matches_text_query(getattr(registro, attr_name), query):
+        if not query:
+            continue
+
+        targets = _resolve_text_filter_targets(filtro_nome, attr_name, query)
+        if not any(
+            matches_text_query(getattr(registro, field_name), search_term)
+            for field_name, search_terms in targets
+            for search_term in search_terms
+        ):
             return False
     return True
+
+
+def _resolve_text_filter_targets(
+    filtro_nome: str,
+    attr_name: str,
+    query: str,
+) -> list[tuple[str, tuple[str, ...]]]:
+    """Resolve um filtro de texto nos pares ``(campo, termos)`` a casar.
+
+    Sempre inclui o campo próprio do filtro. Para os filtros temáticos de
+    `_CROSS_DIMENSION_FILTER_FIELDS`, quando o valor informado não pertence à
+    própria dimensão mas é alias conhecido de outra (ex.: ``area="limpeza
+    urbana"`` sendo "limpeza urbana" um *programa*), reancora a busca no campo
+    canônico daquela dimensão. Quando o valor já é canônico da própria dimensão
+    (ex.: ``area="urbanismo"``), mantém apenas o campo próprio para preservar a
+    precisão do filtro.
+    """
+
+    search_term_getter = TEXT_FILTER_SEARCH_TERMS.get(filtro_nome)
+    own_terms = search_term_getter(query) if search_term_getter is not None else (query,)
+    targets: list[tuple[str, tuple[str, ...]]] = [(attr_name, own_terms)]
+
+    if filtro_nome not in _CROSS_DIMENSION_FILTER_FIELDS:
+        return targets
+
+    normalized_query = normalize_search_text(query)
+    if not normalized_query:
+        return targets
+
+    own_dimension = next(
+        (dimension for dimension in ALIASED_TEXT_DIMENSIONS if dimension[0] == filtro_nome),
+        None,
+    )
+    if own_dimension is not None and own_dimension[2](normalized_query) is not None:
+        return targets
+
+    for dim_name, dim_field, extractor, dim_getter in ALIASED_TEXT_DIMENSIONS:
+        if dim_name == filtro_nome:
+            continue
+        if extractor(normalized_query) is None:
+            continue
+        targets.append((dim_field, dim_getter(query)))
+    return targets
 
 
 def _canonical_rollup_value(value: object) -> object:

@@ -546,3 +546,257 @@ def test_agregar_planejamento_nao_dobra_totais_em_rollups_hierarquicos(monkeypat
     assert resultado["valor_total"] == 133819.88
 
     session.close()
+
+
+def test_consultar_planejamento_aceita_alias_de_programa_fmas(monkeypatch) -> None:
+    session = _build_session()
+    session.add(
+        _planejamento(
+            origem="prefeitura",
+            funcao="Assistência Social",
+            unidade_gestora="PREFEITURA MUNICIPAL",
+            orgao="SECRETARIA MUNICIPAL DE DESENVOLVIMENTO E INTEGRACAO SOCIAL",
+            unidade="SECRETARIA MUNICIPAL DE DESENVOLVIMENTO E INTEGRACAO SOCIAL",
+            programa="Fundo Municipal de Assistência Social",
+            mes="ABRIL",
+            mes_num=4,
+            subfuncao="Assistência Comunitária",
+            acao="Manutenção dos Serviços Administrativos Socioassistenciais",
+            grupo="OUTRAS DESPESAS CORRENTES",
+            orcamento_atualizado=Decimal("32000.00"),
+            valor_pago=Decimal("8450.00"),
+        )
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"ano": 2025, "programa": "fmas"},
+        campos=["programa", "acao", "valor_pago"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "programa": "Fundo Municipal de Assistência Social",
+            "acao": "Manutenção dos Serviços Administrativos Socioassistenciais",
+            "valor_pago": 8450.0,
+        }
+    ]
+
+    session.close()
+
+
+def test_consultar_planejamento_aceita_alias_de_programa_meio_ambiente(monkeypatch) -> None:
+    session = _build_session()
+    session.add(
+        _planejamento(
+            origem="prefeitura",
+            funcao="Gestão Ambiental",
+            unidade_gestora="PREFEITURA MUNICIPAL",
+            orgao="SECRETARIA MUNICIPAL DO MEIO AMBIENTE E AGRICULTURA",
+            unidade="SECRETARIA MUNICIPAL DO MEIO AMBIENTE E AGRICULTURA",
+            programa="Cuidados e Preservacao do Meio Ambiente",
+            mes="MAIO",
+            mes_num=5,
+            subfuncao="Preservação e Conservação Ambiental",
+            acao="Manutenção das Atividades Secretaria Meio Ambiente e Agropecuária",
+            grupo="OUTRAS DESPESAS CORRENTES",
+            orcamento_atualizado=Decimal("41000.00"),
+            valor_pago=Decimal("6200.00"),
+        )
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"ano": 2025, "programa": "meio ambiente"},
+        campos=["programa", "acao", "valor_pago"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "programa": "Cuidados e Preservacao do Meio Ambiente",
+            "acao": "Manutenção das Atividades Secretaria Meio Ambiente e Agropecuária",
+            "valor_pago": 6200.0,
+        }
+    ]
+
+    session.close()
+
+
+def test_consultar_planejamento_aceita_alias_de_acao_limpeza_publica(monkeypatch) -> None:
+    session = _build_session()
+    session.add(
+        _planejamento(
+            origem="prefeitura",
+            funcao="Urbanismo",
+            unidade_gestora="PREFEITURA MUNICIPAL",
+            orgao="SECRETARIA MUNICIPAL DE OBRAS E SERVICOS PUBLICOS",
+            unidade="SECRETARIA MUNICIPAL DE OBRAS E SERVICOS PUBLICOS",
+            programa="Programa de Limpeza Urbana",
+            mes="JUNHO",
+            mes_num=6,
+            subfuncao="Serviços Urbanos",
+            acao="Manutenção dos Serviços de Limpeza Pública",
+            grupo="OUTRAS DESPESAS CORRENTES",
+            orcamento_atualizado=Decimal("58000.00"),
+            valor_pago=Decimal("21102.46"),
+        )
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"ano": 2025, "acao": "limpeza publica"},
+        campos=["programa", "acao", "valor_pago"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "programa": "Programa de Limpeza Urbana",
+            "acao": "Manutenção dos Serviços de Limpeza Pública",
+            "valor_pago": 21102.46,
+        }
+    ]
+
+    session.close()
+
+
+def test_consultar_planejamento_filtra_por_area_urbanismo(monkeypatch) -> None:
+    session = _build_session()
+    session.add_all(
+        [
+            _planejamento(
+                origem="prefeitura",
+                funcao="Urbanismo",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="SECRETARIA MUNICIPAL DE OBRAS E SERVICOS PUBLICOS",
+                unidade="SECRETARIA MUNICIPAL DE OBRAS E SERVICOS PUBLICOS",
+                programa="Programa de Limpeza Urbana",
+                mes="JULHO",
+                mes_num=7,
+                subfuncao="Serviços Urbanos",
+                acao="Manutenção dos Serviços de Limpeza Pública",
+                grupo="OUTRAS DESPESAS CORRENTES",
+                orcamento_atualizado=Decimal("60000.00"),
+                valor_pago=Decimal("18000.00"),
+            ),
+            _planejamento(
+                origem="prefeitura",
+                funcao="Saúde",
+                unidade_gestora="PREFEITURA MUNICIPAL",
+                orgao="FUNDAÇÃO M. SAÚDE",
+                unidade="FUNDAÇÃO M. SAÚDE",
+                programa="Promoção das Ações de Saúde - FUMUSA",
+                mes="JULHO",
+                mes_num=7,
+                subfuncao="Atenção Básica",
+                acao="Manutenção da Atenção Primária à Saúde",
+                grupo="PESSOAL E ENCARGOS SOCIAIS",
+                orcamento_atualizado=Decimal("70000.00"),
+                valor_pago=Decimal("9000.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"ano": 2025, "area": "urbanismo"},
+        campos=["area", "programa", "acao"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "area": "Urbanismo",
+            "programa": "Programa de Limpeza Urbana",
+            "acao": "Manutenção dos Serviços de Limpeza Pública",
+        }
+    ]
+
+    session.close()
+
+
+def _limpeza_urbana_e_distrator_de_urbanismo() -> list[PlanejamentoDespesa]:
+    return [
+        _planejamento(
+            origem="prefeitura",
+            funcao="Urbanismo",
+            unidade_gestora="PREFEITURA MUNICIPAL",
+            orgao="SECRETARIA MUNICIPAL DE OBRAS E SERVICOS PUBLICOS",
+            unidade="SECRETARIA MUNICIPAL DE OBRAS E SERVICOS PUBLICOS",
+            programa="Programa de Limpeza Urbana",
+            mes="AGOSTO",
+            mes_num=8,
+            subfuncao="Serviços Urbanos",
+            acao="Manutenção dos Serviços de Limpeza Pública",
+            grupo="OUTRAS DESPESAS CORRENTES",
+            orcamento_atualizado=Decimal("60000.00"),
+            valor_pago=Decimal("18000.00"),
+        ),
+        _planejamento(
+            origem="prefeitura",
+            funcao="Urbanismo",
+            unidade_gestora="PREFEITURA MUNICIPAL",
+            orgao="SECRETARIA MUNICIPAL DE OBRAS E SERVICOS PUBLICOS",
+            unidade="SECRETARIA MUNICIPAL DE OBRAS E SERVICOS PUBLICOS",
+            programa="Programa de Infraestrutura Urbana e Rural",
+            mes="AGOSTO",
+            mes_num=8,
+            subfuncao="Infraestrutura Urbana",
+            acao="Manutenção de Vias Públicas",
+            grupo="OUTRAS DESPESAS CORRENTES",
+            orcamento_atualizado=Decimal("90000.00"),
+            valor_pago=Decimal("25000.00"),
+        ),
+    ]
+
+
+def test_consultar_planejamento_reancora_programa_informado_como_area(monkeypatch) -> None:
+    """`limpeza urbana` é um *programa*; mesmo informado como `area`, deve casar.
+
+    A função orçamentária dessas linhas é "Urbanismo", então um filtro literal por
+    área não encontraria nada. O termo é reancorado na dimensão canônica
+    (`programa`), sem arrastar as demais linhas de urbanismo.
+    """
+
+    session = _build_session()
+    session.add_all(_limpeza_urbana_e_distrator_de_urbanismo())
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.consultar_planejamento(
+        filtros={"ano": 2025, "area": "limpeza urbana"},
+        campos=["programa", "acao", "valor_pago"],
+    )
+
+    assert resultado["total"] == 1
+    assert resultado["resultados"] == [
+        {
+            "programa": "Programa de Limpeza Urbana",
+            "acao": "Manutenção dos Serviços de Limpeza Pública",
+            "valor_pago": 18000.0,
+        }
+    ]
+
+    session.close()
+
+
+def test_agregar_planejamento_reancora_programa_informado_como_acao(monkeypatch) -> None:
+    """Mesma reancoragem para `agregar_planejamento` quando o termo vem em `acao`."""
+
+    session = _build_session()
+    session.add_all(_limpeza_urbana_e_distrator_de_urbanismo())
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = planejamento_tools.agregar_planejamento(
+        filtros={"ano": 2025, "acao": "limpeza urbana"},
+        metrica="soma_valor_pago",
+    )
+
+    assert resultado["valor_total"] == 18000.0
