@@ -10,9 +10,6 @@ export function Header() {
         </a>
 
         <nav className="flex items-center gap-5 text-sm">
-          <a href="#sobre" className="text-white/80 hover:text-white">
-            Sobre
-          </a>
           <a
             href={LINK_GITHUB}
             target="_blank"

@@ -15,9 +15,7 @@ export function About() {
   return (
     <section id="sobre" className="bg-slate-50 py-24">
       <div className="mx-auto grid max-w-4xl items-center gap-10 px-5 sm:px-8 sm:grid-cols-[auto_1fr]">
-        <div className="flex h-32 w-32 items-center justify-center rounded-2xl bg-white ring-4 ring-primary/20">
-          <User className="h-14 w-14 text-primary" aria-hidden="true" />
-        </div>
+
         <div>
           <p className="text-sm font-bold uppercase tracking-widest text-primary">
             Sobre o projeto

@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  /* --- Institutional blue. Change these three lines to re-theme. --- */
-  --color-primary: 29 78 216; /* blue-700 */
+  
+  --color-primary: 41 30 93; /* blue-700 */
   --color-primary-hover: 30 64 175; /* ~10% darker, blue-800 */
   --color-primary-foreground: 255 255 255;
 
