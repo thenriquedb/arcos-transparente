@@ -34,6 +34,7 @@ def _metric_to_json(value: Decimal | int) -> float | int:
 
 
 GROUP_FIELD_GETTERS = {
+    "placa_veiculo": lambda r: r.placa_veiculo,
     "unidade_responsavel": lambda r: r.unidade_gestora,
     "tipo_veiculo": lambda r: r.tipo_veiculo,
     "situacao": lambda r: r.situacao_veiculo,
@@ -64,10 +65,12 @@ def _project_frota_group(
             "Qual tipo de veiculo tem maior custo de manutencao?",
             "Qual secretaria tem a frota mais cara de manter?",
             "Quais os 10 veiculos com maior gasto total?",
+            "Quais placas aparecem com mais despesas na frota?",
         ],
         hints=[
             "frota",
             "veiculo",
+            "placa",
             "ranking",
             "custo manutencao",
             "total despesas frota",
@@ -99,8 +102,9 @@ def agregar_frota(
             `marca`, `modelo`, `situacao`, `localizacao`,
             `data_aquisicao_inicio` e `data_aquisicao_fim`.
         agrupar_por: Campo opcional de agrupamento. Aceita
-            `unidade_responsavel`, `tipo_veiculo`, `situacao`, `localizacao`
-            ou `marca`. Se nao for informado, a tool retorna um `valor_total`.
+            `placa_veiculo`, `unidade_responsavel`, `tipo_veiculo`,
+            `situacao`, `localizacao` ou `marca`. Se nao for informado,
+            a tool retorna um `valor_total`.
         metrica: Metrica calculada. Aceita `contagem`, `soma_valor_atual` ou
             `soma_total_despesas`.
         ordenar_por: Aceita `metrica` ou o mesmo valor usado em `agrupar_por`.

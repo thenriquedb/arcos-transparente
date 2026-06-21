@@ -123,3 +123,64 @@ def test_consultar_frota_filtra_por_placa(monkeypatch) -> None:
     ]
 
     session.close()
+
+
+def test_agregar_frota_agrupa_por_placa_com_total_de_despesas(monkeypatch) -> None:
+    session = _build_session()
+    caminhao = FrotaVeiculo(
+        codigo_veiculo="1",
+        placa_veiculo="ABC-1234",
+        unidade_gestora="PREFEITURA MUNICIPAL",
+        tipo_veiculo="CAMINHAO",
+    )
+    passeio = FrotaVeiculo(
+        codigo_veiculo="2",
+        placa_veiculo="DEF-5678",
+        unidade_gestora="PREFEITURA MUNICIPAL",
+        tipo_veiculo="AUTOMOVEL",
+    )
+    session.add_all([caminhao, passeio])
+    session.flush()
+    session.add_all(
+        [
+            FrotaDespesa(
+                veiculo_id=caminhao.id,
+                descricao_evento="Abastecimento",
+                valor_lancamento=Decimal("500.00"),
+                total_despesa=Decimal("500.00"),
+            ),
+            FrotaDespesa(
+                veiculo_id=caminhao.id,
+                descricao_evento="Manutencao",
+                valor_lancamento=Decimal("700.00"),
+                total_despesa=Decimal("700.00"),
+            ),
+            FrotaDespesa(
+                veiculo_id=passeio.id,
+                descricao_evento="Abastecimento",
+                valor_lancamento=Decimal("300.00"),
+                total_despesa=Decimal("300.00"),
+            ),
+        ]
+    )
+    session.commit()
+    _patch_session(monkeypatch, session)
+
+    resultado = frotas_tools.agregar_frota(
+        agrupar_por="placa",
+        metrica="soma_total_despesas",
+    )
+
+    assert resultado["total_grupos"] == 2
+    assert resultado["resultados"] == [
+        {
+            "placa_veiculo": "ABC-1234",
+            "soma_total_despesas": 1200.0,
+        },
+        {
+            "placa_veiculo": "DEF-5678",
+            "soma_total_despesas": 300.0,
+        },
+    ]
+
+    session.close()
