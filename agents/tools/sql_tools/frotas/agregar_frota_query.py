@@ -7,6 +7,7 @@ from typing import Any
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
     build_aggregate_response,
@@ -144,6 +145,12 @@ def agregar_frota(
     # Aggregate inside session so lazy-loaded despesas relationship is accessible.
     with session_manager.get_session() as session:
         registros = load_filtered_frota(session, params.filtros)
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="frota",
+            filters=params.filtros,
+            default_suggestion="Nenhum veiculo de frota encontrado com os filtros.",
+        )
         execution = execute_collection_aggregate(
             registros,
             agrupar_por=params.agrupar_por,
@@ -165,7 +172,7 @@ def agregar_frota(
         limite=params.limite,
     )
     suggestion = (
-        "Nenhum veiculo de frota encontrado com os filtros."
+        empty_suggestion
         if (
             (params.agrupar_por is None and execution.source_count == 0)
             or (params.agrupar_por is not None and not execution.rows)

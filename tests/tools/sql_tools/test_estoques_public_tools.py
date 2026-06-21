@@ -34,6 +34,17 @@ def _patch_session(monkeypatch, session) -> None:
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
 
 
+def _patch_session_with_close(monkeypatch, session) -> None:
+    @contextmanager
+    def fake_get_session():
+        try:
+            yield session
+        finally:
+            session.close()
+
+    monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+
 def _seed_estoques(session) -> None:
     alcool = EstoqueMaterial(
         arquivo_origem="estoque-prefeitura-2025.xml",
@@ -384,3 +395,38 @@ def test_consultar_movimentacoes_de_estoque_lista_por_almoxarifado(monkeypatch) 
     assert resultado["total"] == 3
 
     session.close()
+
+
+def test_consultar_movimentacoes_de_estoque_funciona_apos_fechamento_da_sessao(monkeypatch) -> None:
+    session = _build_session()
+    _seed_estoques(session)
+    _patch_session_with_close(monkeypatch, session)
+
+    resultado = estoques_tools.consultar_movimentacoes_de_estoque(
+        filtros={"almoxarifado": "saude", "ano": 2025},
+        campos=["material", "almoxarifado", "valor_total"],
+    )
+
+    assert resultado["total"] == 3
+    assert resultado["resultados"][0]["material"] == "LUVA DESCARTAVEL"
+
+
+def test_agregar_estoques_movimentacoes_funciona_apos_fechamento_da_sessao(monkeypatch) -> None:
+    session = _build_session()
+    _seed_estoques(session)
+    _patch_session_with_close(monkeypatch, session)
+
+    resultado = estoques_tools.agregar_estoques(
+        filtros={"almoxarifado": "saude", "ano": 2025},
+        agrupar_por="material",
+        metrica="soma_movimentacao_quantidade",
+    )
+
+    assert resultado["total_grupos"] == 1
+    assert resultado["resultados"] == [
+        {
+            "material": "LUVA DESCARTAVEL",
+            "soma_movimentacao_quantidade": 18.0,
+            "soma_movimentacao_valor": 72.0,
+        }
+    ]

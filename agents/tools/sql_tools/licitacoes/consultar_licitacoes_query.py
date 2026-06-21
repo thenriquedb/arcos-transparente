@@ -9,6 +9,7 @@ from sqlalchemy.orm import selectinload
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.lookup import (
     LookupExecutionResult,
     build_lookup_response,
@@ -287,6 +288,12 @@ def consultar_licitacoes(
             valor_total_estimado = session.execute(
                 select(func.coalesce(func.sum(total_subquery.c.valor_estimado), 0))
             ).scalar_one()
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="licitacoes",
+            filters=params.filtros,
+            default_suggestion=_SUGESTAO_SEM_RESULTADOS,
+        )
 
     metadata = ConsultarLicitacoesMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -302,7 +309,7 @@ def consultar_licitacoes(
         total=total,
         rows=licitacoes,
         response_updates={"valor_total_estimado": _valor_total_estimado_to_json(valor_total_estimado)},
-        suggestion=_SUGESTAO_SEM_RESULTADOS if not licitacoes else None,
+        suggestion=empty_suggestion if not licitacoes else None,
     )
     return build_lookup_response(
         response_type=ConsultarLicitacoesResponse,

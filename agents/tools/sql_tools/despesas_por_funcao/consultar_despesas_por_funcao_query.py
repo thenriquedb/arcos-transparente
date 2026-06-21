@@ -9,6 +9,7 @@ from sqlalchemy import select
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
     equals_filter,
@@ -206,6 +207,12 @@ def consultar_despesas_por_funcao(
 
     with session_manager.get_session() as session:
         registros = load_filtered_despesas_por_funcao(session, params.filtros)
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="despesas_por_funcao",
+            filters=params.filtros,
+            default_suggestion="Nenhum registro de despesas por funcao encontrado com os filtros.",
+        )
         execution = execute_collection_lookup_result(
             registros,
             ordenar_por=params.ordenar_por,
@@ -213,7 +220,7 @@ def consultar_despesas_por_funcao(
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
-            empty_suggestion=("Nenhum registro de despesas por funcao encontrado com os filtros."),
+            empty_suggestion=empty_suggestion,
         )
 
     campos_retorno = params.campos or list(DEFAULT_DESPESAS_POR_FUNCAO_FIELDS)

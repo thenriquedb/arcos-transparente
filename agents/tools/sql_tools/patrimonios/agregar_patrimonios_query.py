@@ -7,6 +7,7 @@ from typing import Any
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
     build_aggregate_response,
@@ -151,6 +152,12 @@ def agregar_patrimonios(
 
     with session_manager.get_session() as session:
         registros = load_filtered_patrimonios(session, params.filtros)
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="patrimonios",
+            filters=params.filtros,
+            default_suggestion="Nenhum bem patrimonial encontrado com os filtros.",
+        )
 
     metadata = AgregarPatrimoniosMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -173,7 +180,7 @@ def agregar_patrimonios(
         serialize_metric=_metric_to_json,
     )
     suggestion = (
-        "Nenhum bem patrimonial encontrado com os filtros."
+        empty_suggestion
         if (
             (params.agrupar_por is None and execution.source_count == 0)
             or (params.agrupar_por is not None and not execution.rows)

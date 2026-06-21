@@ -6,9 +6,11 @@ from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.filtering import (
     apply_declared_filters,
     equals_filter,
@@ -74,7 +76,11 @@ def load_filtered_estoque_movimentacoes(
 ) -> list[EstoqueMovimentacao]:
     """Carrega movimentações de estoque aplicando os filtros declarados."""
 
-    registros = list(session.execute(select(EstoqueMovimentacao)).scalars())
+    registros = list(
+        session.execute(
+            select(EstoqueMovimentacao).options(joinedload(EstoqueMovimentacao.estoque_material))
+        ).scalars()
+    )
     return apply_declared_filters(registros, filtros, _MOVIMENTACOES_FILTER_CONDITIONS)
 
 
@@ -165,6 +171,12 @@ def consultar_movimentacoes_de_estoque(
 
     with session_manager.get_session() as session:
         registros = load_filtered_estoque_movimentacoes(session, params.filtros)
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="estoques_movimentacoes",
+            filters=params.filtros,
+            default_suggestion="Nenhuma movimentacao de estoque encontrada com os filtros.",
+        )
         execution = execute_collection_lookup_result(
             registros,
             ordenar_por=params.ordenar_por,
@@ -172,7 +184,7 @@ def consultar_movimentacoes_de_estoque(
             offset=params.offset,
             limite=params.limite,
             sort_key_getters=SORT_FIELD_GETTERS,
-            empty_suggestion=("Nenhuma movimentacao de estoque encontrada com os filtros."),
+            empty_suggestion=empty_suggestion,
         )
 
     metadata = ConsultarMovimentacoesDeEstoqueMetadata(

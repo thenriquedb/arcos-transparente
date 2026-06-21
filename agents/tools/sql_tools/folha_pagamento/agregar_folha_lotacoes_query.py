@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
     build_aggregate_response,
@@ -159,6 +160,12 @@ def agregar_folha_lotacoes(
     metric_expression = _build_metric_expression(params.metrica)
 
     with session_manager.get_session() as session:
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="folha_lotacoes",
+            filters=params.filtros,
+            default_suggestion="Nenhum registro de folha encontrado com os filtros.",
+        )
         metadata = AgregarFolhaLotacoesMetadata(
             filtros_aplicados=params.filtros.to_metadata_dict(),
             agrupar_por=params.agrupar_por,
@@ -186,7 +193,7 @@ def agregar_folha_lotacoes(
                 execution=AggregateExecutionResult(
                     valor_total=decimal_or_int_to_json(valor_total),
                     source_count=total_match,
-                    suggestion=("Nenhum registro de folha encontrado com os filtros." if total_match == 0 else None),
+                    suggestion=(empty_suggestion if total_match == 0 else None),
                 ),
             )
 
@@ -226,7 +233,7 @@ def agregar_folha_lotacoes(
             rows=rows,
             valor_total=decimal_or_int_to_json(valor_total),
             source_count=total_match,
-            suggestion=("Nenhuma lotacao encontrada com os filtros informados." if not rows else None),
+            suggestion=(empty_suggestion if not rows else None),
         ),
         item_model=AgregacaoFolhaLotacoesItem,
         agrupar_por=params.agrupar_por,

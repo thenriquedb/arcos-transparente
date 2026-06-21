@@ -10,6 +10,7 @@ from sqlalchemy import select
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.projection import project_public_rows
 from database import session as session_manager
 from database.models import Eleito
@@ -249,6 +250,12 @@ def consultar_eleitos(
         ordenados = _sort_eleitos(registros, params.ordenar_por, params.ordem)
         pagina = ordenados[params.offset : params.offset + params.limite]
         resultados = _project_eleitos(pagina, params.campos)
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="eleitos",
+            filters=params.filtros,
+            default_suggestion="Nenhum politico eleito encontrado com os filtros.",
+        )
 
     metadata = ConsultarEleitosMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -264,7 +271,7 @@ def consultar_eleitos(
             total=0,
             resultados=[],
             metadata=metadata,
-            sugestao="Nenhum politico eleito encontrado com os filtros.",
+            sugestao=empty_suggestion,
         ).model_dump(mode="json")
 
     mensagem = None

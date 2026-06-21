@@ -8,6 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import agents.tools.sql_tools.despesas_por_funcao as despesas_por_funcao_tools
+import agents.tools.sql_tools.shared.empty_state as empty_state_module
 from agents.tools import registry as tools_registry
 from database import session as session_manager
 from database.models import Base, DespesaPorFuncao
@@ -31,6 +32,12 @@ def _patch_session(monkeypatch, session) -> None:
         yield session
 
     monkeypatch.setattr(session_manager, "get_session", fake_get_session)
+
+
+def _write_despesas_por_funcao_source_file(tmp_path, filename: str) -> None:
+    relatorio_dir = tmp_path / "despesas" / "despesas-por-funcao"
+    relatorio_dir.mkdir(parents=True, exist_ok=True)
+    (relatorio_dir / filename).write_text("placeholder", encoding="utf-8")
 
 
 def test_consultar_despesas_por_funcao_lista_por_funcao(monkeypatch) -> None:
@@ -163,6 +170,48 @@ def test_consultar_despesas_por_funcao_preserva_mensagem_de_paginacao(
 
     assert resultado["total"] == 2
     assert resultado["mensagem"] == "Mostrando 1 de 2 registros encontrados."
+
+    session.close()
+
+
+def test_consultar_despesas_por_funcao_explica_quando_fonte_existe_mas_dominio_nao_foi_importado(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    session = _build_session()
+    _patch_session(monkeypatch, session)
+    _write_despesas_por_funcao_source_file(tmp_path, "despesas-por-funcao-prefeitura-2025.csv")
+    monkeypatch.setattr(empty_state_module, "get_cli_data_directory", lambda: tmp_path)
+
+    resultado = despesas_por_funcao_tools.consultar_despesas_por_funcao(
+        filtros={"ano": 2025, "origem": "prefeitura", "funcao": "saude"},
+    )
+
+    assert resultado["total"] == 0
+    assert resultado["sugestao"] == (
+        "Os arquivos-fonte de despesas por funcao para 2025 e origem prefeitura existem no ambiente, "
+        "mas esse dominio ainda nao foi importado no banco local. Reimporte a base SQLite antes de "
+        "responder essa pergunta."
+    )
+
+    session.close()
+
+
+def test_consultar_despesas_por_funcao_mantem_sugestao_padrao_sem_arquivo_fonte_correspondente(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    session = _build_session()
+    _patch_session(monkeypatch, session)
+    _write_despesas_por_funcao_source_file(tmp_path, "despesas-por-funcao-prefeitura-2025.csv")
+    monkeypatch.setattr(empty_state_module, "get_cli_data_directory", lambda: tmp_path)
+
+    resultado = despesas_por_funcao_tools.consultar_despesas_por_funcao(
+        filtros={"ano": 2030, "origem": "prefeitura", "funcao": "saude"},
+    )
+
+    assert resultado["total"] == 0
+    assert resultado["sugestao"] == "Nenhum registro de despesas por funcao encontrado com os filtros."
 
     session.close()
 
@@ -331,5 +380,29 @@ def test_agregar_despesas_por_funcao_total_anual(monkeypatch) -> None:
     )
 
     assert resultado["valor_total"] == 550000.0
+
+    session.close()
+
+
+def test_agregar_despesas_por_funcao_explica_quando_fonte_existe_mas_dominio_nao_foi_importado(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    session = _build_session()
+    _patch_session(monkeypatch, session)
+    _write_despesas_por_funcao_source_file(tmp_path, "despesas-por-funcao-prefeitura-2025.csv")
+    monkeypatch.setattr(empty_state_module, "get_cli_data_directory", lambda: tmp_path)
+
+    resultado = despesas_por_funcao_tools.agregar_despesas_por_funcao(
+        filtros={"ano": 2025, "origem": "prefeitura", "funcao": "saude"},
+        metrica="soma_valor_pago",
+    )
+
+    assert resultado["valor_total"] == 0
+    assert resultado["sugestao"] == (
+        "Os arquivos-fonte de despesas por funcao para 2025 e origem prefeitura existem no ambiente, "
+        "mas esse dominio ainda nao foi importado no banco local. Reimporte a base SQLite antes de "
+        "responder essa pergunta."
+    )
 
     session.close()

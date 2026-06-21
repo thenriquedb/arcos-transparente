@@ -6,6 +6,7 @@ from typing import Any
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
     build_aggregate_response,
@@ -139,6 +140,12 @@ def agregar_quadro_pessoal(
 
     with session_manager.get_session() as session:
         registros = load_filtered_quadro_pessoal(session, params.filtros)
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="quadro_pessoal",
+            filters=params.filtros,
+            default_suggestion="Nenhum registro de quadro de pessoal encontrado.",
+        )
 
     metadata = AgregarQuadroPessoalMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -161,7 +168,7 @@ def agregar_quadro_pessoal(
         serialize_metric=lambda value: value,
     )
     suggestion = (
-        "Nenhum registro de quadro de pessoal encontrado."
+        empty_suggestion
         if (
             (params.agrupar_por is None and execution.source_count == 0)
             or (params.agrupar_por is not None and not execution.rows)

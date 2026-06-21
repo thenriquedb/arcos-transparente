@@ -6,6 +6,7 @@ from typing import Any
 
 from agents.tools.names import ToolName
 from agents.tools.registry import PUBLIC_SCOPE, register, routing_metadata
+from agents.tools.sql_tools.shared.empty_state import resolve_empty_result_suggestion
 from agents.tools.sql_tools.shared.aggregate import (
     AggregateExecutionResult,
     build_aggregate_response,
@@ -127,6 +128,12 @@ def agregar_planejamento(
 
     with session_manager.get_session() as session:
         registros = load_filtered_planejamentos(session, params.filtros)
+        empty_suggestion = resolve_empty_result_suggestion(
+            session,
+            domain_key="planejamento",
+            filters=params.filtros,
+            default_suggestion="Nenhum registro de planejamento encontrado com os filtros.",
+        )
 
     metadata = AgregarPlanejamentoMetadata(
         filtros_aplicados=params.filtros.to_metadata_dict(),
@@ -149,7 +156,7 @@ def agregar_planejamento(
         serialize_metric=metric_to_json,
     )
     suggestion = (
-        "Nenhum registro de planejamento encontrado com os filtros."
+        empty_suggestion
         if (
             (params.agrupar_por is None and execution.source_count == 0)
             or (params.agrupar_por is not None and not execution.rows)
