@@ -17,11 +17,18 @@ from .consultar_frota_schema import (
 
 
 ALLOWED_FROTA_GROUP_FIELDS = {
+    "placa_veiculo",
     "unidade_responsavel",
     "tipo_veiculo",
     "situacao",
     "localizacao",
     "marca",
+}
+FROTA_GROUP_FIELD_ALIASES = {
+    "placa": "placa_veiculo",
+    "placa do veiculo": "placa_veiculo",
+    "veiculo": "placa_veiculo",
+    "veiculos": "placa_veiculo",
 }
 ALLOWED_FROTA_AGGREGATE_METRICS = {
     "contagem",
@@ -51,6 +58,7 @@ class AgregarFrotaParams(SqlToolBaseSchema):
         normalized = clean_text(value)
         if normalized is None:
             return None
+        normalized = FROTA_GROUP_FIELD_ALIASES.get(normalized, normalized)
         if normalized not in ALLOWED_FROTA_GROUP_FIELDS:
             raise ValueError(f"agrupar_por nao suportado: {normalized}")
         return normalized
