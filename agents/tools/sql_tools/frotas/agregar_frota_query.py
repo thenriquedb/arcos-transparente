@@ -51,8 +51,7 @@ def _build_vehicle_group_details(veiculo: FrotaVeiculo) -> dict[str, Any]:
 
 def _build_group_projector(registros: list[FrotaVeiculo]):
     vehicle_details_by_plate = {
-        _vehicle_group_key(registro, "placa_veiculo"): _build_vehicle_group_details(registro)
-        for registro in registros
+        _vehicle_group_key(registro, "placa_veiculo"): _build_vehicle_group_details(registro) for registro in registros
     }
 
     def project_group(
