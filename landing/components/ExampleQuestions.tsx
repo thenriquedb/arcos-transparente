@@ -10,51 +10,51 @@ const categories: {
   themes: string[];
   questions: string[];
 }[] = [
-  {
-    icon: Banknote,
-    title: "Dinheiro público",
-    themes: ["Gastos", "Receitas", "Contratos", "Licitações"],
-    questions: [
-      "Quanto a prefeitura gastou com saúde em 2025?",
-      "Quais foram os maiores contratos do ano?",
-      "Quem ganhou a licitação 147/2025?",
-      "Quanto a prefeitura arrecadou em 2025?",
-    ],
-  },
-  {
-    icon: Users,
-    title: "Pessoas e salários",
-    themes: ["Salários", "Servidores", "Câmara", "Prefeitura"],
-    questions: [
-      "Qual foi o salário do prefeito em março de 2025?",
-      "Quais são os maiores salários do município?",
-      "Quantas pessoas trabalham na saúde?",
-      "Quais são os cargos e salários da Câmara?",
-    ],
-  },
-  {
-    icon: Truck,
-    title: "Bens, frota e operação",
-    themes: ["Frota", "Patrimônio", "Almoxarifado", "Diárias"],
-    questions: [
-      "Quais veículos da prefeitura mais gastam com manutenção?",
-      "Quanto foi gasto com diárias em 2025?",
-      "Quais bens a prefeitura tem registrados?",
-      "O que tem no estoque do almoxarifado?",
-    ],
-  },
-  {
-    icon: Bus,
-    title: "Serviços e cidade",
-    themes: ["Telefones úteis", "Ônibus", "Secretarias"],
-    questions: [
-      "Qual é o telefone da Secretaria de Saúde?",
-      "Quais são os horários de ônibus?",
-      "Como funciona a tarifa zero?",
-      "Onde encontro os contatos da prefeitura?",
-    ],
-  },
-];
+    {
+      icon: Banknote,
+      title: "Dinheiro público",
+      themes: ["Gastos", "Receitas", "Contratos", "Licitações"],
+      questions: [
+        "Quanto a prefeitura gastou com saúde em 2025?",
+        "Quais foram os maiores contratos do ano?",
+        "Quais empresas mais receberam dinheiro da prefeitura?",
+        "Quanto a prefeitura arrecadou em 2025?",
+      ],
+    },
+    {
+      icon: Users,
+      title: "Servidores e salários",
+      themes: ["Salários", "Servidores", "Câmara", "Prefeitura"],
+      questions: [
+        "Qual foi o salário do prefeito em março de 2025?",
+        "Quais são os maiores salários do município?",
+        "Quais foram os maiores pagamentos de diárias do ano?",
+        "Quais são os cargos e salários da Câmara?",
+      ],
+    },
+    {
+      icon: Truck,
+      title: "Bens, frota e operação",
+      themes: ["Frota", "Patrimônio", "Almoxarifado", "Diárias"],
+      questions: [
+        "Quais veículos da prefeitura mais gastam com manutenção?",
+        "Quanto foi gasto com diárias em 2025?",
+        "Quais bens a prefeitura tem registrados?",
+        "O que tem no estoque do almoxarifado?",
+      ],
+    },
+    {
+      icon: Bus,
+      title: "Serviços e cidade",
+      themes: ["Telefones úteis", "Ônibus", "Secretarias"],
+      questions: [
+        "Qual é o telefone da Secretaria de Saúde?",
+        "Quais são os horários de ônibus?",
+        "Como funciona a tarifa zero?",
+        "Onde encontro os contatos da prefeitura?",
+      ],
+    },
+  ];
 
 function QuestionButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -81,9 +81,8 @@ function QuestionButton({ text }: { text: string }) {
       </span>
       <span className="flex-1">{text}</span>
       <span
-        className={`shrink-0 text-xs font-semibold text-primary transition-opacity ${
-          copied ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-        }`}
+        className={`shrink-0 text-xs font-semibold text-primary transition-opacity ${copied ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`}
       >
         {copied ? "Copiado!" : "Copiar"}
       </span>

@@ -27,3 +27,9 @@ build/
 
 .env
 vector_store/
+
+# Landing page
+node_modules/
+dist/
+build/
+*.log
