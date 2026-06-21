@@ -219,6 +219,40 @@ def test_hybrid_selector_prioriza_ranking_de_maiores_contratos() -> None:
     assert selection.candidate_tool_names == ("consultar_contratos",)
 
 
+def test_hybrid_selector_prioriza_agregacao_de_despesas_da_frota() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria resolver gastos da frota")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quais os principais gastos dos veiculos da prefeitura?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_frota_spend_query"
+    assert selection.candidate_tool_names == ("agregar_despesas_frota",)
+
+
+def test_hybrid_selector_preserva_ranking_de_veiculos_que_mais_gastaram() -> None:
+    def _runner_nao_deve_ser_chamado(*_args, **_kwargs):
+        raise AssertionError("heuristica deveria preservar ranking de veiculos")
+
+    selector = HybridToolSelector(runner=_runner_nao_deve_ser_chamado)
+
+    selection = selector.select(
+        "Quais veiculos da prefeitura mais gastaram com manutencao?",
+        history=[],
+    )
+
+    assert selection.action == "allow"
+    assert selection.used_fallback is False
+    assert selection.reason_code == "heuristic_frota_vehicle_spend_ranking"
+    assert selection.candidate_tool_names == ("agregar_frota",)
+
+
 @pytest.mark.parametrize(
     "pergunta",
     [

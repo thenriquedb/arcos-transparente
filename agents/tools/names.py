@@ -93,6 +93,7 @@ class ToolName(StrEnum):
 
     # Despesas por veículo de frota
     CONSULTAR_DESPESAS_FROTA = "consultar_despesas_frota"
+    AGREGAR_DESPESAS_FROTA = "agregar_despesas_frota"
 
     # Eleitos
     CONSULTAR_ELEITOS = "consultar_eleitos"

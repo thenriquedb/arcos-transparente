@@ -85,6 +85,8 @@ _SPEND_AGGREGATION_TERMS = (
     "soma",
     "ranking",
     "rankings",
+    "principal",
+    "principais",
     "comparacao",
     "comparacoes",
     "comparativo",
@@ -137,6 +139,43 @@ _SERVIDOR_AGGREGATE_SIGNALS = (
     "por lotacao",
     "por secretaria",
     "massa salarial",
+)
+_FROTA_DOMAIN_TERMS = (
+    "frota",
+    "veiculo",
+    "veiculos",
+    "placa",
+    "placas",
+    "onibus",
+    "ambulancia",
+    "van",
+    "retroescavadeira",
+    "caminhao",
+)
+_FROTA_VEHICLE_RANKING_CUES = (
+    "quais veiculos",
+    "veiculos que mais",
+    "veiculos mais",
+    "placas que mais",
+    "placas com mais",
+    "tipo de veiculo",
+    "tipos de veiculo",
+)
+_FROTA_EXPENSE_QUERY_CUES = (
+    "gastos dos veiculos",
+    "gastos dos veiculos da prefeitura",
+    "gastos com a frota",
+    "gastos da frota",
+    "despesas dos veiculos",
+    "despesas dos veiculos da prefeitura",
+    "despesas da frota",
+    "despesas com a frota",
+    "manutencao da frota",
+    "combustivel da frota",
+    "tipos de gasto",
+    "tipos de despesa",
+    "principais gastos",
+    "principais despesas",
 )
 
 
@@ -449,6 +488,9 @@ def _select_with_heuristics(
         estoques_selection = _select_estoques_query_with_router(question)
         if estoques_selection is not None:
             return estoques_selection
+        frota_spend_selection = _select_frota_spend_query(question)
+        if frota_spend_selection is not None:
+            return frota_spend_selection
         servidor_cross_search_selection = _select_servidor_cross_search(question)
         if servidor_cross_search_selection is not None:
             return servidor_cross_search_selection
@@ -698,6 +740,34 @@ def _select_estoques_query_with_router(
         [tool_name],
         reason_code="heuristic_estoques_query",
     )
+
+
+def _select_frota_spend_query(
+    question: str,
+) -> HybridToolSelection | None:
+    normalized_question = normalize_conversation_text(question)
+    if not normalized_question:
+        return None
+    if not _has_any_term(normalized_question, _FROTA_DOMAIN_TERMS):
+        return None
+    if not any(signal in normalized_question for signal in _EVENT_SPEND_SIGNAL_TERMS):
+        return None
+    if any(cue in normalized_question for cue in _FROTA_VEHICLE_RANKING_CUES):
+        return _build_named_candidate_selection(
+            [ToolName.AGREGAR_FROTA],
+            reason_code="heuristic_frota_vehicle_spend_ranking",
+        )
+    if any(cue in normalized_question for cue in _FROTA_EXPENSE_QUERY_CUES):
+        tool_name = (
+            ToolName.AGREGAR_DESPESAS_FROTA
+            if _is_explicit_aggregate_spend_request(normalized_question)
+            else ToolName.CONSULTAR_DESPESAS_FROTA
+        )
+        return _build_named_candidate_selection(
+            [tool_name],
+            reason_code="heuristic_frota_spend_query",
+        )
+    return None
 
 
 def _select_servidor_cross_search(
