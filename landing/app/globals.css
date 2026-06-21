@@ -4,8 +4,8 @@
 
 :root {
   
-  --color-primary: 41 30 93; /* blue-700 */
-  --color-primary-hover: 30 64 175; /* ~10% darker, blue-800 */
+  --color-primary: 29 78 216; /* blue-700 (#1d4ed8) */
+  --color-primary-hover: 30 64 175; /* blue-800 (#1e40af), darker on hover */
   --color-primary-foreground: 255 255 255;
 
   --color-surface: 255 255 255;

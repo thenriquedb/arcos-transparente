@@ -183,7 +183,8 @@ export function ChatSimulation() {
   return (
     <div
       ref={rootRef}
-      aria-label="Demonstração do assistente"
+      role="group"
+      aria-label="Demonstração ilustrativa do assistente"
       className="w-full overflow-hidden rounded-2xl border border-slate-200 bg-surface-subtle shadow-xl"
     >
       {/* Chat header */}
@@ -200,9 +201,10 @@ export function ChatSimulation() {
         </div>
       </div>
 
-      {/* Messages */}
+      {/* Messages — decorative animation; hidden from assistive tech to avoid
+          flooding it with the per-character typewriter updates. */}
       <div
-        aria-live="polite"
+        aria-hidden="true"
         className="flex max-h-[320px] flex-col gap-3 overflow-y-auto p-4 md:max-h-none md:min-h-[360px]"
       >
         {showUserBubble && (
@@ -248,6 +250,7 @@ export function ChatSimulation() {
         >
           Abrir o chat
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          <span className="sr-only">(abre em nova aba)</span>
         </a>
       </div>
     </div>

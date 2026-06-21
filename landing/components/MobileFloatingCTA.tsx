@@ -59,6 +59,7 @@ export function MobileFloatingCTA() {
       >
         Experimente
         <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        <span className="sr-only">(abre em nova aba)</span>
       </a>
     </div>
   );

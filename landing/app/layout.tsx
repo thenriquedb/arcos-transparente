@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { PRODUCTION_URL } from "@/lib/constants";
 import "./globals.css";
@@ -41,6 +41,10 @@ export const metadata: Metadata = {
     title,
     description,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1d4ed8",
 };
 
 export default function RootLayout({

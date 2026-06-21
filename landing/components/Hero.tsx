@@ -10,7 +10,7 @@ export function Hero() {
     >
       <div className="mx-auto grid max-w-6xl items-start gap-10 px-5 sm:px-8 lg:grid-cols-[1.1fr_1fr]">
         <div>
-          <h1 className="text-5xl font-black leading-tight">
+          <h1 className="text-4xl font-black leading-tight sm:text-5xl">
             Dados públicos de Arcos em linguagem simples
           </h1>
           <p className="mt-6 max-w-md text-xl leading-relaxed text-white/85">
@@ -25,6 +25,7 @@ export function Hero() {
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-7 py-4 text-lg font-bold text-primary hover:bg-white/90"
           >
             Fazer uma pergunta <ArrowRight className="h-5 w-5" aria-hidden="true" />
+            <span className="sr-only">(abre em nova aba)</span>
           </a>
         </div>
         <div className="lg:-mb-40">

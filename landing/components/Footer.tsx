@@ -13,6 +13,7 @@ export function Footer() {
           className="underline hover:text-white"
         >
           Repositório
+          <span className="sr-only"> (abre em nova aba)</span>
         </a>
       </div>
     </footer>

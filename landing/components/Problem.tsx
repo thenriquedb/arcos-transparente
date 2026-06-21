@@ -22,7 +22,7 @@ export function Problem() {
           <h2 className="mt-3 text-4xl font-black leading-tight tracking-tight text-slate-900">
             Os dados são públicos.
             <br />
-            <span className="text-slate-400">
+            <span className="text-slate-500">
               Mas nem sempre são fáceis de encontrar.
             </span>
           </h2>

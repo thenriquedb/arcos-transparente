@@ -9,7 +9,7 @@ export function Header() {
           Arcos Transparente
         </a>
 
-        <nav className="flex items-center gap-5 text-sm">
+        <nav aria-label="Principal" className="flex items-center gap-5 text-sm">
           <a
             href={LINK_GITHUB}
             target="_blank"
@@ -17,14 +17,15 @@ export function Header() {
             className="inline-flex items-center gap-1.5 text-white/80 hover:text-white"
           >
             <Github className="h-4 w-4" aria-hidden="true" /> GitHub
+            <span className="sr-only"> (abre em nova aba)</span>
           </a>
           <a
             href={URL_CHATBOT}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-md bg-white px-4 py-2 font-semibold text-primary hover:bg-white/90"
+            className="inline-flex min-h-[44px] items-center rounded-md bg-white px-4 py-2.5 font-semibold text-primary hover:bg-white/90"
           >
-            Experimente →
+            Experimente →<span className="sr-only"> (abre em nova aba)</span>
           </a>
         </nav>
       </div>

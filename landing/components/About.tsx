@@ -72,6 +72,7 @@ export function About() {
               className="inline-flex items-center gap-1.5 text-slate-700 hover:text-primary"
             >
               <Github className="h-4 w-4" aria-hidden="true" /> GitHub
+              <span className="sr-only"> (abre em nova aba)</span>
             </a>
             {hasLinkedIn ? (
               <a
@@ -81,6 +82,7 @@ export function About() {
                 className="inline-flex items-center gap-1.5 text-slate-700 hover:text-primary"
               >
                 <Linkedin className="h-4 w-4" aria-hidden="true" /> LinkedIn
+                <span className="sr-only"> (abre em nova aba)</span>
               </a>
             ) : null}
             <a

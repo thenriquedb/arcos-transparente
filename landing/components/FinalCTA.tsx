@@ -24,6 +24,7 @@ export function FinalCTA() {
               className="font-semibold text-slate-900 underline decoration-primary/40 underline-offset-2 hover:decoration-primary"
             >
               Lei de Acesso à Informação
+              <span className="sr-only"> (abre em nova aba)</span>
             </a>{" "}
             garante que qualquer cidadão possa acessar informações públicas. O{" "}
             <strong className="font-semibold text-slate-900">
@@ -39,6 +40,7 @@ export function FinalCTA() {
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-4 text-lg font-bold text-primary-foreground hover:bg-primary-hover"
           >
             Fazer uma pergunta <ArrowRight className="h-5 w-5" aria-hidden="true" />
+            <span className="sr-only">(abre em nova aba)</span>
           </a>
         </div>
 
