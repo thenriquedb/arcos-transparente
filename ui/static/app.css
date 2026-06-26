@@ -1,11 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tema da landing do Arcos Transparente.
+ * Portado de landing/app/globals.css. As cores ficam em CSS variables para que
+ * o azul institucional possa ser trocado em um unico lugar; o tailwind.config
+ * (inline no <head>) referencia estas variaveis via rgb(var(--...) / <alpha>).
+ */
 
 :root {
-  
   --color-primary: 29 78 216; /* blue-700 (#1d4ed8) */
-  --color-primary-hover: 30 64 175; /* blue-800 (#1e40af), darker on hover */
+  --color-primary-hover: 30 64 175; /* blue-800 (#1e40af) */
   --color-primary-foreground: 255 255 255;
 
   --color-surface: 255 255 255;
@@ -23,7 +24,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Visible focus ring on every interactive element. */
+/* Anel de foco visivel em todo elemento interativo. */
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible {

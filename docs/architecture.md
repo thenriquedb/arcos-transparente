@@ -2,13 +2,13 @@
 
 ## Visão Geral da Arquitetura
 
-O Arcos Transparente é uma pilha `XML/CSV → parser → schema → SQLite → tools SQL + RAG → agente LangChain → Streamlit`. Os dados públicos do portal da transparência de Arcos (MG) são ingeridos por um pipeline offline e normalizados em um banco SQLite relacional. Quando um cidadão faz uma pergunta via interface web, um agente ReAct (LangChain + LangGraph) seleciona as tools adequadas, executa queries SQL ou recuperação semântica, e devolve a resposta em linguagem natural.
+O Arcos Transparente é uma pilha `XML/CSV → parser → schema → SQLite → tools SQL + RAG → agente LangChain → FastAPI + Chainlit`. Os dados públicos do portal da transparência de Arcos (MG) são ingeridos por um pipeline offline e normalizados em um banco SQLite relacional. Quando um cidadão faz uma pergunta via interface web, um agente ReAct (LangChain + LangGraph) seleciona as tools adequadas, executa queries SQL ou recuperação semântica, e devolve a resposta em linguagem natural.
 
 A camada de agente expõe **39 tools públicas** organizadas por domínio (servidores e folha, contratos, licitações, despesas, receitas, planejamento, frota, patrimônio, estoques, quadro de pessoal, eleitos, transferências financeiras e conhecimento municipal). Cada domínio tem pelo menos uma tool de consulta/listagem e uma de agregação/ranking. Uma tool RAG (`consultar_conhecimento_municipal`) cobre o acervo markdown curado de telefones, horários de ônibus (intermunicipais e do Tarifa Zero), estrutura organizacional e FAQ.
 
 Antes de cada pergunta chegar ao modelo, um sistema de guardrails determinísticos rejeita perguntas fora do escopo, vazias ou com tentativa de injection. Uma política de seleção híbrida reduz a superfície de tools candidatas entregue ao agente, melhorando a precisão das escolhas. A roteabilidade das tools vem da metadata de cada tool (`routing_metadata`) consumida pelo seletor; a camada de NLU (`agents/nlu/`) faz a leitura estruturada da pergunta (`QueryReading`) e expõe poucos predicados de intenção determinísticos (`agents/nlu/intents.py`) para as distinções genuinamente ambíguas.
 
-As interfaces de usuário vivem no pacote `ui/`, separado do pacote `agents/` — que permanece agnóstico de qualquer UI. A interface padrão é Streamlit (`ui/web.py`); há também uma CLI de chat (`ui/cli.py`, acessível por `python -m ui`). O runtime completo pode ser executado em Docker com um único `docker compose up app`, que executa bootstrap automático (`db init`, `importar`, `rag index`) antes de subir o Streamlit.
+As interfaces de usuário vivem no pacote `ui/`, separado do pacote `agents/` — que permanece agnóstico de qualquer UI. A interface padrão é um app FastAPI (`ui/server.py`) que serve a landing institucional (Jinja2 + Tailwind) em `/` e monta o chat Chainlit (`ui/chat_app.py`) em `/chat`; há também uma CLI de chat (`ui/cli.py`, acessível por `python -m ui`). O runtime completo pode ser executado em Docker com um único `docker compose up app`, que executa bootstrap automático (`db init`, `importar`, `rag index`) antes de subir o app via uvicorn.
 
 ```mermaid
 flowchart TD
@@ -16,7 +16,7 @@ flowchart TD
     B --> C[(SQLite\ntransparencia.db)]
     D[Acervo Markdown / PDF\ndata/rag/] --> E[RAG Indexer\nagents/rag/indexing.py]
     E --> F[(Chroma\nvector_store/)]
-    G[Cidadão] --> H[Streamlit Web\nui/web.py]
+    G[Cidadão] --> H[FastAPI + Chainlit\nui/server.py + ui/chat_app.py]
     H --> I[ChatbotApplication\nagents/chatbot/application.py]
     I --> J{Guardrails\nDeterminísticos}
     J -- bloqueado --> G
@@ -71,7 +71,7 @@ Quando o cidadão envia uma pergunta, o runtime executa as camadas em ordem ante
 ```mermaid
 sequenceDiagram
     participant User as Cidadão
-    participant Web as Streamlit / CLI
+    participant Web as Chainlit / CLI
     participant Core as ChatbotApplication
     participant Guard as Guardrails
     participant Policy as Política Determinística
@@ -111,7 +111,7 @@ graph LR
     CLI --> DB[(database/)]
     CLI --> RAGIdx[agents/rag/indexing.py]
 
-    Web[ui/web.py] --> Core[agents/chatbot/application.py]
+    Web[ui/chat_app.py] --> Core[agents/chatbot/application.py]
     UICLI[ui/cli.py] --> Core
     Core --> Backend[agents/chatbot/backend.py]
     Core --> Guard[agents/guardrails.py]
@@ -216,7 +216,11 @@ arcos-transparente/
 ├── ui/                             # Interfaces de usuário (agents/ é agnóstico de UI)
 │   ├── __main__.py                 # Entrypoint `python -m ui` → CLI de chat
 │   ├── cli.py                      # Interface CLI de chat
-│   └── web.py                      # Interface web Streamlit
+│   ├── server.py                   # App FastAPI: landing em / + Chainlit em /chat
+│   ├── chat_app.py                 # Target Chainlit (on_chat_start / on_message)
+│   ├── errors.py                   # friendly_error_message (UI-agnóstico)
+│   ├── templates/                  # Landing Jinja2 (index.html)
+│   └── static/                     # CSS/JS da landing (app.css, landing.js)
 │
 ├── shared/
 │   ├── utils/

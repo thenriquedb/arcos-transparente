@@ -118,13 +118,14 @@ Exibe total de registros nas tabelas principais e a última migration aplicada.
 
 ## Executando o Chatbot
 
-### Interface Web (Streamlit)
+### Interface Web (FastAPI + Chainlit)
 
 ```bash
-uv run streamlit run ui/web.py
+uv run uvicorn ui.server:app --port 8501   # adicione --reload em desenvolvimento
 ```
 
-O app abre em `http://localhost:8501` por padrão.
+A landing institucional abre em `http://localhost:8501/` e o chat em
+`http://localhost:8501/chat`.
 
 ### Interface CLI
 
@@ -136,7 +137,7 @@ uv run python -m ui
 
 ## Execução com Docker
 
-O fluxo Docker executa `db init`, `importar` e `rag index` automaticamente no startup antes de subir o Streamlit.
+O fluxo Docker executa `db init`, `importar` e `rag index` automaticamente no startup antes de subir o app FastAPI/Chainlit (uvicorn).
 
 ### Deploy automático (recomendado)
 

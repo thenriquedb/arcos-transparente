@@ -4,7 +4,8 @@ Citizen-facing transparency chatbot over ingested municipal public data for the
 city of Arcos (MG). A pipeline ingests public XML/CSV files into a normalized
 SQLite database; a LangChain agent answers natural-language questions using broad
 per-domain SQL tools plus semantic retrieval (RAG) over a curated markdown/PDF
-corpus. The default surface is a Streamlit app; a CLI chat also exists.
+corpus. The default surface is a FastAPI app that serves an institutional landing
+page plus a Chainlit chat UI (single process); a CLI chat also exists.
 
 > Read `CONTEXT.md` for the project's domain language and `docs/` for deeper
 > architecture notes.
@@ -13,8 +14,8 @@ corpus. The default surface is a Streamlit app; a CLI chat also exists.
 
 Python 3.13+ · `uv` (package manager) · Typer + Rich (CLI) · SQLAlchemy 2 +
 Alembic + SQLite · Pydantic 2 · LangChain + LangGraph · OpenAI (`gpt-4.1-mini`
-default) · Chroma (RAG vector store) · Streamlit (web UI) · Loguru · pytest +
-Ruff · Docker. No static type checker is configured (Ruff only).
+default) · Chroma (RAG vector store) · FastAPI + Jinja2 (landing) + Chainlit (chat
+UI) · Loguru · pytest + Ruff · Docker. No static type checker is configured (Ruff only).
 
 ## Common commands
 
@@ -29,7 +30,7 @@ uv run python cli.py importar --tipo contratos --ano 2025
 uv run python cli.py rag index             # build the RAG index (Chroma)
 uv run python cli.py rag status
 
-uv run streamlit run ui/web.py             # web chat (http://localhost:8501)
+uv run uvicorn ui.server:app --port 8501   # landing (/) + chat (/chat) — add --reload in dev
 uv run python -m ui                        # CLI chat (--once "pergunta" for one-shot)
 
 uv run pytest -q                           # run the test suite
@@ -38,8 +39,8 @@ uv run alembic revision --autogenerate -m "msg" ; uv run alembic upgrade head
 ```
 
 Docker: `docker compose build && docker compose up app` (the entrypoint runs
-`db init`, `importar`, `rag index` then launches Streamlit; disable with
-`AUTO_BOOTSTRAP_ON_START=0`). See `docs/docker.md`.
+`db init`, `importar`, `rag index` then launches the FastAPI/Chainlit app via
+uvicorn; disable with `AUTO_BOOTSTRAP_ON_START=0`). See `docs/docker.md`.
 
 `importar` recreates the whole SQLite base before loading (POC behavior);
 `--force` is kept only for compatibility.
@@ -62,8 +63,11 @@ user question
 
 - `cli.py` — Typer CLI: `db`, `importar`, `rag`.
 - `ui/` — **user interfaces, kept separate so `agents/` stays UI-agnostic.**
-  `web.py` (Streamlit), `cli.py` (`run_once`/`run_interactive`), `__main__.py`
-  (`python -m ui`). **`agents/` must never import `ui/`.**
+  `server.py` (FastAPI: landing at `/` + mounts Chainlit at `/chat`), `chat_app.py`
+  (Chainlit `on_chat_start`/`on_message` target), `errors.py` (`friendly_error_message`),
+  `templates/` (Jinja2 landing) + `static/` (CSS/JS), `cli.py`
+  (`run_once`/`run_interactive`), `__main__.py` (`python -m ui`). **`agents/` must
+  never import `ui/`.**
 - `agents/chatbot/` — chatbot core, framework/UI-agnostic:
   - `application.py` — `ChatbotApplication`, the conversation use case.
   - `backend.py` — `ChatbotAgentBackend`, runs the LangChain agent.

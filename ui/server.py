@@ -1,0 +1,155 @@
+"""App web do Arcos Transparente: landing (FastAPI + Jinja2) + chat (Chainlit).
+
+Surface unica em Python: o FastAPI serve a landing institucional em ``/`` e o
+Chainlit (UI de chat) e montado em ``/chat`` via ``mount_chainlit``. Rodar com:
+
+    uv run uvicorn ui.server:app --port 8501
+
+Todo o "cerebro" continua em ``agents/chatbot`` — esta camada so apresenta.
+"""
+
+from __future__ import annotations
+
+import os
+import sys
+from pathlib import Path
+
+from chainlit.utils import mount_chainlit
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse, PlainTextResponse, Response
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+
+UI_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = UI_DIR.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+CHAT_PATH = "/chat"
+GITHUB_LINK = "https://github.com/thenriquedb/arcos-transparente"
+DATA_RANGE = "Janeiro de 2025 – Maio de 2026"
+PRODUCTION_URL = os.getenv("PUBLIC_BASE_URL", "https://arcos-transparente.vercel.app").rstrip("/")
+PAGE_TITLE = "Arcos Transparente — Consulte os dados públicos de Arcos (MG)"
+PAGE_DESCRIPTION = (
+    "Ferramenta gratuita para consultar contratos, salários e licitações da prefeitura de Arcos em linguagem natural."
+)
+
+# Conteudo da landing (portado dos componentes Next).
+PROBLEM_QUESTIONS = [
+    "Quanto foi gasto com diárias em 2025?",
+    "Quem ganhou determinada licitação?",
+    "Quais contratos estão ativos?",
+    "Quanto a prefeitura recebeu em transferências?",
+    "Qual o telefone de uma secretaria?",
+    "Quais são os horários de ônibus?",
+]
+
+STEPS = [
+    {
+        "icon": "message-square",
+        "title": "Você pergunta",
+        "body": "Digite sua dúvida do jeito que falaria no dia a dia.",
+    },
+    {
+        "icon": "search",
+        "title": "O sistema procura",
+        "body": "Ele busca a informação nos dados públicos disponíveis.",
+    },
+    {
+        "icon": "file-text",
+        "title": "Você confere a resposta",
+        "body": "A resposta vem com a fonte, o período consultado e os dados encontrados.",
+    },
+]
+
+CATEGORIES = [
+    {
+        "icon": "banknote",
+        "title": "Dinheiro público",
+        "themes": ["Gastos", "Receitas", "Contratos", "Licitações"],
+        "questions": [
+            "Quanto a prefeitura gastou com saúde em 2025?",
+            "Quais foram os maiores contratos do ano?",
+            "Quais empresas mais receberam dinheiro da prefeitura?",
+            "Quanto a prefeitura arrecadou em 2025?",
+        ],
+    },
+    {
+        "icon": "users",
+        "title": "Servidores e salários",
+        "themes": ["Salários", "Servidores", "Câmara", "Prefeitura"],
+        "questions": [
+            "Qual foi o salário do prefeito em março de 2025?",
+            "Quais são os maiores salários do município?",
+            "Quais foram os maiores pagamentos de diárias do ano?",
+            "Quais são os cargos e salários da Câmara?",
+        ],
+    },
+    {
+        "icon": "truck",
+        "title": "Bens, frota e operação",
+        "themes": ["Frota", "Patrimônio", "Almoxarifado", "Diárias"],
+        "questions": [
+            "Quais veículos da prefeitura mais gastam com manutenção?",
+            "Quanto foi gasto com diárias em 2025?",
+            "Quais bens a prefeitura tem registrados?",
+            "O que tem no estoque do almoxarifado?",
+        ],
+    },
+    {
+        "icon": "bus",
+        "title": "Serviços e cidade",
+        "themes": ["Telefones úteis", "Ônibus", "Secretarias"],
+        "questions": [
+            "Qual é o telefone da Secretaria de Saúde?",
+            "Quais são os horários de ônibus?",
+            "Como funciona a tarifa zero?",
+            "Onde encontro os contatos da prefeitura?",
+        ],
+    },
+]
+
+templates = Jinja2Templates(directory=str(UI_DIR / "templates"))
+
+app = FastAPI(title="Arcos Transparente")
+app.mount("/static", StaticFiles(directory=str(UI_DIR / "static")), name="static")
+
+
+@app.get("/", response_class=HTMLResponse)
+async def landing(request: Request) -> Response:
+    return templates.TemplateResponse(
+        request,
+        "index.html",
+        {
+            "chat_url": CHAT_PATH,
+            "github_link": GITHUB_LINK,
+            "data_range": DATA_RANGE,
+            "production_url": PRODUCTION_URL,
+            "page_title": PAGE_TITLE,
+            "page_description": PAGE_DESCRIPTION,
+            "problem_questions": PROBLEM_QUESTIONS,
+            "steps": STEPS,
+            "categories": CATEGORIES,
+        },
+    )
+
+
+@app.get("/robots.txt", response_class=PlainTextResponse)
+async def robots() -> str:
+    return f"User-agent: *\nAllow: /\nSitemap: {PRODUCTION_URL}/sitemap.xml\n"
+
+
+@app.get("/sitemap.xml")
+async def sitemap() -> Response:
+    body = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"  <url><loc>{PRODUCTION_URL}/</loc><changefreq>weekly</changefreq>"
+        "<priority>1.0</priority></url>\n"
+        "</urlset>\n"
+    )
+    return Response(content=body, media_type="application/xml")
+
+
+mount_chainlit(app=app, target=str(UI_DIR / "chat_app.py"), path=CHAT_PATH)

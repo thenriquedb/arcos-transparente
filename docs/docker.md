@@ -12,7 +12,7 @@ O repositório agora inclui suporte oficial a Docker com:
 
 Padronizar a execucao do projeto em um container unico e stateful, preservando:
 
-- interface web em Streamlit
+- interface web em FastAPI (landing) + Chainlit (chat)
 - banco SQLite local
 - indice vetorial local do RAG
 - comandos operacionais ja existentes em `cli.py`
@@ -27,8 +27,9 @@ python cli.py importar
 python cli.py rag index
 ```
 
-So depois disso o Streamlit sobe. Isso permite que deploys em plataformas como
-Railway inicializem o banco e o índice RAG sem precisar abrir console manual.
+So depois disso o app FastAPI/Chainlit sobe (uvicorn). Isso permite que deploys em
+plataformas como Railway inicializem o banco e o índice RAG sem precisar abrir
+console manual.
 
 Se voce quiser desativar esse comportamento em ambiente local ou em algum deploy
 específico:

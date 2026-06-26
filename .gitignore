@@ -28,7 +28,12 @@ build/
 .env
 vector_store/
 
-# Landing page
+# Chainlit runtime artifacts
+.files/
+# Traduções são geradas pelo Chainlit no startup; versionamos só a nossa pt-BR.
+.chainlit/translations/*
+!.chainlit/translations/pt-BR.json
+
 node_modules/
 dist/
 build/

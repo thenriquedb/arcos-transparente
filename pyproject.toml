@@ -20,8 +20,11 @@ dependencies = [
     "langsmith>=0.8.5",
     "langgraph>=1.2.1",
     "opentelemetry-exporter-otlp-proto-grpc>=1.42.1",
-    "streamlit>=1.41.0",
     "beautifulsoup4>=4.14.3",
+    "fastapi>=0.138.1",
+    "chainlit>=2.11.1",
+    "jinja2>=3.1.6",
+    "uvicorn>=0.48.0",
 ]
 
 [dependency-groups]
