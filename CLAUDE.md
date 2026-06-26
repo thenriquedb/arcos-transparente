@@ -32,6 +32,7 @@ uv run python cli.py rag status
 
 uv run uvicorn ui.server:app --port 8501   # landing (/) + chat (/chat) — add --reload in dev
 uv run python -m ui                        # CLI chat (--once "pergunta" for one-shot)
+sh scripts/build-landing-css.sh            # regenerate ui/static/tailwind.css after editing landing classes
 
 uv run pytest -q                           # run the test suite
 uv run ruff check . ; uv run ruff format . # lint / format

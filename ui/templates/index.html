@@ -28,39 +28,12 @@
       rel="stylesheet"
     />
 
-    <!-- Tema (CSS variables) -->
+    <!-- Estilos: Tailwind compilado estaticamente (sem CDN/JIT) + tema -->
+    <link rel="stylesheet" href="/static/tailwind.css" />
     <link rel="stylesheet" href="/static/app.css" />
 
-    <!-- Tailwind Play CDN (sem toolchain Node) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: {
-                DEFAULT: "rgb(var(--color-primary) / <alpha-value>)",
-                hover: "rgb(var(--color-primary-hover) / <alpha-value>)",
-                foreground:
-                  "rgb(var(--color-primary-foreground) / <alpha-value>)",
-              },
-              surface: {
-                DEFAULT: "rgb(var(--color-surface) / <alpha-value>)",
-                subtle: "rgb(var(--color-surface-subtle) / <alpha-value>)",
-              },
-            },
-            fontFamily: { sans: ["Inter", "system-ui", "sans-serif"] },
-            keyframes: {
-              blink: { "0%,100%": { opacity: "0.2" }, "50%": { opacity: "1" } },
-            },
-            animation: { blink: "blink 1.2s ease-in-out infinite" },
-          },
-        },
-      };
-    </script>
-
-    <!-- Icones Lucide via CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Icones Lucide (self-hosted, sem CDN de terceiros) -->
+    <script src="/static/vendor/lucide.min.js" defer></script>
   </head>
 
   <body class="font-sans">
@@ -521,12 +494,5 @@
     </div>
 
     <script src="/static/landing.js"></script>
-    <script>
-      // Renderiza os icones Lucide apos o DOM estar pronto.
-      window.addEventListener(
-        "DOMContentLoaded",
-        () => window.lucide && window.lucide.createIcons(),
-      );
-    </script>
   </body>
 </html>

@@ -33,7 +33,4 @@ def friendly_error_message(exc: Exception) -> str:
     if any(marker in normalized for marker in database_markers):
         return "Banco local indisponivel ou sem dados importados. Importe a base SQLite antes de consultar o chat."
 
-    return (
-        "Falha inesperada ao consultar o agente ou uma ferramenta. "
-        "Tente novamente ou veja os detalhes tecnicos abaixo."
-    )
+    return "Falha inesperada ao consultar o agente ou uma ferramenta. Tente novamente em instantes."

@@ -8,6 +8,9 @@ Montado pelo FastAPI (``ui/server.py``) em ``/chat`` atraves de
 from __future__ import annotations
 
 import sys
+import threading
+import time
+from collections import deque
 from pathlib import Path
 
 import chainlit as cl
@@ -21,15 +24,58 @@ from agents.chatbot import ChatbotAgentBackend, ChatbotApplication, ChatSession 
 from ui.errors import friendly_error_message  # noqa: E402
 
 
+# --- Limites de abuso (endpoint publico que dispara chamadas pagas ao LLM) -----
+# Tamanho maximo da pergunta (evita prompts gigantes e custo descontrolado).
+MAX_MESSAGE_CHARS = 2000
+# Janela deslizante para rate limit.
+RATE_WINDOW_SECONDS = 60.0
+# Maximo de mensagens por sessao na janela.
+MAX_MESSAGES_PER_SESSION = 30
+# Disjuntor global do processo (protege custo mesmo com muitas sessoes).
+MAX_MESSAGES_GLOBAL = 120
+# Maximo de mensagens mantidas no historico da sessao (memoria + custo de tokens).
+MAX_HISTORY_MESSAGES = 30
+
+# Estruturas tocadas apenas em on_message (event loop, single-thread) -> sem race.
+_session_hits: dict[str, deque[float]] = {}
+_global_hits: deque[float] = deque()
+
+
+def _prune(hits: deque[float], now: float) -> None:
+    cutoff = now - RATE_WINDOW_SECONDS
+    while hits and hits[0] < cutoff:
+        hits.popleft()
+
+
+def _rate_limited(session_id: str) -> bool:
+    """Registra um hit e devolve True se o limite (sessao ou global) estourou."""
+
+    now = time.monotonic()
+    session_hits = _session_hits.setdefault(session_id, deque())
+    _prune(session_hits, now)
+    _prune(_global_hits, now)
+
+    if len(session_hits) >= MAX_MESSAGES_PER_SESSION or len(_global_hits) >= MAX_MESSAGES_GLOBAL:
+        return True
+
+    session_hits.append(now)
+    _global_hits.append(now)
+    return False
+
+
 # Backend unico por processo: sem estado entre sessoes (cacheia agentes por
-# subconjunto de tools internamente). As sessoes ficam isoladas pelo ChatSession.
+# subconjunto de tools internamente, com lock proprio). As sessoes ficam
+# isoladas pelo ChatSession (session_id como thread do agente).
 _BACKEND: ChatbotAgentBackend | None = None
+_BACKEND_LOCK = threading.Lock()
 
 
 def _get_backend() -> ChatbotAgentBackend:
     global _BACKEND
     if _BACKEND is None:
-        _BACKEND = ChatbotAgentBackend()
+        with _BACKEND_LOCK:
+            if _BACKEND is None:
+                _BACKEND = ChatbotAgentBackend()
     return _BACKEND
 
 
@@ -63,7 +109,7 @@ async def starters(user=None):
         ),
         cl.Starter(
             label="Maiores contratos do ano",
-            message="Quais foram os maiores contratos do ano?",
+            message="Quais foram os maiores contratos do ano de 2025?",
             icon=icon,
         ),
         cl.Starter(
@@ -74,30 +120,57 @@ async def starters(user=None):
     ]
 
 
-@cl.on_chat_start
-async def on_chat_start() -> None:
-    app = ChatbotApplication(
+def _build_application() -> ChatbotApplication:
+    return ChatbotApplication(
         backend=_get_backend(),
         session=ChatSession(id=cl.context.session.id),
     )
-    cl.user_session.set("app", app)
+
+
+@cl.on_chat_start
+async def on_chat_start() -> None:
+    cl.user_session.set("app", _build_application())
 
 
 @cl.on_message
 async def on_message(message: cl.Message) -> None:
+    content = (message.content or "").strip()
+
+    if not content:
+        await cl.Message(content="Envie uma pergunta para eu poder ajudar.").send()
+        return
+
+    if len(content) > MAX_MESSAGE_CHARS:
+        await cl.Message(
+            content=(
+                f"Sua pergunta é muito longa (limite de {MAX_MESSAGE_CHARS} caracteres). Resuma e tente novamente."
+            )
+        ).send()
+        return
+
+    if _rate_limited(cl.context.session.id):
+        await cl.Message(
+            content=("Você enviou muitas perguntas em pouco tempo. Aguarde alguns instantes e tente novamente.")
+        ).send()
+        return
+
     app: ChatbotApplication = cl.user_session.get("app")
     if app is None:
-        app = ChatbotApplication(
-            backend=_get_backend(),
-            session=ChatSession(id=cl.context.session.id),
-        )
+        app = _build_application()
         cl.user_session.set("app", app)
 
     try:
-        response = await cl.make_async(app.ask)(message.content)
+        response = await cl.make_async(app.ask)(content)
         await cl.Message(content=response.content).send()
-    except ValueError as exc:
-        # Guardrail / pergunta vazia: a propria mensagem ja e amigavel.
-        await cl.Message(content=str(exc)).send()
     except Exception as exc:  # noqa: BLE001
+        # Nunca expõe a exceção crua ao usuário; friendly_error_message cobre os
+        # casos conhecidos (config/provider/banco) e um fallback generico.
         await cl.Message(content=friendly_error_message(exc)).send()
+    finally:
+        _trim_history(app)
+
+
+def _trim_history(app: ChatbotApplication) -> None:
+    history = getattr(getattr(app, "session", None), "history", None)
+    if history is not None and len(history) > MAX_HISTORY_MESSAGES:
+        del history[:-MAX_HISTORY_MESSAGES]

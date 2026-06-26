@@ -186,6 +186,8 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    // Renderiza os icones Lucide (script self-hosted carregado com defer).
+    if (window.lucide) window.lucide.createIcons();
     initChatSimulation();
     initMobileCta();
     initCopyButtons();

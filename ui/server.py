@@ -14,6 +14,7 @@ import os
 import sys
 from pathlib import Path
 
+from chainlit.config import config as _chainlit_config
 from chainlit.utils import mount_chainlit
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, Response
@@ -29,7 +30,12 @@ if str(PROJECT_ROOT) not in sys.path:
 CHAT_PATH = "/chat"
 GITHUB_LINK = "https://github.com/thenriquedb/arcos-transparente"
 DATA_RANGE = "Janeiro de 2025 – Maio de 2026"
-PRODUCTION_URL = os.getenv("PUBLIC_BASE_URL", "https://arcos-transparente.vercel.app").rstrip("/")
+# URL publica canonica. Se nao definida, cai para a origem da propria requisicao
+# (evita apontar canonical/OG/sitemap para um dominio errado no deploy).
+PUBLIC_BASE_URL = (os.getenv("PUBLIC_BASE_URL") or "").rstrip("/")
+# Origens permitidas no CORS do chat (Chainlit). Same-origin NAO depende disto;
+# por padrao bloqueia cross-origin. Ex.: ALLOWED_ORIGINS="https://a.gov,https://b".
+ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
 PAGE_TITLE = "Arcos Transparente — Consulte os dados públicos de Arcos (MG)"
 PAGE_DESCRIPTION = (
     "Ferramenta gratuita para consultar contratos, salários e licitações da prefeitura de Arcos em linguagem natural."
@@ -112,8 +118,37 @@ CATEGORIES = [
 
 templates = Jinja2Templates(directory=str(UI_DIR / "templates"))
 
+# Cabecalhos de seguranca. A CSP so e aplicada fora do /chat: a SPA do Chainlit
+# usa scripts inline / eval / websockets proprios e quebraria sob uma CSP estrita.
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+}
+CONTENT_SECURITY_POLICY = (
+    "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; "
+    "img-src 'self' data:; script-src 'self'; connect-src 'self'; form-action 'self'; "
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+    "font-src 'self' https://fonts.gstatic.com"
+)
+
+
+def _base_url(request: Request) -> str:
+    return PUBLIC_BASE_URL or str(request.base_url).rstrip("/")
+
+
 app = FastAPI(title="Arcos Transparente")
 app.mount("/static", StaticFiles(directory=str(UI_DIR / "static")), name="static")
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    for header, value in SECURITY_HEADERS.items():
+        response.headers.setdefault(header, value)
+    if not request.url.path.startswith(CHAT_PATH):
+        response.headers.setdefault("Content-Security-Policy", CONTENT_SECURITY_POLICY)
+    return response
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -125,7 +160,7 @@ async def landing(request: Request) -> Response:
             "chat_url": CHAT_PATH,
             "github_link": GITHUB_LINK,
             "data_range": DATA_RANGE,
-            "production_url": PRODUCTION_URL,
+            "production_url": _base_url(request),
             "page_title": PAGE_TITLE,
             "page_description": PAGE_DESCRIPTION,
             "problem_questions": PROBLEM_QUESTIONS,
@@ -136,20 +171,24 @@ async def landing(request: Request) -> Response:
 
 
 @app.get("/robots.txt", response_class=PlainTextResponse)
-async def robots() -> str:
-    return f"User-agent: *\nAllow: /\nSitemap: {PRODUCTION_URL}/sitemap.xml\n"
+async def robots(request: Request) -> str:
+    return f"User-agent: *\nAllow: /\nSitemap: {_base_url(request)}/sitemap.xml\n"
 
 
 @app.get("/sitemap.xml")
-async def sitemap() -> Response:
+async def sitemap(request: Request) -> Response:
     body = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f"  <url><loc>{PRODUCTION_URL}/</loc><changefreq>weekly</changefreq>"
+        f"  <url><loc>{_base_url(request)}/</loc><changefreq>weekly</changefreq>"
         "<priority>1.0</priority></url>\n"
         "</urlset>\n"
     )
     return Response(content=body, media_type="application/xml")
 
+
+# Restringe o CORS do Chainlit antes de montar (default: sem cross-origin).
+# Precisa ocorrer antes de mount_chainlit, que constroi o CORSMiddleware do chat.
+_chainlit_config.project.allow_origins = ALLOWED_ORIGINS
 
 mount_chainlit(app=app, target=str(UI_DIR / "chat_app.py"), path=CHAT_PATH)
