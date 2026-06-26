@@ -12,6 +12,7 @@ htmlcov/
 build/
 dist/
 
+# Banco/indice/dados de runtime locais (recriados no container)
 database/*.db
 database/*.db-shm
 database/*.db-wal
@@ -21,3 +22,11 @@ runtime/
 .env
 
 openspec/changes/archive/
+
+# Artefatos de build/dev nao necessarios em runtime
+# .cache/ = binario do Tailwind standalone (~48MB); .files/ = runtime do Chainlit
+.cache/
+.files/
+tests/
+scripts/
+*.log
