@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1d4ed8" />
+
+    <title>{{ page_title }}</title>
+    <meta name="description" content="{{ page_description }}" />
+    <link rel="canonical" href="{{ production_url }}/" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Arcos Transparente" />
+    <meta property="og:title" content="{{ page_title }}" />
+    <meta property="og:description" content="{{ page_description }}" />
+    <meta property="og:url" content="{{ production_url }}/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ page_title }}" />
+    <meta name="twitter:description" content="{{ page_description }}" />
+
+    <!-- Fonte Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos: Tailwind compilado estaticamente (sem CDN/JIT) + tema -->
+    <link rel="stylesheet" href="/static/tailwind.css" />
+    <link rel="stylesheet" href="/static/app.css" />
+
+    <!-- Icones Lucide (self-hosted, sem CDN de terceiros) -->
+    <script src="/static/vendor/lucide.min.js" defer></script>
+  </head>
+
+  <body class="font-sans">
+    <!-- Header -->
+    <header class="bg-primary">
+      <div
+        class="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 text-primary-foreground sm:px-8"
+      >
+        <a href="#top" class="text-lg font-extrabold tracking-tight"
+          >Arcos Transparente</a
+        >
+        <nav aria-label="Principal" class="flex items-center gap-5 text-sm">
+          <a
+            href="{{ github_link }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-white/80 hover:text-white"
+          >
+            <i data-lucide="github" class="h-4 w-4"></i> GitHub
+            <span class="sr-only"> (abre em nova aba)</span>
+          </a>
+          <a
+            href="{{ chat_url }}"
+            class="inline-flex min-h-[44px] items-center rounded-md bg-white px-4 py-2.5 font-semibold text-primary hover:bg-white/90"
+          >
+            Experimente →
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section
+        id="top"
+        class="relative bg-primary pb-32 pt-12 text-primary-foreground"
+      >
+        <div
+          class="mx-auto grid max-w-6xl items-start gap-10 px-5 sm:px-8 lg:grid-cols-[1.1fr_1fr]"
+        >
+          <div>
+            <h1 class="text-4xl font-black leading-tight sm:text-5xl">
+              Dados públicos de Arcos em linguagem simples
+            </h1>
+            <p class="mt-6 max-w-md text-xl leading-relaxed text-white/85">
+              Consulte gastos, salários, contratos, receitas, diárias e
+              informações úteis da cidade usando perguntas simples, como se
+              estivesse conversando no WhatsApp ou no ChatGPT.
+            </p>
+            <a
+              href="{{ chat_url }}"
+              class="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-7 py-4 text-lg font-bold text-primary hover:bg-white/90"
+            >
+              Fazer uma pergunta
+              <i data-lucide="arrow-right" class="h-5 w-5"></i>
+            </a>
+          </div>
+          <div class="lg:-mb-40">
+            <div class="rounded-2xl bg-white p-2 shadow-2xl">
+              <!-- Simulacao de chat (decorativa) -->
+              <div
+                id="chat-sim"
+                role="group"
+                aria-label="Demonstração ilustrativa do assistente"
+                class="w-full overflow-hidden rounded-2xl border border-slate-200 bg-surface-subtle shadow-xl"
+              >
+                <div
+                  class="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-3"
+                >
+                  <span
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10"
+                  >
+                    <i
+                      data-lucide="building-2"
+                      class="h-4 w-4 text-primary"
+                    ></i>
+                  </span>
+                  <div class="leading-tight">
+                    <p class="text-sm font-semibold text-slate-900">
+                      Arcos Transparente
+                    </p>
+                    <p class="flex items-center gap-1.5 text-xs text-slate-500">
+                      <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                      online
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  aria-hidden="true"
+                  class="flex max-h-[320px] flex-col gap-3 overflow-y-auto p-4 md:max-h-none md:min-h-[360px]"
+                >
+                  <div
+                    id="chat-sim-user"
+                    class="hidden justify-end opacity-0 transition-opacity duration-300 flex"
+                  >
+                    <p
+                      id="chat-sim-user-text"
+                      class="max-w-[80%] rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-sm"
+                    ></p>
+                  </div>
+                  <div
+                    id="chat-sim-assistant"
+                    class="hidden items-start gap-2 opacity-0 transition-opacity duration-300 flex"
+                  >
+                    <span
+                      class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10"
+                    >
+                      <i
+                        data-lucide="building-2"
+                        class="h-4 w-4 text-primary"
+                      ></i>
+                    </span>
+                    <div
+                      class="max-w-[80%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 shadow-sm"
+                    >
+                      <span
+                        id="chat-sim-typing"
+                        class="hidden items-center gap-1 py-1 flex"
+                      >
+                        <span
+                          class="h-1.5 w-1.5 rounded-full bg-slate-400 animate-blink"
+                        ></span>
+                        <span
+                          class="h-1.5 w-1.5 rounded-full bg-slate-400 animate-blink"
+                          style="animation-delay: 200ms"
+                        ></span>
+                        <span
+                          class="h-1.5 w-1.5 rounded-full bg-slate-400 animate-blink"
+                          style="animation-delay: 400ms"
+                        ></span>
+                      </span>
+                      <span id="chat-sim-text"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="border-t border-slate-200 bg-white px-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <input
+                      type="text"
+                      disabled
+                      placeholder="Ex.: salários, contratos, receitas ou telefones úteis"
+                      aria-hidden="true"
+                      tabindex="-1"
+                      class="flex-1 cursor-not-allowed rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-400 placeholder:text-slate-400"
+                    />
+                    <button
+                      type="button"
+                      disabled
+                      aria-hidden="true"
+                      tabindex="-1"
+                      class="cursor-not-allowed rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-400"
+                    >
+                      Enviar
+                    </button>
+                  </div>
+                  <a
+                    href="{{ chat_url }}"
+                    class="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-hover"
+                  >
+                    Abrir o chat
+                    <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Problema -->
+      <section class="bg-white py-24">
+        <div
+          class="mx-auto grid max-w-6xl items-start gap-12 px-5 sm:px-8 lg:grid-cols-2 lg:gap-16"
+        >
+          <div>
+            <p class="text-sm font-bold uppercase tracking-widest text-primary">
+              O problema
+            </p>
+            <h2
+              class="mt-3 text-4xl font-black leading-tight tracking-tight text-slate-900"
+            >
+              Os dados são públicos.<br />
+              <span class="text-slate-500"
+                >Mas nem sempre são fáceis de encontrar.</span
+              >
+            </h2>
+            <div class="mt-6 space-y-4 text-lg leading-relaxed text-slate-600">
+              <p>
+                As informações existem, mas muitas vezes estão espalhadas em
+                portais, planilhas, relatórios e páginas difíceis de navegar.
+              </p>
+              <p>
+                Descobrir quanto custou uma obra, quem ganhou uma licitação ou
+                quanto foi gasto em determinada área não deveria ser complicado.
+              </p>
+              <p>
+                O
+                <strong class="font-semibold text-slate-900"
+                  >Arcos Transparente</strong
+                >
+                ajuda a transformar esses dados em respostas mais simples, para
+                qualquer pessoa entender.
+              </p>
+            </div>
+          </div>
+          <div class="space-y-3">
+            {% for q in problem_questions %}
+            <div
+              class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-slate-700"
+            >
+              <i
+                data-lucide="message-square"
+                class="h-5 w-5 shrink-0 text-primary/60"
+              ></i>
+              <span class="text-base leading-snug">{{ q }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <!-- Como funciona -->
+      <section class="bg-slate-50 py-24">
+        <div class="mx-auto max-w-6xl px-5 sm:px-8">
+          <div class="mx-auto max-w-2xl text-center">
+            <h2 class="text-4xl font-black tracking-tight text-slate-900">
+              Funciona como uma conversa.
+            </h2>
+            <p class="mt-4 text-xl leading-relaxed text-slate-600">
+              De graça, sem cadastro e sem precisar abrir planilhas.
+            </p>
+          </div>
+          <div class="relative mt-16 grid gap-12 md:grid-cols-3 md:gap-8">
+            <div
+              aria-hidden="true"
+              class="absolute left-[16.66%] right-[16.66%] top-7 hidden h-0.5 bg-slate-200 md:block"
+            ></div>
+            {% for step in steps %}
+            <div class="relative text-center">
+              <div
+                class="relative z-10 mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-black text-primary-foreground ring-8 ring-slate-50"
+              >
+                {{ loop.index }}
+              </div>
+              <i
+                data-lucide="{{ step.icon }}"
+                class="mx-auto mt-5 h-6 w-6 text-primary"
+              ></i>
+              <h3 class="mt-3 text-lg font-bold text-slate-900">
+                {{ step.title }}
+              </h3>
+              <p class="mx-auto mt-2 max-w-xs leading-relaxed text-slate-600">
+                {{ step.body }}
+              </p>
+            </div>
+            {% endfor %}
+          </div>
+          <p
+            class="mt-14 flex items-center justify-center gap-2 text-center text-sm text-slate-500"
+          >
+            <i data-lucide="scale" class="h-4 w-4 shrink-0 text-primary"></i> O
+            <strong class="font-semibold text-slate-700"
+              >Arcos Transparente</strong
+            >
+            só consulta informações públicas. Nada é alterado.
+          </p>
+        </div>
+      </section>
+
+      <!-- Perguntas de exemplo -->
+      <section id="perguntas" class="bg-white py-24">
+        <div class="mx-auto max-w-6xl px-5 sm:px-8">
+          <h2 class="text-4xl font-black tracking-tight text-slate-900">
+            Pergunte sobre a cidade do seu jeito.
+          </h2>
+          <p class="mt-4 max-w-2xl text-xl leading-relaxed text-slate-600">
+            Escolha um tema ou faça uma pergunta livre. A ferramenta busca nos
+            dados públicos e mostra a resposta com a fonte.
+          </p>
+          <div class="mt-12 grid gap-6 md:grid-cols-2">
+            {% for cat in categories %}
+            <div
+              class="rounded-2xl border border-slate-200 bg-slate-50 p-7 transition-shadow hover:shadow-lg"
+            >
+              <div class="flex items-center gap-4">
+                <span
+                  class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                >
+                  <i data-lucide="{{ cat.icon }}" class="h-7 w-7"></i>
+                </span>
+                <h3 class="text-2xl font-black tracking-tight text-slate-900">
+                  {{ cat.title }}
+                </h3>
+              </div>
+              <div class="mt-4 flex flex-wrap gap-2">
+                {% for t in cat.themes %}
+                <span
+                  class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-500 ring-1 ring-slate-200"
+                  >{{ t }}</span
+                >
+                {% endfor %}
+              </div>
+              <ul class="mt-5 space-y-2.5">
+                {% for q in cat.questions %}
+                <li>
+                  <button
+                    type="button"
+                    data-copy-question="{{ q }}"
+                    aria-label="Copiar pergunta: {{ q }}"
+                    class="group flex w-full items-start gap-2 text-left text-lg font-medium leading-snug text-slate-800 hover:text-primary"
+                  >
+                    <span aria-hidden="true" class="text-primary">›</span>
+                    <span class="flex-1">{{ q }}</span>
+                    <span
+                      data-copy-label
+                      class="shrink-0 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100"
+                      >Copiar</span
+                    >
+                  </button>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endfor %}
+          </div>
+          <p class="mt-12 text-slate-500">{{ data_range }}</p>
+        </div>
+      </section>
+
+      <!-- Sobre -->
+      <section id="sobre" class="bg-slate-50 py-24">
+        <div
+          class="mx-auto grid max-w-4xl items-center gap-10 px-5 sm:px-8 sm:grid-cols-[auto_1fr]"
+        >
+          <div>
+            <p class="text-sm font-bold uppercase tracking-widest text-primary">
+              Sobre o projeto
+            </p>
+            <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-900">
+              Um projeto independente
+            </h2>
+            <p class="mt-4 text-lg leading-relaxed text-slate-600">
+              O
+              <strong class="font-semibold text-slate-900"
+                >Arcos Transparente</strong
+              >
+              é uma ferramenta independente que utiliza dados públicos
+              disponíveis em fontes oficiais, como o Portal da Transparência,
+              para facilitar a consulta e compreensão das informações
+              municipais. O projeto não substitui os canais oficiais. As
+              respostas procuram indicar a fonte dos dados utilizados e deixar
+              claro quando a informação não está disponível ou é limitada.<br /><br />
+              Este projeto não tem viés político. Não foi criado para atacar nem
+              para defender ninguém. A ideia é simplesmente facilitar o acesso
+              público às informações da cidade.
+            </p>
+            <div
+              class="mt-6 flex flex-wrap items-center gap-5 text-sm font-semibold"
+            >
+              <a
+                href="{{ github_link }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-slate-700 hover:text-primary"
+              >
+                <i data-lucide="github" class="h-4 w-4"></i> GitHub
+                <span class="sr-only"> (abre em nova aba)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA final -->
+      <section id="cta" class="bg-white py-24">
+        <div class="mx-auto max-w-6xl px-5 sm:px-8">
+          <h2
+            class="text-center text-4xl font-black leading-tight tracking-tight text-slate-900 sm:text-5xl"
+          >
+            Consultar dados públicos é um direito seu.
+          </h2>
+        </div>
+        <div
+          class="mx-auto mt-12 grid max-w-6xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-2 lg:gap-16"
+        >
+          <div>
+            <p class="text-lg leading-relaxed text-slate-600">
+              A
+              <a
+                href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-semibold text-slate-900 underline decoration-primary/40 underline-offset-2 hover:decoration-primary"
+                >Lei de Acesso à Informação</a
+              >
+              garante que qualquer cidadão possa acessar informações públicas. O
+              <strong class="font-semibold text-slate-900"
+                >Arcos Transparente</strong
+              >
+              ajuda a tornar esse caminho mais simples, aproximando os dados
+              oficiais da população.
+            </p>
+            <a
+              href="{{ chat_url }}"
+              class="mt-8 inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-4 text-lg font-bold text-primary-foreground hover:bg-primary-hover"
+            >
+              Fazer uma pergunta
+              <i data-lucide="arrow-right" class="h-5 w-5"></i>
+            </a>
+          </div>
+          <div
+            class="rounded-3xl bg-primary/5 p-8 ring-1 ring-primary/15 sm:p-10"
+          >
+            <span
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10"
+            >
+              <i data-lucide="scale" class="h-7 w-7 text-primary"></i>
+            </span>
+            <p
+              class="mt-6 text-2xl font-black leading-snug tracking-tight text-slate-900"
+            >
+              Buscar, consultar e compartilhar dados públicos não é crime.
+              <span class="text-primary">É exercer cidadania.</span>
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 py-10 text-slate-400">
+      <div class="mx-auto max-w-6xl px-5 text-sm leading-relaxed sm:px-8">
+        Dados públicos do município de Arcos (MG). Projeto independente, sem
+        vínculo oficial com a prefeitura. Código aberto sob licença AGPL-3.0 ·
+        <a
+          href="{{ github_link }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline hover:text-white"
+          >Repositório<span class="sr-only"> (abre em nova aba)</span></a
+        >
+      </div>
+    </footer>
+
+    <!-- CTA flutuante (mobile) -->
+    <div
+      id="mobile-cta"
+      class="pointer-events-none fixed inset-x-0 bottom-0 z-40 translate-y-4 p-4 opacity-0 transition-all duration-300 md:hidden"
+    >
+      <a
+        href="{{ chat_url }}"
+        class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 text-base font-semibold text-primary-foreground shadow-lg transition-colors hover:bg-primary-hover"
+      >
+        Experimente <i data-lucide="arrow-right" class="h-4 w-4"></i>
+      </a>
+    </div>
+
+    <script src="/static/landing.js"></script>
+  </body>
+</html>

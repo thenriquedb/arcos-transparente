@@ -26,7 +26,7 @@ from .consultar_despesas_frota_schema import (
 )
 
 
-def _load_despesas(session, filtros: DespesasFrotaFiltroSchema) -> list[FrotaDespesa]:
+def load_filtered_despesas_frota(session, filtros: DespesasFrotaFiltroSchema) -> list[FrotaDespesa]:
     stmt = (
         select(FrotaDespesa)
         .options(joinedload(FrotaDespesa.veiculo))
@@ -98,6 +98,9 @@ def _row_to_public_dict(despesa: FrotaDespesa) -> dict[str, Any]:
             "evento frota",
             "reparo veiculo",
         ],
+        exclusions=[
+            "Quando a pergunta pedir principais gastos, ranking por tipo de despesa ou comparacao entre manutencao e combustivel, use `agregar_despesas_frota`.",
+        ],
     ),
 )
 def consultar_despesas_frota(
@@ -117,8 +120,10 @@ def consultar_despesas_frota(
     ou para listar todos os gastos com um tipo de despesa (ex. combustivel).
     NAO use para dados cadastrais dos veiculos (marca, modelo, situacao); para
     isso use `consultar_frota`.
-    NAO use para totais ou rankings de gasto por veiculo ou por tipo; para
-    isso use `agregar_frota`.
+    NAO use para rankings dos veiculos que mais gastaram; para isso use
+    `agregar_frota`.
+    NAO use para principais tipos de gasto, manutencao vs combustivel ou totais
+    agregados das despesas da frota; para isso use `agregar_despesas_frota`.
 
     Args:
         filtros: Objeto com filtros opcionais. Campos aceitos: `placa`
@@ -167,7 +172,7 @@ def consultar_despesas_frota(
     params = validated
 
     with session_manager.get_session() as session:
-        despesas = _load_despesas(session, params.filtros)
+        despesas = load_filtered_despesas_frota(session, params.filtros)
         reverse = params.ordem == "desc"
         ordenados = sorted(despesas, key=lambda r: _sort_key(r, params.ordenar_por), reverse=reverse)
         total = len(ordenados)

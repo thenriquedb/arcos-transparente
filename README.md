@@ -7,7 +7,7 @@ Chatbot cidadão que responde perguntas em linguagem natural sobre dados públic
 
 ## O que faz
 
-Importa XMLs e CSVs do portal da transparência municipal para um banco SQLite normalizado. Um agente LangChain com tools SQL e recuperação semântica (RAG) sobre um acervo markdown curado responde perguntas sobre servidores, contratos, licitações, despesas, receitas, frota, patrimônio, planejamento e mais. A interface padrão é um app Streamlit.
+Importa XMLs e CSVs do portal da transparência municipal para um banco SQLite normalizado. Um agente LangChain com tools SQL e recuperação semântica (RAG) sobre um acervo markdown curado responde perguntas sobre servidores, contratos, licitações, despesas, receitas, frota, patrimônio, planejamento e mais. A interface padrão é um app FastAPI que serve a landing institucional em `/` e o chat (Chainlit) em `/chat`.
 
 ## Instalação Rápida
 
@@ -17,7 +17,7 @@ cd arcos-transparente
 cp .env.example .env          # preencha OPENAI_API_KEY
 uv sync
 uv run python cli.py db init && uv run python cli.py importar && uv run python cli.py rag index
-uv run streamlit run ui/web.py
+uv run uvicorn ui.server:app --port 8501   # landing em / e chat em /chat
 ```
 
 Ou via Docker:

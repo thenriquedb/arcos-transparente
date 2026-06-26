@@ -12,7 +12,7 @@ O repositório agora inclui suporte oficial a Docker com:
 
 Padronizar a execucao do projeto em um container unico e stateful, preservando:
 
-- interface web em Streamlit
+- interface web em FastAPI (landing) + Chainlit (chat)
 - banco SQLite local
 - indice vetorial local do RAG
 - comandos operacionais ja existentes em `cli.py`
@@ -27,8 +27,9 @@ python cli.py importar
 python cli.py rag index
 ```
 
-So depois disso o Streamlit sobe. Isso permite que deploys em plataformas como
-Railway inicializem o banco e o índice RAG sem precisar abrir console manual.
+So depois disso o app FastAPI/Chainlit sobe (uvicorn). Isso permite que deploys em
+plataformas como Railway inicializem o banco e o índice RAG sem precisar abrir
+console manual.
 
 Se voce quiser desativar esse comportamento em ambiente local ou em algum deploy
 específico:
@@ -36,6 +37,33 @@ específico:
 ```env
 AUTO_BOOTSTRAP_ON_START=0
 ```
+
+### Bootstrap idempotente (custo e tempo de boot)
+
+`importar` recria a base e `rag index` consome embeddings pagos da OpenAI — caro
+para repetir a cada restart. O entrypoint grava uma sentinela
+`/app/runtime/.bootstrap_done` após o primeiro seed e, nas próximas subidas, roda
+apenas as migrations (`db init`), pulando `importar`/`rag index`. Como a sentinela
+fica em `/app/runtime`, ela só persiste se houver um **volume** montado lá.
+
+- Para forçar um novo seed (ex.: dados de origem atualizados): `FORCE_BOOTSTRAP=1`.
+- Para desligar o bootstrap por completo: `AUTO_BOOTSTRAP_ON_START=0`.
+
+### Banco do app vs. `DATABASE_URL` da plataforma
+
+O entrypoint **ignora `DATABASE_URL`** e usa `APP_DATABASE_URL` (default: SQLite em
+`/app/runtime`). Isso evita que uma plataforma que injeta `DATABASE_URL` (ex.: um
+plugin Postgres no Railway) sequestre o banco do app, que é SQLite-only. Para um
+caminho de banco customizado, defina `APP_DATABASE_URL`.
+
+### Deploy no Railway
+
+- Monte um **Volume** em `/app/runtime` para persistir banco, índice RAG e a
+  sentinela entre deploys (sem ele, re-seed e custo de embeddings a cada restart).
+- O `--proxy-headers` já vem ligado no uvicorn (o Railway termina TLS na borda);
+  defina `PUBLIC_BASE_URL=https://<seu-app>.up.railway.app` para canonical/OG/sitemap.
+- Garanta `OPENAI_API_KEY` nas variáveis (o `rag index` no boot depende dela).
+- Mantenha **uma réplica** (estado em memória + SQLite local).
 
 ## Fluxo Oficial
 
@@ -117,7 +145,8 @@ recriacao do container.
 - A implementacao atual e de instancia unica stateful.
 - O fluxo nao pressupoe multiplas replicas concorrendo sobre o mesmo volume.
 - A importacao continua recriando a base inteira antes da carga.
-- Com `AUTO_BOOTSTRAP_ON_START=1`, esse recarregamento acontece a cada subida do container.
+- Com `AUTO_BOOTSTRAP_ON_START=1`, o seed (`importar`/`rag index`) roda só uma vez
+  (sentinela `/app/runtime/.bootstrap_done`); use `FORCE_BOOTSTRAP=1` para refazer.
 
 ## Referencias
 

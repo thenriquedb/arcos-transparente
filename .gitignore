@@ -27,3 +27,18 @@ build/
 
 .env
 vector_store/
+
+# Build da landing: binario do Tailwind standalone (baixado sob demanda).
+# O CSS gerado (ui/static/tailwind.css) e o Lucide self-hosted SAO versionados.
+.cache/
+
+# Chainlit runtime artifacts
+.files/
+# Traduções são geradas pelo Chainlit no startup; versionamos só a nossa pt-BR.
+.chainlit/translations/*
+!.chainlit/translations/pt-BR.json
+
+node_modules/
+dist/
+build/
+*.log

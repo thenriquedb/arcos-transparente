@@ -296,6 +296,24 @@ def test_system_prompt_orienta_consultas_de_estoque() -> None:
     assert "quantidade e o valor total por material" in prompt
 
 
+def test_system_prompt_orienta_respostas_agrupadas_de_despesas_em_tabela() -> None:
+    prompt = chatbot_agent.carregar_system_prompt()
+
+    assert "Respostas sobre Despesas Agrupadas por Categoria, Órgão ou Função" in prompt
+    assert "Período de referência (obrigatório)" in prompt
+    assert "período não especificado na base de dados disponível" in prompt
+    assert "PROIBIDO apresentar categorias genéricas sem detalhamento" in prompt
+    assert 'Categorias como "Outras Despesas", "Diversos", "Demais Despesas" ou equivalentes NUNCA devem' in prompt
+    assert "aparecer como item final opaco da resposta" in prompt
+    assert "liste os 3 a 5 itens de maior valor dentro dela" in prompt
+    assert '"demais itens (valor menor que R$ X cada)"' in prompt
+    assert "`agregar_despesas_frota` por `descricao_evento`" in prompt
+    assert "Identifiquei R$ [valor] em despesas que a base classifica de forma agregada" in prompt
+    assert "número de notas fiscais, lançamentos ou empenhos por categoria" in prompt
+    assert "_Fonte: dados públicos do portal de transparência de Arcos/MG." in prompt
+    assert "Lista em ordem decrescente de valor" in prompt
+
+
 def test_scope_help_message_inclui_estoques() -> None:
     help_message = build_scope_help_message()
 

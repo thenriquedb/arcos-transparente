@@ -7,6 +7,7 @@ spans de observabilidade ao redor de cada invocacao.
 
 from __future__ import annotations
 
+import threading
 from collections.abc import Callable, Iterator
 from typing import Any
 
@@ -36,6 +37,10 @@ class ChatbotAgentBackend:
     ) -> None:
         self._agent_factory = agent_factory
         self._agents: dict[tuple[str, ...], Any] = {}
+        # O backend e compartilhado entre sessoes e invocado concorrentemente
+        # (ex.: Chainlit roda `ask` num threadpool). O lock garante criacao
+        # atomica do agente por cache_key, evitando builds duplicados/corrida.
+        self._agents_lock = threading.Lock()
         self._observability_provider = observability_provider or NoOpObservabilityProvider()
 
     def _get_agent(self, candidate_tools: tuple[object, ...] | None = None):
@@ -46,12 +51,18 @@ class ChatbotAgentBackend:
         if cached_agent is not None:
             return cached_agent
 
-        try:
-            agent = self._agent_factory(tools=normalized_tools)
-        except TypeError:
-            agent = self._agent_factory()
-        self._agents[cache_key] = agent
-        return agent
+        with self._agents_lock:
+            # Double-checked: outra thread pode ter criado enquanto aguardavamos.
+            cached_agent = self._agents.get(cache_key)
+            if cached_agent is not None:
+                return cached_agent
+
+            try:
+                agent = self._agent_factory(tools=normalized_tools)
+            except TypeError:
+                agent = self._agent_factory()
+            self._agents[cache_key] = agent
+            return agent
 
     def _normalize_candidate_tools(
         self,

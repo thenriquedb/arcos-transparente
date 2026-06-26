@@ -33,6 +33,41 @@ def _metric_to_json(value: Decimal | int) -> float | int:
     return float(value) if isinstance(value, Decimal) else value
 
 
+def _vehicle_group_key(veiculo: FrotaVeiculo, agrupar_por: str) -> Any:
+    group_value = GROUP_FIELD_GETTERS[agrupar_por](veiculo)
+    return "nao_informado" if group_value in (None, "") else group_value
+
+
+def _build_vehicle_group_details(veiculo: FrotaVeiculo) -> dict[str, Any]:
+    return {
+        "codigo_veiculo": veiculo.codigo_veiculo,
+        "descricao_material": veiculo.descricao_material,
+        "unidade_responsavel": veiculo.unidade_gestora,
+        "tipo_veiculo": veiculo.tipo_veiculo,
+        "marca": veiculo.marca,
+        "modelo": veiculo.modelo,
+    }
+
+
+def _build_group_projector(registros: list[FrotaVeiculo]):
+    vehicle_details_by_plate = {
+        _vehicle_group_key(registro, "placa_veiculo"): _build_vehicle_group_details(registro) for registro in registros
+    }
+
+    def project_group(
+        group_value: Any,
+        metric_value: Any,
+        agrupar_por: str,
+        metrica: str,
+    ) -> dict[str, Any]:
+        resultado = {agrupar_por: group_value, metrica: metric_value}
+        if agrupar_por == "placa_veiculo":
+            resultado.update(vehicle_details_by_plate.get(group_value, {}))
+        return resultado
+
+    return project_group
+
+
 GROUP_FIELD_GETTERS = {
     "placa_veiculo": lambda r: r.placa_veiculo,
     "unidade_responsavel": lambda r: r.unidade_gestora,
@@ -45,15 +80,6 @@ METRIC_FIELD_GETTERS = {
     "soma_valor_atual": lambda r: r.valor_atual or Decimal(0),
     "soma_total_despesas": _veiculo_total_despesas,
 }
-
-
-def _project_frota_group(
-    group_value: Any,
-    metric_value: Any,
-    agrupar_por: str,
-    metrica: str,
-) -> dict[str, Any]:
-    return {agrupar_por: group_value, metrica: metric_value}
 
 
 @register(
@@ -183,6 +209,7 @@ def agregar_frota(
         )
         else None
     )
+    project_group = _build_group_projector(registros) if params.agrupar_por is not None else None
     return build_aggregate_response(
         response_type=AgregarFrotaResponse,
         metadata=metadata,
@@ -193,7 +220,7 @@ def agregar_frota(
             source_count=execution.source_count,
             suggestion=suggestion,
         ),
-        project_group=(_project_frota_group if params.agrupar_por is not None else None),
+        project_group=project_group,
         agrupar_por=params.agrupar_por,
         metrica=params.metrica if params.agrupar_por is not None else None,
     )

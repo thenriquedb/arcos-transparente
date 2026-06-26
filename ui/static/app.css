@@ -1,0 +1,47 @@
+/* Tema da landing do Arcos Transparente.
+ * Portado de landing/app/globals.css. As cores ficam em CSS variables para que
+ * o azul institucional possa ser trocado em um unico lugar; o tailwind.config
+ * (inline no <head>) referencia estas variaveis via rgb(var(--...) / <alpha>).
+ */
+
+:root {
+  --color-primary: 29 78 216; /* blue-700 (#1d4ed8) */
+  --color-primary-hover: 30 64 175; /* blue-800 (#1e40af) */
+  --color-primary-foreground: 255 255 255;
+
+  --color-surface: 255 255 255;
+  --color-surface-subtle: 248 250 252; /* slate-50 */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(var(--color-surface));
+  color: #0f172a; /* slate-900 */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Anel de foco visivel em todo elemento interativo. */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid rgb(var(--color-primary));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

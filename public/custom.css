@@ -1,0 +1,25 @@
+/* Ajustes finos do chat Chainlit para combinar com a landing do Arcos Transparente.
+ * As cores vêm de public/theme.json (azul institucional); aqui aplicamos a fonte
+ * Inter e pequenos toques de marca. Servido via [UI] custom_css em .chainlit/config.toml. */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+[class*="cl-"] {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* Mensagem de boas-vindas / títulos um pouco mais marcantes, como na landing. */
+#welcome-screen h1,
+.cl-welcome-screen h1 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
