@@ -28,8 +28,17 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 CHAT_PATH = "/chat"
+PRIVACY_PATH = "/privacidade"
 GITHUB_LINK = "https://github.com/thenriquedb/arcos-transparente"
-DATA_RANGE = "Janeiro de 2025 – Maio de 2026"
+DATA_RANGE = os.getenv("DATA_RANGE", "Janeiro de 2025 a Maio de 2026")
+# Responsavel/operador e contato (LGPD). Configure no deploy. Se vazio, o contato
+# aponta para as Issues do repositorio.
+OPERATOR_NAME = os.getenv("OPERATOR_NAME", "").strip()
+CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "").strip()
+# Fonte oficial dos dados, exibida na secao de credibilidade (link opcional).
+SOURCE_NAME = os.getenv("SOURCE_NAME", "Portal da Transparência da Prefeitura de Arcos (MG)")
+SOURCE_URL = os.getenv("SOURCE_URL", "").strip()
+OG_IMAGE_PATH = "/static/og-image.svg"
 # URL publica canonica. Se nao definida, cai para a origem da propria requisicao
 # (evita apontar canonical/OG/sitemap para um dominio errado no deploy).
 PUBLIC_BASE_URL = (os.getenv("PUBLIC_BASE_URL") or "").rstrip("/")
@@ -38,34 +47,80 @@ PUBLIC_BASE_URL = (os.getenv("PUBLIC_BASE_URL") or "").rstrip("/")
 ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
 PAGE_TITLE = "Arcos Transparente — Consulte os dados públicos de Arcos (MG)"
 PAGE_DESCRIPTION = (
-    "Ferramenta gratuita para consultar contratos, salários e licitações da prefeitura de Arcos em linguagem natural."
+    "Pergunte em português sobre gastos, salários, contratos e diárias da prefeitura de Arcos (MG). "
+    "Sempre que possível, a resposta traz o período e a fonte para você conferir."
 )
 
-# Conteudo da landing (portado dos componentes Next).
-PROBLEM_QUESTIONS = [
-    "Quanto foi gasto com diárias em 2025?",
-    "Quem ganhou determinada licitação?",
-    "Quais contratos estão ativos?",
-    "Quanto a prefeitura recebeu em transferências?",
-    "Qual o telefone de uma secretaria?",
-    "Quais são os horários de ônibus?",
-]
+# Tela de boas-vindas do chat (Chainlit le chainlit_pt-BR.md / chainlit.md).
+# Gerada a partir de DATA_RANGE para manter o periodo em sincronia com a landing
+# e a pagina de privacidade (fonte unica de verdade).
+WELCOME_MD = """# Arcos Transparente
+
+Pergunte em **português** sobre as contas públicas de Arcos (MG) — gastos, salários,
+contratos, diárias, frota e serviços da cidade. Sempre que possível, a resposta traz o
+**período** e a **fonte** para você conferir.
+
+👉 Clique em um exemplo abaixo ou escreva sua pergunta.
+
+---
+
+**Antes de usar as respostas:**
+
+- 🤖 São geradas por **IA** e podem conter erros ou estar incompletas — **confira na fonte oficial**.
+- 🗓️ Período coberto pelos dados: **{data_range}**.
+- 🏛️ Baseadas em **dados públicos oficiais**. Projeto **independente**, sem vínculo com a prefeitura; não substitui os canais oficiais.
+- 🔒 Sua pergunta é processada por um provedor de IA para gerar a resposta. Veja a [Política de Privacidade](/privacidade).
+
+[Sobre o projeto e fontes](/) · [Privacidade](/privacidade)
+"""
+
+
+def _write_chat_welcome() -> None:
+    """Gera as telas de boas-vindas do Chainlit a partir de DATA_RANGE.
+
+    Mantem o periodo dos dados consistente entre landing, privacidade e chat.
+    Escrito antes de mount_chainlit; o Chainlit le esses arquivos por requisicao.
+    """
+
+    content = WELCOME_MD.format(data_range=DATA_RANGE)
+    root = Path(getattr(_chainlit_config, "root", None) or PROJECT_ROOT)
+    for name in ("chainlit_pt-BR.md", "chainlit.md"):
+        try:
+            (root / name).write_text(content, encoding="utf-8")
+        except OSError:
+            # Filesystem somente-leitura: mantem o arquivo versionado como fallback.
+            pass
+
+
+# Comparativo honesto com o portal oficial (diferencial).
+COMPARISON = {
+    "portal": [
+        "Vários sistemas, planilhas e relatórios separados",
+        "Termos técnicos de orçamento público",
+        "Você precisa procurar e cruzar os dados",
+    ],
+    "here": [
+        "Uma pergunta em português, uma resposta direta",
+        "Sempre que possível, com período e fonte para conferir",
+        "Grátis, sem cadastro e sem instalar nada",
+    ],
+}
 
 STEPS = [
     {
         "icon": "message-square",
         "title": "Você pergunta",
-        "body": "Digite sua dúvida do jeito que falaria no dia a dia.",
+        "body": "Escreva sua dúvida do jeito que falaria no dia a dia.",
     },
     {
         "icon": "search",
-        "title": "O sistema procura",
-        "body": "Ele busca a informação nos dados públicos disponíveis.",
+        "title": "Consultamos os dados públicos",
+        "body": "A pergunta é respondida com base nos dados oficiais já reunidos.",
     },
     {
         "icon": "file-text",
-        "title": "Você confere a resposta",
-        "body": "A resposta vem com a fonte, o período consultado e os dados encontrados.",
+        "title": "Você confere na fonte",
+        "body": "Sempre que possível, a resposta traz o período e a origem do dado para você validar.",
     },
 ]
 
@@ -77,7 +132,7 @@ CATEGORIES = [
         "questions": [
             "Quanto a prefeitura gastou com saúde em 2025?",
             "Quais foram os maiores contratos do ano?",
-            "Quais empresas mais receberam dinheiro da prefeitura?",
+            "Quais empresas mais receberam pagamentos da prefeitura?",
             "Quanto a prefeitura arrecadou em 2025?",
         ],
     },
@@ -86,8 +141,8 @@ CATEGORIES = [
         "title": "Servidores e salários",
         "themes": ["Salários", "Servidores", "Câmara", "Prefeitura"],
         "questions": [
-            "Qual foi o salário do prefeito em março de 2025?",
             "Quais são os maiores salários do município?",
+            "Qual é o salário do prefeito?",
             "Quais foram os maiores pagamentos de diárias do ano?",
             "Quais são os cargos e salários da Câmara?",
         ],
@@ -106,12 +161,12 @@ CATEGORIES = [
     {
         "icon": "bus",
         "title": "Serviços e cidade",
-        "themes": ["Telefones úteis", "Ônibus", "Secretarias"],
+        "themes": ["Telefones úteis", "Secretarias", "Contatos"],
         "questions": [
             "Qual é o telefone da Secretaria de Saúde?",
-            "Quais são os horários de ônibus?",
-            "Como funciona a tarifa zero?",
+            "Quais secretarias existem na prefeitura?",
             "Onde encontro os contatos da prefeitura?",
+            "Quais são os horários de ônibus?",
         ],
     },
 ]
@@ -137,6 +192,21 @@ def _base_url(request: Request) -> str:
     return PUBLIC_BASE_URL or str(request.base_url).rstrip("/")
 
 
+def _shared_context(request: Request) -> dict:
+    """Variaveis comuns a todas as paginas (header/footer, identidade, LGPD)."""
+
+    base = _base_url(request)
+    return {
+        "chat_url": CHAT_PATH,
+        "privacy_url": PRIVACY_PATH,
+        "github_link": GITHUB_LINK,
+        "operator_name": OPERATOR_NAME,
+        "contact_email": CONTACT_EMAIL,
+        "production_url": base,
+        "og_image": f"{base}{OG_IMAGE_PATH}",
+    }
+
+
 app = FastAPI(title="Arcos Transparente")
 app.mount("/static", StaticFiles(directory=str(UI_DIR / "static")), name="static")
 
@@ -157,15 +227,31 @@ async def landing(request: Request) -> Response:
         request,
         "index.html",
         {
-            "chat_url": CHAT_PATH,
-            "github_link": GITHUB_LINK,
+            **_shared_context(request),
             "data_range": DATA_RANGE,
-            "production_url": _base_url(request),
             "page_title": PAGE_TITLE,
             "page_description": PAGE_DESCRIPTION,
-            "problem_questions": PROBLEM_QUESTIONS,
+            "comparison": COMPARISON,
             "steps": STEPS,
             "categories": CATEGORIES,
+            "source_name": SOURCE_NAME,
+            "source_url": SOURCE_URL,
+        },
+    )
+
+
+@app.get(PRIVACY_PATH, response_class=HTMLResponse)
+async def privacy(request: Request) -> Response:
+    return templates.TemplateResponse(
+        request,
+        "privacidade.html",
+        {
+            **_shared_context(request),
+            "data_range": DATA_RANGE,
+            "page_title": "Privacidade — Arcos Transparente",
+            "page_description": "Como o Arcos Transparente trata as suas perguntas e os dados públicos consultados.",
+            "source_name": SOURCE_NAME,
+            "source_url": SOURCE_URL,
         },
     )
 
@@ -186,6 +272,9 @@ async def sitemap(request: Request) -> Response:
     )
     return Response(content=body, media_type="application/xml")
 
+
+# Gera o welcome do chat com o DATA_RANGE atual (fonte unica de verdade).
+_write_chat_welcome()
 
 # Restringe o CORS do Chainlit antes de montar (default: sem cross-origin).
 # Precisa ocorrer antes de mount_chainlit, que constroi o CORSMiddleware do chat.

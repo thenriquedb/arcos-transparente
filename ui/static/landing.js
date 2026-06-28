@@ -9,21 +9,24 @@
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // --- Simulacao de chat (decorativa) --------------------------------------
+  // Conteudo meramente ilustrativo (rotulado "Exemplo ilustrativo" na UI). Evita
+  // numeros atribuidos a pessoas identificaveis; usa agregados e linguagem
+  // condicional para nao sugerir precisao garantida.
   const PAIRS = [
     {
-      user: "Qual foi o salário do prefeito em março de 2025?",
+      user: "Quanto a prefeitura gastou com saúde em 2025?",
       assistant:
-        "Em março de 2025, o prefeito recebeu R$ 14.283,50 líquidos, já considerando os descontos registrados na folha.",
+        "Exemplo: somando as despesas da função Saúde no período, mostro o total e indico o período e a fonte para você conferir.",
     },
     {
-      user: "Quanto a prefeitura gastou com diárias em 2025?",
+      user: "Quais foram os maiores contratos do ano?",
       assistant:
-        "Posso buscar o total de diárias registradas em 2025 e mostrar o valor por período ou por órgão, conforme a base disponível.",
+        "Exemplo: listo os maiores contratos por valor, com fornecedor, objeto e data, e aponto onde conferir no portal oficial.",
     },
     {
-      user: "Quanto foi gasto com saúde no primeiro trimestre de 2025?",
+      user: "Quanto foi gasto com diárias em 2025?",
       assistant:
-        "No primeiro trimestre de 2025, a Secretaria de Saúde registrou R$ 4.182.340,00 em despesas empenhadas, com o período e a origem do dado indicados na resposta.",
+        "Exemplo: somo as diárias registradas e mostro o total por período ou por órgão, conforme a base disponível.",
     },
   ];
 

@@ -1,14 +1,18 @@
 # Arcos Transparente
 
-Pergunte sobre os **dados públicos de Arcos (MG)** em linguagem simples — gastos,
-salários, contratos, receitas, diárias, frota e informações úteis da cidade.
+Pergunte em **português** sobre as contas públicas de Arcos (MG) — gastos, salários,
+contratos, diárias, frota e serviços da cidade. Sempre que possível, a resposta traz o
+**período** e a **fonte** para você conferir.
 
-Exemplos:
+👉 Clique em um exemplo abaixo ou escreva sua pergunta.
 
-- Quanto a prefeitura gastou com saúde em 2025?
-- Qual foi o salário do prefeito em março de 2025?
-- Quais contratos estão prestes a vencer?
-- Qual é o telefone da Secretaria de Saúde?
+---
 
-As respostas procuram indicar a fonte e o período consultado. O projeto consulta
-apenas informações públicas e não substitui os canais oficiais.
+**Antes de usar as respostas:**
+
+- 🤖 São geradas por **IA** e podem conter erros ou estar incompletas — **confira na fonte oficial**.
+- 🗓️ Período coberto pelos dados: **Janeiro de 2025 a Maio de 2026**.
+- 🏛️ Baseadas em **dados públicos oficiais**. Projeto **independente**, sem vínculo com a prefeitura; não substitui os canais oficiais.
+- 🔒 Sua pergunta é processada por um provedor de IA para gerar a resposta. Veja a [Política de Privacidade](/privacidade).
+
+[Sobre o projeto e fontes](/) · [Privacidade](/privacidade)

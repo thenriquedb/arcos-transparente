@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1d4ed8" />
+    <title>{{ page_title }}</title>
+    <meta name="description" content="{{ page_description }}" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="{{ production_url }}{{ privacy_url }}" />
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/tailwind.css" />
+    <link rel="stylesheet" href="/static/app.css" />
+  </head>
+
+  <body class="font-sans">
+    <header class="bg-primary">
+      <div
+        class="mx-auto flex w-full max-w-3xl items-center justify-between px-5 py-5 text-primary-foreground sm:px-8"
+      >
+        <a href="/" class="text-lg font-extrabold tracking-tight"
+          >Arcos Transparente</a
+        >
+        <a href="/" class="text-sm font-semibold text-white/90 hover:text-white"
+          >← Voltar</a
+        >
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-3xl px-5 py-16 sm:px-8">
+      <h1 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+        Privacidade e uso de dados
+      </h1>
+      <p class="mt-4 text-slate-600">
+        Esta página explica, em linguagem simples, como o Arcos Transparente
+        trata as suas perguntas e os dados públicos consultados.
+      </p>
+
+      <div class="mt-10 space-y-8 leading-relaxed text-slate-700">
+        <section>
+          <h2 class="text-xl font-bold text-slate-900">Quem é o responsável</h2>
+          <p class="mt-2">
+            {% if operator_name %}O Arcos Transparente é mantido por {{
+            operator_name }}, de forma independente.{% else %}O Arcos
+            Transparente é mantido de forma independente.{% endif %} É um
+            projeto sem vínculo oficial com a prefeitura de Arcos (MG). {% if
+            contact_email %}Contato:
+            <a
+              href="mailto:{{ contact_email }}"
+              class="font-medium text-primary underline"
+              >{{ contact_email }}</a
+            >. {% else %}Para contato, use as
+            <a
+              href="{{ github_link }}/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-medium text-primary underline"
+              >issues do repositório</a
+            >. {% endif %}
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-slate-900">Quais dados tratamos</h2>
+          <p class="mt-2">
+            Não exigimos cadastro nem login. O único dado pessoal que pode
+            existir é o
+            <strong>conteúdo das perguntas que você digita</strong>, então evite
+            incluir informações pessoais sensíveis nas mensagens.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-slate-900">
+            Como usamos a sua pergunta
+          </h2>
+          <p class="mt-2">
+            Para gerar a resposta, a sua pergunta é enviada a um provedor de IA
+            (<strong>OpenAI</strong>), que pode processá-la em servidores fora
+            do Brasil (transferência internacional). Usamos esse processamento
+            apenas para produzir a resposta no momento da consulta.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-slate-900">O que NÃO fazemos</h2>
+          <ul class="mt-2 list-disc space-y-1 pl-6">
+            <li>Não publicamos as suas perguntas.</li>
+            <li>
+              Não vendemos nem compartilhamos seus dados para fins de marketing.
+            </li>
+            <li>Não criamos perfil de usuário nem exigimos identificação.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-slate-900">Base legal</h2>
+          <p class="mt-2">
+            O tratamento se apoia no legítimo interesse de operar o serviço e
+            responder à sua consulta (art. 7º, IX, da LGPD), limitado ao
+            necessário para essa finalidade.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-slate-900">Seus direitos</h2>
+          <p class="mt-2">
+            Você pode solicitar informações sobre o tratamento dos seus dados ou
+            pedir esclarecimentos pelos canais de contato acima, conforme a
+            LGPD.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-slate-900">
+            Dados públicos consultados
+          </h2>
+          <p class="mt-2">
+            As respostas se baseiam em dados públicos de fontes oficiais, como o
+            {{ source_name }}. Período coberto: {{ data_range }}. As respostas
+            são geradas por IA e
+            <strong>podem conter erros</strong>, confira sempre na fonte oficial
+            antes de usar.
+          </p>
+        </section>
+      </div>
+
+      <p class="mt-12">
+        <a href="{{ chat_url }}" class="font-semibold text-primary underline"
+          >Ir para o chat →</a
+        >
+      </p>
+    </main>
+
+    <footer class="bg-slate-900 py-8 text-slate-400">
+      <div class="mx-auto max-w-3xl px-5 text-sm sm:px-8">
+        Projeto independente, sem vínculo oficial com a prefeitura. Código
+        aberto sob AGPL-3.0 ·
+        <a
+          href="{{ github_link }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline hover:text-white"
+          >Repositório</a
+        >
+      </div>
+    </footer>
+  </body>
+</html>
