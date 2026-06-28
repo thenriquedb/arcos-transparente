@@ -97,10 +97,10 @@ CATEGORIES = [
         "title": "Bens, frota e operação",
         "themes": ["Frota", "Patrimônio", "Almoxarifado", "Diárias"],
         "questions": [
-            "Quais veículos da prefeitura mais gastam com manutenção?",
+            "Quais são os veículos da frota da prefeitura?",
             "Quanto foi gasto com diárias em 2025?",
             "Quais bens a prefeitura tem registrados?",
-            "O que tem no estoque do almoxarifado?",
+            "Quais são os materiais com maior quantidade em estoque?",
         ],
     },
     {

@@ -96,6 +96,7 @@ def _no_persistence():
 async def starters(user=None):
     _ = user
     icon = "/public/favicon.svg"
+
     return [
         cl.Starter(
             label="Gastos com saúde em 2025",
@@ -103,13 +104,13 @@ async def starters(user=None):
             icon=icon,
         ),
         cl.Starter(
-            label="Salário do prefeito",
-            message="Qual foi o salário do prefeito em março de 2025?",
+            label="Servidores e salários",
+            message="Qual foi o salário do prefeito em 2025?",
             icon=icon,
         ),
         cl.Starter(
-            label="Maiores contratos do ano",
-            message="Quais foram os maiores contratos do ano de 2025?",
+            label="Gasto do festival gastronômico",
+            message="Qual foi o gasto do festival gastronômico em 2025?",
             icon=icon,
         ),
         cl.Starter(
