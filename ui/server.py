@@ -131,7 +131,7 @@ CATEGORIES = [
         "questions": [
             "Quanto a prefeitura gastou com saúde em 2025?",
             "Quais foram os maiores contratos do ano?",
-            "Quais empresas mais receberam pagamentos da prefeitura?",
+            "Quanto a prefeitura recebeu de emendas parlamentares?",
             "Quanto a prefeitura arrecadou em 2025?",
         ],
     },
