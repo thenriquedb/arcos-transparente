@@ -48,7 +48,6 @@ ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(","
 PAGE_TITLE = "Arcos Transparente — Consulte os dados públicos de Arcos (MG)"
 PAGE_DESCRIPTION = (
     "Pergunte em português sobre gastos, salários, contratos e diárias da prefeitura de Arcos (MG). "
-    "Sempre que possível, a resposta traz o período e a fonte para você conferir."
 )
 
 # Tela de boas-vindas do chat (Chainlit le chainlit_pt-BR.md / chainlit.md).
