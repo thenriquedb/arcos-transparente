@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1d4ed8" />
+    <title>{{ page_title }}</title>
+    <meta name="description" content="{{ page_description }}" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="{{ production_url }}{{ coverage_url }}" />
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Arcos Transparente" />
+    <meta property="og:title" content="{{ page_title }}" />
+    <meta property="og:description" content="{{ page_description }}" />
+    <meta property="og:url" content="{{ production_url }}{{ coverage_url }}" />
+    <meta property="og:image" content="{{ og_image }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="{{ og_image }}" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/tailwind.css" />
+    <link rel="stylesheet" href="/static/app.css" />
+    <script src="/static/vendor/lucide.min.js" defer></script>
+  </head>
+
+  <body class="bg-white font-sans text-slate-900">
+    <!-- Header -->
+    <header class="bg-primary">
+      <div
+        class="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 text-primary-foreground sm:px-8"
+      >
+        <a href="/" class="text-lg font-extrabold tracking-tight"
+          >Arcos Transparente</a
+        >
+        <nav aria-label="Principal" class="flex items-center gap-5 text-sm">
+          <a
+            href="{{ coverage_url }}"
+            class="hidden text-white/90 hover:text-white sm:inline"
+          >
+            O que consultar
+          </a>
+          <a
+            href="{{ github_link }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-white/90 hover:text-white"
+          >
+            <i data-lucide="github" class="h-4 w-4"></i> GitHub
+            <span class="sr-only"> (abre em nova aba)</span>
+          </a>
+          <a
+            href="{{ chat_url }}"
+            class="inline-flex min-h-[44px] items-center rounded-md bg-white px-4 py-2.5 font-semibold text-primary hover:bg-white/90"
+          >
+            Experimente →
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-4xl px-5 pb-24 sm:px-8">
+      <!-- Hero -->
+      <section class="pt-14">
+        <p class="text-xs font-bold uppercase tracking-widest text-primary">
+          Cobertura da base
+        </p>
+        <h1
+          class="mt-3 text-4xl font-black leading-tight tracking-tight sm:text-5xl"
+        >
+          O que você pode perguntar ao Arcos Transparente
+        </h1>
+        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
+          Esta página mostra exatamente quais informações a IA consegue
+          consultar, de onde vêm os dados, até que período estão disponíveis e o
+          que ainda não é suportado.
+        </p>
+
+        <!-- Badges -->
+        <div class="mt-8 flex flex-wrap gap-3 text-sm">
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5"
+          >
+            <i data-lucide="calendar" class="h-4 w-4 text-primary"></i>
+            Período: <strong class="font-semibold">{{ data_range }}</strong>
+          </span>
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5"
+          >
+            <i data-lucide="database" class="h-4 w-4 text-primary"></i>
+            Fontes oficiais
+          </span>
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5"
+          >
+            <i data-lucide="layers" class="h-4 w-4 text-primary"></i>
+            <strong class="font-semibold">{{ n_categorias }}</strong> áreas de
+            dados
+          </span>
+          {% if data_updated_at %}
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5"
+          >
+            <i data-lucide="refresh-cw" class="h-4 w-4 text-primary"></i>
+            Atualizado em {{ data_updated_at }}
+          </span>
+          {% endif %}
+        </div>
+      </section>
+
+      <!-- Confiança -->
+      <section
+        id="confianca"
+        class="mt-12 scroll-mt-24 rounded-2xl border border-slate-200 p-6 sm:p-8"
+      >
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">
+          Como você pode confiar
+        </p>
+        <ul class="mt-4 grid gap-4 sm:grid-cols-2">
+          <li class="flex items-start gap-3">
+            <i
+              data-lucide="circle-check"
+              class="mt-0.5 h-5 w-5 shrink-0 text-emerald-600"
+            ></i>
+            <span
+              >Apenas consulta —
+              <strong>nunca altera, apaga ou insere</strong> dados
+              oficiais.</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <i
+              data-lucide="circle-check"
+              class="mt-0.5 h-5 w-5 shrink-0 text-emerald-600"
+            ></i>
+            <span
+              ><strong>Todas as informações são públicas</strong>, obtidas de
+              fontes oficiais.</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <i
+              data-lucide="circle-check"
+              class="mt-0.5 h-5 w-5 shrink-0 text-emerald-600"
+            ></i>
+            <span
+              >Sempre que possível, indica a
+              <strong>fonte e o período</strong> usados na resposta.</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <i
+              data-lucide="circle-check"
+              class="mt-0.5 h-5 w-5 shrink-0 text-emerald-600"
+            ></i>
+            <span
+              >Quando não encontra a informação, <strong>avisa</strong> em vez
+              de inventar.</span
+            >
+          </li>
+          <li class="flex items-start gap-3 sm:col-span-2">
+            <i
+              data-lucide="circle-check"
+              class="mt-0.5 h-5 w-5 shrink-0 text-emerald-600"
+            ></i>
+            <span
+              ><strong>Código aberto</strong>: qualquer pessoa pode inspecionar
+              como a aplicação funciona no
+              <a
+                href="{{ github_link }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-semibold text-primary underline hover:text-primary-hover"
+                >repositório</a
+              >.</span
+            >
+          </li>
+        </ul>
+      </section>
+
+      <!-- Nesta página -->
+      <nav
+        aria-label="Nesta página"
+        class="mt-8 rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm"
+      >
+        <span class="font-semibold text-slate-500">Nesta página</span>
+        <ul class="mt-2 flex flex-wrap gap-x-5 gap-y-1.5">
+          {% for section in sections %}
+          <li>
+            <a href="#{{ section.id }}" class="text-primary hover:underline"
+              >{{ section.title }}</a
+            >
+          </li>
+          {% endfor %}
+          <li>
+            <a href="#como-usa" class="text-primary hover:underline"
+              >Como a IA usa os dados</a
+            >
+          </li>
+          <li>
+            <a href="#indisponivel" class="text-primary hover:underline"
+              >O que não está disponível</a
+            >
+          </li>
+          <li>
+            <a href="#faq" class="text-primary hover:underline"
+              >Perguntas frequentes</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Seções de dados -->
+      {% for section in sections %}
+      <section id="{{ section.id }}" class="mt-16 scroll-mt-24">
+        <div class="flex items-center gap-3">
+          <span
+            class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary"
+          >
+            <i data-lucide="{{ section.icon }}" class="h-5 w-5"></i>
+          </span>
+          <h2 class="text-2xl font-black tracking-tight">
+            {{ section.title }}
+          </h2>
+        </div>
+        <p class="mt-2 text-slate-600">{{ section.description }}</p>
+
+        <div class="mt-4">
+          {% for cat in section.categories %}
+          <div
+            class="grid gap-5 border-t border-slate-200 py-8 lg:grid-cols-3 lg:gap-10"
+          >
+            <div>
+              <div class="flex items-center gap-2.5">
+                <i
+                  data-lucide="{{ cat.icon }}"
+                  class="h-5 w-5 text-primary"
+                ></i>
+                <h3 class="text-lg font-bold">{{ cat.title }}</h3>
+              </div>
+              <p class="mt-2 text-sm leading-relaxed text-slate-600">
+                {{ cat.what }}
+              </p>
+            </div>
+            <div class="grid gap-6 sm:grid-cols-2 lg:col-span-2">
+              <div>
+                <p
+                  class="text-xs font-semibold uppercase tracking-wide text-slate-400"
+                >
+                  Você pode perguntar
+                </p>
+                <ul class="mt-2 space-y-1.5 text-sm text-slate-700">
+                  {% for q in cat.ask %}
+                  <li class="italic text-slate-600">“{{ q }}”</li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div>
+                <p
+                  class="text-xs font-semibold uppercase tracking-wide text-slate-400"
+                >
+                  Dados utilizados
+                </p>
+                <ul class="mt-2 space-y-1.5 text-sm text-slate-700">
+                  {% for d in cat.datasets %}
+                  <li class="flex items-start gap-2">
+                    <i
+                      data-lucide="check"
+                      class="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                    ></i>
+                    <span>{{ d }}</span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% if cat.limit %}
+              <div
+                class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 sm:col-span-2"
+              >
+                <strong class="font-semibold">Limitação:</strong> {{ cat.limit
+                }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endfor %}
+
+      <!-- Como a IA usa os dados -->
+      <section
+        id="como-usa"
+        class="mt-16 scroll-mt-24 border-t border-slate-200 pt-12"
+      >
+        <h2 class="text-2xl font-black tracking-tight">
+          Como a IA usa os dados
+        </h2>
+        <ol class="mt-5 space-y-4 text-slate-700">
+          <li class="flex items-start gap-3">
+            <span
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground"
+              >1</span
+            >
+            <span
+              >Você pergunta em português, do jeito que falaria no dia a
+              dia.</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground"
+              >2</span
+            >
+            <span
+              >A IA procura nos conjuntos de dados públicos já carregados — ela
+              não navega na internet nem acessa outros sistemas.</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground"
+              >3</span
+            >
+            <span
+              >Ela responde e, sempre que possível, indica o período e a fonte
+              para você conferir no portal oficial.</span
+            >
+          </li>
+        </ol>
+      </section>
+
+      <!-- O que ainda não está disponível -->
+      <section
+        id="indisponivel"
+        class="mt-16 scroll-mt-24 border-t border-slate-200 pt-12"
+      >
+        <h2 class="text-2xl font-black tracking-tight">
+          O que ainda não está disponível
+        </h2>
+        <p class="mt-2 text-slate-600">
+          Para não criar expectativas erradas, estes pontos não fazem parte da
+          aplicação hoje:
+        </p>
+        <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+          {% for item in not_available %}
+          <li class="flex items-start gap-2.5 text-slate-600">
+            <i
+              data-lucide="x"
+              class="mt-0.5 h-4 w-4 shrink-0 text-slate-400"
+            ></i>
+            <span>{{ item }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <!-- FAQ -->
+      <section
+        id="faq"
+        class="mt-16 scroll-mt-24 border-t border-slate-200 pt-12"
+      >
+        <h2 class="text-2xl font-black tracking-tight">Perguntas frequentes</h2>
+        <div class="mt-4 divide-y divide-slate-200 border-t border-slate-200">
+          {% for item in faq %}
+          <details class="group">
+            <summary
+              class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-semibold text-slate-900 [&::-webkit-details-marker]:hidden"
+            >
+              {{ item.q }}
+              <i
+                data-lucide="chevron-down"
+                class="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open:rotate-180"
+              ></i>
+            </summary>
+            <p class="pb-4 leading-relaxed text-slate-600">{{ item.a }}</p>
+          </details>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- CTA discreto -->
+      <div
+        class="mt-16 flex flex-col items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p class="text-slate-700">
+          Achou o que precisava? Faça sua pergunta no chat.
+        </p>
+        <a
+          href="{{ chat_url }}"
+          class="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-6 py-3 font-bold text-primary-foreground hover:bg-primary-hover"
+        >
+          Abrir o chat
+          <i data-lucide="arrow-right" class="h-5 w-5"></i>
+        </a>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 py-10 text-slate-400">
+      <div
+        class="mx-auto max-w-6xl space-y-3 px-5 text-sm leading-relaxed sm:px-8"
+      >
+        <p>
+          As respostas são geradas por IA e podem conter erros, confira sempre
+          na fonte oficial.
+        </p>
+        <p>
+          Dados públicos do município de Arcos (MG). Projeto independente, sem
+          vínculo oficial com a prefeitura. Código aberto sob licença AGPL-3.0.
+        </p>
+        <p class="flex flex-wrap gap-x-4 gap-y-1">
+          <a href="{{ coverage_url }}" class="underline hover:text-white"
+            >O que consultar</a
+          >
+          <a href="{{ privacy_url }}" class="underline hover:text-white"
+            >Privacidade</a
+          >
+          <a
+            href="{{ github_link }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline hover:text-white"
+            >Repositório<span class="sr-only"> (abre em nova aba)</span></a
+          >
+        </p>
+      </div>
+    </footer>
+
+    <script src="/static/landing.js"></script>
+  </body>
+</html>

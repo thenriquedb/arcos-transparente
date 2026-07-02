@@ -17,19 +17,40 @@
     />
     <link rel="stylesheet" href="/static/tailwind.css" />
     <link rel="stylesheet" href="/static/app.css" />
+    <script src="/static/vendor/lucide.min.js" defer></script>
   </head>
 
   <body class="font-sans">
     <header class="bg-primary">
       <div
-        class="mx-auto flex w-full max-w-3xl items-center justify-between px-5 py-5 text-primary-foreground sm:px-8"
+        class="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 text-primary-foreground sm:px-8"
       >
         <a href="/" class="text-lg font-extrabold tracking-tight"
           >Arcos Transparente</a
         >
-        <a href="/" class="text-sm font-semibold text-white/90 hover:text-white"
-          >← Voltar</a
-        >
+        <nav aria-label="Principal" class="flex items-center gap-5 text-sm">
+          <a
+            href="{{ coverage_url }}"
+            class="hidden text-white/90 hover:text-white sm:inline"
+          >
+            O que consultar
+          </a>
+          <a
+            href="{{ github_link }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-white/90 hover:text-white"
+          >
+            <i data-lucide="github" class="h-4 w-4"></i> GitHub
+            <span class="sr-only"> (abre em nova aba)</span>
+          </a>
+          <a
+            href="{{ chat_url }}"
+            class="inline-flex min-h-[44px] items-center rounded-md bg-white px-4 py-2.5 font-semibold text-primary hover:bg-white/90"
+          >
+            Experimente →
+          </a>
+        </nav>
       </div>
     </header>
 
@@ -151,5 +172,7 @@
         >
       </div>
     </footer>
+
+    <script src="/static/landing.js"></script>
   </body>
 </html>

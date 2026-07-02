@@ -29,6 +29,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 CHAT_PATH = "/chat"
 PRIVACY_PATH = "/privacidade"
+COVERAGE_PATH = "/cobertura"
 GITHUB_LINK = "https://github.com/thenriquedb/arcos-transparente"
 DATA_RANGE = os.getenv("DATA_RANGE", "Janeiro de 2025 a Maio de 2026")
 # Responsavel/operador e contato (LGPD). Configure no deploy. Se vazio, o contato
@@ -170,6 +171,250 @@ CATEGORIES = [
     },
 ]
 
+# Cobertura do agente para a pagina de documentacao (/cobertura).
+# Fiel a agents/tools/names.py + corpus RAG em data/rag. Cada categoria responde:
+# o que e, o que da para perguntar, quais dados sao usados e limitacoes proprias.
+# Data opcional da ultima atualizacao da base (ex.: "junho de 2026"). Sem valor,
+# a pagina nao mostra o badge (evita inventar data).
+DATA_UPDATED_AT = os.getenv("DATA_UPDATED_AT", "").strip()
+
+COVERAGE_SECTIONS = [
+    {
+        "id": "financeiros",
+        "icon": "wallet",
+        "title": "Dinheiro público",
+        "description": "Para onde vai e de onde vem o dinheiro do município.",
+        "categories": [
+            {
+                "icon": "banknote",
+                "title": "Gastos e despesas",
+                "what": "Tudo o que a prefeitura pagou, por período, por área e por fornecedor.",
+                "ask": [
+                    "Quanto foi gasto com saúde em 2025?",
+                    "Quais foram as maiores despesas do ano?",
+                    "Quanto a prefeitura gastou com a frota?",
+                ],
+                "datasets": [
+                    "Despesas orçamentárias",
+                    "Despesas por função (saúde, educação, etc.)",
+                    "Despesas por veículo da frota",
+                ],
+            },
+            {
+                "icon": "trending-up",
+                "title": "Receitas e arrecadação",
+                "what": "De onde vem o dinheiro do município e quanto entrou.",
+                "ask": [
+                    "Quanto a prefeitura arrecadou em 2025?",
+                    "Quais são as maiores fontes de receita?",
+                ],
+                "datasets": ["Receitas arrecadadas por período e por fonte"],
+            },
+            {
+                "icon": "gavel",
+                "title": "Contratos e licitações",
+                "what": "As contratações e compras públicas: com quem, para quê e por quanto.",
+                "ask": [
+                    "Quais foram os maiores contratos do ano?",
+                    "O que foi comprado em um contrato?",
+                    "Quais licitações aconteceram em 2025?",
+                ],
+                "datasets": [
+                    "Contratos (valor, fornecedor, objeto, vigência)",
+                    "Itens adquiridos em contratos",
+                    "Licitações",
+                ],
+            },
+            {
+                "icon": "arrow-left-right",
+                "title": "Transferências e emendas",
+                "what": "Recursos que o município recebeu de outros entes, como emendas parlamentares.",
+                "ask": [
+                    "Quanto a prefeitura recebeu de emendas parlamentares?",
+                    "Quais transferências o município recebeu?",
+                ],
+                "datasets": ["Transferências financeiras", "Emendas parlamentares"],
+            },
+            {
+                "icon": "target",
+                "title": "Planejamento e orçamento",
+                "what": "O que estava previsto no orçamento: programas, ações e valores planejados.",
+                "ask": [
+                    "Quais programas estão previstos no orçamento?",
+                    "Quanto foi planejado para a saúde?",
+                ],
+                "datasets": ["Planejamento orçamentário (programas, ações e valores)"],
+                "limit": "Mostra o que foi planejado. Para o que foi realmente gasto, veja Gastos e despesas.",
+            },
+        ],
+    },
+    {
+        "id": "pessoas",
+        "icon": "users",
+        "title": "Pessoas e remuneração",
+        "description": "Quem trabalha para o município e quanto recebe.",
+        "categories": [
+            {
+                "icon": "users",
+                "title": "Servidores e folha",
+                "what": "Quem trabalha na prefeitura, em que cargo, onde e quanto recebe.",
+                "ask": [
+                    "Quais são os maiores salários do município?",
+                    "Qual é a folha de pagamento por secretaria?",
+                    "Qual o histórico de pagamentos de um servidor?",
+                ],
+                "datasets": [
+                    "Servidores e remuneração",
+                    "Folha por cargo e por lotação (secretaria)",
+                    "Quadro de pessoal",
+                    "Histórico funcional e de pagamentos",
+                ],
+            },
+            {
+                "icon": "plane",
+                "title": "Diárias e passagens",
+                "what": "Pagamentos de deslocamento a servidores e agentes públicos.",
+                "ask": [
+                    "Quanto foi gasto com diárias em 2025?",
+                    "Quem recebeu diárias?",
+                    "Quais foram os maiores pagamentos de diárias?",
+                ],
+                "datasets": ["Diárias", "Passagens"],
+            },
+            {
+                "icon": "landmark",
+                "title": "Câmara Municipal",
+                "what": "Dados do Poder Legislativo: servidores, salários e vereadores.",
+                "ask": [
+                    "Quais são os cargos e salários da Câmara?",
+                    "Quem são os vereadores?",
+                    "O que faz a Câmara?",
+                ],
+                "datasets": [
+                    "Servidores e salários da Câmara",
+                    "Vereadores e papel da Câmara (acervo)",
+                ],
+            },
+        ],
+    },
+    {
+        "id": "patrimonio",
+        "icon": "package",
+        "title": "Patrimônio e operação",
+        "description": "O que o município possui e como se mantém.",
+        "categories": [
+            {
+                "icon": "truck",
+                "title": "Frota",
+                "what": "Os veículos do município e quanto custam para manter.",
+                "ask": [
+                    "Quais veículos a prefeitura tem?",
+                    "Quais veículos mais gastam com manutenção?",
+                ],
+                "datasets": ["Frota municipal", "Custos por veículo"],
+            },
+            {
+                "icon": "package",
+                "title": "Bens, patrimônio e almoxarifado",
+                "what": "O que a prefeitura possui e o que entra e sai do almoxarifado.",
+                "ask": [
+                    "Quais bens a prefeitura tem registrados?",
+                    "O que há no estoque do almoxarifado?",
+                    "Quais foram as movimentações do estoque?",
+                ],
+                "datasets": [
+                    "Bens patrimoniais",
+                    "Estoques do almoxarifado",
+                    "Movimentações de estoque",
+                ],
+            },
+        ],
+    },
+    {
+        "id": "cidade",
+        "icon": "building-2",
+        "title": "Cidade e representação",
+        "description": "Serviços ao cidadão e quem foi eleito para governar.",
+        "categories": [
+            {
+                "icon": "phone",
+                "title": "Serviços ao cidadão",
+                "what": "Informações úteis do dia a dia, de um acervo selecionado.",
+                "ask": [
+                    "Qual é o telefone da Secretaria de Saúde?",
+                    "Quais são os horários de ônibus?",
+                    "Quais secretarias existem na prefeitura?",
+                ],
+                "datasets": [
+                    "Telefones úteis e contatos",
+                    "Estrutura organizacional da prefeitura",
+                    "Horários de ônibus e tarifa zero",
+                    "Serviços e medicamentos da saúde",
+                    "Perguntas frequentes",
+                ],
+                "limit": "É um acervo curado; não cobre todos os serviços da cidade.",
+            },
+            {
+                "icon": "vote",
+                "title": "Eleições e representantes",
+                "what": "Quem foi eleito para governar o município.",
+                "ask": [
+                    "Quem foram os prefeitos eleitos?",
+                    "Quem foram os vereadores eleitos?",
+                ],
+                "datasets": ["Prefeitos e vereadores eleitos"],
+            },
+        ],
+    },
+]
+
+# O que a aplicacao ainda NAO cobre (reduz expectativa; aumenta confianca).
+NOT_AVAILABLE = [
+    "Documentos originais, como notas fiscais, empenhos e editais em PDF",
+    "Acompanhamento de obras e sua execução física",
+    "Dados em tempo real ou do dia de hoje",
+    "Comparações com outras cidades",
+    "Períodos fora da base disponível",
+    "Ouvidoria, protocolos e pedidos de acesso à informação",
+]
+
+FAQ = [
+    {
+        "q": "Os dados são oficiais?",
+        "a": "Sim. Vêm de fontes públicas oficiais do município e não são inventados pela aplicação.",
+    },
+    {
+        "q": "A IA inventa respostas?",
+        "a": (
+            "Ela responde com base nos dados já carregados. Ainda assim, como toda IA, pode errar ou "
+            "interpretar mal — por isso indica a fonte e o período, para você conferir. Quando não "
+            "encontra a informação, deve avisar em vez de inventar."
+        ),
+    },
+    {
+        "q": "A aplicação altera alguma informação?",
+        "a": "Não. É somente leitura: nunca modifica, apaga ou insere dados nos sistemas públicos.",
+    },
+    {
+        "q": "Qual o período coberto?",
+        "a": "A base atual cobre {data_range}.",
+    },
+    {
+        "q": "Os dados são atualizados automaticamente?",
+        "a": (
+            "Não em tempo real. São atualizados quando a base é reimportada das fontes oficiais, "
+            "de tempos em tempos."
+        ),
+    },
+    {
+        "q": "Posso usar essas respostas como documento oficial?",
+        "a": (
+            "Não. Elas servem para orientar e facilitar o acesso à informação. Para fins oficiais, "
+            "use os documentos e canais oficiais da prefeitura e da Câmara."
+        ),
+    },
+]
+
 templates = Jinja2Templates(directory=str(UI_DIR / "templates"))
 
 # Cabecalhos de seguranca. A CSP so e aplicada fora do /chat: a SPA do Chainlit
@@ -198,6 +443,7 @@ def _shared_context(request: Request) -> dict:
     return {
         "chat_url": CHAT_PATH,
         "privacy_url": PRIVACY_PATH,
+        "coverage_url": COVERAGE_PATH,
         "github_link": GITHUB_LINK,
         "operator_name": OPERATOR_NAME,
         "contact_email": CONTACT_EMAIL,
@@ -239,6 +485,32 @@ async def landing(request: Request) -> Response:
     )
 
 
+@app.get(COVERAGE_PATH, response_class=HTMLResponse)
+async def coverage(request: Request) -> Response:
+    n_categorias = sum(len(section["categories"]) for section in COVERAGE_SECTIONS)
+    faq = [{"q": item["q"], "a": item["a"].format(data_range=DATA_RANGE)} for item in FAQ]
+    return templates.TemplateResponse(
+        request,
+        "cobertura.html",
+        {
+            **_shared_context(request),
+            "data_range": DATA_RANGE,
+            "data_updated_at": DATA_UPDATED_AT,
+            "page_title": "O que você pode perguntar — Arcos Transparente",
+            "page_description": (
+                "A cobertura da base do Arcos Transparente (MG): quais dados públicos a IA consulta, "
+                "de onde vêm, até que período e quais são as limitações."
+            ),
+            "sections": COVERAGE_SECTIONS,
+            "not_available": NOT_AVAILABLE,
+            "faq": faq,
+            "n_categorias": n_categorias,
+            "source_name": SOURCE_NAME,
+            "source_url": SOURCE_URL,
+        },
+    )
+
+
 @app.get(PRIVACY_PATH, response_class=HTMLResponse)
 async def privacy(request: Request) -> Response:
     return templates.TemplateResponse(
@@ -262,11 +534,17 @@ async def robots(request: Request) -> str:
 
 @app.get("/sitemap.xml")
 async def sitemap(request: Request) -> Response:
+    base = _base_url(request)
+    pages = [("/", "1.0"), (COVERAGE_PATH, "0.8"), (PRIVACY_PATH, "0.3")]
+    urls = "".join(
+        f"  <url><loc>{base}{path}</loc><changefreq>weekly</changefreq>"
+        f"<priority>{prio}</priority></url>\n"
+        for path, prio in pages
+    )
     body = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f"  <url><loc>{_base_url(request)}/</loc><changefreq>weekly</changefreq>"
-        "<priority>1.0</priority></url>\n"
+        f"{urls}"
         "</urlset>\n"
     )
     return Response(content=body, media_type="application/xml")

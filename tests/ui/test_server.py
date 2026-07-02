@@ -67,6 +67,55 @@ def test_chat_header_links_para_site_e_privacidade() -> None:
     urls = {link.get("url") for link in (ui.get("header_links") or [])}
     assert "/" in urls
     assert "/privacidade" in urls
+    assert "/cobertura" in urls
+
+
+def test_cobertura_pagina() -> None:
+    resp = client.get("/cobertura")
+    assert resp.status_code == 200
+    body = resp.text
+    # Grupos fieis aos dominios de tools do agente.
+    for termo in ["Gastos e despesas", "Contratos e licitações", "Câmara Municipal", "Frota"]:
+        assert termo in body
+    # Periodo dos dados (fonte unica).
+    assert server.DATA_RANGE in body
+    # Disclaimer honesto de IA.
+    assert "podem conter erros" in body
+
+
+def test_cobertura_deixa_claro_somente_leitura_e_publico() -> None:
+    body = re.sub(r"\s+", " ", client.get("/cobertura").text)
+    assert "Apenas consulta" in body
+    assert "nunca altera, apaga ou insere" in body
+    assert "Todas as informações são públicas" in body
+    # Codigo aberto como sinal de confianca (auditavel).
+    assert "Código aberto" in body
+    assert "qualquer pessoa pode inspecionar" in body
+
+
+def test_cobertura_estrutura_de_documentacao() -> None:
+    body = re.sub(r"\s+", " ", client.get("/cobertura").text)
+    # Responde as perguntas-chave do usuario.
+    assert "O que você pode perguntar ao Arcos Transparente" in body
+    assert "Você pode perguntar" in body
+    assert "Dados utilizados" in body
+    # Secoes por tipo.
+    for secao in ["Dinheiro público", "Pessoas e remuneração", "Patrimônio e operação", "Cidade e representação"]:
+        assert secao in body
+    # Reduz expectativas + FAQ.
+    assert "O que ainda não está disponível" in body
+    assert "Perguntas frequentes" in body
+    assert "Como a IA usa os dados" in body
+
+
+def test_landing_linka_cobertura() -> None:
+    assert 'href="/cobertura"' in client.get("/").text
+
+
+def test_sitemap_inclui_paginas() -> None:
+    body = client.get("/sitemap.xml").text
+    assert "/cobertura" in body
+    assert "/privacidade" in body
 
 
 def test_data_range_consistente_entre_paginas() -> None:

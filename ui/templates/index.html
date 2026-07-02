@@ -58,6 +58,9 @@
           >Arcos Transparente</a
         >
         <nav aria-label="Principal" class="flex items-center gap-5 text-sm">
+          <a href="{{ coverage_url }}" class="hidden text-white/90 hover:text-white sm:inline">
+            O que consultar
+          </a>
           <a
             href="{{ github_link }}"
             target="_blank"
@@ -334,7 +337,11 @@
               Fazer uma pergunta
               <i data-lucide="arrow-right" class="h-5 w-5"></i>
             </a>
-            <p class="mt-3 text-sm text-slate-500">Grátis, sem cadastro.</p>
+            <p class="mt-4 text-sm text-slate-600">
+              <a href="{{ coverage_url }}" class="font-semibold text-primary underline decoration-primary/40 hover:decoration-primary">
+                Ver todos os temas que dá para consultar →
+              </a>
+            </p>
           </div>
         </div>
       </section>
@@ -539,6 +546,9 @@
           vínculo oficial com a prefeitura. Código aberto sob licença AGPL-3.0.
         </p>
         <p class="flex flex-wrap gap-x-4 gap-y-1">
+          <a href="{{ coverage_url }}" class="underline hover:text-white"
+            >O que consultar</a
+          >
           <a href="{{ privacy_url }}" class="underline hover:text-white"
             >Privacidade</a
           >

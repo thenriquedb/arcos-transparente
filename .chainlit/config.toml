@@ -176,6 +176,13 @@ default_avatar_file_url = ""
     target = "_self"
 
 [[UI.header_links]]
+    name = "cobertura"
+    display_name = "O que consultar"
+    icon_url = "/static/favicon.svg"
+    url = "/cobertura"
+    target = "_self"
+
+[[UI.header_links]]
     name = "privacidade"
     display_name = "Privacidade"
     icon_url = "/static/favicon.svg"
